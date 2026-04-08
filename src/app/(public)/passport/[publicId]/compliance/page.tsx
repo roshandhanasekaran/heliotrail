@@ -1,13 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { SectionHeader } from "@/components/shared/section-header";
 import { EmptyState } from "@/components/shared/empty-state";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ComplianceClient } from "@/components/passport/compliance-client";
 import { CERTIFICATE_STATUS_LABELS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
 import type { PassportCertificate } from "@/types/passport";
-import { AwardIcon, ShieldCheckIcon } from "lucide-react";
+import { AwardIcon } from "lucide-react";
 
 interface Props {
   params: Promise<{ publicId: string }>;
@@ -32,70 +30,29 @@ export default async function CompliancePage({ params }: Props) {
 
   const certs = (certificates ?? []) as PassportCertificate[];
 
-  const statusColor: Record<string, string> = {
-    valid: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-    expired: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    revoked: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-  };
-
-  return (
-    <div className="space-y-8">
-      <SectionHeader
-        title="Compliance & Certifications"
-        description="Standards, test certifications, and regulatory compliance"
-      />
-
-      {certs.length === 0 ? (
+  if (certs.length === 0) {
+    return (
+      <div>
         <EmptyState
           title="No certificates available"
           description="Certificate data has not been added to this passport yet."
           icon={<AwardIcon className="h-10 w-10" />}
         />
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {certs.map((cert) => (
-            <Card key={cert.id}>
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between gap-2">
-                  <CardTitle className="text-base leading-tight">
-                    {cert.standard_name}
-                  </CardTitle>
-                  <Badge className={statusColor[cert.status] ?? ""}>
-                    {CERTIFICATE_STATUS_LABELS[cert.status]}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Issuer</span>
-                  <span className="font-medium">{cert.issuer}</span>
-                </div>
-                {cert.certificate_number && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Certificate #</span>
-                    <span className="font-mono text-xs">{cert.certificate_number}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Issued</span>
-                  <span>{formatDate(cert.issued_date)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Expires</span>
-                  <span>{formatDate(cert.expiry_date)}</span>
-                </div>
-                {cert.scope_notes && (
-                  <p className="mt-2 text-xs text-muted-foreground border-t border-border pt-2">
-                    <ShieldCheckIcon className="mr-1 inline h-3 w-3" />
-                    {cert.scope_notes}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  const certsData = certs.map((cert) => ({
+    id: cert.id,
+    standardName: cert.standard_name,
+    status: cert.status,
+    statusLabel: CERTIFICATE_STATUS_LABELS[cert.status],
+    issuer: cert.issuer,
+    certificateNumber: cert.certificate_number,
+    issuedDate: formatDate(cert.issued_date),
+    expiryDate: formatDate(cert.expiry_date),
+    scopeNotes: cert.scope_notes,
+  }));
+
+  return <ComplianceClient certs={certsData} />;
 }

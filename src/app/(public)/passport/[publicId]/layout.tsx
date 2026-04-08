@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PassportHero } from "@/components/passport/passport-hero";
 import { PassportSectionNav } from "@/components/passport/passport-section-nav";
+import { GradientMeshBg } from "@/components/passport/gradient-mesh-bg";
 import type { Passport } from "@/types/passport";
 import type { Metadata } from "next";
 
@@ -36,10 +37,11 @@ export default async function PassportLayout({ params, children }: Props) {
   if (!passport) notFound();
 
   return (
-    <div>
+    <div className="relative min-h-screen">
+      <GradientMeshBg />
       <PassportHero passport={passport} />
       <PassportSectionNav publicId={publicId} />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {children}
       </div>
     </div>
