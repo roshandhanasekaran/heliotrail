@@ -142,8 +142,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Bottom gradient transition to light theme */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 h-24 bg-gradient-to-t from-background to-transparent" />
+      {/* No bottom gradient — flows directly into dark trust bar */}
     </section>
   );
 }

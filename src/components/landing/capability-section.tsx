@@ -163,8 +163,7 @@ export function CapabilitySection() {
         }}
       />
 
-      {/* Top gradient transition from light */}
-      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent" />
+      {/* No top gradient — flows directly from dark trust bar */}
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeIn>

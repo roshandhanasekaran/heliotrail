@@ -22,7 +22,7 @@ const items = [
 
 export function TrustBar() {
   return (
-    <section className="relative overflow-hidden border-y border-border/30 bg-gradient-to-b from-card/60 to-background">
+    <section className="relative overflow-hidden border-y border-white/[0.06] bg-[#0a0a1a]">
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <FadeIn>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6">
@@ -46,10 +46,10 @@ export function TrustBar() {
                       />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-foreground">
+                      <p className="text-sm font-semibold text-white/90">
                         {item.label}
                       </p>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-slate-500 mt-0.5">
                         {item.sublabel}
                       </p>
                     </div>
