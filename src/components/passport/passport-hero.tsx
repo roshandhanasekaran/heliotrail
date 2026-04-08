@@ -26,12 +26,12 @@ interface PassportHeroProps {
 }
 
 const quickStats = (p: Passport) => [
-  { label: "Rated Power", value: `${p.rated_power_stc_w ?? "—"}`, unit: "W", icon: ZapIcon, color: "#6366f1" },
-  { label: "Efficiency", value: `${p.module_efficiency_percent ?? "—"}`, unit: "%", icon: GaugeIcon, color: "#22c55e" },
-  { label: "Carbon", value: `${p.carbon_footprint_kg_co2e ?? "—"}`, unit: "kg", icon: LeafIcon, color: "#10b981" },
-  { label: "Lifetime", value: `${p.expected_lifetime_years ?? "—"}`, unit: "yr", icon: CalendarIcon, color: "#f59e0b" },
-  { label: "Warranty", value: `${p.product_warranty_years ?? "—"}`, unit: "yr", icon: ShieldCheckIcon, color: "#3b82f6" },
-  { label: "Cells", value: `${p.cell_count ?? "—"}`, unit: "", icon: GridIcon, color: "#8b5cf6" },
+  { label: "Rated Power", value: `${p.rated_power_stc_w ?? "\u2014"}`, unit: "W", icon: ZapIcon, color: "#6366f1" },
+  { label: "Efficiency", value: `${p.module_efficiency_percent ?? "\u2014"}`, unit: "%", icon: GaugeIcon, color: "#22c55e" },
+  { label: "Carbon", value: `${p.carbon_footprint_kg_co2e ?? "\u2014"}`, unit: "kg", icon: LeafIcon, color: "#10b981" },
+  { label: "Lifetime", value: `${p.expected_lifetime_years ?? "\u2014"}`, unit: "yr", icon: CalendarIcon, color: "#f59e0b" },
+  { label: "Warranty", value: `${p.product_warranty_years ?? "\u2014"}`, unit: "yr", icon: ShieldCheckIcon, color: "#3b82f6" },
+  { label: "Cells", value: `${p.cell_count ?? "\u2014"}`, unit: "", icon: GridIcon, color: "#8b5cf6" },
 ];
 
 export function PassportHero({ passport }: PassportHeroProps) {
@@ -96,7 +96,7 @@ export function PassportHero({ passport }: PassportHeroProps) {
             <div className="flex flex-col gap-1 text-sm text-muted-foreground sm:text-right">
               <span className="flex items-center gap-1.5 sm:justify-end">
                 <FactoryIcon className="h-3.5 w-3.5 text-muted-foreground/60" />
-                {passport.facility_name ?? "—"}
+                {passport.facility_name ?? "\u2014"}
               </span>
               <span className="flex items-center gap-1.5 sm:justify-end">
                 <ClockIcon className="h-3.5 w-3.5 text-muted-foreground/60" />
@@ -106,7 +106,7 @@ export function PassportHero({ passport }: PassportHeroProps) {
           </div>
         </FadeIn>
 
-        {/* Quick stats grid */}
+        {/* Quick stats grid — premium glassmorphic cards */}
         <FadeIn delay={0.2}>
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {stats.map((stat, i) => {
@@ -117,8 +117,17 @@ export function PassportHero({ passport }: PassportHeroProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.05 }}
-                  className="rounded-xl bg-muted/50 px-4 py-3"
+                  whileHover={{ y: -2, transition: { duration: 0.2 } }}
+                  className="group relative rounded-xl border border-border/50 bg-gradient-to-br from-card to-muted/30 px-4 py-3 transition-shadow duration-300 hover:shadow-lg"
+                  style={{
+                    boxShadow: `0 2px 8px ${stat.color}08`,
+                  }}
                 >
+                  {/* Top accent line */}
+                  <div
+                    className="absolute top-0 left-2 right-2 h-0.5 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"
+                    style={{ backgroundColor: stat.color }}
+                  />
                   <div className="flex items-center gap-1.5">
                     <Icon className="h-3.5 w-3.5" style={{ color: stat.color }} />
                     <p className="text-xs text-muted-foreground">

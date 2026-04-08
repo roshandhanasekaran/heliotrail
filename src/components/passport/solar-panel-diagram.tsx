@@ -228,14 +228,33 @@ export function SolarPanelDiagram({
                     className="group w-full text-left"
                   >
                     <div
-                      className="relative overflow-hidden rounded-xl border border-border/50 bg-card p-4 transition-all duration-200 hover:shadow-md"
+                      className="relative overflow-hidden rounded-xl border border-border/50 bg-card p-4 transition-all duration-300 hover:shadow-lg"
+                      style={{
+                        boxShadow: hoveredZone === zone.id
+                          ? `0 4px 20px ${zone.color}15, 0 0 0 1px ${zone.color}20`
+                          : undefined,
+                        borderColor: hoveredZone === zone.id
+                          ? `${zone.color}30`
+                          : undefined,
+                      }}
                     >
+                      {/* Top accent line on hover */}
+                      <div
+                        className="absolute top-0 left-3 right-3 h-0.5 rounded-full transition-opacity duration-300"
+                        style={{
+                          backgroundColor: zone.color,
+                          opacity: hoveredZone === zone.id ? 0.7 : 0,
+                        }}
+                      />
                       <div className="relative flex items-center gap-4">
                         {/* Zone icon */}
                         <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105"
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-all duration-200 group-hover:scale-110"
                           style={{
                             backgroundColor: `${zone.color}12`,
+                            boxShadow: hoveredZone === zone.id
+                              ? `0 4px 12px ${zone.color}20`
+                              : "none",
                           }}
                         >
                           <Icon className="h-5 w-5" style={{ color: zone.color }} />
