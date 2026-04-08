@@ -1,8 +1,8 @@
-import { Oxanium, Source_Code_Pro } from "next/font/google";
+import { Inter, Source_Code_Pro } from "next/font/google";
 
-export const oxanium = Oxanium({
+export const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-oxanium",
+  variable: "--font-inter",
   display: "swap",
 });
 

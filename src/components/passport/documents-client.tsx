@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/passport/glass-card";
 import { SectionTitle } from "@/components/passport/section-title";
-import { FileTextIcon, DownloadIcon, FileIcon } from "lucide-react";
+import { DownloadIcon, FileIcon } from "lucide-react";
 
 interface DocData {
   id: string;
@@ -23,13 +23,13 @@ interface DocumentsClientProps {
 }
 
 const typeColors: Record<string, string> = {
-  datasheet: "#2196f3",
-  declaration_of_conformity: "#4caf50",
-  manual: "#ff9800",
-  epd: "#9c27b0",
-  test_report: "#f44336",
-  warranty: "#00bcd4",
-  other: "#607d8b",
+  datasheet: "#3b82f6",
+  declaration_of_conformity: "#22c55e",
+  manual: "#f59e0b",
+  epd: "#8b5cf6",
+  test_report: "#ef4444",
+  warranty: "#06b6d4",
+  other: "#64748b",
 };
 
 export function DocumentsClient({ docs }: DocumentsClientProps) {
@@ -38,7 +38,7 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
       <SectionTitle
         title="Documents"
         description="Public documentation, declarations, and technical datasheets"
-        accentColor="#a855f7"
+        accentColor="#8b5cf6"
       />
 
       <div className="space-y-3">
@@ -53,12 +53,12 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
               transition={{ delay: i * 0.06, duration: 0.4 }}
             >
               <GlassCard accentColor={color}>
-                <div className="flex items-start gap-4 p-5">
+                <div className="flex items-start gap-4 p-5 pt-6">
                   {/* File icon */}
                   <div
-                    className="flex h-11 w-11 shrink-0 items-center justify-center"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
                     style={{
-                      backgroundColor: `${color}15`,
+                      backgroundColor: `${color}12`,
                     }}
                   >
                     <FileIcon className="h-5 w-5" style={{ color }} />
@@ -73,32 +73,31 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
                         </p>
                         <div className="mt-1.5 flex flex-wrap items-center gap-2">
                           <span
-                            className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                            className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold"
                             style={{
-                              backgroundColor: `${color}15`,
+                              backgroundColor: `${color}12`,
                               color,
                             }}
                           >
                             {doc.documentTypeLabel}
                           </span>
                           {doc.mimeType && (
-                            <span className="text-xs text-muted-foreground/50">
+                            <span className="text-xs text-muted-foreground">
                               {doc.mimeType.split("/")[1]?.toUpperCase()}
                             </span>
                           )}
                           {doc.fileSizeFormatted && (
-                            <span className="text-xs text-muted-foreground/50">
+                            <span className="text-xs text-muted-foreground">
                               {doc.fileSizeFormatted}
                             </span>
                           )}
                         </div>
                       </div>
 
-                      {/* Download indicator */}
                       <div
-                        className="flex h-8 w-8 shrink-0 items-center justify-center transition-colors"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors"
                         style={{
-                          backgroundColor: `${color}10`,
+                          backgroundColor: `${color}08`,
                         }}
                       >
                         <DownloadIcon
@@ -109,12 +108,12 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
                     </div>
 
                     {doc.description && (
-                      <p className="mt-2 text-sm text-muted-foreground/70">
+                      <p className="mt-2 text-sm text-muted-foreground">
                         {doc.description}
                       </p>
                     )}
 
-                    <div className="mt-2 flex gap-4 text-xs text-muted-foreground/50">
+                    <div className="mt-2 flex gap-4 text-xs text-muted-foreground">
                       {doc.issuer && <span>Issued by {doc.issuer}</span>}
                       {doc.issuedDate && <span>{doc.issuedDate}</span>}
                     </div>

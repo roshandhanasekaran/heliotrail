@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { GlassCard } from "@/components/passport/glass-card";
 import type { Passport } from "@/types/passport";
 import {
   LayoutDashboardIcon,
@@ -26,7 +25,7 @@ const zones = [
     label: "A",
     title: "General Info",
     description: "Manufacturer, identity, warranty",
-    color: "#3b82f6",
+    color: "#6366f1",
     icon: LayoutDashboardIcon,
     href: "",
   },
@@ -44,7 +43,7 @@ const zones = [
     label: "C",
     title: "Compliance",
     description: "Certifications & standards",
-    color: "#eab308",
+    color: "#f59e0b",
     icon: ShieldCheckIcon,
     href: "/compliance",
   },
@@ -62,7 +61,7 @@ const zones = [
     label: "E",
     title: "Documents",
     description: "Datasheets, declarations, manuals",
-    color: "#a855f7",
+    color: "#8b5cf6",
     icon: FileTextIcon,
     href: "/documents",
   },
@@ -87,47 +86,38 @@ export function SolarPanelDiagram({
         >
           <svg
             viewBox="0 0 320 420"
-            className="w-full drop-shadow-[0_0_40px_rgba(76,175,80,0.08)]"
+            className="w-full drop-shadow-xl"
           >
             <defs>
               <linearGradient id="panel-grad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2d4a30" />
-                <stop offset="100%" stopColor="#1a2e1c" />
+                <stop offset="0%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#0f172a" />
               </linearGradient>
               <linearGradient id="cell-grad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#3d5a40" />
-                <stop offset="100%" stopColor="#2a3f2c" />
+                <stop offset="0%" stopColor="#334155" />
+                <stop offset="100%" stopColor="#1e293b" />
               </linearGradient>
               <filter id="panel-shadow">
-                <feDropShadow dx="0" dy="4" stdDeviation="8" floodColor="rgba(0,0,0,0.3)" />
-              </filter>
-              <filter id="panel-glow">
-                <feGaussianBlur stdDeviation="6" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
+                <feDropShadow dx="0" dy="8" stdDeviation="16" floodColor="rgba(0,0,0,0.12)" />
               </filter>
             </defs>
 
             {/* Panel body */}
             <rect
-              x="20" y="30" width="280" height="370" rx="8"
+              x="20" y="30" width="280" height="370" rx="12"
               fill="url(#panel-grad)"
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="1.5"
               filter="url(#panel-shadow)"
             />
 
-            {/* Aluminium frame highlight */}
+            {/* Frame highlight */}
             <rect
-              x="20" y="30" width="280" height="370" rx="8"
+              x="20" y="30" width="280" height="370" rx="12"
               fill="none"
-              stroke="rgba(255,255,255,0.06)"
-              strokeWidth="3"
+              stroke="rgba(148,163,184,0.15)"
+              strokeWidth="2"
             />
 
-            {/* Solar cells grid - 6x10 */}
+            {/* Solar cells grid */}
             {Array.from({ length: 8 }).map((_, row) =>
               Array.from({ length: 5 }).map((_, col) => (
                 <rect
@@ -136,83 +126,77 @@ export function SolarPanelDiagram({
                   y={44 + row * 43}
                   width="46"
                   height="37"
-                  rx="1.5"
+                  rx="3"
                   fill="url(#cell-grad)"
-                  stroke="rgba(76,175,80,0.12)"
+                  stroke="rgba(99,102,241,0.08)"
                   strokeWidth="0.5"
                 />
               ))
             )}
 
-            {/* Busbars (horizontal lines across cells) */}
+            {/* Busbars */}
             {Array.from({ length: 8 }).map((_, row) =>
               Array.from({ length: 5 }).map((_, col) => (
                 <g key={`bus-${row}-${col}`}>
                   <line
-                    x1={34 + col * 52}
-                    y1={56 + row * 43}
-                    x2={80 + col * 52}
-                    y2={56 + row * 43}
-                    stroke="rgba(192,192,192,0.15)"
-                    strokeWidth="0.4"
+                    x1={34 + col * 52} y1={56 + row * 43}
+                    x2={80 + col * 52} y2={56 + row * 43}
+                    stroke="rgba(148,163,184,0.12)" strokeWidth="0.4"
                   />
                   <line
-                    x1={34 + col * 52}
-                    y1={68 + row * 43}
-                    x2={80 + col * 52}
-                    y2={68 + row * 43}
-                    stroke="rgba(192,192,192,0.15)"
-                    strokeWidth="0.4"
+                    x1={34 + col * 52} y1={68 + row * 43}
+                    x2={80 + col * 52} y2={68 + row * 43}
+                    stroke="rgba(148,163,184,0.12)" strokeWidth="0.4"
                   />
                 </g>
               ))
             )}
 
             {/* Junction box */}
-            <rect x="130" y="18" width="60" height="16" rx="3" fill="#2a2a2a" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-            <text x="160" y="29" textAnchor="middle" fill="rgba(255,255,255,0.3)" className="text-[6px] font-medium">J-BOX</text>
+            <rect x="130" y="18" width="60" height="16" rx="6" fill="#1e293b" stroke="rgba(148,163,184,0.2)" strokeWidth="0.5" />
+            <text x="160" y="29" textAnchor="middle" fill="rgba(148,163,184,0.5)" className="text-[6px] font-medium">J-BOX</text>
 
             {/* Cables */}
             <line x1="148" y1="18" x2="148" y2="8" stroke="#ef4444" strokeWidth="1.5" strokeLinecap="round" />
             <line x1="172" y1="18" x2="172" y2="8" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
             <text x="148" y="5" textAnchor="middle" fill="#ef4444" className="text-[7px] font-bold">+</text>
-            <text x="172" y="5" textAnchor="middle" fill="#3b82f6" className="text-[7px] font-bold">−</text>
+            <text x="172" y="5" textAnchor="middle" fill="#3b82f6" className="text-[7px] font-bold">{"\u2212"}</text>
 
-            {/* Corner mounting holes */}
+            {/* Mounting holes */}
             {[
               [30, 40], [290, 40], [30, 390], [290, 390],
             ].map(([cx, cy], i) => (
-              <circle key={i} cx={cx} cy={cy} r="4" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+              <circle key={i} cx={cx} cy={cy} r="4" fill="none" stroke="rgba(148,163,184,0.15)" strokeWidth="1" />
             ))}
 
-            {/* Hover glow overlay per zone */}
+            {/* Hover glow */}
             {hoveredZone && (
               <motion.rect
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                x="20" y="30" width="280" height="370" rx="8"
-                fill={zones.find((z) => z.id === hoveredZone)?.color ?? "#4caf50"}
+                x="20" y="30" width="280" height="370" rx="12"
+                fill={zones.find((z) => z.id === hoveredZone)?.color ?? "#6366f1"}
                 fillOpacity="0.06"
               />
             )}
 
             {/* Model label */}
-            <text x="160" y="412" textAnchor="middle" fill="rgba(255,255,255,0.25)" className="text-[8px] font-mono">
+            <text x="160" y="412" textAnchor="middle" fill="rgba(148,163,184,0.35)" className="text-[8px] font-mono">
               {passport.model_id}
             </text>
           </svg>
 
           {/* Floating specs badge */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-            <div className="flex items-center gap-2 border border-border bg-card px-3 py-1">
-              <SunIcon className="h-3 w-3 text-primary" />
-              <span className="text-[10px] font-mono text-primary/80">
+            <div className="flex items-center gap-2 rounded-full bg-card border border-border/50 shadow-sm px-4 py-1.5">
+              <SunIcon className="h-3.5 w-3.5 text-primary" />
+              <span className="text-xs font-semibold text-primary">
                 {passport.rated_power_stc_w}W
               </span>
-              <span className="text-[10px] text-muted-foreground/40">|</span>
-              <span className="text-[10px] font-mono text-muted-foreground/60">
-                η {passport.module_efficiency_percent}%
+              <span className="text-xs text-muted-foreground/40">|</span>
+              <span className="text-xs text-muted-foreground">
+                {"\u03b7"} {passport.module_efficiency_percent}%
               </span>
             </div>
           </div>
@@ -223,7 +207,7 @@ export function SolarPanelDiagram({
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 text-xs text-muted-foreground/50 uppercase tracking-wider font-semibold"
+            className="mb-4 text-sm font-medium text-muted-foreground"
           >
             Explore Passport Sections
           </motion.p>
@@ -244,37 +228,26 @@ export function SolarPanelDiagram({
                     className="group w-full text-left"
                   >
                     <div
-                      className="relative overflow-hidden border border-border bg-card p-4 transition-all duration-200 hover:bg-muted"
-                      style={{
-                        boxShadow: hoveredZone === zone.id ? `0 0 30px ${zone.color}08, inset 0 1px 0 rgba(255,255,255,0.04)` : "inset 0 1px 0 rgba(255,255,255,0.02)",
-                      }}
+                      className="relative overflow-hidden rounded-xl border border-border/50 bg-card p-4 transition-all duration-200 hover:shadow-md"
                     >
-                      {/* Hover gradient */}
-                      <div
-                        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        style={{
-                          background: `linear-gradient(90deg, ${zone.color}08, transparent)`,
-                        }}
-                      />
-
                       <div className="relative flex items-center gap-4">
-                        {/* Zone badge */}
+                        {/* Zone icon */}
                         <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center transition-transform duration-200 group-hover:scale-110"
+                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-105"
                           style={{
-                            backgroundColor: `${zone.color}15`,
+                            backgroundColor: `${zone.color}12`,
                           }}
                         >
-                          <Icon className="h-4.5 w-4.5" style={{ color: zone.color }} />
+                          <Icon className="h-5 w-5" style={{ color: zone.color }} />
                         </div>
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span
-                              className="text-[10px] font-bold px-1.5 py-0.5"
+                              className="text-[10px] font-bold rounded px-1.5 py-0.5"
                               style={{
-                                backgroundColor: `${zone.color}20`,
+                                backgroundColor: `${zone.color}15`,
                                 color: zone.color,
                               }}
                             >
@@ -284,17 +257,14 @@ export function SolarPanelDiagram({
                               {zone.title}
                             </span>
                           </div>
-                          <p className="mt-0.5 text-xs text-muted-foreground/50">
+                          <p className="mt-0.5 text-xs text-muted-foreground">
                             {zone.description}
                           </p>
                         </div>
 
                         {/* Arrow */}
                         <ArrowRightIcon
-                          className="h-4 w-4 shrink-0 text-muted-foreground/20 transition-all duration-200 group-hover:translate-x-1"
-                          style={{
-                            color: hoveredZone === zone.id ? zone.color : undefined,
-                          }}
+                          className="h-4 w-4 shrink-0 text-muted-foreground/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-muted-foreground"
                         />
                       </div>
                     </div>
@@ -304,18 +274,18 @@ export function SolarPanelDiagram({
             })}
           </div>
 
-          {/* Passport ID badge */}
+          {/* Passport ID */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="mt-4 flex items-center gap-2"
+            className="mt-5 flex items-center gap-3"
           >
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
-            <span className="font-mono text-[10px] text-muted-foreground/30">
+            <div className="h-px flex-1 bg-border/50" />
+            <span className="font-mono text-[11px] text-muted-foreground/50">
               {passport.pv_passport_id}
             </span>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+            <div className="h-px flex-1 bg-border/50" />
           </motion.div>
 
           {/* Carbon badge */}
@@ -325,10 +295,10 @@ export function SolarPanelDiagram({
             transition={{ delay: 0.55 }}
             className="mt-3 flex justify-center"
           >
-            <div className="flex items-center gap-2 border border-primary/30 bg-primary/5 px-3 py-1">
-              <div className="h-1.5 w-1.5 bg-primary" />
-              <span className="text-[10px] text-primary">
-                CO₂ Footprint: {passport.carbon_footprint_kg_co2e} kg/module
+            <div className="flex items-center gap-2 rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-4 py-1.5">
+              <div className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                CO{"\u2082"} Footprint: {passport.carbon_footprint_kg_co2e} kg/module
               </span>
             </div>
           </motion.div>

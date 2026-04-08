@@ -23,7 +23,7 @@ export function GlassCard({
     const rect = ref.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
-    ref.current.style.transform = `perspective(800px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+    ref.current.style.transform = `perspective(800px) rotateY(${x * 3}deg) rotateX(${-y * 3}deg)`;
   };
 
   const handleMouseLeave = () => {
@@ -38,21 +38,19 @@ export function GlassCard({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative overflow-hidden border bg-card",
-        "shadow-[0_2px_4px_rgba(0,0,0,0.4)]",
-        "transition-transform duration-150 ease-out",
+        "relative overflow-hidden rounded-2xl bg-card border border-border/50",
+        "shadow-[0_1px_3px_rgba(0,0,0,0.04),0_4px_12px_rgba(0,0,0,0.03)]",
+        "hover:shadow-[0_2px_8px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.04)]",
+        "transition-all duration-300 ease-out",
         className
       )}
-      style={
-        accentColor
-          ? {
-              borderColor: `${accentColor}30`,
-              borderLeftWidth: "3px",
-              borderLeftColor: accentColor,
-            }
-          : undefined
-      }
     >
+      {accentColor && (
+        <div
+          className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
+          style={{ backgroundColor: accentColor }}
+        />
+      )}
       {children}
     </div>
   );

@@ -13,7 +13,7 @@ interface SectionTitleProps {
 export function SectionTitle({
   title,
   description,
-  accentColor = "#4caf50",
+  accentColor,
   className,
 }: SectionTitleProps) {
   return (
@@ -25,15 +25,13 @@ export function SectionTitle({
     >
       <div className="flex items-center gap-3">
         <div
-          className="h-6 w-1"
-          style={{ backgroundColor: accentColor }}
+          className="h-6 w-1.5 rounded-full"
+          style={{ backgroundColor: accentColor ?? "var(--primary)" }}
         />
-        <h2 className="text-xl font-bold uppercase tracking-[0.1em] sm:text-2xl">
-          {title}
-        </h2>
+        <h2 className="text-xl font-semibold sm:text-2xl">{title}</h2>
       </div>
       {description && (
-        <p className="mt-1.5 pl-[1rem] text-sm text-muted-foreground">
+        <p className="mt-2 pl-[1.125rem] text-sm text-muted-foreground">
           {description}
         </p>
       )}

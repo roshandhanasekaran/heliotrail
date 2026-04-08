@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { oxanium, sourceCodePro } from "@/lib/fonts";
+import { inter, sourceCodePro } from "@/lib/fonts";
 import { SITE_CONFIG } from "@/lib/constants";
 import "./globals.css";
 
@@ -22,12 +22,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${oxanium.variable} ${sourceCodePro.variable} h-full antialiased`}
+      className={`${inter.variable} ${sourceCodePro.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

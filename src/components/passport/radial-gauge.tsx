@@ -21,8 +21,7 @@ export function RadialGauge({
   label,
   unit = "%",
   size = 160,
-  color = "#4caf50",
-  glowColor,
+  color = "#6366f1",
   className,
 }: RadialGaugeProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -43,7 +42,6 @@ export function RadialGauge({
     return displayValue.on("change", (v) => setDisplay(String(v)));
   }, [displayValue]);
 
-  const glow = glowColor || color;
   const id = `gauge-${label.replace(/\s/g, "-")}`;
 
   return (
@@ -56,15 +54,8 @@ export function RadialGauge({
           <defs>
             <linearGradient id={`${id}-grad`} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor={color} />
-              <stop offset="100%" stopColor={color} stopOpacity="0.6" />
+              <stop offset="100%" stopColor={color} stopOpacity="0.5" />
             </linearGradient>
-            <filter id={`${id}-glow`}>
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
           </defs>
 
           {/* Background track */}
@@ -74,8 +65,8 @@ export function RadialGauge({
             r={radius}
             fill="none"
             stroke="currentColor"
-            strokeWidth="6"
-            className="text-border/30"
+            strokeWidth="8"
+            className="text-muted/60"
           />
 
           {/* Animated arc */}
@@ -85,9 +76,8 @@ export function RadialGauge({
             r={radius}
             fill="none"
             stroke={`url(#${id}-grad)`}
-            strokeWidth="6"
+            strokeWidth="8"
             strokeLinecap="round"
-            filter={`url(#${id}-glow)`}
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
             animate={
@@ -102,11 +92,8 @@ export function RadialGauge({
         {/* Center value */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className="text-3xl font-bold font-mono tabular-nums"
-            style={{
-              color,
-              textShadow: `0 0 10px ${glow}40, 0 0 30px ${glow}15`,
-            }}
+            className="text-3xl font-bold tabular-nums"
+            style={{ color }}
           >
             {display}
           </span>
