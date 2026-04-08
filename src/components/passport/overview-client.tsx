@@ -41,19 +41,19 @@ export function OverviewClient({
                 </div>
                 <h3 className="text-lg font-semibold">Manufacturer</h3>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-1">
                 {manufacturerData.map((item, i) => (
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 + i * 0.05 }}
-                    className="flex items-center justify-between border-b border-border/50 pb-2.5 last:border-0"
+                    className="group flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/50"
                   >
                     <span className="text-sm text-muted-foreground">
                       {item.label}
                     </span>
-                    <span className="text-sm font-medium">{item.value}</span>
+                    <span className="text-sm font-semibold">{item.value}</span>
                   </motion.div>
                 ))}
               </div>
@@ -76,19 +76,19 @@ export function OverviewClient({
                   Warranty &amp; Identification
                 </h3>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-1">
                 {warrantyData.map((item, i) => (
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + i * 0.05 }}
-                    className="flex items-center justify-between border-b border-border/50 pb-2.5 last:border-0"
+                    className="group flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/50"
                   >
                     <span className="text-sm text-muted-foreground">
                       {item.label}
                     </span>
-                    <span className="text-sm font-medium font-mono">
+                    <span className="text-sm font-semibold font-mono">
                       {item.value}
                     </span>
                   </motion.div>

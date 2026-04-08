@@ -29,10 +29,10 @@ export function PassportSectionNav({ publicId }: PassportSectionNavProps) {
   const base = `/passport/${publicId}`;
 
   return (
-    <div className="border-b border-border/50 bg-card/80 backdrop-blur-sm">
+    <div className="sticky top-0 z-30 border-b border-border/30 bg-card/90 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollArea className="w-full">
-          <nav className="flex gap-1 py-1" role="tablist">
+          <nav className="flex gap-1.5 py-2" role="tablist">
             {sections.map((s) => {
               const href = `${base}${s.segment}`;
               const isActive =
@@ -48,10 +48,10 @@ export function PassportSectionNav({ publicId }: PassportSectionNavProps) {
                   role="tab"
                   aria-selected={isActive}
                   className={cn(
-                    "relative flex items-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all",
+                    "relative flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition-all duration-200",
                     isActive
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                      : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                   )}
                 >
                   <Icon className="h-4 w-4" />

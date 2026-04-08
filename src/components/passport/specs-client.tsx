@@ -92,7 +92,7 @@ export function SpecsClient({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.25 + i * 0.04 }}
-                    className="flex items-center justify-between border-b border-border/30 py-3 last:border-0"
+                    className="flex items-center justify-between rounded-lg px-3 py-3 transition-colors hover:bg-muted/50"
                   >
                     <span className="text-sm text-muted-foreground">
                       {row.param}
@@ -144,7 +144,7 @@ export function SpecsClient({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.35 + i * 0.04 }}
-                    className="flex items-center justify-between border-b border-border/30 py-3 last:border-0"
+                    className="flex items-center justify-between rounded-lg px-3 py-3 transition-colors hover:bg-muted/50"
                   >
                     <span className="text-sm text-muted-foreground">
                       {row.param}
