@@ -1,30 +1,46 @@
+"use client";
+
+import { FadeIn } from "@/components/ui/fade-in";
 import {
   ShieldCheckIcon,
   RecycleIcon,
   GlobeIcon,
   ZapIcon,
+  LockIcon,
+  DatabaseIcon,
 } from "lucide-react";
 
 const items = [
-  { icon: ShieldCheckIcon, label: "EU ESPR Aligned" },
-  { icon: RecycleIcon, label: "Circularity Tracked" },
-  { icon: GlobeIcon, label: "Open & Interoperable" },
-  { icon: ZapIcon, label: "Real-Time Verified" },
+  { icon: ShieldCheckIcon, label: "EU ESPR Aligned", sublabel: "Regulation 2024/1781" },
+  { icon: RecycleIcon, label: "Circularity Tracked", sublabel: "End-of-life ready" },
+  { icon: LockIcon, label: "Immutable Records", sublabel: "Tamper-proof data" },
+  { icon: GlobeIcon, label: "Open Standards", sublabel: "Interoperable DPP" },
+  { icon: DatabaseIcon, label: "Real-Time Data", sublabel: "Always current" },
+  { icon: ZapIcon, label: "Instant Verification", sublabel: "QR scan access" },
 ];
 
 export function TrustBar() {
   return (
-    <section className="border-y border-border bg-muted/30">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-8 px-4 py-6 sm:px-6 lg:gap-16 lg:px-8">
-        {items.map((item) => (
-          <div
-            key={item.label}
-            className="flex items-center gap-2 text-sm text-muted-foreground"
-          >
-            <item.icon className="h-4 w-4 text-primary" />
-            <span className="font-medium">{item.label}</span>
+    <section className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm">
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
+      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <FadeIn>
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
+            {items.map((item, i) => (
+              <FadeIn key={item.label} delay={i * 0.05}>
+                <div className="flex flex-col items-center gap-2 text-center group">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                    <item.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{item.label}</p>
+                    <p className="text-xs text-muted-foreground">{item.sublabel}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
           </div>
-        ))}
+        </FadeIn>
       </div>
     </section>
   );
