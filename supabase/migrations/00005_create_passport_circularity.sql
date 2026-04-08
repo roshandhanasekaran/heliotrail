@@ -1,0 +1,23 @@
+create table passport_circularity (
+  id uuid primary key default gen_random_uuid(),
+  passport_id uuid unique not null references passports(id) on delete cascade,
+  recyclability_rate_percent numeric(5,2),
+  recycled_content_percent numeric(5,2),
+  renewable_content_percent numeric(5,2),
+  is_hazardous boolean default false,
+  hazardous_substances_notes text,
+  dismantling_time_minutes integer,
+  dismantling_instructions text,
+  collection_scheme text,
+  recycler_name text,
+  recycler_contact text,
+  recovery_aluminium boolean default false,
+  recovery_glass boolean default false,
+  recovery_silicon boolean default false,
+  recovery_copper boolean default false,
+  recovery_silver boolean default false,
+  recovery_notes text,
+  end_of_life_status text default 'in_use',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
