@@ -73,6 +73,7 @@ export default async function CircularityPage({ params }: Props) {
     massG: m.mass_g,
     isCritical: m.is_critical_raw_material,
     isSoC: m.is_substance_of_concern,
+    recyclabilityHint: m.recyclability_hint,
   }));
 
   return (

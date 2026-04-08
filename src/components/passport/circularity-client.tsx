@@ -20,6 +20,7 @@ interface MaterialData {
   massG: number | null;
   isCritical: boolean;
   isSoC: boolean;
+  recyclabilityHint: string | null;
 }
 
 interface CircularityData {
@@ -125,7 +126,25 @@ export function CircularityClient({
                   Panel Cross-Section
                 </h3>
               </div>
-              <ExplodedPanel materials={[]} />
+              <ExplodedPanel
+                materials={materials.map((m, i) => {
+                  const colors = [
+                    "#60a5fa", "#fbbf24", "#a78bfa", "#34d399",
+                    "#f97316", "#e879f9", "#f472b6", "#06b6d4", "#94a3b8",
+                  ];
+                  return {
+                    name: m.name,
+                    massPercent: m.massPercent,
+                    massG: m.massG ?? undefined,
+                    color: colors[i % colors.length],
+                    description:
+                      m.recyclabilityHint ??
+                      ((m.isCritical ? "Critical Raw Material. " : "") +
+                      (m.isSoC ? "Substance of Concern. " : "") +
+                      `${m.massPercent}% of total module mass`),
+                  };
+                })}
+              />
             </div>
           </GlassCard>
         </motion.div>
