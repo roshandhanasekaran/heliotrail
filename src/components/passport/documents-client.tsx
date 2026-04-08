@@ -56,7 +56,7 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
                 <div className="flex items-start gap-4 p-5">
                   {/* File icon */}
                   <div
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center"
                     style={{
                       backgroundColor: `${color}15`,
                     }}
@@ -73,7 +73,7 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
                         </p>
                         <div className="mt-1.5 flex flex-wrap items-center gap-2">
                           <span
-                            className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                            className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
                             style={{
                               backgroundColor: `${color}15`,
                               color,
@@ -96,7 +96,7 @@ export function DocumentsClient({ docs }: DocumentsClientProps) {
 
                       {/* Download indicator */}
                       <div
-                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors"
+                        className="flex h-8 w-8 shrink-0 items-center justify-center transition-colors"
                         style={{
                           backgroundColor: `${color}10`,
                         }}

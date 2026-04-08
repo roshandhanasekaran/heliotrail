@@ -89,14 +89,14 @@ export function CapabilitySection() {
         {capabilities.map((cap, i) => (
           <FadeIn key={cap.title} delay={i * 0.08}>
             <div
-              className={`group relative overflow-hidden rounded-xl border ${cap.borderColor} bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5`}
+              className={`group relative overflow-hidden border ${cap.borderColor} bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5`}
             >
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${cap.color} opacity-0 transition-opacity group-hover:opacity-100`}
               />
               <div className="relative">
                 <div
-                  className={`mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-background/50 ${cap.iconColor} ring-1 ring-border/50`}
+                  className={`mb-4 flex h-11 w-11 items-center justify-center bg-background/50 ${cap.iconColor} ring-1 ring-border/50`}
                 >
                   <cap.icon className="h-5 w-5" />
                 </div>

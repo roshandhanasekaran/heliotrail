@@ -1,15 +1,8 @@
-import { Montserrat, Merriweather, Source_Code_Pro } from "next/font/google";
+import { Oxanium, Source_Code_Pro } from "next/font/google";
 
-export const montserrat = Montserrat({
+export const oxanium = Oxanium({
   subsets: ["latin"],
-  variable: "--font-montserrat",
-  display: "swap",
-});
-
-export const merriweather = Merriweather({
-  subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-merriweather",
+  variable: "--font-oxanium",
   display: "swap",
 });
 

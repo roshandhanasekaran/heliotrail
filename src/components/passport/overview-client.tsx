@@ -36,7 +36,7 @@ export function OverviewClient({
           <GlassCard tilt accentColor="#4caf50">
             <div className="p-6">
               <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                <div className="flex h-9 w-9 items-center justify-center bg-primary/10">
                   <FactoryIcon className="h-4.5 w-4.5 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold">Manufacturer</h3>
@@ -48,7 +48,7 @@ export function OverviewClient({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 + i * 0.05 }}
-                    className="flex items-center justify-between border-b border-white/[0.04] pb-2.5 last:border-0"
+                    className="flex items-center justify-between border-b border-border pb-2.5 last:border-0"
                   >
                     <span className="text-sm text-muted-foreground/70">
                       {item.label}
@@ -69,7 +69,7 @@ export function OverviewClient({
           <GlassCard tilt accentColor="#ab47bc">
             <div className="p-6">
               <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/10">
+                <div className="flex h-9 w-9 items-center justify-center bg-purple-500/10">
                   <ShieldCheckIcon className="h-4.5 w-4.5 text-purple-400" />
                 </div>
                 <h3 className="text-lg font-semibold">
@@ -83,7 +83,7 @@ export function OverviewClient({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + i * 0.05 }}
-                    className="flex items-center justify-between border-b border-white/[0.04] pb-2.5 last:border-0"
+                    className="flex items-center justify-between border-b border-border pb-2.5 last:border-0"
                   >
                     <span className="text-sm text-muted-foreground/70">
                       {item.label}

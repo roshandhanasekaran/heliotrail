@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { montserrat, merriweather, sourceCodePro } from "@/lib/fonts";
+import { oxanium, sourceCodePro } from "@/lib/fonts";
 import { SITE_CONFIG } from "@/lib/constants";
 import "./globals.css";
 
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${montserrat.variable} ${merriweather.variable} ${sourceCodePro.variable} h-full antialiased`}
+      className={`${oxanium.variable} ${sourceCodePro.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider

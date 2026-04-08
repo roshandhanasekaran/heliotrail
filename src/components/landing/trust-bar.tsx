@@ -29,7 +29,7 @@ export function TrustBar() {
             {items.map((item, i) => (
               <FadeIn key={item.label} delay={i * 0.05}>
                 <div className="flex flex-col items-center gap-2 text-center group">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                  <div className="flex h-10 w-10 items-center justify-center bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                     <item.icon className="h-5 w-5" />
                   </div>
                   <div>

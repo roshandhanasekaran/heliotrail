@@ -205,7 +205,7 @@ export function SolarPanelDiagram({
 
           {/* Floating specs badge */}
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-            <div className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-black/40 px-3 py-1 backdrop-blur-md">
+            <div className="flex items-center gap-2 border border-border bg-card px-3 py-1">
               <SunIcon className="h-3 w-3 text-primary" />
               <span className="text-[10px] font-mono text-primary/80">
                 {passport.rated_power_stc_w}W
@@ -244,7 +244,7 @@ export function SolarPanelDiagram({
                     className="group w-full text-left"
                   >
                     <div
-                      className="relative overflow-hidden rounded-xl border border-white/[0.05] bg-white/[0.02] p-4 transition-all duration-200 hover:border-white/[0.1] hover:bg-white/[0.04]"
+                      className="relative overflow-hidden border border-border bg-card p-4 transition-all duration-200 hover:bg-muted"
                       style={{
                         boxShadow: hoveredZone === zone.id ? `0 0 30px ${zone.color}08, inset 0 1px 0 rgba(255,255,255,0.04)` : "inset 0 1px 0 rgba(255,255,255,0.02)",
                       }}
@@ -260,7 +260,7 @@ export function SolarPanelDiagram({
                       <div className="relative flex items-center gap-4">
                         {/* Zone badge */}
                         <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-transform duration-200 group-hover:scale-110"
+                          className="flex h-10 w-10 shrink-0 items-center justify-center transition-transform duration-200 group-hover:scale-110"
                           style={{
                             backgroundColor: `${zone.color}15`,
                           }}
@@ -272,7 +272,7 @@ export function SolarPanelDiagram({
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span
-                              className="text-[10px] font-bold rounded-md px-1.5 py-0.5"
+                              className="text-[10px] font-bold px-1.5 py-0.5"
                               style={{
                                 backgroundColor: `${zone.color}20`,
                                 color: zone.color,
@@ -325,9 +325,9 @@ export function SolarPanelDiagram({
             transition={{ delay: 0.55 }}
             className="mt-3 flex justify-center"
           >
-            <div className="flex items-center gap-2 rounded-full border border-emerald-500/10 bg-emerald-500/5 px-3 py-1">
-              <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              <span className="text-[10px] text-emerald-400/80">
+            <div className="flex items-center gap-2 border border-primary/30 bg-primary/5 px-3 py-1">
+              <div className="h-1.5 w-1.5 bg-primary" />
+              <span className="text-[10px] text-primary">
                 CO₂ Footprint: {passport.carbon_footprint_kg_co2e} kg/module
               </span>
             </div>

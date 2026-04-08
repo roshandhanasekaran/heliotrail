@@ -18,25 +18,22 @@ export function SectionTitle({
 }: SectionTitleProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.4 }}
       className={cn("mb-8", className)}
     >
       <div className="flex items-center gap-3">
         <div
-          className="h-8 w-1 rounded-full"
-          style={{
-            background: `linear-gradient(to bottom, ${accentColor}, ${accentColor}40)`,
-            boxShadow: `0 0 12px ${accentColor}30`,
-          }}
+          className="h-6 w-1"
+          style={{ backgroundColor: accentColor }}
         />
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+        <h2 className="text-xl font-bold uppercase tracking-[0.1em] sm:text-2xl">
           {title}
         </h2>
       </div>
       {description && (
-        <p className="mt-2 pl-[1.75rem] text-sm text-muted-foreground/80">
+        <p className="mt-1.5 pl-[1rem] text-sm text-muted-foreground">
           {description}
         </p>
       )}

@@ -36,7 +36,7 @@ export function HeroSection() {
 
       {/* Animated gradient orb */}
       <motion.div
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full z-0"
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] z-0"
         style={{
           background:
             "radial-gradient(circle, rgba(76,175,80,0.15) 0%, rgba(46,125,50,0.05) 50%, transparent 70%)",
@@ -57,12 +57,12 @@ export function HeroSection() {
           {/* Badge */}
           <FadeIn delay={0.1}>
             <motion.div
-              className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm text-primary backdrop-blur-sm"
+              className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm text-primary backdrop-blur-sm"
               whileHover={{ scale: 1.05 }}
             >
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+                <span className="absolute inline-flex h-full w-full animate-ping bg-primary opacity-75" />
+                <span className="relative inline-flex h-2 w-2 bg-primary" />
               </span>
               EU ESPR Digital Product Passport Platform
             </motion.div>

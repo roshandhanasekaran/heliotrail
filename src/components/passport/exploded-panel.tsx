@@ -41,7 +41,7 @@ export function ExplodedPanel({
       <div className="flex justify-center mb-6">
         <button
           onClick={() => setIsExploded(!isExploded)}
-          className="group flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-all hover:border-primary/30 hover:bg-primary/10"
+          className="group flex items-center gap-2 border border-border bg-muted px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-all hover:border-primary/30 hover:bg-primary/10"
         >
           <motion.span
             animate={{ rotate: isExploded ? 180 : 0 }}
@@ -291,11 +291,11 @@ export function ExplodedPanel({
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
-                className="rounded-xl border border-white/[0.06] bg-white/[0.03] p-4 backdrop-blur-sm"
+                className="border border-border bg-card p-4"
               >
                 <div className="flex items-center gap-2.5 mb-3">
                   <div
-                    className="h-4 w-4 rounded-md"
+                    className="h-4 w-4"
                     style={{
                       backgroundColor: layers[activeLayer].color,
                       boxShadow: `0 0 10px ${layers[activeLayer].color}40`,
@@ -332,7 +332,7 @@ export function ExplodedPanel({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="rounded-xl border border-white/[0.04] bg-white/[0.02] p-4 text-center"
+                className="border border-border bg-card p-4 text-center"
               >
                 <p className="text-xs text-muted-foreground/40">
                   Hover over a layer to see details

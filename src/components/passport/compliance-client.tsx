@@ -57,7 +57,7 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
                       {cert.standardName}
                     </h3>
                     <div
-                      className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                      className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold"
                       style={{
                         backgroundColor: `${config.color}15`,
                         color: config.color,
@@ -96,7 +96,7 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
 
                   {/* Scope notes */}
                   {cert.scopeNotes && (
-                    <div className="mt-4 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2">
+                    <div className="mt-4 border border-border bg-card px-3 py-2">
                       <div className="flex items-start gap-1.5">
                         <ShieldCheckIcon className="mt-0.5 h-3 w-3 text-primary/60 shrink-0" />
                         <p className="text-xs text-muted-foreground/80">

@@ -69,7 +69,7 @@ export function SpecsClient({
           <GlassCard tilt accentColor="#2196f3">
             <div className="p-6">
               <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10">
+                <div className="flex h-9 w-9 items-center justify-center bg-blue-500/10">
                   <ZapIcon className="h-4.5 w-4.5 text-blue-400" />
                 </div>
                 <h3 className="text-lg font-semibold">
@@ -79,7 +79,7 @@ export function SpecsClient({
 
               <div className="space-y-0">
                 {/* Table header */}
-                <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 mb-1">
+                <div className="flex items-center justify-between border-b border-border pb-2 mb-1">
                   <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/50">
                     Parameter
                   </span>
@@ -93,7 +93,7 @@ export function SpecsClient({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.25 + i * 0.04 }}
-                    className="flex items-center justify-between border-b border-white/[0.03] py-3 last:border-0"
+                    className="flex items-center justify-between border-b border-border py-3 last:border-0"
                   >
                     <span className="text-sm text-muted-foreground/80">
                       {row.param}
@@ -129,7 +129,7 @@ export function SpecsClient({
           <GlassCard tilt accentColor="#ff9800">
             <div className="p-6">
               <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-500/10">
+                <div className="flex h-9 w-9 items-center justify-center bg-orange-500/10">
                   <BoxIcon className="h-4.5 w-4.5 text-orange-400" />
                 </div>
                 <h3 className="text-lg font-semibold">
@@ -138,7 +138,7 @@ export function SpecsClient({
               </div>
 
               <div className="space-y-0">
-                <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 mb-1">
+                <div className="flex items-center justify-between border-b border-border pb-2 mb-1">
                   <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/50">
                     Parameter
                   </span>
@@ -152,7 +152,7 @@ export function SpecsClient({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.35 + i * 0.04 }}
-                    className="flex items-center justify-between border-b border-white/[0.03] py-3 last:border-0"
+                    className="flex items-center justify-between border-b border-border py-3 last:border-0"
                   >
                     <span className="text-sm text-muted-foreground/80">
                       {row.param}
