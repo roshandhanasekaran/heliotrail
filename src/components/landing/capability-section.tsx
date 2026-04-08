@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { FadeIn } from "@/components/ui/fade-in";
+import { motion } from "framer-motion";
 import {
   FileTextIcon,
   ShieldCheckIcon,
@@ -8,74 +10,136 @@ import {
   BarChart3Icon,
   ScanLineIcon,
   UsersIcon,
+  ArrowRightIcon,
 } from "lucide-react";
 
 const capabilities = [
   {
     icon: FileTextIcon,
-    color: "from-blue-500/20 to-blue-600/5",
-    borderColor: "border-blue-500/20 hover:border-blue-500/40",
-    iconColor: "text-blue-400",
+    accent: "#6366f1",
     title: "Complete Product Identity",
     description:
       "Every module gets a unique digital passport with manufacturer data, specifications, and full traceability from factory to field.",
   },
   {
     icon: ShieldCheckIcon,
-    color: "from-emerald-500/20 to-emerald-600/5",
-    borderColor: "border-emerald-500/20 hover:border-emerald-500/40",
-    iconColor: "text-emerald-400",
+    accent: "#22c55e",
     title: "Compliance & Certifications",
     description:
       "Track IEC standards, CE declarations, and safety certifications with automatic expiry monitoring and status verification.",
   },
   {
     icon: RecycleIcon,
-    color: "from-amber-500/20 to-amber-600/5",
-    borderColor: "border-amber-500/20 hover:border-amber-500/40",
-    iconColor: "text-amber-400",
+    accent: "#f59e0b",
     title: "Circularity Intelligence",
     description:
       "Material composition, recyclability rates, dismantling guides, and critical raw material tracking for end-of-life planning.",
   },
   {
     icon: BarChart3Icon,
-    color: "from-rose-500/20 to-rose-600/5",
-    borderColor: "border-rose-500/20 hover:border-rose-500/40",
-    iconColor: "text-rose-400",
+    accent: "#ef4444",
     title: "Carbon Footprint Tracking",
     description:
       "Cradle-to-gate carbon footprint per ISO 14067 with full methodology transparency and environmental product declarations.",
   },
   {
     icon: ScanLineIcon,
-    color: "from-violet-500/20 to-violet-600/5",
-    borderColor: "border-violet-500/20 hover:border-violet-500/40",
-    iconColor: "text-violet-400",
+    accent: "#8b5cf6",
     title: "QR-Based Access",
     description:
       "Every passport has a unique public ID and QR code. Scan at the installation site to instantly access the full digital record.",
   },
   {
     icon: UsersIcon,
-    color: "from-cyan-500/20 to-cyan-600/5",
-    borderColor: "border-cyan-500/20 hover:border-cyan-500/40",
-    iconColor: "text-cyan-400",
+    accent: "#06b6d4",
     title: "Role-Based Visibility",
     description:
       "Public data for consumers, restricted data for recyclers, full access for manufacturers — all enforced at the database level.",
   },
 ];
 
+function CapabilityCard({
+  cap,
+  index,
+}: {
+  cap: (typeof capabilities)[number];
+  index: number;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const Icon = cap.icon;
+
+  return (
+    <FadeIn delay={index * 0.08}>
+      <motion.div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        whileHover={{ y: -4, transition: { duration: 0.25 } }}
+        className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300"
+        style={{
+          boxShadow: isHovered
+            ? `0 8px 30px ${cap.accent}12, 0 0 0 1px ${cap.accent}20`
+            : "0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03)",
+          borderColor: isHovered ? `${cap.accent}30` : undefined,
+        }}
+      >
+        {/* Top accent line */}
+        <div
+          className="absolute top-0 left-3 right-3 h-0.5 rounded-full transition-all duration-300"
+          style={{
+            backgroundColor: cap.accent,
+            opacity: isHovered ? 0.8 : 0,
+            transform: isHovered ? "scaleX(1)" : "scaleX(0.3)",
+          }}
+        />
+
+        {/* Hover gradient overlay */}
+        <div
+          className="absolute inset-0 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(400px circle at 50% 0%, ${cap.accent}06, transparent 70%)`,
+            opacity: isHovered ? 1 : 0,
+          }}
+        />
+
+        <div className="relative">
+          <div className="mb-5 flex items-center justify-between">
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300"
+              style={{
+                backgroundColor: `${cap.accent}10`,
+                boxShadow: isHovered
+                  ? `0 4px 14px ${cap.accent}20`
+                  : "none",
+              }}
+            >
+              <Icon
+                className="h-5.5 w-5.5 transition-transform duration-300 group-hover:scale-110"
+                style={{ color: cap.accent }}
+              />
+            </div>
+            <ArrowRightIcon
+              className="h-4 w-4 text-muted-foreground/0 transition-all duration-300 group-hover:text-muted-foreground/50 group-hover:translate-x-0.5"
+            />
+          </div>
+          <h3 className="text-lg font-semibold tracking-tight">{cap.title}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {cap.description}
+          </p>
+        </div>
+      </motion.div>
+    </FadeIn>
+  );
+}
+
 export function CapabilitySection() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
       <FadeIn>
         <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
             Platform Capabilities
-          </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          </div>
+          <h2 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
             Everything a PV passport needs
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
@@ -87,26 +151,7 @@ export function CapabilitySection() {
 
       <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {capabilities.map((cap, i) => (
-          <FadeIn key={cap.title} delay={i * 0.08}>
-            <div
-              className={`group relative overflow-hidden rounded-2xl border ${cap.borderColor} bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:bg-card/80 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5`}
-            >
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${cap.color} opacity-0 transition-opacity group-hover:opacity-100`}
-              />
-              <div className="relative">
-                <div
-                  className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-background/50 ${cap.iconColor} ring-1 ring-border/50`}
-                >
-                  <cap.icon className="h-5 w-5" />
-                </div>
-                <h3 className="text-lg font-semibold">{cap.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {cap.description}
-                </p>
-              </div>
-            </div>
-          </FadeIn>
+          <CapabilityCard key={cap.title} cap={cap} index={i} />
         ))}
       </div>
     </section>

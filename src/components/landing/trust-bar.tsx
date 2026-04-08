@@ -1,6 +1,7 @@
 "use client";
 
 import { FadeIn } from "@/components/ui/fade-in";
+import { motion } from "framer-motion";
 import {
   ShieldCheckIcon,
   RecycleIcon,
@@ -11,34 +12,51 @@ import {
 } from "lucide-react";
 
 const items = [
-  { icon: ShieldCheckIcon, label: "EU ESPR Aligned", sublabel: "Regulation 2024/1781" },
-  { icon: RecycleIcon, label: "Circularity Tracked", sublabel: "End-of-life ready" },
-  { icon: LockIcon, label: "Immutable Records", sublabel: "Tamper-proof data" },
-  { icon: GlobeIcon, label: "Open Standards", sublabel: "Interoperable DPP" },
-  { icon: DatabaseIcon, label: "Real-Time Data", sublabel: "Always current" },
-  { icon: ZapIcon, label: "Instant Verification", sublabel: "QR scan access" },
+  { icon: ShieldCheckIcon, label: "EU ESPR Aligned", sublabel: "Regulation 2024/1781", color: "#6366f1" },
+  { icon: RecycleIcon, label: "Circularity Tracked", sublabel: "End-of-life ready", color: "#22c55e" },
+  { icon: LockIcon, label: "Immutable Records", sublabel: "Tamper-proof data", color: "#f59e0b" },
+  { icon: GlobeIcon, label: "Open Standards", sublabel: "Interoperable DPP", color: "#3b82f6" },
+  { icon: DatabaseIcon, label: "Real-Time Data", sublabel: "Always current", color: "#8b5cf6" },
+  { icon: ZapIcon, label: "Instant Verification", sublabel: "QR scan access", color: "#06b6d4" },
 ];
 
 export function TrustBar() {
   return (
-    <section className="relative overflow-hidden border-y border-border/50 bg-card/30 backdrop-blur-sm">
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
-      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden border-y border-border/30 bg-gradient-to-b from-card/60 to-background">
+      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <FadeIn>
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
-            {items.map((item, i) => (
-              <FadeIn key={item.label} delay={i * 0.05}>
-                <div className="flex flex-col items-center gap-2 text-center group">
-                  <div className="flex h-10 w-10 items-center justify-center bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
-                    <item.icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{item.label}</p>
-                    <p className="text-xs text-muted-foreground">{item.sublabel}</p>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-6">
+            {items.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <FadeIn key={item.label} delay={i * 0.05}>
+                  <motion.div
+                    whileHover={{ y: -2 }}
+                    className="group flex flex-col items-center gap-3 text-center"
+                  >
+                    <div
+                      className="flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:shadow-lg"
+                      style={{
+                        backgroundColor: `${item.color}10`,
+                      }}
+                    >
+                      <Icon
+                        className="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
+                        style={{ color: item.color }}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">
+                        {item.label}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {item.sublabel}
+                      </p>
+                    </div>
+                  </motion.div>
+                </FadeIn>
+              );
+            })}
           </div>
         </FadeIn>
       </div>
