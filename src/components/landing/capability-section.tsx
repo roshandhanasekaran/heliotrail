@@ -73,22 +73,23 @@ function CapabilityCard({
       <motion.div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        whileHover={{ y: -4, transition: { duration: 0.25 } }}
-        className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 transition-all duration-300"
+        whileHover={{ y: -6, transition: { duration: 0.25 } }}
+        className="group relative h-full overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] p-6 backdrop-blur-sm transition-all duration-300"
         style={{
           boxShadow: isHovered
-            ? `0 8px 30px ${cap.accent}12, 0 0 0 1px ${cap.accent}20`
-            : "0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03)",
-          borderColor: isHovered ? `${cap.accent}30` : undefined,
+            ? `0 8px 40px ${cap.accent}20, 0 0 0 1px ${cap.accent}30, inset 0 1px 0 rgba(255,255,255,0.06)`
+            : "inset 0 1px 0 rgba(255,255,255,0.04)",
+          borderColor: isHovered ? `${cap.accent}40` : undefined,
         }}
       >
         {/* Top accent line */}
         <div
-          className="absolute top-0 left-3 right-3 h-0.5 rounded-full transition-all duration-300"
+          className="absolute top-0 left-0 right-0 h-[2px] transition-all duration-300"
           style={{
-            backgroundColor: cap.accent,
+            background: isHovered
+              ? `linear-gradient(90deg, transparent, ${cap.accent}, transparent)`
+              : "transparent",
             opacity: isHovered ? 0.8 : 0,
-            transform: isHovered ? "scaleX(1)" : "scaleX(0.3)",
           }}
         />
 
@@ -96,7 +97,7 @@ function CapabilityCard({
         <div
           className="absolute inset-0 transition-opacity duration-300"
           style={{
-            background: `radial-gradient(400px circle at 50% 0%, ${cap.accent}06, transparent 70%)`,
+            background: `radial-gradient(400px circle at 50% 0%, ${cap.accent}12, transparent 70%)`,
             opacity: isHovered ? 1 : 0,
           }}
         />
@@ -106,9 +107,9 @@ function CapabilityCard({
             <div
               className="flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300"
               style={{
-                backgroundColor: `${cap.accent}10`,
+                backgroundColor: `${cap.accent}15`,
                 boxShadow: isHovered
-                  ? `0 4px 14px ${cap.accent}20`
+                  ? `0 4px 20px ${cap.accent}30`
                   : "none",
               }}
             >
@@ -118,11 +119,13 @@ function CapabilityCard({
               />
             </div>
             <ArrowRightIcon
-              className="h-4 w-4 text-muted-foreground/0 transition-all duration-300 group-hover:text-muted-foreground/50 group-hover:translate-x-0.5"
+              className="h-4 w-4 text-white/0 transition-all duration-300 group-hover:text-white/40 group-hover:translate-x-0.5"
             />
           </div>
-          <h3 className="text-lg font-semibold tracking-tight">{cap.title}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          <h3 className="text-lg font-semibold tracking-tight text-white">
+            {cap.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-slate-400">
             {cap.description}
           </p>
         </div>
@@ -133,27 +136,60 @@ function CapabilityCard({
 
 export function CapabilitySection() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-      <FadeIn>
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-medium text-primary">
-            Platform Capabilities
-          </div>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
-            Everything a PV passport needs
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            From manufacturing data to end-of-life recycling, HelioTrail
-            captures the full lifecycle of every solar module.
-          </p>
-        </div>
-      </FadeIn>
+    <section className="relative overflow-hidden bg-[#0a0a1a] py-24">
+      {/* Decorative gradient orbs */}
+      <div
+        className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full opacity-30"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] rounded-full opacity-20"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%)",
+        }}
+      />
 
-      <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {capabilities.map((cap, i) => (
-          <CapabilityCard key={cap.title} cap={cap} index={i} />
-        ))}
+      {/* Grid pattern overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Top gradient transition from light */}
+      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-background to-transparent" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <FadeIn>
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-300">
+              Platform Capabilities
+            </div>
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Everything a PV passport needs
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+              From manufacturing data to end-of-life recycling, HelioTrail
+              captures the full lifecycle of every solar module.
+            </p>
+          </div>
+        </FadeIn>
+
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {capabilities.map((cap, i) => (
+            <CapabilityCard key={cap.title} cap={cap} index={i} />
+          ))}
+        </div>
       </div>
+
+      {/* No bottom gradient — flows directly into CTA footer */}
     </section>
   );
 }
