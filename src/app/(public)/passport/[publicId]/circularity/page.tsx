@@ -88,6 +88,7 @@ export default async function CircularityPage({ params }: Props) {
     <CircularityClient
       circularity={circularityData}
       materials={materialsData}
+      accessLevel="public"
     />
   );
 }
