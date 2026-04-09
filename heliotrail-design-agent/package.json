@@ -1,0 +1,29 @@
+{
+  "name": "heliotrail-design-agent",
+  "version": "1.0.0",
+  "description": "Elite UI/UX design agent for HelioTrail — iterative design cycles, inspiration research, screenshot review, and professional frontend implementation",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "npx tsx src/index.ts",
+    "design": "npx tsx src/index.ts",
+    "review": "npx tsx src/review.ts",
+    "inspire": "npx tsx src/inspire.ts",
+    "typecheck": "npx tsc --noEmit"
+  },
+  "keywords": [
+    "design-agent",
+    "ui-ux",
+    "heliotrail",
+    "claude-agent-sdk"
+  ],
+  "author": "HelioTrail",
+  "license": "ISC",
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.97",
+    "@types/node": "^25.5.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "zod": "^4.3.6"
+  }
+}

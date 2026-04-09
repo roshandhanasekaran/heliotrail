@@ -1,0 +1,201 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "HT HelioTrail" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: HT
+        - generic [ref=e7]: HelioTrail
+      - navigation [ref=e8]:
+        - link "Scan" [ref=e9] [cursor=pointer]:
+          - /url: /scan
+          - img
+          - text: Scan
+        - link "Sign In" [ref=e10] [cursor=pointer]:
+          - /url: /sign-in
+          - img
+          - text: Sign In
+        - button "Toggle theme" [ref=e11]:
+          - img
+          - generic [ref=e12]: Toggle theme
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e19]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e27]: Active Passport
+            - generic [ref=e28]: TOPCon
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - text: Verified
+          - generic [ref=e33]:
+            - generic [ref=e34]: PVP-2026-0001
+            - button [ref=e35]:
+              - img [ref=e36]
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "HT-550N-72-BF" [level=1] [ref=e42]
+            - paragraph [ref=e43]: 550 W · HelioTrail Demo Manufacturing
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - text: Chennai GigaFactory
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Manufactured 15 Jan 2026
+        - generic [ref=e53]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - paragraph [ref=e62]: Rated Power
+            - generic [ref=e63]:
+              - generic [ref=e64]: "550"
+              - generic [ref=e65]: W
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - paragraph [ref=e75]: Efficiency
+            - generic [ref=e76]:
+              - generic [ref=e77]: "21.8"
+              - generic [ref=e78]: "%"
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - paragraph [ref=e88]: Carbon
+            - generic [ref=e89]:
+              - generic [ref=e90]: "385"
+              - generic [ref=e91]: kg
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - img [ref=e98]
+              - paragraph [ref=e100]: Lifetime
+            - generic [ref=e101]:
+              - generic [ref=e102]: "35"
+              - generic [ref=e103]: yr
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - img [ref=e110]
+              - paragraph [ref=e113]: Warranty
+            - generic [ref=e114]:
+              - generic [ref=e115]: "12"
+              - generic [ref=e116]: yr
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - img [ref=e123]
+              - paragraph [ref=e125]: Cells
+            - generic [ref=e127]: "72"
+      - tablist [ref=e132]:
+        - tab "Overview" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - generic [ref=e140]: Overview
+        - tab "Specs" [selected] [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]:
+            - img [ref=e143]
+            - generic [ref=e146]: Specs
+        - tab "Compliance" [ref=e148] [cursor=pointer]:
+          - generic [ref=e149]:
+            - img [ref=e150]
+            - generic [ref=e153]: Compliance
+        - tab "Circularity" [ref=e154] [cursor=pointer]:
+          - generic [ref=e155]:
+            - img [ref=e156]
+            - generic [ref=e163]: Circularity
+        - tab "Documents" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]:
+            - img [ref=e166]
+            - generic [ref=e169]: Documents
+      - generic [ref=e171]:
+        - generic [ref=e172]:
+          - generic [ref=e177]:
+            - img [ref=e179]
+            - heading "Technical Specifications" [level=2] [ref=e182]
+          - paragraph [ref=e183]: Electrical and mechanical parameters at Standard Test Conditions (STC)
+        - generic [ref=e190]:
+          - generic [ref=e191]:
+            - generic [ref=e192]:
+              - img [ref=e194]
+              - generic [ref=e218]:
+                - generic [ref=e219]: "0"
+                - generic [ref=e220]: W
+            - paragraph [ref=e221]: Rated Power
+          - generic [ref=e223]:
+            - generic [ref=e224]:
+              - img [ref=e226]
+              - generic [ref=e250]:
+                - generic [ref=e251]: "0"
+                - generic [ref=e252]: "%"
+            - paragraph [ref=e253]: Efficiency
+        - generic [ref=e254]:
+          - generic [ref=e260]:
+            - generic [ref=e261]:
+              - img [ref=e263]
+              - generic [ref=e265]:
+                - heading "Electrical Parameters" [level=3] [ref=e266]
+                - paragraph [ref=e267]: Standard Test Conditions
+            - generic [ref=e268]:
+              - generic [ref=e269]: Parameter
+              - generic [ref=e270]: Value
+            - generic [ref=e271]:
+              - generic [ref=e272]:
+                - generic [ref=e273]: Rated Power (STC)
+                - generic [ref=e274]: 550 W
+              - generic [ref=e275]:
+                - generic [ref=e276]: Module Efficiency
+                - generic [ref=e277]: 21.8 %
+              - generic [ref=e278]:
+                - generic [ref=e279]: Open Circuit Voltage (Voc)
+                - generic [ref=e280]: 49.8 V
+              - generic [ref=e281]:
+                - generic [ref=e282]: Short Circuit Current (Isc)
+                - generic [ref=e283]: 13.95 A
+              - generic [ref=e284]:
+                - generic [ref=e285]: Voltage at Max Power (Vmp)
+                - generic [ref=e286]: 41.7 V
+              - generic [ref=e287]:
+                - generic [ref=e288]: Current at Max Power (Imp)
+                - generic [ref=e289]: 13.19 A
+              - generic [ref=e290]:
+                - generic [ref=e291]: Max System Voltage
+                - generic [ref=e292]: 1500 V
+          - generic [ref=e298]:
+            - generic [ref=e299]:
+              - img [ref=e301]
+              - generic [ref=e304]:
+                - heading "Mechanical Parameters" [level=3] [ref=e305]
+                - paragraph [ref=e306]: Physical dimensions & weight
+            - generic [ref=e307]:
+              - generic [ref=e308]: Parameter
+              - generic [ref=e309]: Value
+            - generic [ref=e310]:
+              - generic [ref=e311]:
+                - generic [ref=e312]: Length
+                - generic [ref=e313]: 2278 mm
+              - generic [ref=e314]:
+                - generic [ref=e315]: Width
+                - generic [ref=e316]: 1134 mm
+              - generic [ref=e317]:
+                - generic [ref=e318]: Depth
+                - generic [ref=e319]: 30 mm
+              - generic [ref=e320]:
+                - generic [ref=e321]: Mass
+                - generic [ref=e322]: 28.5 kg
+              - generic [ref=e323]:
+                - generic [ref=e324]: Cell Count
+                - generic [ref=e325]: "72"
+              - generic [ref=e326]:
+                - generic [ref=e327]: Cell Type
+                - generic [ref=e328]: N-type TOPCon bifacial
+  - contentinfo [ref=e329]:
+    - generic [ref=e330]:
+      - generic [ref=e331]:
+        - generic [ref=e332]:
+          - generic [ref=e334]: HT
+          - generic [ref=e335]: HelioTrail— Digital Product Passports for PV Solar
+        - navigation [ref=e336]:
+          - link "Scan Passport" [ref=e337] [cursor=pointer]:
+            - /url: /scan
+          - link "About" [ref=e338] [cursor=pointer]:
+            - /url: /
+      - paragraph [ref=e339]: © 2026 HelioTrail. Aligned with EU ESPR Digital Product Passport requirements.
+  - button "Open Next.js Dev Tools" [ref=e345] [cursor=pointer]:
+    - img [ref=e346]

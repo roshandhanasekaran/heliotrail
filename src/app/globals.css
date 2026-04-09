@@ -93,6 +93,11 @@
   --passport-green-muted: #E8FAE9;
   --passport-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   --passport-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --passport-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --passport-amber: #F59E0B;
+  --passport-amber-muted: #FEF3C7;
+  --passport-blue: #3B82F6;
+  --passport-blue-muted: #DBEAFE;
 }
 
 @layer base {

@@ -1,0 +1,217 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "HT HelioTrail" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: HT
+        - generic [ref=e7]: HelioTrail
+      - navigation [ref=e8]:
+        - link "Scan" [ref=e9] [cursor=pointer]:
+          - /url: /scan
+          - img
+          - text: Scan
+        - link "Sign In" [ref=e10] [cursor=pointer]:
+          - /url: /sign-in
+          - img
+          - text: Sign In
+        - button "Toggle theme" [ref=e11]:
+          - img
+          - generic [ref=e12]: Toggle theme
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e19]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e27]: Active Passport
+            - generic [ref=e28]: TOPCon
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - text: Verified
+          - generic [ref=e33]:
+            - generic [ref=e34]: PVP-2026-0001
+            - button [ref=e35]:
+              - img [ref=e36]
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "HT-550N-72-BF" [level=1] [ref=e42]
+            - paragraph [ref=e43]: 550 W · HelioTrail Demo Manufacturing
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - text: Chennai GigaFactory
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Manufactured 15 Jan 2026
+        - generic [ref=e53]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - paragraph [ref=e62]: Rated Power
+            - generic [ref=e63]:
+              - generic [ref=e64]: "550"
+              - generic [ref=e65]: W
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - paragraph [ref=e75]: Efficiency
+            - generic [ref=e76]:
+              - generic [ref=e77]: "21.8"
+              - generic [ref=e78]: "%"
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - paragraph [ref=e88]: Carbon
+            - generic [ref=e89]:
+              - generic [ref=e90]: "385"
+              - generic [ref=e91]: kg
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - img [ref=e98]
+              - paragraph [ref=e100]: Lifetime
+            - generic [ref=e101]:
+              - generic [ref=e102]: "35"
+              - generic [ref=e103]: yr
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - img [ref=e110]
+              - paragraph [ref=e113]: Warranty
+            - generic [ref=e114]:
+              - generic [ref=e115]: "12"
+              - generic [ref=e116]: yr
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - img [ref=e123]
+              - paragraph [ref=e125]: Cells
+            - generic [ref=e127]: "72"
+      - tablist [ref=e132]:
+        - tab "Overview" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - generic [ref=e140]: Overview
+        - tab "Specs" [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]:
+            - img [ref=e143]
+            - generic [ref=e146]: Specs
+        - tab "Compliance" [ref=e147] [cursor=pointer]:
+          - generic [ref=e148]:
+            - img [ref=e149]
+            - generic [ref=e152]: Compliance
+        - tab "Circularity" [ref=e153] [cursor=pointer]:
+          - generic [ref=e154]:
+            - img [ref=e155]
+            - generic [ref=e162]: Circularity
+        - tab "Documents" [selected] [ref=e163] [cursor=pointer]:
+          - generic [ref=e164]:
+            - img [ref=e165]
+            - generic [ref=e168]: Documents
+      - generic [ref=e171]:
+        - generic [ref=e172]:
+          - generic [ref=e177]:
+            - img [ref=e179]
+            - heading "Documents" [level=2] [ref=e182]
+          - paragraph [ref=e183]: Public documentation, declarations, and technical datasheets
+        - generic [ref=e185]:
+          - generic [ref=e191]:
+            - img [ref=e193]
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - generic [ref=e198]:
+                  - paragraph [ref=e199]: HT-550N-72-BF Technical Datasheet
+                  - generic [ref=e200]:
+                    - generic [ref=e201]: Datasheet
+                    - generic [ref=e202]: PDF
+                    - generic [ref=e203]: 2.3 MB
+                - img [ref=e205]
+              - paragraph [ref=e208]: Complete electrical and mechanical specifications at STC and NOCT conditions
+              - generic [ref=e209]:
+                - generic [ref=e210]: Issued by HelioTrail Demo Manufacturing
+                - generic [ref=e211]: 1 Dec 2025
+          - generic [ref=e217]:
+            - img [ref=e219]
+            - generic [ref=e223]:
+              - generic [ref=e224]:
+                - generic [ref=e225]:
+                  - paragraph [ref=e226]: EU Declaration of Conformity
+                  - generic [ref=e227]:
+                    - generic [ref=e228]: Declaration of Conformity
+                    - generic [ref=e229]: PDF
+                    - generic [ref=e230]: 830 KB
+                - img [ref=e232]
+              - paragraph [ref=e235]: Declaration of conformity under EU Machinery Directive and Low Voltage Directive
+              - generic [ref=e236]:
+                - generic [ref=e237]: Issued by HelioTrail Demo Manufacturing
+                - generic [ref=e238]: 10 Jan 2026
+          - generic [ref=e244]:
+            - img [ref=e246]
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]:
+                  - paragraph [ref=e252]: Installation and User Manual
+                  - generic [ref=e253]:
+                    - generic [ref=e254]: User Manual
+                    - generic [ref=e255]: PDF
+                    - generic [ref=e256]: 5.0 MB
+                - img [ref=e258]
+              - paragraph [ref=e261]: Complete installation, commissioning, and maintenance guide
+              - generic [ref=e262]:
+                - generic [ref=e263]: Issued by HelioTrail Demo Manufacturing
+                - generic [ref=e264]: 15 Nov 2025
+          - generic [ref=e270]:
+            - img [ref=e272]
+            - generic [ref=e275]:
+              - generic [ref=e276]:
+                - generic [ref=e277]:
+                  - paragraph [ref=e278]: Safety Instructions
+                  - generic [ref=e279]:
+                    - generic [ref=e280]: Safety Instructions
+                    - generic [ref=e281]: PDF
+                    - generic [ref=e282]: 1.1 MB
+                - img [ref=e284]
+              - paragraph [ref=e287]: Safety guidelines for handling, transport, installation, and disposal
+              - generic [ref=e288]:
+                - generic [ref=e289]: Issued by HelioTrail Demo Manufacturing
+                - generic [ref=e290]: 15 Nov 2025
+          - generic [ref=e296]:
+            - img [ref=e298]
+            - generic [ref=e300]:
+              - generic [ref=e301]:
+                - generic [ref=e302]:
+                  - paragraph [ref=e303]: Environmental Product Declaration
+                  - generic [ref=e304]:
+                    - generic [ref=e305]: EPD
+                    - generic [ref=e306]: PDF
+                    - generic [ref=e307]: 3.0 MB
+                - img [ref=e309]
+              - paragraph [ref=e312]: Cradle-to-gate EPD per ISO 14025 and EN 15804
+              - generic [ref=e313]:
+                - generic [ref=e314]: Issued by Institut Bauen und Umwelt
+                - generic [ref=e315]: 20 Oct 2025
+          - generic [ref=e321]:
+            - img [ref=e323]
+            - generic [ref=e326]:
+              - generic [ref=e327]:
+                - generic [ref=e328]:
+                  - paragraph [ref=e329]: End-of-Life Recycling Guide
+                  - generic [ref=e330]:
+                    - generic [ref=e331]: Recycling Guide
+                    - generic [ref=e332]: PDF
+                    - generic [ref=e333]: 957 KB
+                - img [ref=e335]
+              - paragraph [ref=e338]: Dismantling sequence, material recovery guidance, and hazard information
+              - generic [ref=e339]:
+                - generic [ref=e340]: Issued by HelioTrail Demo Manufacturing
+                - generic [ref=e341]: 15 Dec 2025
+      - generic [ref=e343]:
+        - generic [ref=e344]:
+          - generic [ref=e345]:
+            - generic [ref=e347]: HT
+            - generic [ref=e348]: HelioTrail— Digital Product Passports for PV Solar
+          - navigation [ref=e349]:
+            - link "Scan Passport" [ref=e350] [cursor=pointer]:
+              - /url: /scan
+            - link "About" [ref=e351] [cursor=pointer]:
+              - /url: /
+        - paragraph [ref=e352]: © 2026 HelioTrail. Aligned with EU ESPR Digital Product Passport requirements.
+  - button "Open Next.js Dev Tools" [ref=e358] [cursor=pointer]:
+    - img [ref=e359]
+  - alert [ref=e362]

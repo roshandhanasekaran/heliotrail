@@ -1,0 +1,227 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "HT HelioTrail" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: HT
+        - generic [ref=e7]: HelioTrail
+      - navigation [ref=e8]:
+        - link "Scan" [ref=e9] [cursor=pointer]:
+          - /url: /scan
+          - img
+          - text: Scan
+        - link "Sign In" [ref=e10] [cursor=pointer]:
+          - /url: /sign-in
+          - img
+          - text: Sign In
+        - button "Toggle theme" [ref=e11]:
+          - img
+          - generic [ref=e12]: Toggle theme
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e19]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e27]: Active Passport
+            - generic [ref=e28]: TOPCon
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - text: Verified
+          - generic [ref=e33]:
+            - generic [ref=e34]: PVP-2026-0001
+            - button [ref=e35]:
+              - img [ref=e36]
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "HT-550N-72-BF" [level=1] [ref=e42]
+            - paragraph [ref=e43]: 550 W · HelioTrail Demo Manufacturing
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - text: Chennai GigaFactory
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Manufactured 15 Jan 2026
+        - generic [ref=e53]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - paragraph [ref=e62]: Rated Power
+            - generic [ref=e63]:
+              - generic [ref=e64]: "550"
+              - generic [ref=e65]: W
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - paragraph [ref=e75]: Efficiency
+            - generic [ref=e76]:
+              - generic [ref=e77]: "21.8"
+              - generic [ref=e78]: "%"
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - paragraph [ref=e88]: Carbon
+            - generic [ref=e89]:
+              - generic [ref=e90]: "385"
+              - generic [ref=e91]: kg
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - img [ref=e98]
+              - paragraph [ref=e100]: Lifetime
+            - generic [ref=e101]:
+              - generic [ref=e102]: "35"
+              - generic [ref=e103]: yr
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - img [ref=e110]
+              - paragraph [ref=e113]: Warranty
+            - generic [ref=e114]:
+              - generic [ref=e115]: "12"
+              - generic [ref=e116]: yr
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - img [ref=e123]
+              - paragraph [ref=e125]: Cells
+            - generic [ref=e127]: "72"
+      - tablist [ref=e132]:
+        - tab "Overview" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - generic [ref=e140]: Overview
+        - tab "Specs" [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]:
+            - img [ref=e143]
+            - generic [ref=e146]: Specs
+        - tab "Compliance" [selected] [ref=e147] [cursor=pointer]:
+          - generic [ref=e148]:
+            - img [ref=e149]
+            - generic [ref=e152]: Compliance
+        - tab "Circularity" [ref=e154] [cursor=pointer]:
+          - generic [ref=e155]:
+            - img [ref=e156]
+            - generic [ref=e163]: Circularity
+        - tab "Documents" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]:
+            - img [ref=e166]
+            - generic [ref=e169]: Documents
+      - generic [ref=e171]:
+        - generic [ref=e172]:
+          - generic [ref=e177]:
+            - img [ref=e179]
+            - heading "Compliance & Certifications" [level=2] [ref=e182]
+          - paragraph [ref=e183]: Standards, test certifications, and regulatory compliance
+        - generic [ref=e190]:
+          - img [ref=e192]
+          - generic [ref=e195]: "4"
+          - generic [ref=e196]: valid
+        - generic [ref=e197]:
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - generic [ref=e205]:
+                - img [ref=e207]
+                - heading "UL 61730" [level=3] [ref=e210]
+              - generic [ref=e211]:
+                - img [ref=e212]
+                - text: Valid
+            - generic [ref=e215]:
+              - generic [ref=e216]:
+                - generic [ref=e217]: Issuer
+                - generic [ref=e218]: UL Solutions
+              - generic [ref=e219]:
+                - generic [ref=e220]: "Certificate #"
+                - generic [ref=e221]: UL-61730-HT550-001
+              - generic [ref=e222]:
+                - generic [ref=e223]: Issued
+                - generic [ref=e224]: 1 Oct 2025
+              - generic [ref=e225]:
+                - generic [ref=e226]: Expires
+                - generic [ref=e227]: 1 Oct 2030
+            - generic [ref=e229]:
+              - img [ref=e230]
+              - paragraph [ref=e233]: North American safety certification
+          - generic [ref=e239]:
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - img [ref=e243]
+                - heading "IEC 62804:2014" [level=3] [ref=e246]
+              - generic [ref=e247]:
+                - img [ref=e248]
+                - text: Valid
+            - generic [ref=e251]:
+              - generic [ref=e252]:
+                - generic [ref=e253]: Issuer
+                - generic [ref=e254]: PI Berlin
+              - generic [ref=e255]:
+                - generic [ref=e256]: "Certificate #"
+                - generic [ref=e257]: CERT-62804-HT550-001
+              - generic [ref=e258]:
+                - generic [ref=e259]: Issued
+                - generic [ref=e260]: 1 Sept 2025
+              - generic [ref=e261]:
+                - generic [ref=e262]: Expires
+                - generic [ref=e263]: 1 Sept 2030
+            - generic [ref=e265]:
+              - img [ref=e266]
+              - paragraph [ref=e269]: PID resistance test — passed at 96h/85C/85%RH/1500V
+          - generic [ref=e275]:
+            - generic [ref=e276]:
+              - generic [ref=e277]:
+                - img [ref=e279]
+                - heading "IEC 61215:2021" [level=3] [ref=e282]
+              - generic [ref=e283]:
+                - img [ref=e284]
+                - text: Valid
+            - generic [ref=e287]:
+              - generic [ref=e288]:
+                - generic [ref=e289]: Issuer
+                - generic [ref=e290]: TUV Rheinland
+              - generic [ref=e291]:
+                - generic [ref=e292]: "Certificate #"
+                - generic [ref=e293]: CERT-61215-HT550-001
+              - generic [ref=e294]:
+                - generic [ref=e295]: Issued
+                - generic [ref=e296]: 15 Aug 2025
+              - generic [ref=e297]:
+                - generic [ref=e298]: Expires
+                - generic [ref=e299]: 15 Aug 2030
+            - generic [ref=e301]:
+              - img [ref=e302]
+              - paragraph [ref=e305]: Design qualification and type approval for crystalline silicon terrestrial PV modules
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - generic [ref=e313]:
+                - img [ref=e315]
+                - heading "IEC 61730:2023" [level=3] [ref=e318]
+              - generic [ref=e319]:
+                - img [ref=e320]
+                - text: Valid
+            - generic [ref=e323]:
+              - generic [ref=e324]:
+                - generic [ref=e325]: Issuer
+                - generic [ref=e326]: TUV Rheinland
+              - generic [ref=e327]:
+                - generic [ref=e328]: "Certificate #"
+                - generic [ref=e329]: CERT-61730-HT550-001
+              - generic [ref=e330]:
+                - generic [ref=e331]: Issued
+                - generic [ref=e332]: 15 Aug 2025
+              - generic [ref=e333]:
+                - generic [ref=e334]: Expires
+                - generic [ref=e335]: 15 Aug 2030
+            - generic [ref=e337]:
+              - img [ref=e338]
+              - paragraph [ref=e341]: PV module safety qualification — Class A fire rating
+  - contentinfo [ref=e342]:
+    - generic [ref=e343]:
+      - generic [ref=e344]:
+        - generic [ref=e345]:
+          - generic [ref=e347]: HT
+          - generic [ref=e348]: HelioTrail— Digital Product Passports for PV Solar
+        - navigation [ref=e349]:
+          - link "Scan Passport" [ref=e350] [cursor=pointer]:
+            - /url: /scan
+          - link "About" [ref=e351] [cursor=pointer]:
+            - /url: /
+      - paragraph [ref=e352]: © 2026 HelioTrail. Aligned with EU ESPR Digital Product Passport requirements.
+  - button "Open Next.js Dev Tools" [ref=e358] [cursor=pointer]:
+    - img [ref=e359]

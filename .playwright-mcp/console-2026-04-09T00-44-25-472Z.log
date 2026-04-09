@@ -1,0 +1,247 @@
+[    1262ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1301ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1464ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <CircularityPage>
+      <CircularityClient circularity={{...}} materials={[...]}>
+        ...
+          <div style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+            <GlassCard variant="subtle">
+              <div ref={{current:null}} onMouseMove={function handleMouseMove} onMouseEnter={function onMouseEnter} ...>
+                <div>
+                <div className="relative z-10">
+                  <div className="px-8 py-8">
+                    <div className="flex flex-...">
+                      <RadialGauge value={92} max={100} label="Recyclabil..." unit="%" size={175} color="#22c55e" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:175, ...}}>
+                            <div>
+                            <svg viewBox="0 0 175 175" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={50.749999999999964}
++                               y1={23.84713282184378}
+-                               y1="23.847132821843772"
+                                x2={48.749999999999964}
+                                y2={20.383031206706022}
+                                stroke="#22c55e"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={8.5} max={100} label="Recycled C..." unit="%" size={155} color="#60a5fa" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:155, ...}}>
+                            <div>
+                            <svg viewBox="0 0 155 155" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={45.74999999999997}
++                               y1={22.50738685968816}
+-                               y1="22.507386859688154"
+                                x2={43.74999999999997}
++                               y2={19.04328524455041}
+-                               y2="19.043285244550404"
+                                stroke="rgba(255,255,255,0.08)"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.4}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={25} max={120} label="Dismantlin..." unit="min" size={155} color="#fbbf24" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:155, ...}}>
+                            <div>
+                            <svg viewBox="0 0 155 155" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={45.74999999999997}
++                               y1={22.50738685968816}
+-                               y1="22.507386859688154"
+                                x2={43.74999999999997}
++                               y2={19.04328524455041}
+-                               y2="19.043285244550404"
+                                stroke="rgba(255,255,255,0.08)"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.4}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  960155ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  960473ms] [LOG] [Fast Refresh] done in 420ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1673880ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1675408ms] [LOG] [Fast Refresh] done in 1627ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1675598ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1677076ms] [LOG] [Fast Refresh] done in 1576ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1677523ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1677809ms] [LOG] [Fast Refresh] done in 390ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1678166ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1678181ms] [LOG] [Fast Refresh] done in 116ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1679421ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1679437ms] [LOG] [Fast Refresh] done in 113ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1680153ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1680158ms] [LOG] [Fast Refresh] done in 106ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1684156ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1686382ms] [LOG] [Fast Refresh] done in 2252ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1699696ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1700983ms] [LOG] [Fast Refresh] done in 1345ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1701134ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1701194ms] [LOG] [Fast Refresh] done in 161ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1702259ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1702411ms] [LOG] [Fast Refresh] done in 254ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1702936ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1703520ms] [LOG] [Fast Refresh] done in 685ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1704063ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1704120ms] [LOG] [Fast Refresh] done in 159ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1704331ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1704356ms] [LOG] [Fast Refresh] done in 125ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1711009ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1711634ms] [LOG] [Fast Refresh] done in 725ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1713702ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1713949ms] [LOG] [Fast Refresh] done in 348ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1714771ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1715038ms] [LOG] [Fast Refresh] done in 367ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1726665ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1728151ms] [LOG] [Fast Refresh] done in 1588ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1728353ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1728374ms] [LOG] [Fast Refresh] done in 122ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1769459ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1771157ms] [LOG] [Fast Refresh] done in 1746ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1784376ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1790264ms] [LOG] [Fast Refresh] done in 5925ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1790404ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1791538ms] [LOG] [Fast Refresh] done in 1234ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1792313ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1792678ms] [LOG] [Fast Refresh] done in 467ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1793808ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1797249ms] [LOG] [Fast Refresh] done in 3544ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1814864ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1817468ms] [LOG] [Fast Refresh] done in 2645ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1817873ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1819492ms] [LOG] [Fast Refresh] done in 1718ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1849008ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1849176ms] [LOG] [Fast Refresh] done in 261ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1879113ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1879338ms] [LOG] [Fast Refresh] done in 279ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1879469ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1879554ms] [LOG] [Fast Refresh] done in 186ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1888233ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1888483ms] [LOG] [Fast Refresh] done in 308ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1899190ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1899223ms] [LOG] [Fast Refresh] done in 136ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1910764ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1910860ms] [LOG] [Fast Refresh] done in 198ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1916988ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1917165ms] [LOG] [Fast Refresh] done in 217ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1917385ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1917389ms] [LOG] [Fast Refresh] done in 198ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1922553ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1922599ms] [LOG] [Fast Refresh] done in 148ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1934525ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1934640ms] [LOG] [Fast Refresh] done in 217ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1952722ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1952752ms] [LOG] [Fast Refresh] done in 132ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1956270ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1958476ms] [LOG] [Fast Refresh] done in 2294ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1958585ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1959219ms] [LOG] [Fast Refresh] done in 736ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1982090ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1982900ms] [LOG] [Fast Refresh] done in 855ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1983058ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1983276ms] [LOG] [Fast Refresh] done in 320ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1996047ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1996963ms] [LOG] [Fast Refresh] done in 989ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2032746ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2033377ms] [LOG] [Fast Refresh] done in 733ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2038110ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2038246ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2047586ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2049115ms] [LOG] [Fast Refresh] done in 1631ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2052255ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2052433ms] [LOG] [Fast Refresh] done in 294ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2053427ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2053971ms] [LOG] [Fast Refresh] done in 661ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2065328ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2065431ms] [LOG] [Fast Refresh] done in 203ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2066346ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2066614ms] [LOG] [Fast Refresh] done in 368ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2071749ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2071926ms] [LOG] [Fast Refresh] done in 278ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2082950ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2083097ms] [LOG] [Fast Refresh] done in 249ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2084349ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2084366ms] [LOG] [Fast Refresh] done in 132ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2102932ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2103323ms] [LOG] [Fast Refresh] done in 492ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431

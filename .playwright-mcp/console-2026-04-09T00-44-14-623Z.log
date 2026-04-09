@@ -1,0 +1,107 @@
+[     397ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[     414ms] [LOG] [Fast Refresh] done in 118ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1271ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1320ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1522ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <SpecsPage>
+      <SpecsClient electrical={[...]} mechanical={[...]} gaugeData={{power:550, ...}}>
+        ...
+          <div style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+            <GlassCard variant="subtle">
+              <div ref={{current:null}} onMouseMove={function handleMouseMove} onMouseEnter={function onMouseEnter} ...>
+                <div>
+                <div className="relative z-10">
+                  <div className="px-8 py-8">
+                    <div className="flex flex-...">
+                      <RadialGauge value={550} max={700} label="Rated Power" unit="W" size={170} color="#818cf8" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:170, ...}}>
+                            <div>
+                            <svg viewBox="0 0 170 170" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={49.49999999999997}
++                               y1={23.512196331304878}
+-                               y1="23.51219633130487"
+                                x2={47.499999999999964}
++                               y2={20.048094716167128}
+-                               y2="20.048094716167114"
+                                stroke="#818cf8"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={21.8} max={30} label="Efficiency" unit="%" size={170} color="#34d399" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:170, ...}}>
+                            <div>
+                            <svg viewBox="0 0 170 170" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={49.49999999999997}
++                               y1={23.512196331304878}
+-                               y1="23.51219633130487"
+                                x2={47.499999999999964}
++                               y2={20.048094716167128}
+-                               y2="20.048094716167114"
+                                stroke="#34d399"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[    6585ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    6589ms] [LOG] [Fast Refresh] done in 105ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431

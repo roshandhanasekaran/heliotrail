@@ -1,0 +1,240 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "HT HelioTrail" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: HT
+        - generic [ref=e7]: HelioTrail
+      - navigation [ref=e8]:
+        - link "Scan" [ref=e9] [cursor=pointer]:
+          - /url: /scan
+          - img
+          - text: Scan
+        - link "Sign In" [ref=e10] [cursor=pointer]:
+          - /url: /sign-in
+          - img
+          - text: Sign In
+        - button "Toggle theme" [ref=e11]:
+          - img
+          - generic [ref=e12]: Toggle theme
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e19]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e27]: Active Passport
+            - generic [ref=e28]: TOPCon
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - text: Verified
+          - generic [ref=e33]:
+            - generic [ref=e34]: PVP-2026-0001
+            - button [ref=e35]:
+              - img [ref=e36]
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "HT-550N-72-BF" [level=1] [ref=e42]
+            - paragraph [ref=e43]: 550 W · HelioTrail Demo Manufacturing
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - text: Chennai GigaFactory
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Manufactured 15 Jan 2026
+        - generic [ref=e53]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - paragraph [ref=e62]: Rated Power
+            - generic [ref=e63]:
+              - generic [ref=e64]: "550"
+              - generic [ref=e65]: W
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - paragraph [ref=e75]: Efficiency
+            - generic [ref=e76]:
+              - generic [ref=e77]: "21.8"
+              - generic [ref=e78]: "%"
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - paragraph [ref=e88]: Carbon
+            - generic [ref=e89]:
+              - generic [ref=e90]: "385"
+              - generic [ref=e91]: kg
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - img [ref=e98]
+              - paragraph [ref=e100]: Lifetime
+            - generic [ref=e101]:
+              - generic [ref=e102]: "35"
+              - generic [ref=e103]: yr
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - img [ref=e110]
+              - paragraph [ref=e113]: Warranty
+            - generic [ref=e114]:
+              - generic [ref=e115]: "12"
+              - generic [ref=e116]: yr
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - img [ref=e123]
+              - paragraph [ref=e125]: Cells
+            - generic [ref=e127]: "72"
+      - tablist [ref=e132]:
+        - tab "Overview" [selected] [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - generic [ref=e140]: Overview
+        - tab "Specs" [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]:
+            - img [ref=e144]
+            - generic [ref=e147]: Specs
+        - tab "Compliance" [ref=e148] [cursor=pointer]:
+          - generic [ref=e149]:
+            - img [ref=e150]
+            - generic [ref=e153]: Compliance
+        - tab "Circularity" [ref=e154] [cursor=pointer]:
+          - generic [ref=e155]:
+            - img [ref=e156]
+            - generic [ref=e163]: Circularity
+        - tab "Documents" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]:
+            - img [ref=e166]
+            - generic [ref=e169]: Documents
+      - generic [ref=e171]:
+        - generic [ref=e174]:
+          - generic [ref=e175]:
+            - img [ref=e176]:
+              - generic [ref=e260]: J-BOX
+              - generic [ref=e261]: +
+              - generic [ref=e262]: −
+              - generic [ref=e267]: HT-550N-72-BF
+            - generic [ref=e269]:
+              - img [ref=e270]
+              - generic [ref=e276]: 550W
+              - generic [ref=e277]: "|"
+              - generic [ref=e278]: η 21.8%
+          - generic [ref=e279]:
+            - paragraph [ref=e280]: Explore Passport Sections
+            - generic [ref=e281]:
+              - button "A General Info Manufacturer, identity, warranty" [ref=e283]:
+                - generic [ref=e286]:
+                  - img [ref=e288]
+                  - generic [ref=e293]:
+                    - generic [ref=e294]:
+                      - generic [ref=e295]: A
+                      - generic [ref=e296]: General Info
+                    - paragraph [ref=e297]: Manufacturer, identity, warranty
+                  - img [ref=e298]
+              - button "B Specifications Electrical & mechanical parameters" [ref=e301]:
+                - generic [ref=e304]:
+                  - img [ref=e306]
+                  - generic [ref=e309]:
+                    - generic [ref=e310]:
+                      - generic [ref=e311]: B
+                      - generic [ref=e312]: Specifications
+                    - paragraph [ref=e313]: Electrical & mechanical parameters
+                  - img [ref=e314]
+              - button "C Compliance Certifications & standards" [ref=e317]:
+                - generic [ref=e320]:
+                  - img [ref=e322]
+                  - generic [ref=e325]:
+                    - generic [ref=e326]:
+                      - generic [ref=e327]: C
+                      - generic [ref=e328]: Compliance
+                    - paragraph [ref=e329]: Certifications & standards
+                  - img [ref=e330]
+              - button "D Circularity Recyclability & end-of-life" [ref=e333]:
+                - generic [ref=e336]:
+                  - img [ref=e338]
+                  - generic [ref=e345]:
+                    - generic [ref=e346]:
+                      - generic [ref=e347]: D
+                      - generic [ref=e348]: Circularity
+                    - paragraph [ref=e349]: Recyclability & end-of-life
+                  - img [ref=e350]
+              - button "E Documents Datasheets, declarations, manuals" [ref=e353]:
+                - generic [ref=e356]:
+                  - img [ref=e358]
+                  - generic [ref=e361]:
+                    - generic [ref=e362]:
+                      - generic [ref=e363]: E
+                      - generic [ref=e364]: Documents
+                    - paragraph [ref=e365]: Datasheets, declarations, manuals
+                  - img [ref=e366]
+            - generic [ref=e370]: PVP-2026-0001
+            - generic [ref=e375]: "CO₂ Footprint: 385 kg/module"
+        - generic [ref=e376]:
+          - generic [ref=e377]:
+            - generic [ref=e382]:
+              - img [ref=e384]
+              - heading "Product Details" [level=2] [ref=e393]
+            - paragraph [ref=e394]: Manufacturer information and warranty coverage
+          - generic [ref=e396]:
+            - generic [ref=e402]:
+              - generic [ref=e403]:
+                - img [ref=e405]
+                - generic [ref=e407]:
+                  - heading "Manufacturer" [level=3] [ref=e408]
+                  - paragraph [ref=e409]: Origin & production details
+              - generic [ref=e410]:
+                - generic [ref=e411]:
+                  - generic [ref=e412]: Manufacturer
+                  - generic [ref=e413]: HelioTrail Demo Manufacturing
+                - generic [ref=e414]:
+                  - generic [ref=e415]: Operator ID
+                  - generic [ref=e416]: EO-HT-001
+                - generic [ref=e417]:
+                  - generic [ref=e418]: Country
+                  - generic [ref=e419]: India
+                - generic [ref=e420]:
+                  - generic [ref=e421]: Facility
+                  - generic [ref=e422]: Chennai GigaFactory
+                - generic [ref=e423]:
+                  - generic [ref=e424]: Location
+                  - generic [ref=e425]: Chennai, India
+                - generic [ref=e426]:
+                  - generic [ref=e427]: Manufacturing Date
+                  - generic [ref=e428]: 15 Jan 2026
+            - generic [ref=e434]:
+              - generic [ref=e435]:
+                - img [ref=e437]
+                - generic [ref=e440]:
+                  - heading "Warranty & Identification" [level=3] [ref=e441]
+                  - paragraph [ref=e442]: Coverage & serial details
+              - generic [ref=e443]:
+                - generic [ref=e444]:
+                  - generic [ref=e445]: Serial Number
+                  - generic [ref=e446]: HTD-2026-TPC-001234
+                - generic [ref=e447]:
+                  - generic [ref=e448]: Batch ID
+                  - generic [ref=e449]: B-2026-Q1-TOPCon
+                - generic [ref=e450]:
+                  - generic [ref=e451]: GTIN
+                  - generic [ref=e452]: "04012345678901"
+                - generic [ref=e453]:
+                  - generic [ref=e454]: Product Warranty
+                  - generic [ref=e455]: 12 years
+                - generic [ref=e456]:
+                  - generic [ref=e457]: Performance Warranty
+                  - generic [ref=e458]: 30 years / 87.4%
+                - generic [ref=e459]:
+                  - generic [ref=e460]: Degradation Rate
+                  - generic [ref=e461]: 0.4%/yr
+  - contentinfo [ref=e462]:
+    - generic [ref=e463]:
+      - generic [ref=e464]:
+        - generic [ref=e465]:
+          - generic [ref=e467]: HT
+          - generic [ref=e468]: HelioTrail— Digital Product Passports for PV Solar
+        - navigation [ref=e469]:
+          - link "Scan Passport" [ref=e470] [cursor=pointer]:
+            - /url: /scan
+          - link "About" [ref=e471] [cursor=pointer]:
+            - /url: /
+      - paragraph [ref=e472]: © 2026 HelioTrail. Aligned with EU ESPR Digital Product Passport requirements.
+  - button "Open Next.js Dev Tools" [ref=e478] [cursor=pointer]:
+    - img [ref=e479]

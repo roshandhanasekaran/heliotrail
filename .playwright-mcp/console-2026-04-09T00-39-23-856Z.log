@@ -1,0 +1,145 @@
+[     352ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[     427ms] [LOG] [Fast Refresh] done in 176ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2426ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2486ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2697ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2712ms] [LOG] [Fast Refresh] done in 126ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2815ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <CircularityPage>
+      <CircularityClient circularity={{...}} materials={[...]}>
+        ...
+          <div style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+            <GlassCard variant="subtle">
+              <div ref={{current:null}} onMouseMove={function handleMouseMove} onMouseEnter={function onMouseEnter} ...>
+                <div>
+                <div className="relative z-10">
+                  <div className="px-8 py-8">
+                    <div className="flex flex-...">
+                      <RadialGauge value={92} max={100} label="Recyclabil..." unit="%" size={175} color="#22c55e" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:175, ...}}>
+                            <div>
+                            <svg viewBox="0 0 175 175" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={50.749999999999964}
++                               y1={23.84713282184378}
+-                               y1="23.847132821843772"
+                                x2={48.749999999999964}
+                                y2={20.383031206706022}
+                                stroke="#22c55e"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={8.5} max={100} label="Recycled C..." unit="%" size={155} color="#60a5fa" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:155, ...}}>
+                            <div>
+                            <svg viewBox="0 0 155 155" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={45.74999999999997}
++                               y1={22.50738685968816}
+-                               y1="22.507386859688154"
+                                x2={43.74999999999997}
++                               y2={19.04328524455041}
+-                               y2="19.043285244550404"
+                                stroke="rgba(255,255,255,0.08)"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.4}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={25} max={120} label="Dismantlin..." unit="min" size={155} color="#fbbf24" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:155, ...}}>
+                            <div>
+                            <svg viewBox="0 0 155 155" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={45.74999999999997}
++                               y1={22.50738685968816}
+-                               y1="22.507386859688154"
+                                x2={43.74999999999997}
++                               y2={19.04328524455041}
+-                               y2="19.043285244550404"
+                                stroke="rgba(255,255,255,0.08)"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.4}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272

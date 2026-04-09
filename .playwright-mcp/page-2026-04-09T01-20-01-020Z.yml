@@ -1,0 +1,254 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "HT HelioTrail" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]: HT
+        - generic [ref=e7]: HelioTrail
+      - navigation [ref=e8]:
+        - link "Scan" [ref=e9] [cursor=pointer]:
+          - /url: /scan
+          - img
+          - text: Scan
+        - link "Sign In" [ref=e10] [cursor=pointer]:
+          - /url: /sign-in
+          - img
+          - text: Sign In
+        - button "Toggle theme" [ref=e11]:
+          - img
+          - generic [ref=e12]: Toggle theme
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e19]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - generic [ref=e27]: Active Passport
+            - generic [ref=e28]: TOPCon
+            - generic [ref=e29]:
+              - img [ref=e30]
+              - text: Verified
+          - generic [ref=e33]:
+            - generic [ref=e34]: PVP-2026-0001
+            - button [ref=e35]:
+              - img [ref=e36]
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - heading "HT-550N-72-BF" [level=1] [ref=e42]
+            - paragraph [ref=e43]: 550 W · HelioTrail Demo Manufacturing
+          - generic [ref=e44]:
+            - generic [ref=e45]:
+              - img [ref=e46]
+              - text: Chennai GigaFactory
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Manufactured 15 Jan 2026
+        - generic [ref=e53]:
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - paragraph [ref=e62]: Rated Power
+            - generic [ref=e63]:
+              - generic [ref=e64]: "550"
+              - generic [ref=e65]: W
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - img [ref=e72]
+              - paragraph [ref=e75]: Efficiency
+            - generic [ref=e76]:
+              - generic [ref=e77]: "21.8"
+              - generic [ref=e78]: "%"
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - img [ref=e85]
+              - paragraph [ref=e88]: Carbon
+            - generic [ref=e89]:
+              - generic [ref=e90]: "385"
+              - generic [ref=e91]: kg
+          - generic [ref=e96]:
+            - generic [ref=e97]:
+              - img [ref=e98]
+              - paragraph [ref=e100]: Lifetime
+            - generic [ref=e101]:
+              - generic [ref=e102]: "35"
+              - generic [ref=e103]: yr
+          - generic [ref=e108]:
+            - generic [ref=e109]:
+              - img [ref=e110]
+              - paragraph [ref=e113]: Warranty
+            - generic [ref=e114]:
+              - generic [ref=e115]: "12"
+              - generic [ref=e116]: yr
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - img [ref=e123]
+              - paragraph [ref=e125]: Cells
+            - generic [ref=e127]: "72"
+      - tablist [ref=e132]:
+        - tab "Overview" [ref=e133] [cursor=pointer]:
+          - generic [ref=e134]:
+            - img [ref=e135]
+            - generic [ref=e140]: Overview
+        - tab "Specs" [ref=e141] [cursor=pointer]:
+          - generic [ref=e142]:
+            - img [ref=e143]
+            - generic [ref=e146]: Specs
+        - tab "Compliance" [ref=e147] [cursor=pointer]:
+          - generic [ref=e148]:
+            - img [ref=e149]
+            - generic [ref=e152]: Compliance
+        - tab "Circularity" [selected] [ref=e153] [cursor=pointer]:
+          - generic [ref=e154]:
+            - img [ref=e155]
+            - generic [ref=e162]: Circularity
+        - tab "Documents" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]:
+            - img [ref=e166]
+            - generic [ref=e169]: Documents
+      - generic [ref=e171]:
+        - generic [ref=e172]:
+          - generic [ref=e177]:
+            - img [ref=e179]
+            - heading "Circularity & End of Life" [level=2] [ref=e186]
+          - paragraph [ref=e187]: Recyclability, material composition, and dismantling information
+        - generic [ref=e194]:
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - img [ref=e198]
+              - generic [ref=e222]:
+                - generic [ref=e223]: "0"
+                - generic [ref=e224]: "%"
+            - paragraph [ref=e225]: Recyclability Rate
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - img [ref=e230]
+              - generic [ref=e254]:
+                - generic [ref=e255]: "0"
+                - generic [ref=e256]: "%"
+            - paragraph [ref=e257]: Recycled Content
+          - generic [ref=e259]:
+            - generic [ref=e260]:
+              - img [ref=e262]
+              - generic [ref=e286]:
+                - generic [ref=e287]: "0"
+                - generic [ref=e288]: min
+            - paragraph [ref=e289]: Dismantling Time
+        - generic [ref=e295]:
+          - generic [ref=e296]:
+            - img [ref=e298]
+            - generic [ref=e301]:
+              - heading "Material Composition" [level=3] [ref=e302]
+              - paragraph [ref=e303]: Weight distribution by component
+          - generic [ref=e304]:
+            - generic [ref=e305]:
+              - img [ref=e306]
+              - generic:
+                - generic:
+                  - generic: "18.2"
+                  - generic: kg total
+            - generic [ref=e317]:
+              - generic [ref=e318] [cursor=pointer]:
+                - generic [ref=e321]: Tempered glass
+                - generic [ref=e322]:
+                  - generic [ref=e323]: 12.0kg
+                  - generic [ref=e324]: 42.11%
+              - generic [ref=e325] [cursor=pointer]:
+                - generic [ref=e328]: Aluminium alloy
+                - generic [ref=e329]:
+                  - generic [ref=e330]: 3.2kg
+                  - generic [ref=e331]: 11.23%
+              - generic [ref=e332] [cursor=pointer]:
+                - generic [ref=e335]: EVA encapsulant
+                - generic [ref=e336]:
+                  - generic [ref=e337]: 1.1kg
+                  - generic [ref=e338]: 3.86%
+              - generic [ref=e339] [cursor=pointer]:
+                - generic [ref=e342]: Silicon wafers
+                - generic [ref=e343]:
+                  - generic [ref=e344]: 480g
+                  - generic [ref=e345]: 1.68%
+              - generic [ref=e346] [cursor=pointer]:
+                - generic [ref=e349]: Copper interconnects
+                - generic [ref=e350]:
+                  - generic [ref=e351]: 350g
+                  - generic [ref=e352]: 1.23%
+              - generic [ref=e353] [cursor=pointer]:
+                - generic [ref=e356]: Silver paste
+                - generic [ref=e357]:
+                  - generic [ref=e358]: 8g
+                  - generic [ref=e359]: 0.03%
+              - generic [ref=e360] [cursor=pointer]:
+                - generic [ref=e363]: Backsheet polymer
+                - generic [ref=e364]:
+                  - generic [ref=e365]: 650g
+                  - generic [ref=e366]: 2.28%
+              - generic [ref=e367] [cursor=pointer]:
+                - generic [ref=e370]: Junction box (PP)
+                - generic [ref=e371]:
+                  - generic [ref=e372]: 280g
+                  - generic [ref=e373]: 0.98%
+              - generic [ref=e374] [cursor=pointer]:
+                - generic [ref=e377]: Sealant and adhesive
+                - generic [ref=e378]:
+                  - generic [ref=e379]: 150g
+                  - generic [ref=e380]: 0.53%
+        - generic [ref=e387]:
+          - generic [ref=e388]:
+            - img [ref=e390]
+            - generic [ref=e397]:
+              - heading "Material Recovery" [level=3] [ref=e398]
+              - paragraph [ref=e399]: Recoverable materials assessment
+          - generic [ref=e400]:
+            - generic [ref=e401]:
+              - generic [ref=e404]: Aluminium
+              - generic [ref=e405]:
+                - img [ref=e406]
+                - generic [ref=e409]: Recoverable
+            - generic [ref=e410]:
+              - generic [ref=e413]: Glass
+              - generic [ref=e414]:
+                - img [ref=e415]
+                - generic [ref=e418]: Recoverable
+            - generic [ref=e419]:
+              - generic [ref=e422]: Silicon
+              - generic [ref=e423]:
+                - img [ref=e424]
+                - generic [ref=e427]: Recoverable
+            - generic [ref=e428]:
+              - generic [ref=e431]: Copper
+              - generic [ref=e432]:
+                - img [ref=e433]
+                - generic [ref=e436]: Recoverable
+            - generic [ref=e437]:
+              - generic [ref=e440]: Silver
+              - generic [ref=e441]:
+                - img [ref=e442]
+                - generic [ref=e445]: Recoverable
+          - paragraph [ref=e446]: "Aluminium frame: direct smelting. Glass: cullet for glass industry. Silicon: chemical purification for reuse. Copper: copper smelting. Silver: chemical extraction. EVA/backsheet: energy recovery."
+        - generic [ref=e447]:
+          - generic [ref=e453]:
+            - generic [ref=e454]:
+              - img [ref=e456]
+              - generic [ref=e458]:
+                - heading "Dismantling Instructions" [level=3] [ref=e459]
+                - paragraph [ref=e460]: End-of-life procedures
+            - generic [ref=e461]: "1. Remove junction box and cables (2 min) 2. Remove aluminium frame — unclip or unbolt corners (5 min) 3. Separate backsheet via thermal delamination at 350°C (8 min) 4. Separate glass from cell string (5 min) 5. Recover silicon cells and copper interconnects (5 min) Note: Wear appropriate PPE. Handle glass carefully to avoid breakage contamination."
+          - generic [ref=e467]:
+            - generic [ref=e468]:
+              - img [ref=e470]
+              - generic [ref=e477]:
+                - heading "Collection Scheme" [level=3] [ref=e478]
+                - paragraph [ref=e479]: Recycling program details
+            - paragraph [ref=e480]: WEEE Directive 2012/19/EU — PV modules classified as electronic waste. Return to manufacturer take-back program or approved WEEE collection facility.
+      - generic [ref=e482]:
+        - generic [ref=e483]:
+          - generic [ref=e484]:
+            - generic [ref=e486]: HT
+            - generic [ref=e487]: HelioTrail— Digital Product Passports for PV Solar
+          - navigation [ref=e488]:
+            - link "Scan Passport" [ref=e489] [cursor=pointer]:
+              - /url: /scan
+            - link "About" [ref=e490] [cursor=pointer]:
+              - /url: /
+        - paragraph [ref=e491]: © 2026 HelioTrail. Aligned with EU ESPR Digital Product Passport requirements.
+  - button "Open Next.js Dev Tools" [ref=e497] [cursor=pointer]:
+    - img [ref=e498]

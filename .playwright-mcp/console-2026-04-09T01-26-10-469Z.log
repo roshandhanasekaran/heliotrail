@@ -1,0 +1,576 @@
+[     323ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[     458ms] [LOG] [Fast Refresh] done in 236ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[     561ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[     621ms] [LOG] [Fast Refresh] done in 162ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1726ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    1964ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2208ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <SpecsPage>
+      <SpecsClient electrical={[...]} mechanical={[...]} gaugeData={{power:550, ...}}>
+        ...
+          <div style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+            <GlassCard variant="subtle">
+              <div ref={{current:null}} onMouseMove={function handleMouseMove} onMouseEnter={function onMouseEnter} ...>
+                <div>
+                <div className="relative z-10">
+                  <div className="px-8 py-8">
+                    <div className="flex flex-...">
+                      <RadialGauge value={550} max={700} label="Rated Power" unit="W" size={170} color="#818cf8" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:170, ...}}>
+                            <div>
+                            <svg viewBox="0 0 170 170" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={49.49999999999997}
++                               y1={23.512196331304878}
+-                               y1="23.51219633130487"
+                                x2={47.499999999999964}
++                               y2={20.048094716167128}
+-                               y2="20.048094716167114"
+                                stroke="#818cf8"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={21.8} max={30} label="Efficiency" unit="%" size={170} color="#34d399" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:170, ...}}>
+                            <div>
+                            <svg viewBox="0 0 170 170" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={49.49999999999997}
++                               y1={23.512196331304878}
+-                               y1="23.51219633130487"
+                                x2={47.499999999999964}
++                               y2={20.048094716167128}
+-                               y2="20.048094716167114"
+                                stroke="#34d399"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[    2238ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2313ms] [LOG] [Fast Refresh] done in 204ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2729ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2767ms] [LOG] [Fast Refresh] done in 171ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    2973ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    3678ms] [LOG] [Fast Refresh] done in 843ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   10124ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   10151ms] [LOG] [Fast Refresh] done in 130ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   33289ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   33332ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   33481ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <SpecsPage>
+      <SpecsClient electrical={[...]} mechanical={[...]} gaugeData={{power:550, ...}}>
+        ...
+          <div style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+            <GlassCard variant="subtle">
+              <div ref={{current:null}} onMouseMove={function handleMouseMove} onMouseEnter={function onMouseEnter} ...>
+                <div>
+                <div className="relative z-10">
+                  <div className="px-8 py-8">
+                    <div className="flex flex-...">
+                      <RadialGauge value={550} max={700} label="Rated Power" unit="W" size={170} color="#818cf8" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:170, ...}}>
+                            <div>
+                            <svg viewBox="0 0 170 170" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={49.49999999999997}
++                               y1={23.512196331304878}
+-                               y1="23.51219633130487"
+                                x2={47.499999999999964}
++                               y2={20.048094716167128}
+-                               y2="20.048094716167114"
+                                stroke="#818cf8"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+                      <div>
+                      <RadialGauge value={21.8} max={30} label="Efficiency" unit="%" size={170} color="#34d399" ...>
+                        <div ref={{current:null}} className="flex flex-...">
+                          <div className="relative r..." style={{width:170, ...}}>
+                            <div>
+                            <svg viewBox="0 0 170 170" className="w-full h-f...">
+                              <defs>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line>
+                              <line
+                                x1={49.49999999999997}
++                               y1={23.512196331304878}
+-                               y1="23.51219633130487"
+                                x2={47.499999999999964}
++                               y2={20.048094716167128}
+-                               y2="20.048094716167114"
+                                stroke="#34d399"
+                                strokeWidth={0.8}
+                                strokeLinecap="round"
+                                opacity={0.8}
+                              >
+                              ...
+                              ...
+                            ...
+                          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  318935ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  319019ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  319168ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  319180ms] [LOG] [Fast Refresh] done in 114ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  322123ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  322217ms] [LOG] [Fast Refresh] done in 194ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  323190ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  323226ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  643702ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  643704ms] [LOG] [Fast Refresh] done in 104ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  668194ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  668994ms] [LOG] [Fast Refresh] done in 901ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  675842ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  676030ms] [LOG] [Fast Refresh] done in 262ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  755654ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  756214ms] [LOG] [Fast Refresh] done in 662ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  763161ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  768130ms] [LOG] [Fast Refresh] done in 3548ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  769657ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  770408ms] [LOG] [Fast Refresh] done in 914ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  771921ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  771990ms] [LOG] [Fast Refresh] done in 170ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  773605ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  773717ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  773891ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  775685ms] [LOG] [Fast Refresh] done in 1907ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  821888ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  822739ms] [LOG] [Fast Refresh] done in 923ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  848537ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  848836ms] [LOG] [Fast Refresh] done in 395ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  848939ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  849031ms] [LOG] [Fast Refresh] done in 192ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  849373ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  849373ms] [LOG] [Fast Refresh] done in 169ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  849514ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  849682ms] [LOG] [Fast Refresh] done in 268ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  850075ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  850147ms] [LOG] [Fast Refresh] done in 174ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  892570ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  894691ms] [LOG] [Fast Refresh] done in 2209ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  894793ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  896397ms] [LOG] [Fast Refresh] done in 1705ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  899406ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  899598ms] [LOG] [Fast Refresh] done in 292ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  900329ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  900550ms] [LOG] [Fast Refresh] done in 322ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  901474ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  901567ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  901958ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  902043ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <PassportHero passport={{id:"18d6ad...", ...}}>
+      <div className="relative o...">
+        <div>
+        <div>
+        <div className="relative z...">
+          <FadeIn>
+          <FadeIn delay={0.1}>
+            <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true, ...}} ...>
+              <div className="" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                <div className="flex flex-...">
+                  <div>
+                  <motion.div initial={{opacity:0, ...}} animate={{opacity:1,scale:1}} transition={{delay:0.3, ...}} ...>
+                    <div className="shrink-0 f..." style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                      <div className="rounded-xl...">
+                        <div className="rounded-lg...">
+                          <QRCodeSVG2 value="http://loc..." size={96} level="M" bgColor="#ffffff" fgColor="#1a1d23">
+                            <svg height={96} width={96} viewBox="0 0 33 33" ref={null} role="img">
+                              <path>
+                              <path
+                                fill="#1a1d23"
++                               d="M0 0h7v1H0zM9 0h1v1H9zM14 0h1v1H14zM16 0h1v1H16zM18 0h2v1H18zM23 0h1v1H23zM26,0 h7v..."
+-                               d="M0 0h7v1H0zM10 0h2v1H10zM13 0h2v1H13zM16 0h1v1H16zM18 0h6v1H18zM26,0 h7v1H26zM0 1h1..."
+                                shapeRendering="crispEdges"
+                              >
+                      ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  902084ms] [LOG] [Fast Refresh] done in 235ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  902915ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  903644ms] [LOG] [Fast Refresh] done in 869ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  918229ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  918688ms] [LOG] [Fast Refresh] done in 355ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  929814ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  930019ms] [LOG] [Fast Refresh] done in 210ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  934790ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  935017ms] [LOG] [Fast Refresh] done in 317ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  947599ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  947630ms] [LOG] [Fast Refresh] done in 116ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  972065ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  972501ms] [LOG] [Fast Refresh] done in 514ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  987127ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  987452ms] [LOG] [Fast Refresh] done in 404ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  990718ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  990800ms] [LOG] [Fast Refresh] done in 184ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  995752ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  995781ms] [LOG] [Fast Refresh] done in 130ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1010871ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1011730ms] [LOG] [Fast Refresh] done in 948ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1052897ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1053606ms] [LOG] [Fast Refresh] done in 574ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1055095ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1055339ms] [LOG] [Fast Refresh] done in 346ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1068715ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1069022ms] [LOG] [Fast Refresh] done in 387ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1083168ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1083308ms] [LOG] [Fast Refresh] done in 203ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1106349ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1106418ms] [LOG] [Fast Refresh] done in 172ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1125321ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1125390ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1125533ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1125571ms] [LOG] [Fast Refresh] done in 148ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1125594ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <PassportHero passport={{id:"18d6ad...", ...}}>
+      <div className="relative o...">
+        <div>
+        <div>
+        <div className="relative z...">
+          <FadeIn>
+          <FadeIn delay={0.1}>
+            <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true, ...}} ...>
+              <div className="" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                <div className="flex flex-...">
+                  <div>
+                  <motion.div initial={{opacity:0, ...}} animate={{opacity:1,scale:1}} transition={{delay:0.3, ...}} ...>
+                    <div className="shrink-0 f..." style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                      <div className="rounded-xl...">
+                        <div className="rounded-lg...">
+                          <QRCodeSVG2 value="http://loc..." size={96} level="M" bgColor="#ffffff" fgColor="#1a1d23">
+                            <svg height={96} width={96} viewBox="0 0 33 33" ref={null} role="img">
+                              <path>
+                              <path
+                                fill="#1a1d23"
++                               d="M0 0h7v1H0zM9 0h1v1H9zM14 0h1v1H14zM16 0h1v1H16zM18 0h2v1H18zM23 0h1v1H23zM26,0 h7v..."
+-                               d="M0 0h7v1H0zM10 0h2v1H10zM13 0h2v1H13zM16 0h1v1H16zM18 0h6v1H18zM26,0 h7v1H26zM0 1h1..."
+                                shapeRendering="crispEdges"
+                              >
+                      ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[ 1138186ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1138268ms] [LOG] [Fast Refresh] done in 183ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1139620ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1139789ms] [LOG] [Fast Refresh] done in 273ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1145602ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1145884ms] [LOG] [Fast Refresh] done in 354ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1163578ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1163711ms] [LOG] [Fast Refresh] done in 223ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1164559ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1164586ms] [LOG] [Fast Refresh] done in 60ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1607343ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1607910ms] [LOG] [Fast Refresh] done in 669ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1609485ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1609585ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1609781ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1609913ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <PassportHero passport={{id:"18d6ad...", ...}}>
+      <div className="relative o...">
+        <div>
+        <div>
+        <div className="relative z...">
+          <FadeIn>
+          <FadeIn delay={0.1}>
+            <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true, ...}} ...>
+              <div className="" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                <div className="flex flex-...">
+                  <div>
+                  <motion.div initial={{opacity:0, ...}} animate={{opacity:1,scale:1}} transition={{delay:0.3, ...}} ...>
+                    <div className="shrink-0 f..." style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                      <div className="rounded-xl...">
+                        <div className="rounded-lg...">
+                          <QRCodeSVG2 value="http://loc..." size={96} level="M" bgColor="#ffffff" fgColor="#1a1d23">
+                            <svg height={96} width={96} viewBox="0 0 33 33" ref={null} role="img">
+                              <path>
+                              <path
+                                fill="#1a1d23"
++                               d="M0 0h7v1H0zM9 0h1v1H9zM14 0h1v1H14zM16 0h1v1H16zM18 0h2v1H18zM23 0h1v1H23zM26,0 h7v..."
+-                               d="M0 0h7v1H0zM10 0h2v1H10zM13 0h2v1H13zM16 0h1v1H16zM18 0h6v1H18zM26,0 h7v1H26zM0 1h1..."
+                                shapeRendering="crispEdges"
+                              >
+                      ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[ 1610145ms] [LOG] [Fast Refresh] done in 521ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1673793ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1674508ms] [LOG] [Fast Refresh] done in 824ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1674685ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1674868ms] [LOG] [Fast Refresh] done in 284ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1682706ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1683858ms] [LOG] [Fast Refresh] done in 1227ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1761330ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1761717ms] [LOG] [Fast Refresh] done in 390ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1789792ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1790218ms] [LOG] [Fast Refresh] done in 490ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1790400ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1790455ms] [LOG] [Fast Refresh] done in 156ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1797446ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1797472ms] [LOG] [Fast Refresh] done in 128ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1798167ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1798225ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1798424ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <PassportHero passport={{id:"18d6ad...", ...}}>
+      <div className="relative o...">
+        <div>
+        <div>
+        <div className="relative z...">
+          <FadeIn>
+          <FadeIn delay={0.1}>
+            <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true, ...}} ...>
+              <div className="" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                <div className="flex flex-...">
+                  <div>
+                  <motion.div initial={{opacity:0, ...}} animate={{opacity:1,scale:1}} transition={{delay:0.3, ...}} ...>
+                    <div className="shrink-0 f..." style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                      <div className="rounded-xl...">
+                        <div className="rounded-lg...">
+                          <QRCodeSVG2 value="http://loc..." size={96} level="M" bgColor="#ffffff" fgColor="#1a1d23">
+                            <svg height={96} width={96} viewBox="0 0 33 33" ref={null} role="img">
+                              <path>
+                              <path
+                                fill="#1a1d23"
++                               d="M0 0h7v1H0zM9 0h1v1H9zM14 0h1v1H14zM16 0h1v1H16zM18 0h2v1H18zM23 0h1v1H23zM26,0 h7v..."
+-                               d="M0 0h7v1H0zM10 0h2v1H10zM13 0h2v1H13zM16 0h1v1H16zM18 0h6v1H18zM26,0 h7v1H26zM0 1h1..."
+                                shapeRendering="crispEdges"
+                              >
+                      ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[ 1800373ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1800740ms] [LOG] [Fast Refresh] done in 418ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1800854ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1800895ms] [LOG] [Fast Refresh] done in 142ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1816193ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1816855ms] [LOG] [Fast Refresh] done in 370ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1844794ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1846694ms] [LOG] [Fast Refresh] done in 777ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1847339ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1847740ms] [LOG] [Fast Refresh] done in 502ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1857886ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1857967ms] [LOG] [Fast Refresh] done in 183ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1865176ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1865465ms] [LOG] [Fast Refresh] done in 219ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1879539ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1879565ms] [LOG] [Fast Refresh] done in 127ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1924576ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1925387ms] [LOG] [Fast Refresh] done in 896ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1925599ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1926186ms] [LOG] [Fast Refresh] done in 687ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1926595ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1926691ms] [LOG] [Fast Refresh] done in 197ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1939097ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1939143ms] [LOG] [Fast Refresh] done in 152ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1942803ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1942942ms] [LOG] [Fast Refresh] done in 157ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1950890ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1950907ms] [LOG] [Fast Refresh] done in 108ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1957237ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1957286ms] [LOG] [Fast Refresh] done in 150ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1957964ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1957981ms] [LOG] [Fast Refresh] done in 118ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1962790ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1963551ms] [LOG] [Fast Refresh] done in 867ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1965370ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1965674ms] [LOG] [Fast Refresh] done in 406ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1966138ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1966246ms] [LOG] [Fast Refresh] done in 209ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1967177ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 1969060ms] [LOG] [Fast Refresh] done in 1978ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2045180ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2045259ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[ 2045431ms] [ERROR] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+%s%s https://react.dev/link/hydration-mismatch 
+
+  ...
+    <PassportHero passport={{id:"18d6ad...", ...}}>
+      <div className="relative o...">
+        <div>
+        <div>
+        <div className="relative z...">
+          <FadeIn>
+          <FadeIn delay={0.1}>
+            <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true, ...}} ...>
+              <div className="" style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                <div className="flex flex-...">
+                  <div>
+                  <motion.div initial={{opacity:0, ...}} animate={{opacity:1,scale:1}} transition={{delay:0.3, ...}} ...>
+                    <div className="shrink-0 f..." style={{opacity:0, ...}} ref={function useMotionRef.useCallback}>
+                      <div className="rounded-xl...">
+                        <div className="rounded-lg...">
+                          <QRCodeSVG2 value="http://loc..." size={96} level="M" bgColor="#ffffff" fgColor="#1a1d23">
+                            <svg height={96} width={96} viewBox="0 0 33 33" ref={null} role="img">
+                              <path>
+                              <path
+                                fill="#1a1d23"
++                               d="M0 0h7v1H0zM9 0h1v1H9zM14 0h1v1H14zM16 0h1v1H16zM18 0h2v1H18zM23 0h1v1H23zM26,0 h7v..."
+-                               d="M0 0h7v1H0zM10 0h2v1H10zM13 0h2v1H13zM16 0h1v1H16zM18 0h6v1H18zM26,0 h7v1H26zM0 1h1..."
+                                shapeRendering="crispEdges"
+                              >
+                      ...
+          ...
+ @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
