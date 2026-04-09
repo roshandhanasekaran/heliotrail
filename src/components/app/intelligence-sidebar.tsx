@@ -13,22 +13,13 @@ import {
   Upload,
   BarChart3,
   Calendar,
-  Shield,
   Sparkles,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Droplets,
   Wrench,
   Euro,
   Activity,
   Zap,
   Target,
   ArrowRight,
-  CheckCircle2,
-  Clock,
-  Eye,
-  RefreshCw,
 } from "lucide-react";
 import { Sparkline } from "@/components/shared/sparkline";
 import {
@@ -38,10 +29,13 @@ import {
   getRevenueIntelligence,
   getPerformanceForecast,
   getAnomalyStream,
-  CATEGORY_LABELS,
-  type AIInsight,
-  type MLAnomaly,
 } from "@/lib/mock/ai-analytics";
+
+import { FleetHealthGauge } from "@/components/app/ai-analytics/shared/fleet-health-gauge";
+import { CountdownRing } from "@/components/app/ai-analytics/shared/countdown-ring";
+import { LossDriverBar } from "@/components/app/ai-analytics/shared/loss-driver-bar";
+import { InsightCard } from "@/components/app/ai-analytics/shared/insight-card";
+import { AnomalyCard } from "@/components/app/ai-analytics/shared/anomaly-card";
 
 /* ─── Data ─── */
 
@@ -65,218 +59,12 @@ const DEADLINES = [
   { label: "Q2 compliance review", date: "Jun 30, 2026", days: 82 },
 ];
 
-/* ─── Severity / status styling ─── */
-
-const INSIGHT_SEVERITY: Record<AIInsight["severity"], { bg: string; text: string; border: string }> = {
-  critical: { bg: "bg-[#FEE2E2]", text: "text-[#B91C1C]", border: "border-[#FECACA]" },
-  warning: { bg: "bg-[#FEF3C7]", text: "text-[#92400E]", border: "border-[#FDE68A]" },
-  info: { bg: "bg-[#EFF6FF]", text: "text-[#1E40AF]", border: "border-[#BFDBFE]" },
-  success: { bg: "bg-[#DCFCE7]", text: "text-[#166534]", border: "border-[#BBF7D0]" },
-};
-
-const ANOMALY_SEVERITY: Record<MLAnomaly["severity"], string> = {
-  high: "bg-[#FEE2E2] text-[#B91C1C]",
-  medium: "bg-[#FEF3C7] text-[#92400E]",
-  low: "bg-[#F3F4F6] text-[#6B7280]",
-};
-
-const PATTERN_BADGE: Record<MLAnomaly["pattern"], { label: string; color: string }> = {
-  recurring: { label: "Recurring", color: "text-[#DC2626]" },
-  escalating: { label: "Escalating", color: "text-[#F59E0B]" },
-  "one-off": { label: "One-off", color: "text-[#6B7280]" },
-};
+/* ─── Helpers ─── */
 
 function daysColor(d: number): string {
   if (d < 30) return "text-[#DC2626]";
   if (d < 60) return "text-[#F59E0B]";
   return "text-[#22C55E]";
-}
-
-/* ─── Fleet Health Radial Gauge ─── */
-
-function FleetHealthGauge({ score, delta }: { score: number; delta: number }) {
-  const r = 42;
-  const circ = 2 * Math.PI * r;
-  const offset = circ - (score / 100) * circ;
-  const color = score > 85 ? "#22C55E" : score > 70 ? "#F59E0B" : "#DC2626";
-
-  return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative">
-        <svg width="108" height="108" viewBox="0 0 108 108">
-          {/* Background track */}
-          <circle
-            cx="54"
-            cy="54"
-            r={r}
-            fill="none"
-            stroke="#F2F2F2"
-            strokeWidth="5"
-          />
-          {/* Score arc */}
-          <circle
-            cx="54"
-            cy="54"
-            r={r}
-            fill="none"
-            stroke={color}
-            strokeWidth="5"
-            strokeDasharray={circ}
-            strokeDashoffset={offset}
-            strokeLinecap="butt"
-            transform="rotate(-90 54 54)"
-            className="transition-all duration-700"
-          />
-          {/* Breakdown arcs (thin inner rings) */}
-          {healthScore.breakdown.map((b, i) => {
-            const innerR = 34;
-            const innerCirc = 2 * Math.PI * innerR;
-            const segmentLength = (b.weight * b.score) / 100 * innerCirc;
-            const prevOffset = healthScore.breakdown
-              .slice(0, i)
-              .reduce((sum, prev) => sum + (prev.weight * prev.score) / 100, 0) * innerCirc;
-            return (
-              <circle
-                key={b.label}
-                cx="54"
-                cy="54"
-                r={innerR}
-                fill="none"
-                stroke={b.color}
-                strokeWidth="2.5"
-                strokeDasharray={`${segmentLength} ${innerCirc - segmentLength}`}
-                strokeDashoffset={-prevOffset}
-                transform="rotate(-90 54 54)"
-                opacity={0.5}
-              />
-            );
-          })}
-          {/* Center text */}
-          <text
-            x="54"
-            y="50"
-            textAnchor="middle"
-            dominantBaseline="central"
-            className="fill-[#0D0D0D]"
-            fontSize="22"
-            fontWeight="700"
-            fontFamily="JetBrains Mono, monospace"
-          >
-            {score}
-          </text>
-          <text
-            x="54"
-            y="67"
-            textAnchor="middle"
-            className="fill-[#A3A3A3]"
-            fontSize="8"
-            fontFamily="DM Sans, sans-serif"
-          >
-            fleet health
-          </text>
-        </svg>
-        {/* Delta badge */}
-        <div
-          className={cn(
-            "absolute -right-1 top-0 flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold",
-            delta >= 0
-              ? "bg-[#DCFCE7] text-[#166534]"
-              : "bg-[#FEE2E2] text-[#B91C1C]",
-          )}
-        >
-          {delta >= 0 ? (
-            <TrendingUp className="h-2.5 w-2.5" />
-          ) : (
-            <TrendingDown className="h-2.5 w-2.5" />
-          )}
-          {delta > 0 ? "+" : ""}
-          {delta}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Countdown Ring (small) ─── */
-
-function CountdownRing({ days, max }: { days: number; max: number }) {
-  const r = 14;
-  const circ = 2 * Math.PI * r;
-  const progress = Math.min(days / max, 1);
-  const offset = circ * progress;
-  const color = days <= 3 ? "#DC2626" : days <= 7 ? "#F59E0B" : "#22C55E";
-
-  return (
-    <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
-      <circle cx="18" cy="18" r={r} fill="none" stroke="#F2F2F2" strokeWidth="2.5" />
-      <circle
-        cx="18"
-        cy="18"
-        r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="2.5"
-        strokeDasharray={circ}
-        strokeDashoffset={offset}
-        strokeLinecap="butt"
-        transform="rotate(-90 18 18)"
-      />
-      <text
-        x="18"
-        y="18"
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill={color}
-        fontSize="10"
-        fontWeight="700"
-        fontFamily="JetBrains Mono, monospace"
-      >
-        {days}
-      </text>
-    </svg>
-  );
-}
-
-/* ─── Loss Driver Bar ─── */
-
-function LossDriverBar({
-  category,
-  euroPerMonth,
-  percent,
-  color,
-  trend,
-}: {
-  category: string;
-  euroPerMonth: number;
-  percent: number;
-  color: string;
-  trend: "up" | "down" | "stable";
-}) {
-  return (
-    <div className="space-y-0.5">
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-medium text-[#737373]">{category}</span>
-        <div className="flex items-center gap-1">
-          <span className="font-mono text-[10px] font-semibold text-[#0D0D0D]">
-            €{euroPerMonth.toFixed(1)}
-          </span>
-          {trend === "up" ? (
-            <TrendingUp className="h-2.5 w-2.5 text-[#DC2626]" />
-          ) : trend === "down" ? (
-            <TrendingDown className="h-2.5 w-2.5 text-[#22C55E]" />
-          ) : (
-            <Minus className="h-2.5 w-2.5 text-[#A3A3A3]" />
-          )}
-        </div>
-      </div>
-      <div className="h-1.5 w-full bg-[#F2F2F2]">
-        <div
-          className="h-full transition-all duration-500"
-          style={{ width: `${percent}%`, backgroundColor: color }}
-        />
-      </div>
-    </div>
-  );
 }
 
 /* ─── Main component ─── */
@@ -363,7 +151,7 @@ export function IntelligenceSidebar() {
           <SectionHeader icon={Activity}>Fleet Health</SectionHeader>
           <div className="dashed-card p-3">
             <div className="flex justify-center">
-              <FleetHealthGauge score={healthScore.overall} delta={healthScore.weeklyDelta} />
+              <FleetHealthGauge score={healthScore.overall} delta={healthScore.weeklyDelta} breakdown={healthScore.breakdown} />
             </div>
             {/* Breakdown mini bars */}
             <div className="mt-3 space-y-1.5">
@@ -426,47 +214,9 @@ export function IntelligenceSidebar() {
 
           {activeTab === "insights" ? (
             <div className="dashed-card divide-y divide-dashed divide-[#D9D9D9]">
-              {insights.slice(0, insightLimit).map((insight) => {
-                const style = INSIGHT_SEVERITY[insight.severity];
-                return (
-                  <div key={insight.id} className="px-2.5 py-2.5 space-y-1">
-                    <div className="flex items-start justify-between gap-1.5">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        <span
-                          className={cn(
-                            "shrink-0 px-1 py-0.5 text-[8px] font-bold uppercase leading-none tracking-wide",
-                            style.bg,
-                            style.text,
-                          )}
-                        >
-                          {CATEGORY_LABELS[insight.category]}
-                        </span>
-                        <span className="font-mono text-[8px] text-[#A3A3A3]">
-                          {insight.confidence}% conf
-                        </span>
-                      </div>
-                      <span className="shrink-0 text-[8px] text-[#A3A3A3]">
-                        {insight.timestamp}
-                      </span>
-                    </div>
-                    <p className="text-[11px] font-semibold leading-tight text-[#0D0D0D]">
-                      {insight.title}
-                    </p>
-                    <p className="text-[10px] leading-snug text-[#737373]">
-                      {insight.detail}
-                    </p>
-                    {insight.action && (
-                      <Link
-                        href={insight.action.href}
-                        className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-[#22C55E] hover:text-[#0D0D0D] transition-colors"
-                      >
-                        {insight.action.label}
-                        <ArrowRight className="h-2.5 w-2.5" />
-                      </Link>
-                    )}
-                  </div>
-                );
-              })}
+              {insights.slice(0, insightLimit).map((insight) => (
+                <InsightCard key={insight.id} insight={insight} />
+              ))}
               {insightLimit < insights.length && (
                 <button
                   onClick={() => setInsightLimit(insights.length)}
@@ -488,50 +238,7 @@ export function IntelligenceSidebar() {
           ) : (
             <div className="dashed-card divide-y divide-dashed divide-[#D9D9D9]">
               {anomalies.map((anomaly) => (
-                <div key={anomaly.id} className="px-2.5 py-2.5 space-y-1">
-                  <div className="flex items-start justify-between gap-1.5">
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className={cn(
-                          "px-1 py-0.5 text-[8px] font-bold uppercase leading-none tracking-wide",
-                          ANOMALY_SEVERITY[anomaly.severity],
-                        )}
-                      >
-                        {anomaly.severity}
-                      </span>
-                      <span
-                        className={cn(
-                          "text-[8px] font-semibold",
-                          PATTERN_BADGE[anomaly.pattern].color,
-                        )}
-                      >
-                        {PATTERN_BADGE[anomaly.pattern].label}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="font-mono text-[8px] text-[#A3A3A3]">
-                        {anomaly.mlConfidence}%
-                      </span>
-                      {anomaly.resolved ? (
-                        <CheckCircle2 className="h-2.5 w-2.5 text-[#22C55E]" />
-                      ) : (
-                        <Clock className="h-2.5 w-2.5 text-[#F59E0B]" />
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-[11px] font-semibold leading-tight text-[#0D0D0D]">
-                    {anomaly.type}
-                    {anomaly.module && (
-                      <span className="ml-1 font-mono text-[9px] font-normal text-[#A3A3A3]">
-                        {anomaly.module}
-                      </span>
-                    )}
-                  </p>
-                  <p className="text-[10px] leading-snug text-[#737373]">
-                    {anomaly.description}
-                  </p>
-                  <span className="text-[8px] text-[#A3A3A3]">{anomaly.timestamp}</span>
-                </div>
+                <AnomalyCard key={anomaly.id} anomaly={anomaly} />
               ))}
             </div>
           )}
