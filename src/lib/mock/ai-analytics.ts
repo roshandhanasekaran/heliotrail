@@ -336,3 +336,480 @@ export function getAnomalyStream(): MLAnomaly[] {
     },
   ];
 }
+
+// ─── Fleet Benchmarking ────────────────────────────────────
+
+export interface FleetBenchmark {
+  moduleId: string;
+  modelId: string;
+  manufacturer: string;
+  pr: number; // current PR%
+  delta: number; // vs fleet average
+  rank: number;
+  status: "outperforming" | "normal" | "underperforming";
+}
+
+export function getFleetBenchmarking(): FleetBenchmark[] {
+  return [
+    {
+      moduleId: "WRM-600-LOT-01",
+      modelId: "WRM-600",
+      manufacturer: "Waaree Energies",
+      pr: 87.2,
+      delta: 5.8,
+      rank: 1,
+      status: "outperforming",
+    },
+    {
+      moduleId: "VSMDH-450-LOT-02",
+      modelId: "VSMDH-450",
+      manufacturer: "Vikram Solar",
+      pr: 86.1,
+      delta: 4.7,
+      rank: 2,
+      status: "outperforming",
+    },
+    {
+      moduleId: "ASM-540-LOT-01",
+      modelId: "ASM-540",
+      manufacturer: "Adani Solar",
+      pr: 85.3,
+      delta: 3.9,
+      rank: 3,
+      status: "outperforming",
+    },
+    {
+      moduleId: "WRM-600-LOT-03",
+      modelId: "WRM-600",
+      manufacturer: "Waaree Energies",
+      pr: 83.8,
+      delta: 2.4,
+      rank: 4,
+      status: "normal",
+    },
+    {
+      moduleId: "VSMDH-450-LOT-04",
+      modelId: "VSMDH-450",
+      manufacturer: "Vikram Solar",
+      pr: 82.6,
+      delta: 1.2,
+      rank: 5,
+      status: "normal",
+    },
+    {
+      moduleId: "ASM-540-LOT-03",
+      modelId: "ASM-540",
+      manufacturer: "Adani Solar",
+      pr: 81.4,
+      delta: 0.0,
+      rank: 6,
+      status: "normal",
+    },
+    {
+      moduleId: "WRM-600-LOT-05",
+      modelId: "WRM-600",
+      manufacturer: "Waaree Energies",
+      pr: 80.1,
+      delta: -1.3,
+      rank: 7,
+      status: "normal",
+    },
+    {
+      moduleId: "VSMDH-450-LOT-06",
+      modelId: "VSMDH-450",
+      manufacturer: "Vikram Solar",
+      pr: 78.4,
+      delta: -3.0,
+      rank: 8,
+      status: "underperforming",
+    },
+    {
+      moduleId: "ASM-540-LOT-05",
+      modelId: "ASM-540",
+      manufacturer: "Adani Solar",
+      pr: 76.9,
+      delta: -4.5,
+      rank: 9,
+      status: "underperforming",
+    },
+    {
+      moduleId: "WRM-600-LOT-07",
+      modelId: "WRM-600",
+      manufacturer: "Waaree Energies",
+      pr: 74.8,
+      delta: -6.6,
+      rank: 10,
+      status: "underperforming",
+    },
+  ];
+}
+
+// ─── Compliance Risk Scoring ───────────────────────────────
+
+export interface ComplianceRisk {
+  passportId: string;
+  modelId: string;
+  riskScore: number; // 0-100, higher = more risk
+  riskLevel: "low" | "medium" | "high";
+  factors: string[];
+}
+
+export function getComplianceRiskScoring(): ComplianceRisk[] {
+  return [
+    {
+      passportId: "DPP-WRM-600-001",
+      modelId: "WRM-600",
+      riskScore: 8,
+      riskLevel: "low",
+      factors: ["All certificates current", "Full traceability data"],
+    },
+    {
+      passportId: "DPP-ASM-540-001",
+      modelId: "ASM-540",
+      riskScore: 12,
+      riskLevel: "low",
+      factors: ["All certificates current", "Complete BOM documentation"],
+    },
+    {
+      passportId: "DPP-VSMDH-450-001",
+      modelId: "VSMDH-450",
+      riskScore: 6,
+      riskLevel: "low",
+      factors: ["All certificates current", "EU ESPR fully aligned"],
+    },
+    {
+      passportId: "DPP-WRM-600-003",
+      modelId: "WRM-600",
+      riskScore: 15,
+      riskLevel: "low",
+      factors: ["All certificates current", "Minor data gap in transport records"],
+    },
+    {
+      passportId: "DPP-ASM-540-003",
+      modelId: "ASM-540",
+      riskScore: 18,
+      riskLevel: "low",
+      factors: ["All certificates current", "Recycling plan pending review"],
+    },
+    {
+      passportId: "DPP-VSMDH-450-004",
+      modelId: "VSMDH-450",
+      riskScore: 42,
+      riskLevel: "medium",
+      factors: [
+        "IEC 61730 certificate expiring in 60 days",
+        "Renewal application not yet submitted",
+      ],
+    },
+    {
+      passportId: "DPP-WRM-600-005",
+      modelId: "WRM-600",
+      riskScore: 55,
+      riskLevel: "medium",
+      factors: [
+        "Missing Environmental Product Declaration (EPD) document",
+        "Carbon footprint data incomplete for upstream suppliers",
+      ],
+    },
+    {
+      passportId: "DPP-ASM-540-005",
+      modelId: "ASM-540",
+      riskScore: 81,
+      riskLevel: "high",
+      factors: [
+        "REACH substance status under review — SVHC candidate list update pending",
+        "Supplier due diligence report overdue by 45 days",
+        "Potential non-compliance with EU ESPR Article 8(2)",
+      ],
+    },
+  ];
+}
+
+// ─── Carbon Optimization ───────────────────────────────────
+
+export interface CarbonOptimization {
+  currentAvgKgCO2e: number;
+  industryBenchmark: number;
+  potentialReductionPercent: number;
+  suggestions: {
+    action: string;
+    impactKgCO2e: number;
+    difficulty: "easy" | "medium" | "hard";
+  }[];
+}
+
+export function getCarbonOptimization(): CarbonOptimization {
+  return {
+    currentAvgKgCO2e: 815,
+    industryBenchmark: 750,
+    potentialReductionPercent: 12.4,
+    suggestions: [
+      {
+        action: "Switch to recycled aluminium frames (30% recycled content → 80%)",
+        impactKgCO2e: 38,
+        difficulty: "medium",
+      },
+      {
+        action: "Source polysilicon from hydro-powered facilities",
+        impactKgCO2e: 42,
+        difficulty: "hard",
+      },
+      {
+        action: "Consolidate shipping routes to reduce transport emissions",
+        impactKgCO2e: 14,
+        difficulty: "easy",
+      },
+      {
+        action: "Replace SF₆ in cell manufacturing with fluorine-free alternative",
+        impactKgCO2e: 7,
+        difficulty: "medium",
+      },
+    ],
+  };
+}
+
+// ─── Provenance Correlations (Killer Feature) ──────────────
+
+export interface ProvenanceCorrelations {
+  supplierDegradation: {
+    supplierId: string;
+    materialName: string;
+    avgDegradationRate: number; // %/yr
+    moduleCount: number;
+    comparedToFleetAvg: number; // delta vs fleet avg
+    risk: "normal" | "elevated" | "critical";
+  }[];
+  batchAnomalies: {
+    batchId: string;
+    company: string;
+    modulesAffected: number;
+    modulesTotal: number;
+    anomalyType: string;
+    severity: "low" | "medium" | "high";
+  }[];
+  materialRiskFactors: {
+    material: string;
+    originCountry: string;
+    riskType: string;
+    incidenceRate: number; // %
+    affectedModules: number;
+  }[];
+  warrantyClaimCandidates: {
+    passportId: string;
+    modelId: string;
+    currentDegradation: number; // %/yr
+    warrantyThreshold: number; // %/yr
+    batchId: string;
+    commonSupplier: string;
+    estimatedClaimValueEur: number;
+  }[];
+}
+
+export function getProvenanceCorrelations(): ProvenanceCorrelations {
+  return {
+    supplierDegradation: [
+      {
+        supplierId: "SUP-SI-001",
+        materialName: "Polysilicon wafers",
+        avgDegradationRate: 0.38,
+        moduleCount: 14,
+        comparedToFleetAvg: -0.02,
+        risk: "normal",
+      },
+      {
+        supplierId: "SUP-EV-001",
+        materialName: "EVA encapsulant",
+        avgDegradationRate: 0.54,
+        moduleCount: 8,
+        comparedToFleetAvg: 0.14,
+        risk: "elevated",
+      },
+      {
+        supplierId: "SUP-AL-001",
+        materialName: "Aluminium frames",
+        avgDegradationRate: 0.36,
+        moduleCount: 18,
+        comparedToFleetAvg: -0.04,
+        risk: "normal",
+      },
+      {
+        supplierId: "SUP-GL-001",
+        materialName: "Tempered glass",
+        avgDegradationRate: 0.40,
+        moduleCount: 18,
+        comparedToFleetAvg: 0.0,
+        risk: "normal",
+      },
+      {
+        supplierId: "SUP-BS-001",
+        materialName: "Backsheet (TPT)",
+        avgDegradationRate: 0.42,
+        moduleCount: 10,
+        comparedToFleetAvg: 0.02,
+        risk: "normal",
+      },
+      {
+        supplierId: "SUP-JB-001",
+        materialName: "Junction boxes",
+        avgDegradationRate: 0.61,
+        moduleCount: 6,
+        comparedToFleetAvg: 0.21,
+        risk: "elevated",
+      },
+    ],
+    batchAnomalies: [
+      {
+        batchId: "LOT-2026-Q1-SRT-003",
+        company: "Waaree Energies",
+        modulesAffected: 3,
+        modulesTotal: 6,
+        anomalyType: "Elevated PID susceptibility — voltage-driven leakage current above threshold",
+        severity: "high",
+      },
+      {
+        batchId: "BATCH-MND-2026-02",
+        company: "Adani Solar",
+        modulesAffected: 2,
+        modulesTotal: 5,
+        anomalyType: "Micro-crack propagation rate 2.3x fleet average after thermal cycling",
+        severity: "medium",
+      },
+      {
+        batchId: "LOT-2026-Q1-VKS-001",
+        company: "Vikram Solar",
+        modulesAffected: 1,
+        modulesTotal: 4,
+        anomalyType: "Hot-spot formation at cell interconnect — IR imaging confirms solder void",
+        severity: "low",
+      },
+    ],
+    materialRiskFactors: [
+      {
+        material: "EVA encapsulant",
+        originCountry: "CN",
+        riskType: "Delamination",
+        incidenceRate: 2.1,
+        affectedModules: 3,
+      },
+      {
+        material: "Backsheet (PVF)",
+        originCountry: "JP",
+        riskType: "PID susceptibility",
+        incidenceRate: 0.0,
+        affectedModules: 0,
+      },
+      {
+        material: "Solder ribbon",
+        originCountry: "DE",
+        riskType: "Micro-crack at cell interconnect",
+        incidenceRate: 1.4,
+        affectedModules: 2,
+      },
+    ],
+    warrantyClaimCandidates: [
+      {
+        passportId: "DPP-WRM-600-007",
+        modelId: "WRM-600",
+        currentDegradation: 1.1,
+        warrantyThreshold: 0.4,
+        batchId: "LOT-2026-Q1-SRT-003",
+        commonSupplier: "SUP-EV-001 (EVA encapsulant)",
+        estimatedClaimValueEur: 1420,
+      },
+      {
+        passportId: "DPP-ASM-540-005",
+        modelId: "ASM-540",
+        currentDegradation: 0.72,
+        warrantyThreshold: 0.4,
+        batchId: "BATCH-MND-2026-02",
+        commonSupplier: "SUP-JB-001 (Junction boxes)",
+        estimatedClaimValueEur: 980,
+      },
+    ],
+  };
+}
+
+// ─── Warranty Intelligence ─────────────────────────────────
+
+export interface WarrantyIntelligence {
+  claimReady: {
+    passportId: string;
+    modelId: string;
+    degradationRate: number;
+    warrantyThreshold: number;
+    evidenceScore: number; // 0-100, how complete the evidence package is
+    estimatedClaimValueEur: number;
+  }[];
+  atRisk: {
+    passportId: string;
+    modelId: string;
+    yearsToThreshold: number;
+    currentTrajectory: number; // %/yr
+  }[];
+  batchDefectPatterns: {
+    batchId: string;
+    defectType: string;
+    affectedCount: number;
+    totalInBatch: number;
+    confidence: number; // %
+  }[];
+}
+
+export function getWarrantyIntelligence(): WarrantyIntelligence {
+  return {
+    claimReady: [
+      {
+        passportId: "DPP-WRM-600-007",
+        modelId: "WRM-600",
+        degradationRate: 1.1,
+        warrantyThreshold: 0.4,
+        evidenceScore: 92,
+        estimatedClaimValueEur: 1420,
+      },
+      {
+        passportId: "DPP-ASM-540-005",
+        modelId: "ASM-540",
+        degradationRate: 0.72,
+        warrantyThreshold: 0.4,
+        evidenceScore: 78,
+        estimatedClaimValueEur: 980,
+      },
+    ],
+    atRisk: [
+      {
+        passportId: "DPP-VSMDH-450-006",
+        modelId: "VSMDH-450",
+        yearsToThreshold: 2.1,
+        currentTrajectory: 0.48,
+      },
+      {
+        passportId: "DPP-WRM-600-005",
+        modelId: "WRM-600",
+        yearsToThreshold: 3.4,
+        currentTrajectory: 0.44,
+      },
+      {
+        passportId: "DPP-ASM-540-003",
+        modelId: "ASM-540",
+        yearsToThreshold: 4.8,
+        currentTrajectory: 0.42,
+      },
+    ],
+    batchDefectPatterns: [
+      {
+        batchId: "LOT-2026-Q1-SRT-003",
+        defectType: "Elevated micro-crack rate post-thermal cycling",
+        affectedCount: 3,
+        totalInBatch: 6,
+        confidence: 89,
+      },
+      {
+        batchId: "BATCH-MND-2026-02",
+        defectType: "PID susceptibility above fleet baseline",
+        affectedCount: 2,
+        totalInBatch: 5,
+        confidence: 76,
+      },
+    ],
+  };
+}
