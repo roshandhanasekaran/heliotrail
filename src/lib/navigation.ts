@@ -4,6 +4,7 @@ import {
   FolderOpen,
   CheckSquare,
   BarChart3,
+  BrainCircuit,
   Plug,
   Settings,
   Eye,
@@ -44,7 +45,8 @@ export const SIDEBAR_SECTIONS: NavSection[] = [
     items: [
       { label: "Evidence Vault", href: "/app/evidence", icon: FolderOpen },
       { label: "Approvals", href: "/app/approvals", icon: CheckSquare, badge: "count" },
-      { label: "Analytics", href: "/app/analytics", icon: BarChart3 },
+      { label: "AI Analytics", href: "/app/ai-analytics", icon: BrainCircuit },
+      { label: "Compliance", href: "/app/analytics", icon: BarChart3 },
     ],
   },
   {
