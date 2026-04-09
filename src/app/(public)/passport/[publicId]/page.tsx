@@ -25,6 +25,8 @@ export default async function OverviewPage({ params }: Props) {
     { label: "Manufacturer", value: p.manufacturer_name },
     { label: "Operator ID", value: p.manufacturer_operator_id ?? "—" },
     { label: "Country", value: p.manufacturer_country ?? "—" },
+    { label: "Address", value: p.manufacturer_address ?? "—" },
+    ...(p.manufacturer_contact_url ? [{ label: "Contact", value: p.manufacturer_contact_url }] : []),
     { label: "Facility", value: p.facility_name ?? "—" },
     { label: "Location", value: p.facility_location ?? "—" },
     { label: "Manufacturing Date", value: formatDate(p.manufacturing_date) },
@@ -45,6 +47,13 @@ export default async function OverviewPage({ params }: Props) {
         ? `${p.linear_degradation_percent_per_year}%/yr`
         : "—",
     },
+    { label: "Expected Lifetime", value: formatNumber(p.expected_lifetime_years, "years") },
+    {
+      label: "Carbon Methodology",
+      value: p.carbon_footprint_methodology ?? "—",
+    },
+    ...(p.published_at ? [{ label: "Published", value: formatDate(p.published_at) }] : []),
+    { label: "Passport Version", value: `v${p.passport_version}` },
   ];
 
   return (

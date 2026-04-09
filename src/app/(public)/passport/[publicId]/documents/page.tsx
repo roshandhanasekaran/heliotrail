@@ -53,6 +53,8 @@ export default async function DocumentsPage({ params }: Props) {
     description: doc.description,
     issuer: doc.issuer,
     issuedDate: doc.issued_date ? formatDate(doc.issued_date) : null,
+    url: doc.url,
+    accessLevel: doc.access_level,
   }));
 
   return <DocumentsClient docs={docsData} />;

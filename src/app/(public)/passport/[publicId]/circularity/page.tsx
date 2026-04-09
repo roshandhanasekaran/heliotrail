@@ -52,11 +52,15 @@ export default async function CircularityPage({ params }: Props) {
     recyclabilityRate: c.recyclability_rate_percent ?? 0,
     recycledContent: c.recycled_content_percent ?? 0,
     dismantlingTime: c.dismantling_time_minutes ?? 0,
+    renewableContent: c.renewable_content_percent ?? 0,
     isHazardous: c.is_hazardous,
     dismantlingInstructions: c.dismantling_instructions,
     hazardousNotes: c.hazardous_substances_notes,
     collectionScheme: c.collection_scheme,
     recoveryNotes: c.recovery_notes,
+    recyclerName: c.recycler_name,
+    recyclerContact: c.recycler_contact,
+    endOfLifeStatus: c.end_of_life_status,
     recovery: {
       aluminium: c.recovery_aluminium,
       glass: c.recovery_glass,
@@ -69,11 +73,15 @@ export default async function CircularityPage({ params }: Props) {
   const materialsData = mats.map((m) => ({
     id: m.id,
     name: m.material_name,
+    componentType: m.component_type,
     massPercent: m.mass_percent ?? 0,
     massG: m.mass_g,
     isCritical: m.is_critical_raw_material,
     isSoC: m.is_substance_of_concern,
     recyclabilityHint: m.recyclability_hint,
+    casNumber: m.cas_number,
+    concentrationPercent: m.concentration_percent,
+    regulatoryBasis: m.regulatory_basis,
   }));
 
   return (

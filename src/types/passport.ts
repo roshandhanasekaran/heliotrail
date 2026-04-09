@@ -88,6 +88,17 @@ export interface Passport {
   carbon_footprint_kg_co2e: number | null;
   carbon_footprint_methodology: string | null;
 
+  temperature_coefficient_pmax: number | null;
+  temperature_coefficient_voc: number | null;
+  temperature_coefficient_isc: number | null;
+  noct_celsius: number | null;
+  fire_rating: string | null;
+  ip_rating: string | null;
+  connector_type: string | null;
+  frame_type: string | null;
+  glass_type: string | null;
+  bifaciality_factor: number | null;
+
   passport_version: number;
   created_at: string;
   updated_at: string;

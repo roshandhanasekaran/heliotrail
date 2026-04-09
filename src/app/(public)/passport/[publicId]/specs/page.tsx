@@ -28,6 +28,10 @@ export default async function SpecsPage({ params }: Props) {
     { param: "Voltage at Max Power (Vmp)", value: formatNumber(p.vmp_v, "V") },
     { param: "Current at Max Power (Imp)", value: formatNumber(p.imp_a, "A") },
     { param: "Max System Voltage", value: formatNumber(p.max_system_voltage_v, "V") },
+    ...(p.temperature_coefficient_pmax != null ? [{ param: "Temp. Coefficient (Pmax)", value: `${p.temperature_coefficient_pmax} %/°C` }] : []),
+    ...(p.temperature_coefficient_voc != null ? [{ param: "Temp. Coefficient (Voc)", value: `${p.temperature_coefficient_voc} %/°C` }] : []),
+    ...(p.temperature_coefficient_isc != null ? [{ param: "Temp. Coefficient (Isc)", value: `${p.temperature_coefficient_isc} %/°C` }] : []),
+    ...(p.noct_celsius != null ? [{ param: "NOCT", value: `${p.noct_celsius} °C` }] : []),
   ];
 
   const mechanical = [
@@ -37,6 +41,12 @@ export default async function SpecsPage({ params }: Props) {
     { param: "Mass", value: formatNumber(p.module_mass_kg, "kg") },
     { param: "Cell Count", value: formatNumber(p.cell_count), highlight: true },
     { param: "Cell Type", value: p.cell_type ?? "—" },
+    ...(p.glass_type ? [{ param: "Glass Type", value: p.glass_type }] : []),
+    ...(p.frame_type ? [{ param: "Frame Type", value: p.frame_type }] : []),
+    ...(p.connector_type ? [{ param: "Connector", value: p.connector_type }] : []),
+    ...(p.ip_rating ? [{ param: "IP Rating", value: p.ip_rating }] : []),
+    ...(p.fire_rating ? [{ param: "Fire Rating", value: p.fire_rating }] : []),
+    ...(p.bifaciality_factor != null ? [{ param: "Bifaciality Factor", value: `${(p.bifaciality_factor * 100).toFixed(0)}%`, highlight: true }] : []),
   ];
 
   const gaugeData = {

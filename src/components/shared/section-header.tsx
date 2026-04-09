@@ -6,11 +6,11 @@ interface SectionHeaderProps {
 export function SectionHeader({ title, description }: SectionHeaderProps) {
   return (
     <div className="mb-6">
-      <h2 className="font-heading text-2xl font-bold tracking-tight">
+      <h2 className="font-sans text-2xl font-bold tracking-tight text-[#0D0D0D]">
         {title}
       </h2>
       {description && (
-        <p className="mt-1 text-muted-foreground">{description}</p>
+        <p className="mt-1 text-[#737373]">{description}</p>
       )}
     </div>
   );

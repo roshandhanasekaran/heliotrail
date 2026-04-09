@@ -29,10 +29,10 @@ export function PassportSectionNav({ publicId }: PassportSectionNavProps) {
   const base = `/passport/${publicId}`;
 
   return (
-    <div className="sticky top-0 z-30 border-b border-border/30 bg-card/90 backdrop-blur-xl">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="sticky top-0 z-30 clean-nav">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <ScrollArea className="w-full">
-          <nav className="flex gap-1.5 py-2" role="tablist">
+          <nav className="flex gap-1 py-2" role="tablist">
             {sections.map((s) => {
               const href = `${base}${s.segment}`;
               const isActive =
@@ -47,15 +47,18 @@ export function PassportSectionNav({ publicId }: PassportSectionNavProps) {
                   href={href}
                   role="tab"
                   aria-selected={isActive}
-                  className={cn(
-                    "relative flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-2 text-sm font-medium transition-all duration-200",
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                      : "text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-                  )}
                 >
-                  <Icon className="h-4 w-4" />
-                  {s.label}
+                  <div
+                    className={cn(
+                      "flex items-center gap-2 whitespace-nowrap px-3.5 py-1.5 text-sm font-medium transition-all duration-200",
+                      isActive
+                        ? "nav-pill-active text-[#0D0D0D]"
+                        : "text-[#737373] hover:text-[#0D0D0D] hover:bg-[#F2F2F2]"
+                    )}
+                  >
+                    <Icon className={cn("h-3.5 w-3.5", isActive ? "text-[#22C55E]" : "text-[#737373]")} />
+                    <span>{s.label}</span>
+                  </div>
                 </Link>
               );
             })}

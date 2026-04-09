@@ -5,31 +5,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const glassButtonVariants = cva(
-  "relative isolate cursor-pointer rounded-full transition-all",
+  "inline-flex items-center justify-center cursor-pointer font-semibold transition-all duration-150 ease-out bg-[#22C55E] text-[#0D0D0D] hover:scale-[1.02] hover:shadow-md active:scale-[0.98]",
   {
     variants: {
       size: {
-        default: "text-base font-medium",
-        sm: "text-sm font-medium",
-        lg: "text-lg font-medium",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      size: "default",
-    },
-  }
-);
-
-const glassButtonTextVariants = cva(
-  "glass-button-text relative block select-none tracking-tight",
-  {
-    variants: {
-      size: {
-        default: "px-6 py-3.5",
-        sm: "px-4 py-2",
-        lg: "px-8 py-4",
-        icon: "flex h-10 w-10 items-center justify-center",
+        default: "px-5 py-2.5 text-sm",
+        sm: "px-3 py-1.5 text-sm",
+        lg: "px-7 py-3 text-base",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {
@@ -47,28 +30,13 @@ export interface GlassButtonProps
 const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
   ({ className, children, size, contentClassName, ...props }, ref) => {
     return (
-      <div
-        className={cn(
-          "glass-button-wrap cursor-pointer rounded-full",
-          className
-        )}
+      <button
+        className={cn(glassButtonVariants({ size }), className)}
+        ref={ref}
+        {...props}
       >
-        <button
-          className={cn("glass-button", glassButtonVariants({ size }))}
-          ref={ref}
-          {...props}
-        >
-          <span
-            className={cn(
-              glassButtonTextVariants({ size }),
-              contentClassName
-            )}
-          >
-            {children}
-          </span>
-        </button>
-        <div className="glass-button-shadow rounded-full" />
-      </div>
+        <span className={cn(contentClassName)}>{children}</span>
+      </button>
     );
   }
 );

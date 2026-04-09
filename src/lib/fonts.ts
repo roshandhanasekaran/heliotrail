@@ -1,13 +1,13 @@
-import { Inter, Source_Code_Pro } from "next/font/google";
+import { DM_Sans, JetBrains_Mono } from "next/font/google";
 
-export const inter = Inter({
+export const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
-export const sourceCodePro = Source_Code_Pro({
+export const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-source-code-pro",
+  variable: "--font-jetbrains-mono",
   display: "swap",
 });

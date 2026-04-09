@@ -11,8 +11,8 @@ interface RadialGaugeProps {
   unit?: string;
   size?: number;
   color?: string;
-  glowColor?: string;
   className?: string;
+  showTicks?: boolean;
 }
 
 export function RadialGauge({
@@ -21,12 +21,14 @@ export function RadialGauge({
   label,
   unit = "%",
   size = 160,
-  color = "#6366f1",
+  color = "#0D0D0D",
   className,
+  showTicks = true,
 }: RadialGaugeProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
-  const radius = (size - 20) / 2;
+  const strokeWidth = 7;
+  const radius = (size - 24) / 2;
   const circumference = 2 * Math.PI * radius;
   const percentage = Math.min(value / max, 1);
 
@@ -42,89 +44,101 @@ export function RadialGauge({
     return displayValue.on("change", (v) => setDisplay(String(v)));
   }, [displayValue]);
 
-  const id = `gauge-${label.replace(/\s/g, "-")}`;
+  const tickCount = 24;
 
   return (
-    <div ref={ref} className={cn("flex flex-col items-center group", className)}>
+    <div ref={ref} className={cn("flex flex-col items-center", className)}>
       <div
-        className="relative rounded-full p-3 transition-all duration-500 group-hover:shadow-lg"
+        className="relative"
         style={{
-          width: size + 24,
-          height: size + 24,
-          background: `radial-gradient(circle at 50% 50%, ${color}08 0%, transparent 70%)`,
+          width: size,
+          height: size,
         }}
       >
-        {/* Outer glow ring on hover */}
-        <div
-          className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            boxShadow: `0 0 30px ${color}15, inset 0 0 20px ${color}08`,
-          }}
-        />
-        <div className="relative" style={{ width: size, height: size }}>
-          <svg
-            viewBox={`0 0 ${size} ${size}`}
-            className="w-full h-full -rotate-90"
-          >
-            <defs>
-              <linearGradient id={`${id}-grad`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={color} />
-                <stop offset="100%" stopColor={color} stopOpacity="0.4" />
-              </linearGradient>
-              <filter id={`${id}-glow`}>
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
+        <svg
+          viewBox={`0 0 ${size} ${size}`}
+          className="w-full h-full -rotate-90"
+        >
+          {/* Tick marks */}
+          {showTicks && Array.from({ length: tickCount }).map((_, i) => {
+            const angle = (i / tickCount) * 360;
+            const rads = (angle * Math.PI) / 180;
+            const isMajor = i % 6 === 0;
+            const tickLen = isMajor ? 8 : 4;
+            const outerR = radius + 2;
+            const x1 = Math.round((size / 2 + (outerR - tickLen) * Math.cos(rads)) * 100) / 100;
+            const y1 = Math.round((size / 2 + (outerR - tickLen) * Math.sin(rads)) * 100) / 100;
+            const x2 = Math.round((size / 2 + outerR * Math.cos(rads)) * 100) / 100;
+            const y2 = Math.round((size / 2 + outerR * Math.sin(rads)) * 100) / 100;
 
-            {/* Background track */}
-            <circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="6"
-              className="text-border/40"
-            />
+            return (
+              <line
+                key={i}
+                x1={x1} y1={y1} x2={x2} y2={y2}
+                stroke="#D9D9D9"
+                strokeWidth={isMajor ? 1.5 : 0.8}
+                strokeLinecap="round"
+              />
+            );
+          })}
 
-            {/* Animated arc with glow */}
+          {/* Background track */}
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke="#F2F2F2"
+            strokeWidth={strokeWidth}
+          />
+
+          {/* Main animated arc */}
+          <motion.circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            initial={{ strokeDashoffset: circumference }}
+            animate={
+              inView
+                ? { strokeDashoffset: circumference * (1 - percentage) }
+                : {}
+            }
+            transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
+          />
+
+          {/* End dot */}
+          {inView && percentage > 0.02 && (
             <motion.circle
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              fill="none"
-              stroke={`url(#${id}-grad)`}
-              strokeWidth="7"
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              filter={`url(#${id}-glow)`}
-              initial={{ strokeDashoffset: circumference }}
-              animate={
-                inView
-                  ? { strokeDashoffset: circumference * (1 - percentage) }
-                  : {}
-              }
-              transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
+              cx={Math.round((size / 2 + radius * Math.cos(2 * Math.PI * percentage - Math.PI / 2)) * 100) / 100}
+              cy={Math.round((size / 2 + radius * Math.sin(2 * Math.PI * percentage - Math.PI / 2)) * 100) / 100}
+              r={4}
+              fill={color}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 1.6, duration: 0.3 }}
             />
-          </svg>
+          )}
+        </svg>
 
-          {/* Center value */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span
-              className="text-3xl font-bold tabular-nums"
-              style={{ color }}
-            >
-              {display}
-            </span>
-            <span className="text-xs text-muted-foreground -mt-0.5">{unit}</span>
-          </div>
+        {/* Center value */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span
+            className="text-2xl font-bold tabular-nums tracking-tight text-[#0D0D0D]"
+          >
+            {display}
+          </span>
+          <span className="text-[10px] font-medium text-[#737373] uppercase tracking-wider -mt-0.5">
+            {unit}
+          </span>
         </div>
       </div>
-      <p className="mt-1 text-sm font-medium text-muted-foreground">{label}</p>
+
+      <p className="mt-2 text-xs font-medium text-[#737373] tracking-wide">{label}</p>
     </div>
   );
 }

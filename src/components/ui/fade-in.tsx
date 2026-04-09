@@ -16,13 +16,13 @@ export function FadeIn({
   className,
   delay = 0,
   direction = "up",
-  duration = 0.5,
+  duration = 0.3,
 }: FadeInProps) {
   const directionOffset = {
-    up: { y: 24 },
-    down: { y: -24 },
-    left: { x: 24 },
-    right: { x: -24 },
+    up: { y: 8 },
+    down: { y: -8 },
+    left: { x: 8 },
+    right: { x: -8 },
     none: {},
   };
 

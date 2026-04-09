@@ -8,9 +8,13 @@ export default function PublicLayout({
 }) {
   return (
     <>
-      <PublicNav />
+      <div className="public-nav-wrap">
+        <PublicNav />
+      </div>
       <main className="flex-1">{children}</main>
-      <PublicFooter />
+      <div className="public-footer-wrap">
+        <PublicFooter />
+      </div>
     </>
   );
 }

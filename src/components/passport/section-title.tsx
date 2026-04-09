@@ -1,48 +1,40 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import type { LucideIcon } from "lucide-react";
 
 interface SectionTitleProps {
   title: string;
   description?: string;
   accentColor?: string;
+  icon?: LucideIcon;
   className?: string;
 }
 
 export function SectionTitle({
   title,
   description,
-  accentColor,
+  icon: Icon,
   className,
 }: SectionTitleProps) {
-  const color = accentColor ?? "var(--primary)";
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className={cn("mb-8", className)}
-    >
+    <div className={cn("mb-8", className)}>
       <div className="flex items-center gap-3">
-        <div className="relative">
-          <div
-            className="h-7 w-1.5 rounded-full"
-            style={{ backgroundColor: color }}
-          />
-          <div
-            className="absolute inset-0 rounded-full blur-sm opacity-50"
-            style={{ backgroundColor: color }}
-          />
-        </div>
-        <h2 className="text-xl font-bold tracking-tight sm:text-2xl">{title}</h2>
+        {Icon && (
+          <div className="flex h-8 w-8 items-center justify-center bg-[#F2F2F2]">
+            <Icon className="h-4 w-4 text-[#0D0D0D]" />
+          </div>
+        )}
+        <h2 className="text-xl font-bold uppercase tracking-wide text-[#0D0D0D] sm:text-2xl">
+          {title}
+        </h2>
       </div>
+
       {description && (
-        <p className="mt-2 pl-[1.125rem] text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-[#737373]">
           {description}
         </p>
       )}
-    </motion.div>
+
+      <div className="mt-4 h-px w-full bg-[#D9D9D9]" />
+    </div>
   );
 }

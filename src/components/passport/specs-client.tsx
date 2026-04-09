@@ -1,10 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { GlassCard } from "@/components/passport/glass-card";
 import { RadialGauge } from "@/components/passport/radial-gauge";
 import { SectionTitle } from "@/components/passport/section-title";
-import { ZapIcon, BoxIcon } from "lucide-react";
+import { ZapIcon, BoxIcon, CpuIcon } from "lucide-react";
 
 interface SpecRow {
   param: string;
@@ -27,143 +26,107 @@ export function SpecsClient({
   gaugeData,
 }: SpecsClientProps) {
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       <SectionTitle
         title="Technical Specifications"
-        description="Electrical and mechanical parameters at Standard Test Conditions (STC)"
-        accentColor="#3b82f6"
+        description="Electrical and mechanical parameters at Standard Test Conditions"
+        icon={CpuIcon}
       />
 
-      {/* Radial gauges */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex flex-wrap items-center justify-center gap-10"
-      >
-        <RadialGauge
-          value={gaugeData.power}
-          max={700}
-          label="Rated Power"
-          unit="W"
-          size={160}
-          color="#6366f1"
-        />
-        <RadialGauge
-          value={gaugeData.efficiency}
-          max={30}
-          label="Efficiency"
-          unit="%"
-          size={160}
-          color="#3b82f6"
-        />
-      </motion.div>
+      {/* Gauge display */}
+      <GlassCard>
+        <div className="px-6 py-6">
+          <div className="flex flex-wrap items-center justify-center gap-10 sm:gap-14">
+            <RadialGauge
+              value={gaugeData.power}
+              max={700}
+              label="Rated Power"
+              unit="W"
+              size={160}
+              color="#22C55E"
+              showTicks
+            />
+            <div className="hidden sm:block w-px h-24 bg-[#D9D9D9]" />
+            <RadialGauge
+              value={gaugeData.efficiency}
+              max={30}
+              label="Efficiency"
+              unit="%"
+              size={160}
+              color="#0D0D0D"
+              showTicks
+            />
+          </div>
+        </div>
+      </GlassCard>
 
       {/* Spec tables */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          <GlassCard tilt accentColor="#3b82f6">
-            <div className="p-6 pt-7">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-950/30">
-                  <ZapIcon className="h-5 w-5 text-blue-500" />
-                </div>
-                <h3 className="text-lg font-semibold">
-                  Electrical Parameters
-                </h3>
+      <div className="grid gap-5 lg:grid-cols-2">
+        {/* Electrical */}
+        <GlassCard>
+          <div className="p-5">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
+                <ZapIcon className="h-4 w-4 text-[#0D0D0D]" />
               </div>
-
-              <div className="space-y-0">
-                <div className="flex items-center justify-between border-b border-border/50 pb-2 mb-1">
-                  <span className="text-xs font-medium text-muted-foreground/60">
-                    Parameter
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground/60">
-                    Value
-                  </span>
-                </div>
-                {electrical.map((row, i) => (
-                  <motion.div
-                    key={row.param}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.25 + i * 0.04 }}
-                    className="flex items-center justify-between rounded-lg px-3 py-3 transition-colors hover:bg-muted/50"
-                  >
-                    <span className="text-sm text-muted-foreground">
-                      {row.param}
-                    </span>
-                    <span
-                      className={`text-sm font-mono tabular-nums ${
-                        row.highlight
-                          ? "font-bold text-blue-600 dark:text-blue-400"
-                          : "font-medium"
-                      }`}
-                    >
-                      {row.value}
-                    </span>
-                  </motion.div>
-                ))}
+              <div>
+                <h3 className="text-sm font-semibold text-[#0D0D0D]">Electrical Parameters</h3>
+                <p className="text-[11px] text-[#737373]">Standard Test Conditions</p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.25 }}
-        >
-          <GlassCard tilt accentColor="#f59e0b">
-            <div className="p-6 pt-7">
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/30">
-                  <BoxIcon className="h-5 w-5 text-amber-500" />
-                </div>
-                <h3 className="text-lg font-semibold">
-                  Mechanical Parameters
-                </h3>
+            <div className="passport-table">
+              <div className="passport-table-header">
+                <span>Parameter</span>
+                <span>Value</span>
               </div>
-
-              <div className="space-y-0">
-                <div className="flex items-center justify-between border-b border-border/50 pb-2 mb-1">
-                  <span className="text-xs font-medium text-muted-foreground/60">
-                    Parameter
-                  </span>
-                  <span className="text-xs font-medium text-muted-foreground/60">
-                    Value
+              {electrical.map((row) => (
+                <div
+                  key={row.param}
+                  className="passport-table-row"
+                >
+                  <span className="table-label">{row.param}</span>
+                  <span className={`table-value mono ${row.highlight ? "highlight" : ""}`}>
+                    {row.value}
                   </span>
                 </div>
-                {mechanical.map((row, i) => (
-                  <motion.div
-                    key={row.param}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.35 + i * 0.04 }}
-                    className="flex items-center justify-between rounded-lg px-3 py-3 transition-colors hover:bg-muted/50"
-                  >
-                    <span className="text-sm text-muted-foreground">
-                      {row.param}
-                    </span>
-                    <span
-                      className={`text-sm font-mono tabular-nums ${
-                        row.highlight
-                          ? "font-bold text-amber-600 dark:text-amber-400"
-                          : "font-medium"
-                      }`}
-                    >
-                      {row.value}
-                    </span>
-                  </motion.div>
-                ))}
+              ))}
+            </div>
+          </div>
+        </GlassCard>
+
+        {/* Mechanical */}
+        <GlassCard>
+          <div className="p-5">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
+                <BoxIcon className="h-4 w-4 text-[#0D0D0D]" />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-[#0D0D0D]">Mechanical Parameters</h3>
+                <p className="text-[11px] text-[#737373]">Physical dimensions & construction</p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+
+            <div className="passport-table">
+              <div className="passport-table-header">
+                <span>Parameter</span>
+                <span>Value</span>
+              </div>
+              {mechanical.map((row) => (
+                <div
+                  key={row.param}
+                  className="passport-table-row"
+                >
+                  <span className="table-label">{row.param}</span>
+                  <span className={`table-value mono ${row.highlight ? "highlight" : ""}`}>
+                    {row.value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </GlassCard>
       </div>
     </div>
   );

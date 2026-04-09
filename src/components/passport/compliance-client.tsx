@@ -1,9 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { GlassCard } from "@/components/passport/glass-card";
 import { SectionTitle } from "@/components/passport/section-title";
-import { ShieldCheckIcon, CheckCircleIcon, XCircleIcon, ClockIcon } from "lucide-react";
+import {
+  ShieldCheckIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+  AwardIcon,
+  ExternalLinkIcon,
+} from "lucide-react";
 
 interface CertData {
   id: string;
@@ -15,95 +21,164 @@ interface CertData {
   issuedDate: string;
   expiryDate: string;
   scopeNotes: string | null;
+  documentUrl: string | null;
+  documentHash: string | null;
+  hashAlgorithm: string | null;
 }
 
 interface ComplianceClientProps {
   certs: CertData[];
 }
 
-const statusConfig: Record<string, { color: string; bgClass: string; textClass: string; icon: typeof CheckCircleIcon }> = {
-  valid: { color: "#22c55e", bgClass: "bg-emerald-50 dark:bg-emerald-950/30", textClass: "text-emerald-600 dark:text-emerald-400", icon: CheckCircleIcon },
-  expired: { color: "#ef4444", bgClass: "bg-red-50 dark:bg-red-950/30", textClass: "text-red-600 dark:text-red-400", icon: XCircleIcon },
-  revoked: { color: "#ef4444", bgClass: "bg-red-50 dark:bg-red-950/30", textClass: "text-red-600 dark:text-red-400", icon: XCircleIcon },
-  pending: { color: "#f59e0b", bgClass: "bg-amber-50 dark:bg-amber-950/30", textClass: "text-amber-600 dark:text-amber-400", icon: ClockIcon },
+const statusConfig: Record<
+  string,
+  { badgeClass: string; icon: typeof CheckCircleIcon }
+> = {
+  valid: {
+    badgeClass: "bg-[#E8FAE9] text-[#0D0D0D]",
+    icon: CheckCircleIcon,
+  },
+  expired: {
+    badgeClass: "bg-[#FEE2E2] text-[#0D0D0D]",
+    icon: XCircleIcon,
+  },
+  revoked: {
+    badgeClass: "bg-[#FEE2E2] text-[#0D0D0D]",
+    icon: XCircleIcon,
+  },
+  pending: {
+    badgeClass: "bg-[#FEF3C7] text-[#0D0D0D]",
+    icon: ClockIcon,
+  },
 };
 
 export function ComplianceClient({ certs }: ComplianceClientProps) {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <SectionTitle
         title="Compliance & Certifications"
         description="Standards, test certifications, and regulatory compliance"
-        accentColor="#f59e0b"
+        icon={ShieldCheckIcon}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {certs.map((cert, i) => {
-          const config = statusConfig[cert.status] ?? statusConfig.pending;
-          const Icon = config.icon;
+      {/* Summary bar */}
+      <GlassCard>
+        <div className="flex flex-wrap items-center justify-center gap-8 px-6 py-4">
+          {["valid", "pending", "expired"].map((status) => {
+            const count = certs.filter((c) => c.status === status).length;
+            const config = statusConfig[status];
+            if (count === 0) return null;
+            const Icon = config.icon;
+            return (
+              <div key={status} className="flex items-center gap-2.5">
+                <div className="flex h-7 w-7 items-center justify-center bg-[#F2F2F2]">
+                  <Icon className="h-3.5 w-3.5 text-[#0D0D0D]" />
+                </div>
+                <span className="text-2xl font-bold tabular-nums text-[#0D0D0D]">
+                  {count}
+                </span>
+                <span className="text-xs text-[#737373] capitalize font-medium">{status}</span>
+              </div>
+            );
+          })}
+        </div>
+      </GlassCard>
 
-          return (
-            <motion.div
-              key={cert.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08, duration: 0.4 }}
-            >
-              <GlassCard tilt accentColor={config.color}>
-                <div className="p-5 pt-6">
-                  <div className="flex items-start justify-between gap-3 mb-4">
-                    <h3 className="text-base font-semibold leading-tight">
-                      {cert.standardName}
-                    </h3>
-                    <div
-                      className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${config.bgClass} ${config.textClass}`}
-                    >
-                      <Icon className="h-3 w-3" />
-                      {cert.statusLabel}
-                    </div>
-                  </div>
+      {/* Certificate cards */}
+      <GlassCard>
+        <div className="p-5">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
+              <AwardIcon className="h-4 w-4 text-[#0D0D0D]" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-[#0D0D0D]">Certificates</h3>
+              <p className="text-[11px] text-[#737373]">{certs.length} certification{certs.length !== 1 ? "s" : ""} on file</p>
+            </div>
+          </div>
 
-                  <div className="space-y-2.5">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Issuer</span>
-                      <span className="font-medium">{cert.issuer}</span>
-                    </div>
-                    {cert.certificateNumber && (
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">
-                          Certificate #
-                        </span>
-                        <span className="font-mono text-xs">
-                          {cert.certificateNumber}
-                        </span>
+          <div className="space-y-2">
+            {certs.map((cert) => {
+              const config = statusConfig[cert.status] ?? statusConfig.pending;
+              const Icon = config.icon;
+
+              return (
+                <div
+                  key={cert.id}
+                  className="border border-[#D9D9D9] bg-white p-4 transition-colors hover:bg-[#FAFAFA]"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2.5">
+                        <h4 className="text-sm font-semibold text-[#0D0D0D] truncate">
+                          {cert.standardName}
+                        </h4>
+                        <div
+                          className={`flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${config.badgeClass}`}
+                        >
+                          <Icon className="h-2.5 w-2.5" />
+                          {cert.statusLabel}
+                        </div>
                       </div>
-                    )}
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Issued</span>
-                      <span>{cert.issuedDate}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Expires</span>
-                      <span>{cert.expiryDate}</span>
-                    </div>
-                  </div>
 
-                  {cert.scopeNotes && (
-                    <div className="mt-4 rounded-lg bg-muted/50 px-3 py-2">
-                      <div className="flex items-start gap-1.5">
-                        <ShieldCheckIcon className="mt-0.5 h-3 w-3 text-muted-foreground shrink-0" />
-                        <p className="text-xs text-muted-foreground">
+                      {/* Details as inline table */}
+                      <div className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-1">
+                        <div className="flex justify-between text-xs">
+                          <span className="text-[#737373]">Issuer</span>
+                          <span className="text-[#0D0D0D] font-medium">{cert.issuer}</span>
+                        </div>
+                        {cert.certificateNumber && (
+                          <div className="flex justify-between text-xs">
+                            <span className="text-[#737373]">Cert #</span>
+                            <span className="text-[#0D0D0D] font-mono text-[11px]">
+                              {cert.certificateNumber}
+                            </span>
+                          </div>
+                        )}
+                        <div className="flex justify-between text-xs">
+                          <span className="text-[#737373]">Issued</span>
+                          <span className="text-[#0D0D0D]">{cert.issuedDate}</span>
+                        </div>
+                        <div className="flex justify-between text-xs">
+                          <span className="text-[#737373]">Expires</span>
+                          <span className="text-[#0D0D0D]">{cert.expiryDate}</span>
+                        </div>
+                      </div>
+
+                      {cert.documentHash && (
+                        <div className="col-span-2 flex justify-between text-xs mt-1">
+                          <span className="text-[#737373]">Integrity</span>
+                          <span className="text-[#737373] font-mono text-[10px] truncate max-w-[200px]" title={cert.documentHash}>
+                            {cert.hashAlgorithm?.toUpperCase()}: {cert.documentHash.slice(0, 16)}...
+                          </span>
+                        </div>
+                      )}
+
+                      {cert.scopeNotes && (
+                        <p className="col-span-2 mt-2 text-[11px] text-[#737373] leading-relaxed">
                           {cert.scopeNotes}
                         </p>
-                      </div>
+                      )}
                     </div>
-                  )}
+
+                    {cert.documentUrl && (
+                      <a
+                        href={cert.documentUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="clean-button flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#0D0D0D] shrink-0"
+                      >
+                        <ExternalLinkIcon className="h-3 w-3" />
+                        View
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </GlassCard>
-            </motion.div>
-          );
-        })}
-      </div>
+              );
+            })}
+          </div>
+        </div>
+      </GlassCard>
     </div>
   );
 }

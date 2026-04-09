@@ -52,6 +52,9 @@ export default async function CompliancePage({ params }: Props) {
     issuedDate: formatDate(cert.issued_date),
     expiryDate: formatDate(cert.expiry_date),
     scopeNotes: cert.scope_notes,
+    documentUrl: cert.document_url,
+    documentHash: cert.document_hash,
+    hashAlgorithm: cert.hash_algorithm,
   }));
 
   return <ComplianceClient certs={certsData} />;
