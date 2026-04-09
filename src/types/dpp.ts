@@ -109,6 +109,7 @@ export interface DPPMaterial {
 
 export interface DPPMaterialComposition {
   moduleMaterials: DPPMaterial[];
+  substancesOfConcern?: DPPSubstanceOfConcern[];
   reachStatus?: string;
   rohsStatus?: string;
 }
@@ -159,6 +160,41 @@ export interface DPPWarranty {
   expectedLifetime_years: number | null;
 }
 
+export interface DPPSupplyChainActor {
+  name: string;
+  role: string;
+  operatorId?: string;
+  country?: string;
+  facilityName?: string;
+  facilityLocation?: string;
+  certifications?: string[];
+  tierLevel?: number;
+  stage?: string;
+  uflpaCompliant?: boolean;
+  auditDate?: string;
+}
+
+export interface DPPChainOfCustodyEvent {
+  eventType: string;
+  fromActor?: string;
+  toActor?: string;
+  location?: string;
+  timestamp?: string;
+  evidenceUrl?: string;
+  evidenceHash?: string;
+  notes?: string;
+}
+
+export interface DPPSubstanceOfConcern {
+  substanceName: string;
+  casNumber?: string;
+  concentrationPercent?: number;
+  locationInModule?: string;
+  regulatoryBasis?: string;
+  exemption?: string;
+  notes?: string;
+}
+
 export interface DPPPayload {
   schemaVersion: "1.0.0";
   generatedAt: string;
@@ -174,4 +210,10 @@ export interface DPPPayload {
   carbon: DPPCarbon;
   warranty: DPPWarranty;
   dataCarrierType?: string;
+  supplyChain?: {
+    actors: DPPSupplyChainActor[];
+    chainOfCustodyEvents: DPPChainOfCustodyEvent[];
+    uflpaCompliance?: { status: string };
+    ssiCertification?: { status: string };
+  };
 }

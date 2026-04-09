@@ -5,6 +5,9 @@ import type {
   PassportCertificate,
   PassportDocument,
   PassportCircularity,
+  PassportSupplyChainActor,
+  PassportChainOfCustody,
+  PassportSubstanceOfConcern,
 } from "@/types/passport";
 import type { DPPPayload } from "@/types/dpp";
 
@@ -23,6 +26,9 @@ export async function assemblePassportDPP(
     { data: certificates },
     { data: documents },
     { data: circularity },
+    { data: supplyChainActors },
+    { data: cocEvents },
+    { data: substancesOfConcern },
   ] = await Promise.all([
     supabase.from("passports").select("*").eq("id", passportId).single(),
     supabase
@@ -43,6 +49,20 @@ export async function assemblePassportDPP(
       .select("*")
       .eq("passport_id", passportId)
       .single(),
+    supabase
+      .from("passport_supply_chain_actors")
+      .select("*")
+      .eq("passport_id", passportId)
+      .order("tier_level"),
+    supabase
+      .from("passport_chain_of_custody")
+      .select("*")
+      .eq("passport_id", passportId)
+      .order("event_timestamp"),
+    supabase
+      .from("passport_substances_of_concern")
+      .select("*")
+      .eq("passport_id", passportId),
   ]);
 
   if (!passport) throw new Error(`Passport ${passportId} not found`);
@@ -52,6 +72,9 @@ export async function assemblePassportDPP(
   const certs = (certificates ?? []) as PassportCertificate[];
   const docs = (documents ?? []) as PassportDocument[];
   const circ = circularity as PassportCircularity | null;
+  const scActors = (supplyChainActors ?? []) as PassportSupplyChainActor[];
+  const coc = (cocEvents ?? []) as PassportChainOfCustody[];
+  const socs = (substancesOfConcern ?? []) as PassportSubstanceOfConcern[];
 
   return {
     schemaVersion: "1.0.0",
@@ -169,6 +192,17 @@ export async function assemblePassportDPP(
         originCountry: m.origin_country,
         supplierId: m.supplier_id,
       })),
+      substancesOfConcern: socs.length
+        ? socs.map((s) => ({
+            substanceName: s.substance_name,
+            casNumber: s.cas_number ?? undefined,
+            concentrationPercent: s.concentration_percent ?? undefined,
+            locationInModule: s.location_in_module ?? undefined,
+            regulatoryBasis: s.regulatory_basis ?? undefined,
+            exemption: s.exemption ?? undefined,
+            notes: s.notes ?? undefined,
+          }))
+        : undefined,
       reachStatus: p.reach_status ?? undefined,
       rohsStatus: p.rohs_status ?? undefined,
     },
@@ -215,5 +249,35 @@ export async function assemblePassportDPP(
     },
 
     dataCarrierType: p.data_carrier_type ?? undefined,
+
+    ...(scActors.length
+      ? {
+          supplyChain: {
+            actors: scActors.map((a) => ({
+              name: a.actor_name,
+              role: a.actor_role,
+              operatorId: a.operator_id ?? undefined,
+              country: a.country ?? undefined,
+              facilityName: a.facility_name ?? undefined,
+              facilityLocation: a.facility_location ?? undefined,
+              certifications: a.certifications ?? undefined,
+              tierLevel: a.tier_level ?? undefined,
+              stage: a.stage ?? undefined,
+              uflpaCompliant: a.uflpa_compliant,
+              auditDate: a.audit_date ?? undefined,
+            })),
+            chainOfCustodyEvents: coc.map((e) => ({
+              eventType: e.event_type,
+              fromActor: e.from_actor ?? undefined,
+              toActor: e.to_actor ?? undefined,
+              location: e.location ?? undefined,
+              timestamp: e.event_timestamp ?? undefined,
+              evidenceUrl: e.evidence_url ?? undefined,
+              evidenceHash: e.evidence_hash ?? undefined,
+              notes: e.notes ?? undefined,
+            })),
+          },
+        }
+      : {}),
   };
 }

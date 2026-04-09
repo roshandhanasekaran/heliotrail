@@ -195,6 +195,51 @@ export interface PassportCircularity {
   updated_at: string;
 }
 
+export interface PassportSupplyChainActor {
+  id: string;
+  passport_id: string;
+  actor_name: string;
+  actor_role: string;
+  operator_id: string | null;
+  country: string | null;
+  facility_name: string | null;
+  facility_location: string | null;
+  certifications: string[] | null;
+  tier_level: number | null;
+  stage: string | null;
+  uflpa_compliant: boolean;
+  audit_date: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface PassportChainOfCustody {
+  id: string;
+  passport_id: string;
+  event_type: string;
+  from_actor: string | null;
+  to_actor: string | null;
+  location: string | null;
+  event_timestamp: string | null;
+  evidence_url: string | null;
+  evidence_hash: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface PassportSubstanceOfConcern {
+  id: string;
+  passport_id: string;
+  substance_name: string;
+  cas_number: string | null;
+  concentration_percent: number | null;
+  location_in_module: string | null;
+  regulatory_basis: string | null;
+  exemption: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
 export interface PassportAnchor {
   id: string;
   passport_id: string;
