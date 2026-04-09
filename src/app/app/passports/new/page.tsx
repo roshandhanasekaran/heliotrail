@@ -846,7 +846,7 @@ function StepIdentity({
           recoveryCopper: true,
           recoverySilver: true,
           recoveryNotes: "95%+ aluminium recovery via mechanical separation. Glass recovery via thermal delamination at 500°C.",
-          eolStatus: "in_use",
+          eolStatus: "in_service",
           carbonFootprint: isPERC ? "750" : String(800 + Math.round(model.power / 14)),
           carbonIntensity: isPERC ? "24.0" : "22.5",
           carbonLcaBoundary: "cradle_to_gate",
