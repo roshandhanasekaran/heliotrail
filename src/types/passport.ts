@@ -99,6 +99,19 @@ export interface Passport {
   glass_type: string | null;
   bifaciality_factor: number | null;
 
+  data_carrier_type: string | null;
+  importer_name: string | null;
+  importer_operator_id: string | null;
+  importer_country: string | null;
+  authorized_rep_name: string | null;
+  authorized_rep_operator_id: string | null;
+  carbon_intensity_g_co2e_per_kwh: number | null;
+  carbon_lca_boundary: string | null;
+  carbon_verification_ref: string | null;
+  facility_country: string | null;
+  reach_status: string | null;
+  rohs_status: string | null;
+
   passport_version: number;
   created_at: string;
   updated_at: string;
@@ -118,6 +131,9 @@ export interface PassportMaterial {
   concentration_percent: number | null;
   regulatory_basis: string | null;
   recyclability_hint: string | null;
+  recycled_content_percent: number | null;
+  origin_country: string | null;
+  supplier_id: string | null;
   sort_order: number;
   created_at: string;
 }
@@ -177,4 +193,29 @@ export interface PassportCircularity {
   end_of_life_status: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface PassportAnchor {
+  id: string;
+  passport_id: string;
+  passport_version: number;
+  payload_hash: string;
+  hash_algorithm: string;
+  anchored_at: string;
+  anchor_type: "local" | "blockchain";
+  metadata: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface PassportSubmission {
+  id: string;
+  passport_id: string;
+  anchor_id: string;
+  target_registry: string;
+  submission_status: "pending" | "accepted" | "rejected" | "error";
+  submitted_at: string;
+  response_id: string | null;
+  response_payload: Record<string, unknown> | null;
+  error_message: string | null;
+  created_at: string;
 }
