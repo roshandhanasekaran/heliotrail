@@ -47,7 +47,7 @@ export function TemperatureDeratingChart({
         />
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
-          formatter={(value: number, name: string) => [
+          formatter={(value, name) => [
             `${value} W`,
             name === "theoreticalPower"
               ? "Theoretical"

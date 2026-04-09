@@ -61,7 +61,7 @@ export function DegradationChart({ data }: DegradationChartProps) {
         />
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
-          formatter={(value: number, name: string) => {
+          formatter={(value, name) => {
             const labels: Record<string, string> = {
               retention: "This Module",
               warrantyMin: "Warranty Min",
@@ -69,7 +69,7 @@ export function DegradationChart({ data }: DegradationChartProps) {
               upperBound: "Upper Bound",
               lowerBound: "Lower Bound",
             };
-            return [`${Number(value).toFixed(1)}%`, labels[name] ?? name];
+            return [`${Number(value).toFixed(1)}%`, labels[String(name)] ?? name];
           }}
           labelFormatter={(label) => `Year ${label}`}
         />

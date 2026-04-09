@@ -46,7 +46,7 @@ export function PowerChart({ data }: PowerChartProps) {
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
           cursor={{ fill: "rgba(34,197,94,0.06)" }}
-          formatter={(value: number, name: string) => [
+          formatter={(value, name) => [
             `${value} W`,
             name === "expected" ? "Expected" : "Avg Power",
           ]}

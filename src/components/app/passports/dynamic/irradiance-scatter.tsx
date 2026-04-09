@@ -76,14 +76,14 @@ export function IrradianceScatter({ data }: IrradianceScatterProps) {
         />
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
-          formatter={(value: number, name: string) => [
+          formatter={(value, name) => [
             `${value}${name === "Irradiance" ? " W/m²" : " W"}`,
-            name,
+            String(name),
           ]}
         />
         {/* Reference line: theoretical output */}
         <ReferenceLine
-          segment={refData.map((d) => ({ x: d.irradiance, y: d.power }))}
+          segment={refData.map((d) => ({ x: d.irradiance, y: d.power })) as [{ x: number; y: number }, { x: number; y: number }]}
           stroke="#A3A3A3"
           strokeDasharray="6 3"
           strokeWidth={1.5}

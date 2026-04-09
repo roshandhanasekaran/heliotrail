@@ -65,14 +65,14 @@ export function EnergyYieldChart({ data }: EnergyYieldChartProps) {
         />
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
-          formatter={(value: number, name: string) => {
+          formatter={(value, name) => {
             const labels: Record<string, string> = {
               expected: "Expected",
               actual: "Actual",
               cumulativeExpected: "Cumul. Expected",
               cumulativeActual: "Cumul. Actual",
             };
-            return [`${value.toLocaleString()} kWh`, labels[name] ?? name];
+            return [`${Number(value).toLocaleString()} kWh`, labels[String(name)] ?? name];
           }}
         />
         <Legend

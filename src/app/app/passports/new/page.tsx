@@ -717,11 +717,11 @@ function StepIdentity({
           bom: TEMPLATE_BOM.map((item) => ({ ...item, id: generateId() })),
           // Pre-fill certificates (typical Waaree certification suite)
           certificates: [
-            { id: generateId(), standardName: "IEC 61215", certNumber: "IEC-61215-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
-            { id: generateId(), standardName: "IEC 61730", certNumber: "IEC-61730-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
-            { id: generateId(), standardName: "IEC 61701", certNumber: "IEC-61701-2024-" + modelId.substring(0, 7), issuer: "TÜV SÜD", issuedDate: "2025-09-01", expiryDate: "2030-09-01", status: "valid" as const },
-            { id: generateId(), standardName: "BIS IS 14286", certNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-06-01", expiryDate: "2027-06-01", status: "valid" as const },
-            { id: generateId(), standardName: "CE Declaration", certNumber: "CE-DoC-WRM-2025", issuer: "Waaree Energies Ltd.", issuedDate: "2025-07-01", expiryDate: "", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61215", certificateNumber: "IEC-61215-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61730", certificateNumber: "IEC-61730-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61701", certificateNumber: "IEC-61701-2024-" + modelId.substring(0, 7), issuer: "TÜV SÜD", issuedDate: "2025-09-01", expiryDate: "2030-09-01", status: "valid" as const },
+            { id: generateId(), standard: "BIS IS 14286", certificateNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-06-01", expiryDate: "2027-06-01", status: "valid" as const },
+            { id: generateId(), standard: "CE Declaration", certificateNumber: "CE-DoC-WRM-2025", issuer: "Waaree Energies Ltd.", issuedDate: "2025-07-01", expiryDate: "", status: "valid" as const },
           ],
           // Pre-fill circularity
           recyclabilityRate: "92",

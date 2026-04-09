@@ -48,8 +48,8 @@ export function PRChart({ data }: PRChartProps) {
         />
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
-          formatter={(value: number, name: string) => [
-            `${value.toFixed(1)}%`,
+          formatter={(value, name) => [
+            `${Number(value).toFixed(1)}%`,
             name === "expected" ? "Expected PR" : "Actual PR",
           ]}
         />
