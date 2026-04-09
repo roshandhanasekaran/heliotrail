@@ -18,7 +18,6 @@ import {
   CalendarIcon,
   GridIcon,
 } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
 
 interface PassportHeroProps {
   passport: Passport;
@@ -80,7 +79,7 @@ export function PassportHero({ passport }: PassportHeroProps) {
           </div>
         </div>
 
-        {/* Main content: Title + QR Code side by side */}
+        {/* Main content: Title + Verification badge */}
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-3xl font-bold tracking-tight text-[#0D0D0D] sm:text-4xl lg:text-5xl">
@@ -105,18 +104,16 @@ export function PassportHero({ passport }: PassportHeroProps) {
             </div>
           </div>
 
-          {/* QR Code */}
+          {/* Verified Digital Passport badge */}
           <div className="shrink-0 flex flex-col items-center gap-2">
-            <div className="border border-[#D9D9D9] p-3">
-              <div className="bg-white p-2">
-                <QRCodeSVG
-                  value={passportUrl}
-                  size={96}
-                  level="M"
-                  bgColor="#ffffff"
-                  fgColor="#0D0D0D"
-                />
-              </div>
+            <div className="border border-[#D9D9D9] p-4 flex flex-col items-center gap-2">
+              <ShieldCheckIcon className="h-10 w-10 text-[#22C55E]" />
+              <span className="text-[10px] font-semibold text-[#0D0D0D] uppercase tracking-wider">
+                Verified DPP
+              </span>
+              <span className="font-mono text-[10px] text-[#A3A3A3]">
+                {passport.pv_passport_id}
+              </span>
             </div>
             <span className="text-[10px] font-medium text-[#737373] uppercase tracking-wider">
               Digital Passport

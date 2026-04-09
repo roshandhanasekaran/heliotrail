@@ -343,6 +343,21 @@
   z-index: 1;
 }
 
+/* ============================================
+   TILE FLICKER ANIMATIONS (for DOM-based tiles)
+   ============================================ */
+@keyframes tile-highlight {
+  0% { opacity: 0.08; }
+  50% { opacity: 0.35; }
+  100% { opacity: 0.08; }
+}
+
+@keyframes tile-flash {
+  0% { opacity: 0; }
+  30% { opacity: 0.25; }
+  100% { opacity: 0; }
+}
+
 /* Hide default nav and footer on passport pages (passport has its own) */
 body:has(.passport-page) .public-nav-wrap,
 body:has(.passport-page) .public-footer-wrap {

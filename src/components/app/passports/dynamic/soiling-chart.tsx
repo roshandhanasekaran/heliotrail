@@ -1,0 +1,109 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import type { SoilingDataPoint } from "@/lib/mock/dynamic-data";
+import { Droplets } from "lucide-react";
+
+interface SoilingChartProps {
+  data: SoilingDataPoint[];
+}
+
+export function SoilingChart({ data }: SoilingChartProps) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const maxLoss = useMemo(
+    () => Math.max(...data.map((d) => d.loss)),
+    [data],
+  );
+
+  return (
+    <div className="space-y-3">
+      <div
+        className="relative h-40"
+        onMouseLeave={() => setHoveredIndex(null)}
+      >
+        {/* Tooltip */}
+        <AnimatePresence>
+          {hoveredIndex !== null && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.15 }}
+              className="pointer-events-none absolute -top-10 z-10 border border-[#D9D9D9] bg-white px-2 py-1 text-xs shadow-sm"
+              style={{
+                left: `${(hoveredIndex / (data.length - 1)) * 100}%`,
+                transform: "translateX(-50%)",
+              }}
+            >
+              <div className="font-mono font-semibold text-[#0D0D0D]">
+                {data[hoveredIndex].loss}% loss
+              </div>
+              <div className="text-[#A3A3A3]">
+                -€{data[hoveredIndex].revenueLoss}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Bars */}
+        <div className="flex h-full w-full items-end justify-between gap-1">
+          {data.map((d, i) => {
+            const barHeight = `${(d.loss / maxLoss) * 100}%`;
+            const isHovered = hoveredIndex === i;
+            const isAdjacent =
+              hoveredIndex !== null && Math.abs(hoveredIndex - i) === 1;
+            const exceedsThreshold = d.loss > 5;
+
+            return (
+              <div
+                key={d.month}
+                className="flex h-full flex-1 flex-col items-center justify-end"
+              >
+                <div
+                  className="group relative flex h-full w-full items-end"
+                  onMouseEnter={() => setHoveredIndex(i)}
+                >
+                  <motion.div
+                    className="w-full"
+                    style={{ height: barHeight }}
+                    initial={false}
+                    animate={{
+                      backgroundColor: isHovered
+                        ? exceedsThreshold
+                          ? "#EF4444"
+                          : "#F59E0B"
+                        : isAdjacent
+                          ? exceedsThreshold
+                            ? "rgba(239,68,68,0.3)"
+                            : "rgba(245,158,11,0.3)"
+                          : "#E5E5E5",
+                    }}
+                    transition={{ duration: 0.2 }}
+                  />
+                </div>
+                {/* Cleaning indicator */}
+                {d.cleaned && (
+                  <Droplets className="mt-0.5 h-2.5 w-2.5 text-[#3B82F6]" />
+                )}
+                <span className="mt-0.5 text-[9px] text-[#A3A3A3]">
+                  {d.month}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="flex items-center gap-3 text-[10px] text-[#737373]">
+        <span className="flex items-center gap-1">
+          <Droplets className="h-2.5 w-2.5 text-[#3B82F6]" /> Cleaned
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="h-2 w-2 bg-[#EF4444]" /> &gt;5% loss
+        </span>
+      </div>
+    </div>
+  );
+}

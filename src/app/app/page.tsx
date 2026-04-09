@@ -20,6 +20,8 @@ import { DonutChart } from "@/components/app/dashboard/donut-chart";
 import { CarbonChart } from "@/components/app/dashboard/carbon-chart";
 import { MaterialChart } from "@/components/app/dashboard/material-chart";
 import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+import { FleetPRWidget } from "@/components/app/dashboard/fleet-pr-widget";
+import { AlertsWidget } from "@/components/app/dashboard/alerts-widget";
 import { DashboardKpis } from "./dashboard-kpis";
 
 export default async function DashboardPage() {
@@ -222,6 +224,16 @@ export default async function DashboardPage() {
           <div className="mt-4">
             <MaterialChart segments={materialSegments} />
           </div>
+        </div>
+      </div>
+
+      {/* Fleet Intelligence */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="clean-card hover-card p-5">
+          <FleetPRWidget />
+        </div>
+        <div className="clean-card hover-card p-5">
+          <AlertsWidget />
         </div>
       </div>
 

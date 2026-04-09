@@ -66,7 +66,7 @@ export function HeroSection() {
                 <button className="cta-secondary">
                   <span className="flex items-center gap-2">
                     <ScanLineIcon className="h-4 w-4" />
-                    Scan QR Code
+                    Look Up Passport
                   </span>
                 </button>
               </Link>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { SIDEBAR_SECTIONS } from "@/lib/navigation";
-import { PanelLeftClose, PanelLeft } from "lucide-react";
+import { PanelLeftClose, PanelLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface AppSidebarProps {
@@ -90,6 +90,50 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </div>
         ))}
       </nav>
+
+      {/* Fleet Health mini-widget */}
+      {!collapsed && (
+        <div className="mx-2 mb-2">
+          <div className="mb-1 px-3 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-[#A3A3A3]">
+            Fleet Health
+          </div>
+          <div className="dashed-card p-2.5 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#737373]">
+                <span className="h-1.5 w-1.5 bg-[#22C55E]" />
+                Fleet PR
+              </span>
+              <span className="font-mono text-[0.6875rem] font-semibold text-[#0D0D0D]">
+                81.4%
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#737373]">
+                <span className="h-1.5 w-1.5 bg-[#22C55E]" />
+                Avg Degradation
+              </span>
+              <span className="font-mono text-[0.6875rem] font-semibold text-[#0D0D0D]">
+                0.41%/yr
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#737373]">
+                <span className="h-1.5 w-1.5 bg-[#F59E0B]" />
+                Alerts
+              </span>
+              <span className="font-mono text-[0.6875rem] font-semibold text-[#F59E0B]">
+                2 active
+              </span>
+            </div>
+            <Link
+              href="/app/analytics"
+              className="flex items-center gap-1 pt-1 text-[0.625rem] font-medium text-[#22C55E] transition-colors hover:text-[#0D0D0D]"
+            >
+              View Details <ArrowRight className="h-2.5 w-2.5" />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Bottom: Collapse + user */}
       <div className="border-t border-[#D9D9D9] p-2">

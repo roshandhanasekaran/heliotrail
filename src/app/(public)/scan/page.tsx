@@ -16,7 +16,7 @@ export default function ScanPage() {
     e.preventDefault();
     const trimmed = query.trim();
     if (!trimmed) {
-      setError("Please enter a passport ID or scan a QR code.");
+      setError("Please enter a passport ID to look up.");
       return;
     }
     setError("");

@@ -9,6 +9,7 @@ import {
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { IntelligenceSidebar } from "@/components/app/intelligence-sidebar";
 
 export default function AppLayout({
   children,
@@ -47,7 +48,10 @@ export default function AppLayout({
         )}
       >
         <AppTopbar onMobileMenuToggle={() => setMobileOpen(true)} />
-        <main className="flex-1 bg-white p-4 lg:p-6">{children}</main>
+        <div className="flex flex-1">
+          <main className="flex-1 bg-white p-4 lg:p-6 min-w-0">{children}</main>
+          <IntelligenceSidebar />
+        </div>
       </div>
     </div>
   );

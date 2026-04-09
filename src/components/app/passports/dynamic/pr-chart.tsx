@@ -9,76 +9,77 @@ import {
   ResponsiveContainer,
   CartesianGrid,
   ReferenceLine,
-  Line,
 } from "recharts";
 import { CHART_TOOLTIP_STYLE } from "@/lib/mock/dynamic-data";
-import type { PowerDataPoint } from "@/lib/mock/dynamic-data";
+import type { PRDataPoint } from "@/lib/mock/dynamic-data";
 
-interface PowerChartProps {
-  data: PowerDataPoint[];
+interface PRChartProps {
+  data: PRDataPoint[];
 }
 
-export function PowerChart({ data }: PowerChartProps) {
+export function PRChart({ data }: PRChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={260}>
+    <ResponsiveContainer width="100%" height={280}>
       <AreaChart data={data} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
         <defs>
-          <linearGradient id="powerGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#22C55E" stopOpacity={0.3} />
+          <linearGradient id="prExpectedGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#22C55E" stopOpacity={0.1} />
             <stop offset="100%" stopColor="#22C55E" stopOpacity={0.02} />
+          </linearGradient>
+          <linearGradient id="prActualGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#22C55E" stopOpacity={0.35} />
+            <stop offset="100%" stopColor="#22C55E" stopOpacity={0.05} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
         <XAxis
-          dataKey="day"
+          dataKey="month"
           tick={{ fontSize: 10, fill: "#737373" }}
           axisLine={{ stroke: "#D9D9D9" }}
           tickLine={false}
-          interval="preserveStartEnd"
         />
         <YAxis
+          domain={[70, 90]}
           tick={{ fontSize: 10, fill: "#737373" }}
           axisLine={false}
           tickLine={false}
-          width={45}
-          tickFormatter={(v) => `${v}W`}
+          width={40}
+          tickFormatter={(v) => `${v}%`}
         />
         <Tooltip
           contentStyle={CHART_TOOLTIP_STYLE}
-          cursor={{ fill: "rgba(34,197,94,0.06)" }}
           formatter={(value: number, name: string) => [
-            `${value} W`,
-            name === "expected" ? "Expected" : "Avg Power",
+            `${value.toFixed(1)}%`,
+            name === "expected" ? "Expected PR" : "Actual PR",
           ]}
         />
         <ReferenceLine
-          y={555}
-          stroke="#A3A3A3"
-          strokeDasharray="8 4"
+          y={80}
+          stroke="#F59E0B"
+          strokeDasharray="6 4"
           label={{
-            value: "Rated: 555W",
+            value: "Min threshold: 80%",
             position: "insideTopRight",
             fontSize: 9,
-            fill: "#A3A3A3",
+            fill: "#F59E0B",
           }}
         />
-        {/* Expected output (faint) */}
-        <Line
-          type="natural"
-          dataKey="expected"
-          stroke="#A3A3A3"
-          strokeWidth={1}
-          strokeDasharray="4 4"
-          dot={false}
-        />
-        {/* Actual output */}
         <Area
           type="natural"
-          dataKey="power"
+          dataKey="expected"
+          stroke="#22C55E"
+          strokeWidth={1}
+          strokeDasharray="4 4"
+          fill="url(#prExpectedGradient)"
+        />
+        <Area
+          type="natural"
+          dataKey="actual"
           stroke="#22C55E"
           strokeWidth={2}
-          fill="url(#powerGradient)"
-          activeDot={{ r: 3, fill: "#22C55E" }}
+          fill="url(#prActualGradient)"
+          dot={{ r: 2, fill: "#22C55E", stroke: "#22C55E" }}
+          activeDot={{ r: 4, fill: "#22C55E" }}
         />
       </AreaChart>
     </ResponsiveContainer>

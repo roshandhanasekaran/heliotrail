@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -10,29 +10,2013 @@ import {
   Tag,
   Cpu,
   Layers,
-  Route,
   ShieldCheck,
   Recycle,
-  Activity,
   CheckCircle2,
+  Plus,
+  Trash2,
+  FileDown,
+  Pencil,
+  AlertCircle,
+  ChevronDown,
+  Search,
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+/* ============================================
+   CONSTANTS & TYPES
+   ============================================ */
+
 const WIZARD_STEPS = [
-  { id: "identity", label: "Identity", icon: Tag },
-  { id: "specs", label: "Specifications", icon: Cpu },
-  { id: "composition", label: "Composition", icon: Layers },
-  { id: "traceability", label: "Traceability", icon: Route },
-  { id: "compliance", label: "Compliance", icon: ShieldCheck },
-  { id: "circularity", label: "Circularity", icon: Recycle },
-  { id: "dynamic", label: "Dynamic Data", icon: Activity },
-  { id: "review", label: "Review", icon: CheckCircle2 },
+  { id: "identity", label: "Product Identity", icon: Tag },
+  { id: "specs", label: "Technical Specs", icon: Cpu },
+  { id: "composition", label: "Material Composition", icon: Layers },
+  { id: "compliance", label: "Compliance & Certificates", icon: ShieldCheck },
+  { id: "circularity", label: "Circularity & End-of-Life", icon: Recycle },
+  { id: "review", label: "Review & Submit", icon: CheckCircle2 },
 ] as const;
+
+type StepId = (typeof WIZARD_STEPS)[number]["id"];
+
+interface ModuleModel {
+  id: string;
+  label: string;
+  power: number;
+  technology: string;
+  efficiency: number;
+  voc: number;
+  isc: number;
+  vmp: number;
+  imp: number;
+  maxSystemVoltage: number;
+  length: number;
+  width: number;
+  depth: number;
+  mass: number;
+  cellCount: number;
+  cellType: string;
+  // Extended specs
+  tempCoeffPmax: string;
+  tempCoeffVoc: string;
+  tempCoeffIsc: string;
+  noct: string;
+  fireRating: string;
+  ipRating: string;
+  connectorType: string;
+  frameType: string;
+  glassType: string;
+  bifacialityFactor: string;
+  warrantyYears: string;
+  performanceWarranty: string;
+  degradationRate: string;
+  expectedLifetime: string;
+  // Facility
+  facility: string;
+}
+
+// Shared extended specs for TOPCon modules
+const TOPCON_EXT = {
+  tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.24", tempCoeffIsc: "0.048",
+  noct: "43", fireRating: "Class A", ipRating: "IP68",
+  connectorType: "MC4 Compatible", frameType: "Anodized Aluminium Alloy 6063-T5",
+  glassType: "3.2mm Low-Iron Tempered ARC", bifacialityFactor: "0.70",
+  warrantyYears: "15", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "30",
+};
+
+const MODULE_MODELS: ModuleModel[] = [
+  {
+    id: "WRM-700-TOPCON-BiN-03", label: "WRM-700-TOPCON-BiN-03 (700W TOPCon)",
+    power: 700, technology: "crystalline_silicon_topcon", efficiency: 22.53,
+    voc: 46.8, isc: 19.42, vmp: 39.1, imp: 17.9, maxSystemVoltage: 1500,
+    length: 2384, width: 1303, depth: 33, mass: 34.5, cellCount: 132,
+    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-SRT-001", ...TOPCON_EXT,
+  },
+  {
+    id: "WRM-685-TOPCON-BiN-03", label: "WRM-685-TOPCON-BiN-03 (685W TOPCon)",
+    power: 685, technology: "crystalline_silicon_topcon", efficiency: 22.05,
+    voc: 46.4, isc: 19.2, vmp: 38.8, imp: 17.65, maxSystemVoltage: 1500,
+    length: 2384, width: 1303, depth: 33, mass: 34.5, cellCount: 132,
+    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-SRT-001", ...TOPCON_EXT,
+  },
+  {
+    id: "WRM-600-TOPCON-BiN-08", label: "WRM-600-TOPCON-BiN-08 (600W TOPCon)",
+    power: 600, technology: "crystalline_silicon_topcon", efficiency: 21.86,
+    voc: 38.5, isc: 20.15, vmp: 32.4, imp: 18.52, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 29.8, cellCount: 120,
+    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-CHI-002", ...TOPCON_EXT,
+  },
+  {
+    id: "WRM-580-TOPCON-BiN-08", label: "WRM-580-TOPCON-BiN-08 (580W TOPCon)",
+    power: 580, technology: "crystalline_silicon_topcon", efficiency: 21.13,
+    voc: 38.1, isc: 19.7, vmp: 32.1, imp: 18.07, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 29.8, cellCount: 120,
+    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-CHI-002", ...TOPCON_EXT,
+  },
+  {
+    id: "WRM-590-TOPCON-BiN-08", label: "WRM-590-TOPCON-BiN-08 (590W TOPCon)",
+    power: 590, technology: "crystalline_silicon_topcon", efficiency: 21.5,
+    voc: 38.3, isc: 19.95, vmp: 32.25, imp: 18.29, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 29.8, cellCount: 120,
+    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-CHI-002", ...TOPCON_EXT,
+  },
+  {
+    id: "HT-550N-72-BF", label: "HT-550N-72-BF (550W TOPCon)",
+    power: 550, technology: "crystalline_silicon_topcon", efficiency: 21.33,
+    voc: 49.65, isc: 14.1, vmp: 41.8, imp: 13.16, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 30, mass: 28.6, cellCount: 144,
+    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-SRT-001", ...TOPCON_EXT,
+    bifacialityFactor: "0.65",
+  },
+  {
+    id: "HT-450M-60-PERC", label: "HT-450M-60-PERC (450W PERC)",
+    power: 450, technology: "crystalline_silicon_perc", efficiency: 20.74,
+    voc: 41.32, isc: 13.85, vmp: 34.68, imp: 12.98, maxSystemVoltage: 1500,
+    length: 2094, width: 1038, depth: 35, mass: 24.5, cellCount: 120,
+    cellType: "M10 P-Type Mono PERC", facility: "FAC-WRM-SRT-001",
+    tempCoeffPmax: "-0.35", tempCoeffVoc: "-0.28", tempCoeffIsc: "0.050",
+    noct: "45", fireRating: "Class A", ipRating: "IP67",
+    connectorType: "MC4 Compatible", frameType: "Anodized Aluminium Alloy",
+    glassType: "3.2mm Tempered Glass", bifacialityFactor: "0",
+    warrantyYears: "12", performanceWarranty: "84.8", degradationRate: "0.55", expectedLifetime: "25",
+  },
+  {
+    id: "HT-420H-66-HJT", label: "HT-420H-66-HJT (420W HJT)",
+    power: 420, technology: "crystalline_silicon_hjt", efficiency: 21.8,
+    voc: 51.2, isc: 10.58, vmp: 43.5, imp: 9.66, maxSystemVoltage: 1500,
+    length: 1855, width: 1038, depth: 30, mass: 21.5, cellCount: 132,
+    cellType: "M6 N-Type HJT", facility: "FAC-WRM-SRT-001",
+    tempCoeffPmax: "-0.26", tempCoeffVoc: "-0.22", tempCoeffIsc: "0.046",
+    noct: "42", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized Aluminium Alloy",
+    glassType: "2mm Low-Iron Tempered Glass / Glass", bifacialityFactor: "0.85",
+    warrantyYears: "15", performanceWarranty: "88.0", degradationRate: "0.35", expectedLifetime: "30",
+  },
+];
+
+const FACILITIES = [
+  { id: "FAC-WRM-SRT-001", label: "Surat Mega Factory (FAC-WRM-SRT-001), Gujarat, India" },
+  { id: "FAC-WRM-CHI-002", label: "Chikhli Plant (FAC-WRM-CHI-002), Gujarat, India" },
+];
+
+const TECHNOLOGIES = [
+  { value: "crystalline_silicon_topcon", label: "TOPCon" },
+  { value: "crystalline_silicon_perc", label: "PERC" },
+  { value: "crystalline_silicon_hjt", label: "HJT" },
+  { value: "thin_film_cdte", label: "CdTe" },
+  { value: "thin_film_cigs", label: "CIGS" },
+  { value: "other", label: "Other" },
+];
+
+const CERTIFICATE_STANDARDS = [
+  { value: "IEC 61215", label: "IEC 61215 (Design Qualification)" },
+  { value: "IEC 61730", label: "IEC 61730 (Safety)" },
+  { value: "IEC 61701", label: "IEC 61701 (Salt Mist Corrosion)" },
+  { value: "IEC 62716", label: "IEC 62716 (Ammonia Corrosion)" },
+  { value: "UL 61730", label: "UL 61730 (North America Safety)" },
+  { value: "BIS IS 14286", label: "BIS IS 14286 (India)" },
+  { value: "CE Declaration", label: "CE Declaration of Conformity" },
+  { value: "ISO 14067", label: "Carbon Footprint Verification (ISO 14067)" },
+];
+
+const CERT_STATUSES = [
+  { value: "valid", label: "Valid" },
+  { value: "pending", label: "Pending" },
+  { value: "expired", label: "Expired" },
+];
+
+interface BomItem {
+  id: string;
+  materialName: string;
+  componentType: string;
+  massGrams: number;
+  massPercent: number;
+  casNumber: string;
+  isCriticalRaw: boolean;
+  isSubstanceOfConcern: boolean;
+}
+
+interface Certificate {
+  id: string;
+  standard: string;
+  certificateNumber: string;
+  issuer: string;
+  issuedDate: string;
+  expiryDate: string;
+  status: string;
+}
+
+const TEMPLATE_BOM: Omit<BomItem, "id">[] = [
+  { materialName: "Tempered Solar Glass", componentType: "Cover Glass", massGrams: 21700, massPercent: 64.6, casNumber: "65997-17-3", isCriticalRaw: false, isSubstanceOfConcern: false },
+  { materialName: "Aluminium Alloy 6063-T5", componentType: "Frame", massGrams: 4335, massPercent: 12.9, casNumber: "7429-90-5", isCriticalRaw: false, isSubstanceOfConcern: false },
+  { materialName: "EVA (Ethylene-Vinyl Acetate)", componentType: "Encapsulant", massGrams: 2890, massPercent: 8.6, casNumber: "24937-78-8", isCriticalRaw: false, isSubstanceOfConcern: false },
+  { materialName: "Monocrystalline Silicon (N-Type)", componentType: "Solar Cells", massGrams: 2184, massPercent: 6.5, casNumber: "7440-21-3", isCriticalRaw: true, isSubstanceOfConcern: false },
+  { materialName: "Fluoropolymer Backsheet", componentType: "Backsheet", massGrams: 1142, massPercent: 3.4, casNumber: "9002-84-0", isCriticalRaw: false, isSubstanceOfConcern: false },
+  { materialName: "Copper Ribbon", componentType: "Interconnects", massGrams: 672, massPercent: 2.0, casNumber: "7440-50-8", isCriticalRaw: true, isSubstanceOfConcern: false },
+  { materialName: "Other (Junction Box, Sealants, Adhesives)", componentType: "Miscellaneous", massGrams: 605, massPercent: 1.8, casNumber: "", isCriticalRaw: false, isSubstanceOfConcern: false },
+  { materialName: "Tin (Solder)", componentType: "Solder", massGrams: 27, massPercent: 0.08, casNumber: "7440-31-5", isCriticalRaw: false, isSubstanceOfConcern: false },
+  { materialName: "Silver Paste", componentType: "Cell Metallization", massGrams: 20, massPercent: 0.06, casNumber: "7440-22-4", isCriticalRaw: true, isSubstanceOfConcern: false },
+  { materialName: "Lead (Solder Trace)", componentType: "Solder", massGrams: 7, massPercent: 0.02, casNumber: "7439-92-1", isCriticalRaw: false, isSubstanceOfConcern: true },
+];
+
+function generateId(): string {
+  return Math.random().toString(36).substring(2, 10);
+}
+
+function generatePassportId(): string {
+  const year = new Date().getFullYear();
+  const rand = Math.floor(1000 + Math.random() * 9000);
+  return `PVP-${year}-${rand}`;
+}
+
+function generateUUID(): string {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+/* ============================================
+   FORM DATA STRUCTURE
+   ============================================ */
+
+interface FormData {
+  // Identity
+  passportId: string;
+  publicId: string;
+  modelId: string;
+  serialNumber: string;
+  batchId: string;
+  gtin: string;
+  manufacturer: string;
+  facility: string;
+  manufacturingDate: string;
+  technology: string;
+  // Specs
+  ratedPower: string;
+  efficiency: string;
+  voc: string;
+  isc: string;
+  vmp: string;
+  imp: string;
+  maxSystemVoltage: string;
+  length: string;
+  width: string;
+  depth: string;
+  mass: string;
+  cellCount: string;
+  cellType: string;
+  tempCoeffPmax: string;
+  tempCoeffVoc: string;
+  tempCoeffIsc: string;
+  noct: string;
+  fireRating: string;
+  ipRating: string;
+  connectorType: string;
+  frameType: string;
+  glassType: string;
+  bifacialityFactor: string;
+  warrantyYears: string;
+  performanceWarranty: string;
+  degradationRate: string;
+  expectedLifetime: string;
+  // Composition
+  bom: BomItem[];
+  // Compliance
+  certificates: Certificate[];
+  // Circularity
+  recyclabilityRate: string;
+  recycledContent: string;
+  renewableContent: string;
+  isHazardous: boolean;
+  hazardousNotes: string;
+  dismantlingTime: string;
+  dismantlingInstructions: string;
+  collectionScheme: string;
+  recyclerName: string;
+  recyclerContact: string;
+  recoveryAluminium: boolean;
+  recoveryGlass: boolean;
+  recoverySilicon: boolean;
+  recoveryCopper: boolean;
+  recoverySilver: boolean;
+  recoveryNotes: string;
+  eolStatus: string;
+}
+
+function initialFormData(): FormData {
+  return {
+    passportId: "",
+    publicId: "",
+    modelId: "",
+    serialNumber: "",
+    batchId: "",
+    gtin: "",
+    manufacturer: "Waaree Energies Ltd.",
+    facility: "",
+    manufacturingDate: "",
+    technology: "",
+    ratedPower: "",
+    efficiency: "",
+    voc: "",
+    isc: "",
+    vmp: "",
+    imp: "",
+    maxSystemVoltage: "",
+    length: "",
+    width: "",
+    depth: "",
+    mass: "",
+    cellCount: "",
+    cellType: "",
+    tempCoeffPmax: "-0.30",
+    tempCoeffVoc: "-0.25",
+    tempCoeffIsc: "0.045",
+    noct: "45",
+    fireRating: "Class A",
+    ipRating: "IP68",
+    connectorType: "MC4 Compatible",
+    frameType: "Anodized Aluminium Alloy",
+    glassType: "3.2mm Low Iron Tempered ARC",
+    bifacialityFactor: "0.80",
+    warrantyYears: "30",
+    performanceWarranty: "87.4",
+    degradationRate: "0.40",
+    expectedLifetime: "30",
+    bom: [],
+    certificates: [],
+    recyclabilityRate: "92.5",
+    recycledContent: "15.0",
+    renewableContent: "0",
+    isHazardous: false,
+    hazardousNotes: "",
+    dismantlingTime: "25",
+    dismantlingInstructions: "",
+    collectionScheme: "WEEE Directive (EU) / E-Waste Management Rules (India)",
+    recyclerName: "",
+    recyclerContact: "",
+    recoveryAluminium: true,
+    recoveryGlass: true,
+    recoverySilicon: true,
+    recoveryCopper: true,
+    recoverySilver: true,
+    recoveryNotes: "",
+    eolStatus: "in_service",
+  };
+}
+
+/* ============================================
+   VALIDATION
+   ============================================ */
+
+interface ValidationErrors {
+  [key: string]: string;
+}
+
+function validateStep(step: StepId, data: FormData): ValidationErrors {
+  const errors: ValidationErrors = {};
+  if (step === "identity") {
+    if (!data.modelId) errors.modelId = "Module model is required";
+    if (!data.manufacturer) errors.manufacturer = "Manufacturer is required";
+    if (!data.technology) errors.technology = "Technology is required";
+  }
+  if (step === "specs") {
+    if (!data.ratedPower) errors.ratedPower = "Rated power is required";
+    if (!data.efficiency) errors.efficiency = "Efficiency is required";
+  }
+  return errors;
+}
+
+/* ============================================
+   SUB-COMPONENTS
+   ============================================ */
+
+function FieldLabel({ label, required }: { label: string; required?: boolean }) {
+  return (
+    <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
+      {label}
+      {required && <span className="ml-0.5 text-red-500">*</span>}
+    </label>
+  );
+}
+
+function FieldError({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <p className="mt-0.5 flex items-center gap-1 text-[0.6875rem] text-red-500">
+      <AlertCircle className="h-3 w-3" />
+      {message}
+    </p>
+  );
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  required,
+  error,
+  disabled,
+  mono,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  type?: string;
+  required?: boolean;
+  error?: string;
+  disabled?: boolean;
+  mono?: boolean;
+}) {
+  return (
+    <div>
+      <FieldLabel label={label} required={required} />
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        disabled={disabled}
+        className={cn(
+          "mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] disabled:bg-[#FAFAFA] disabled:text-[#737373]",
+          mono && "font-mono",
+          error && "border-red-400 focus:border-red-500 focus:ring-red-500/30"
+        )}
+      />
+      <FieldError message={error} />
+    </div>
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+  placeholder,
+  required,
+  error,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+  placeholder?: string;
+  required?: boolean;
+  error?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
+
+  const selectedLabel = options.find((o) => o.value === value)?.label;
+  const filtered = search
+    ? options.filter((o) =>
+        o.label.toLowerCase().includes(search.toLowerCase()),
+      )
+    : options;
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+        setSearch("");
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative">
+      <FieldLabel label={label} required={required} />
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(!open);
+          setSearch("");
+        }}
+        className={cn(
+          "mt-1 flex w-full items-center justify-between border border-[#D9D9D9] bg-white px-3 py-2 text-left text-sm transition-colors hover:border-[#A3A3A3]",
+          value ? "text-[#0D0D0D]" : "text-[#A3A3A3]",
+          open && "border-[#22C55E] ring-1 ring-[#22C55E]",
+          error &&
+            !open &&
+            "border-red-400 focus:border-red-500 focus:ring-red-500/30",
+        )}
+      >
+        <span className="truncate">
+          {selectedLabel ?? placeholder ?? "Select..."}
+        </span>
+        <ChevronDown
+          className={cn(
+            "h-3.5 w-3.5 shrink-0 text-[#A3A3A3] transition-transform",
+            open && "rotate-180",
+          )}
+        />
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+            className="absolute z-50 mt-1 w-full border border-[#D9D9D9] bg-white shadow-lg"
+          >
+            {options.length > 5 && (
+              <div className="border-b border-[#F2F2F2] p-2">
+                <div className="relative">
+                  <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#A3A3A3]" />
+                  <input
+                    autoFocus
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search..."
+                    className="w-full border border-[#D9D9D9] bg-[#FAFAFA] py-1.5 pl-7 pr-3 text-xs text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+              </div>
+            )}
+            <ul className="max-h-48 overflow-y-auto py-1">
+              {filtered.length === 0 ? (
+                <li className="px-3 py-2 text-xs text-[#A3A3A3]">
+                  No results found
+                </li>
+              ) : (
+                filtered.map((o) => (
+                  <li key={o.value}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onChange(o.value);
+                        setOpen(false);
+                        setSearch("");
+                      }}
+                      className={cn(
+                        "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#F2F2F2]",
+                        o.value === value &&
+                          "bg-[#E8FAE9] font-medium text-[#0D0D0D]",
+                      )}
+                    >
+                      {o.value === value && (
+                        <CheckCircle2 className="h-3 w-3 shrink-0 text-[#22C55E]" />
+                      )}
+                      <span className={o.value === value ? "" : "ml-5"}>
+                        {o.label}
+                      </span>
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <FieldError message={error} />
+    </div>
+  );
+}
+
+function ToggleField({
+  label,
+  checked,
+  onChange,
+  description,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+  description?: string;
+}) {
+  return (
+    <label className="flex items-start gap-3 cursor-pointer group">
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={cn(
+          "mt-0.5 flex h-5 w-9 shrink-0 items-center border-2 transition-colors",
+          checked
+            ? "border-[#22C55E] bg-[#22C55E]"
+            : "border-[#D9D9D9] bg-[#F2F2F2]"
+        )}
+      >
+        <span
+          className={cn(
+            "block h-3.5 w-3.5 bg-white transition-transform",
+            checked ? "translate-x-[15px]" : "translate-x-[1px]"
+          )}
+        />
+      </button>
+      <div>
+        <span className="text-sm font-medium text-[#0D0D0D]">{label}</span>
+        {description && (
+          <p className="text-xs text-[#737373]">{description}</p>
+        )}
+      </div>
+    </label>
+  );
+}
+
+function TextArea({
+  label,
+  value,
+  onChange,
+  placeholder,
+  rows = 3,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  rows?: number;
+}) {
+  return (
+    <div>
+      <FieldLabel label={label} />
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        rows={rows}
+        className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] resize-y"
+      />
+    </div>
+  );
+}
+
+function SectionDivider({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-3 pt-2">
+      <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] whitespace-nowrap">
+        {label}
+      </span>
+      <div className="h-px flex-1 bg-[#D9D9D9]" />
+    </div>
+  );
+}
+
+/* ============================================
+   STEP COMPONENTS
+   ============================================ */
+
+function StepIdentity({
+  data,
+  onChange,
+  errors,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+  errors: ValidationErrors;
+}) {
+  const handleModelSelect = useCallback(
+    (modelId: string) => {
+      const model = MODULE_MODELS.find((m) => m.id === modelId);
+      if (model) {
+        onChange({
+          modelId,
+          technology: model.technology,
+          facility: model.facility,
+          // Core specs
+          ratedPower: String(model.power),
+          efficiency: String(model.efficiency),
+          voc: String(model.voc),
+          isc: String(model.isc),
+          vmp: String(model.vmp),
+          imp: String(model.imp),
+          maxSystemVoltage: String(model.maxSystemVoltage),
+          length: String(model.length),
+          width: String(model.width),
+          depth: String(model.depth),
+          mass: String(model.mass),
+          cellCount: String(model.cellCount),
+          cellType: model.cellType,
+          // Extended specs
+          tempCoeffPmax: model.tempCoeffPmax,
+          tempCoeffVoc: model.tempCoeffVoc,
+          tempCoeffIsc: model.tempCoeffIsc,
+          noct: model.noct,
+          fireRating: model.fireRating,
+          ipRating: model.ipRating,
+          connectorType: model.connectorType,
+          frameType: model.frameType,
+          glassType: model.glassType,
+          bifacialityFactor: model.bifacialityFactor,
+          warrantyYears: model.warrantyYears,
+          performanceWarranty: model.performanceWarranty,
+          degradationRate: model.degradationRate,
+          expectedLifetime: model.expectedLifetime,
+          // Pre-fill BOM with TOPCon template
+          bom: TEMPLATE_BOM.map((item) => ({ ...item, id: generateId() })),
+          // Pre-fill certificates (typical Waaree certification suite)
+          certificates: [
+            { id: generateId(), standardName: "IEC 61215", certNumber: "IEC-61215-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
+            { id: generateId(), standardName: "IEC 61730", certNumber: "IEC-61730-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
+            { id: generateId(), standardName: "IEC 61701", certNumber: "IEC-61701-2024-" + modelId.substring(0, 7), issuer: "TÜV SÜD", issuedDate: "2025-09-01", expiryDate: "2030-09-01", status: "valid" as const },
+            { id: generateId(), standardName: "BIS IS 14286", certNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-06-01", expiryDate: "2027-06-01", status: "valid" as const },
+            { id: generateId(), standardName: "CE Declaration", certNumber: "CE-DoC-WRM-2025", issuer: "Waaree Energies Ltd.", issuedDate: "2025-07-01", expiryDate: "", status: "valid" as const },
+          ],
+          // Pre-fill circularity
+          recyclabilityRate: "92",
+          recycledContent: "28",
+          renewableContent: "0",
+          isHazardous: true,
+          hazardousNotes: "Contains lead traces in solder alloy (<0.1% by weight). RoHS exemption 7(a) applies.",
+          dismantlingTime: "35",
+          dismantlingInstructions: "1. Remove junction box and cables\n2. Detach aluminium frame (4 corner screws)\n3. Separate front glass from encapsulant (thermal process 150°C)\n4. Extract solar cells from EVA\n5. Recover copper ribbons\n6. Sort materials for recycling",
+          collectionScheme: "EU WEEE / India EPR",
+          recyclerName: "Veolia Environmental Services",
+          recyclerContact: "recycling@veolia.com",
+          recoveryAluminium: true,
+          recoveryGlass: true,
+          recoverySilicon: true,
+          recoveryCopper: true,
+          recoverySilver: true,
+          recoveryNotes: "95%+ aluminium recovery via mechanical separation. Glass recovery via thermal delamination at 500°C.",
+          eolStatus: "in_use",
+        });
+      } else {
+        onChange({ modelId });
+      }
+    },
+    [onChange]
+  );
+
+  return (
+    <div className="space-y-5">
+      {/* Quick-fill demo button — loads WRM-700 data across all steps */}
+      {!data.modelId && (
+        <button
+          type="button"
+          onClick={() => handleModelSelect("WRM-700-TOPCON-BiN-03")}
+          className="w-full border-2 border-dashed border-[#22C55E] bg-[#E8FAE9] px-4 py-3 text-left transition-colors hover:bg-[#d4f5d8]"
+        >
+          <p className="text-xs font-bold text-[#22C55E]">Quick Fill: WRM-700-TOPCON-BiN-03</p>
+          <p className="text-[10px] text-[#737373]">Auto-populate all steps with real Waaree 700W TOPCon module data</p>
+        </button>
+      )}
+
+      {/* Auto-generated IDs */}
+      <div className="bg-[#FAFAFA] border border-dashed border-[#D9D9D9] px-4 py-3">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] mb-2">
+          Auto-Generated Identifiers
+        </p>
+        <div className="flex flex-wrap gap-x-8 gap-y-1">
+          <div>
+            <span className="text-xs text-[#737373]">Passport ID: </span>
+            <span className="font-mono text-xs font-semibold text-[#0D0D0D]">
+              {data.passportId}
+            </span>
+          </div>
+          <div>
+            <span className="text-xs text-[#737373]">Public ID: </span>
+            <span className="font-mono text-[0.65rem] text-[#737373]">
+              {data.publicId}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SelectField
+          label="Module Model"
+          value={data.modelId}
+          onChange={handleModelSelect}
+          options={MODULE_MODELS.map((m) => ({ value: m.id, label: m.label }))}
+          placeholder="Select a Waaree module..."
+          required
+          error={errors.modelId}
+        />
+        <TextField
+          label="Serial Number"
+          value={data.serialNumber}
+          onChange={(v) => onChange({ serialNumber: v })}
+          placeholder="e.g. SN-2026-0001-A"
+          mono
+        />
+        <TextField
+          label="Batch ID"
+          value={data.batchId}
+          onChange={(v) => onChange({ batchId: v })}
+          placeholder="e.g. BATCH-SRT-2026-04"
+          mono
+        />
+        <TextField
+          label="GTIN"
+          value={data.gtin}
+          onChange={(v) => onChange({ gtin: v })}
+          placeholder="14-digit Global Trade Item Number"
+          mono
+        />
+        <TextField
+          label="Manufacturer"
+          value={data.manufacturer}
+          onChange={(v) => onChange({ manufacturer: v })}
+          placeholder="Manufacturer name"
+          required
+          disabled
+          error={errors.manufacturer}
+        />
+        <SelectField
+          label="Manufacturing Facility"
+          value={data.facility}
+          onChange={(v) => onChange({ facility: v })}
+          options={FACILITIES.map((f) => ({ value: f.id, label: f.label }))}
+          placeholder="Select facility..."
+        />
+        <TextField
+          label="Manufacturing Date"
+          value={data.manufacturingDate}
+          onChange={(v) => onChange({ manufacturingDate: v })}
+          type="date"
+        />
+        <SelectField
+          label="Module Technology"
+          value={data.technology}
+          onChange={(v) => onChange({ technology: v })}
+          options={TECHNOLOGIES}
+          placeholder="Select technology..."
+          required
+          error={errors.technology}
+        />
+      </div>
+    </div>
+  );
+}
+
+function StepSpecs({
+  data,
+  onChange,
+  errors,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+  errors: ValidationErrors;
+}) {
+  return (
+    <div className="space-y-5">
+      <SectionDivider label="Electrical Performance (STC)" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Rated Power (W)"
+          value={data.ratedPower}
+          onChange={(v) => onChange({ ratedPower: v })}
+          placeholder="e.g. 700"
+          type="number"
+          required
+          error={errors.ratedPower}
+        />
+        <TextField
+          label="Efficiency (%)"
+          value={data.efficiency}
+          onChange={(v) => onChange({ efficiency: v })}
+          placeholder="e.g. 22.53"
+          type="number"
+          required
+          error={errors.efficiency}
+        />
+        <TextField
+          label="Voc (V)"
+          value={data.voc}
+          onChange={(v) => onChange({ voc: v })}
+          placeholder="Open circuit voltage"
+          type="number"
+        />
+        <TextField
+          label="Isc (A)"
+          value={data.isc}
+          onChange={(v) => onChange({ isc: v })}
+          placeholder="Short circuit current"
+          type="number"
+        />
+        <TextField
+          label="Vmp (V)"
+          value={data.vmp}
+          onChange={(v) => onChange({ vmp: v })}
+          placeholder="Voltage at max power"
+          type="number"
+        />
+        <TextField
+          label="Imp (A)"
+          value={data.imp}
+          onChange={(v) => onChange({ imp: v })}
+          placeholder="Current at max power"
+          type="number"
+        />
+        <TextField
+          label="Max System Voltage (V)"
+          value={data.maxSystemVoltage}
+          onChange={(v) => onChange({ maxSystemVoltage: v })}
+          placeholder="e.g. 1500"
+          type="number"
+        />
+      </div>
+
+      <SectionDivider label="Physical Dimensions" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Length (mm)"
+          value={data.length}
+          onChange={(v) => onChange({ length: v })}
+          placeholder="Module length"
+          type="number"
+        />
+        <TextField
+          label="Width (mm)"
+          value={data.width}
+          onChange={(v) => onChange({ width: v })}
+          placeholder="Module width"
+          type="number"
+        />
+        <TextField
+          label="Depth (mm)"
+          value={data.depth}
+          onChange={(v) => onChange({ depth: v })}
+          placeholder="Module depth"
+          type="number"
+        />
+        <TextField
+          label="Mass (kg)"
+          value={data.mass}
+          onChange={(v) => onChange({ mass: v })}
+          placeholder="Module weight"
+          type="number"
+        />
+        <TextField
+          label="Cell Count"
+          value={data.cellCount}
+          onChange={(v) => onChange({ cellCount: v })}
+          placeholder="e.g. 144"
+          type="number"
+        />
+        <TextField
+          label="Cell Type"
+          value={data.cellType}
+          onChange={(v) => onChange({ cellType: v })}
+          placeholder="e.g. M10 N-Type Mono"
+        />
+      </div>
+
+      <SectionDivider label="Temperature Coefficients" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Pmax Coeff. (%/C)"
+          value={data.tempCoeffPmax}
+          onChange={(v) => onChange({ tempCoeffPmax: v })}
+          placeholder="e.g. -0.30"
+          type="number"
+        />
+        <TextField
+          label="Voc Coeff. (%/C)"
+          value={data.tempCoeffVoc}
+          onChange={(v) => onChange({ tempCoeffVoc: v })}
+          placeholder="e.g. -0.25"
+          type="number"
+        />
+        <TextField
+          label="Isc Coeff. (%/C)"
+          value={data.tempCoeffIsc}
+          onChange={(v) => onChange({ tempCoeffIsc: v })}
+          placeholder="e.g. 0.045"
+          type="number"
+        />
+        <TextField
+          label="NOCT (C)"
+          value={data.noct}
+          onChange={(v) => onChange({ noct: v })}
+          placeholder="e.g. 45"
+          type="number"
+        />
+      </div>
+
+      <SectionDivider label="Mechanical & Ratings" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Fire Rating"
+          value={data.fireRating}
+          onChange={(v) => onChange({ fireRating: v })}
+          placeholder="e.g. Class A"
+        />
+        <TextField
+          label="IP Rating"
+          value={data.ipRating}
+          onChange={(v) => onChange({ ipRating: v })}
+          placeholder="e.g. IP68"
+        />
+        <TextField
+          label="Connector Type"
+          value={data.connectorType}
+          onChange={(v) => onChange({ connectorType: v })}
+          placeholder="e.g. MC4 Compatible"
+        />
+        <TextField
+          label="Frame Type"
+          value={data.frameType}
+          onChange={(v) => onChange({ frameType: v })}
+          placeholder="e.g. Anodized Aluminium"
+        />
+        <TextField
+          label="Glass Type"
+          value={data.glassType}
+          onChange={(v) => onChange({ glassType: v })}
+          placeholder="e.g. 3.2mm Low Iron ARC"
+        />
+        <TextField
+          label="Bifaciality Factor"
+          value={data.bifacialityFactor}
+          onChange={(v) => onChange({ bifacialityFactor: v })}
+          placeholder="e.g. 0.80"
+          type="number"
+        />
+      </div>
+
+      <SectionDivider label="Warranty & Lifetime" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Warranty (Years)"
+          value={data.warrantyYears}
+          onChange={(v) => onChange({ warrantyYears: v })}
+          placeholder="e.g. 30"
+          type="number"
+        />
+        <TextField
+          label="Performance Warranty (%)"
+          value={data.performanceWarranty}
+          onChange={(v) => onChange({ performanceWarranty: v })}
+          placeholder="e.g. 87.4"
+          type="number"
+        />
+        <TextField
+          label="Degradation Rate (%/yr)"
+          value={data.degradationRate}
+          onChange={(v) => onChange({ degradationRate: v })}
+          placeholder="e.g. 0.40"
+          type="number"
+        />
+        <TextField
+          label="Expected Lifetime (Years)"
+          value={data.expectedLifetime}
+          onChange={(v) => onChange({ expectedLifetime: v })}
+          placeholder="e.g. 30"
+          type="number"
+        />
+      </div>
+    </div>
+  );
+}
+
+function StepComposition({
+  data,
+  onChange,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+}) {
+  const addItem = useCallback(() => {
+    onChange({
+      bom: [
+        ...data.bom,
+        {
+          id: generateId(),
+          materialName: "",
+          componentType: "",
+          massGrams: 0,
+          massPercent: 0,
+          casNumber: "",
+          isCriticalRaw: false,
+          isSubstanceOfConcern: false,
+        },
+      ],
+    });
+  }, [data.bom, onChange]);
+
+  const loadTemplate = useCallback(() => {
+    onChange({
+      bom: TEMPLATE_BOM.map((item) => ({ ...item, id: generateId() })),
+    });
+  }, [onChange]);
+
+  const removeItem = useCallback(
+    (id: string) => {
+      onChange({ bom: data.bom.filter((b) => b.id !== id) });
+    },
+    [data.bom, onChange]
+  );
+
+  const updateItem = useCallback(
+    (id: string, patch: Partial<BomItem>) => {
+      onChange({
+        bom: data.bom.map((b) => (b.id === id ? { ...b, ...patch } : b)),
+      });
+    },
+    [data.bom, onChange]
+  );
+
+  const totalMass = data.bom.reduce((sum, b) => sum + b.massGrams, 0);
+  const totalPercent = data.bom.reduce((sum, b) => sum + b.massPercent, 0);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-[#737373]">
+          Bill of Materials for this module.{" "}
+          {data.bom.length > 0 && (
+            <span className="font-mono text-xs">
+              {data.bom.length} items, {(totalMass / 1000).toFixed(1)} kg total, {totalPercent.toFixed(1)}%
+            </span>
+          )}
+        </p>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={loadTemplate}
+            className="cta-secondary !px-3 !py-1.5 !text-xs"
+          >
+            <span className="flex items-center gap-1">
+              <FileDown className="h-3 w-3" /> Load TOPCon Template
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={addItem}
+            className="cta-primary !px-3 !py-1.5 !text-xs"
+          >
+            <Plus className="h-3 w-3" /> Add Material
+          </button>
+        </div>
+      </div>
+
+      {data.bom.length === 0 ? (
+        <div className="dashed-card flex flex-col items-center py-10 text-center">
+          <Layers className="h-8 w-8 text-[#D9D9D9]" />
+          <p className="mt-3 text-sm font-medium text-[#737373]">
+            No materials added
+          </p>
+          <p className="mt-1 text-xs text-[#A3A3A3]">
+            Click &quot;Load TOPCon Template&quot; for a standard BOM or add materials manually.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {/* Table header (desktop) */}
+          <div className="hidden lg:grid lg:grid-cols-[1fr_0.7fr_0.5fr_0.4fr_0.6fr_auto_auto_2.5rem] gap-2 px-3 py-1.5 bg-[#FAFAFA] border border-[#D9D9D9]">
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Material</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Component</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Mass (g)</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Mass %</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">CAS No.</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">CRM</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">SoC</span>
+            <span />
+          </div>
+          {data.bom.map((item) => (
+            <div
+              key={item.id}
+              className="clean-card p-3"
+            >
+              {/* Desktop row */}
+              <div className="hidden lg:grid lg:grid-cols-[1fr_0.7fr_0.5fr_0.4fr_0.6fr_auto_auto_2.5rem] gap-2 items-center">
+                <input
+                  value={item.materialName}
+                  onChange={(e) => updateItem(item.id, { materialName: e.target.value })}
+                  placeholder="Material name"
+                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                />
+                <input
+                  value={item.componentType}
+                  onChange={(e) => updateItem(item.id, { componentType: e.target.value })}
+                  placeholder="Component"
+                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                />
+                <input
+                  type="number"
+                  value={item.massGrams || ""}
+                  onChange={(e) => updateItem(item.id, { massGrams: Number(e.target.value) })}
+                  placeholder="0"
+                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                />
+                <input
+                  type="number"
+                  value={item.massPercent || ""}
+                  onChange={(e) => updateItem(item.id, { massPercent: Number(e.target.value) })}
+                  placeholder="0"
+                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                />
+                <input
+                  value={item.casNumber}
+                  onChange={(e) => updateItem(item.id, { casNumber: e.target.value })}
+                  placeholder="e.g. 7440-21-3"
+                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => updateItem(item.id, { isCriticalRaw: !item.isCriticalRaw })}
+                  className={cn(
+                    "h-7 w-7 flex items-center justify-center border text-xs font-bold",
+                    item.isCriticalRaw
+                      ? "border-[#22C55E] bg-[#E8FAE9] text-[#22C55E]"
+                      : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                  )}
+                  title="Critical Raw Material"
+                >
+                  C
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateItem(item.id, { isSubstanceOfConcern: !item.isSubstanceOfConcern })}
+                  className={cn(
+                    "h-7 w-7 flex items-center justify-center border text-xs font-bold",
+                    item.isSubstanceOfConcern
+                      ? "border-[#F59E0B] bg-[#FEF3C7] text-[#F59E0B]"
+                      : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                  )}
+                  title="Substance of Concern"
+                >
+                  S
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeItem(item.id)}
+                  className="flex h-7 w-7 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                  title="Remove"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              {/* Mobile layout */}
+              <div className="space-y-2 lg:hidden">
+                <div className="flex items-center justify-between">
+                  <input
+                    value={item.materialName}
+                    onChange={(e) => updateItem(item.id, { materialName: e.target.value })}
+                    placeholder="Material name"
+                    className="flex-1 border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeItem(item.id)}
+                    className="ml-2 flex h-7 w-7 shrink-0 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    value={item.componentType}
+                    onChange={(e) => updateItem(item.id, { componentType: e.target.value })}
+                    placeholder="Component type"
+                    className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                  <input
+                    value={item.casNumber}
+                    onChange={(e) => updateItem(item.id, { casNumber: e.target.value })}
+                    placeholder="CAS No."
+                    className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={item.massGrams || ""}
+                      onChange={(e) => updateItem(item.id, { massGrams: Number(e.target.value) })}
+                      placeholder="Mass (g)"
+                      className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      value={item.massPercent || ""}
+                      onChange={(e) => updateItem(item.id, { massPercent: Number(e.target.value) })}
+                      placeholder="Mass %"
+                      className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => updateItem(item.id, { isCriticalRaw: !item.isCriticalRaw })}
+                    className={cn(
+                      "flex-1 py-1 border text-xs font-semibold",
+                      item.isCriticalRaw
+                        ? "border-[#22C55E] bg-[#E8FAE9] text-[#0D0D0D]"
+                        : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                    )}
+                  >
+                    Critical Raw Material
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateItem(item.id, { isSubstanceOfConcern: !item.isSubstanceOfConcern })}
+                    className={cn(
+                      "flex-1 py-1 border text-xs font-semibold",
+                      item.isSubstanceOfConcern
+                        ? "border-[#F59E0B] bg-[#FEF3C7] text-[#0D0D0D]"
+                        : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                    )}
+                  >
+                    Substance of Concern
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Total row */}
+          <div className="flex items-center justify-between border-t border-dashed border-[#D9D9D9] px-3 pt-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+              Total
+            </span>
+            <div className="flex gap-6 text-sm font-semibold text-[#0D0D0D]">
+              <span className="font-mono">{(totalMass / 1000).toFixed(2)} kg</span>
+              <span className={cn("font-mono", Math.abs(totalPercent - 100) > 0.5 && "text-[#F59E0B]")}>
+                {totalPercent.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StepCompliance({
+  data,
+  onChange,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+}) {
+  const addCert = useCallback(() => {
+    onChange({
+      certificates: [
+        ...data.certificates,
+        {
+          id: generateId(),
+          standard: "",
+          certificateNumber: "",
+          issuer: "",
+          issuedDate: "",
+          expiryDate: "",
+          status: "valid",
+        },
+      ],
+    });
+  }, [data.certificates, onChange]);
+
+  const removeCert = useCallback(
+    (id: string) => {
+      onChange({ certificates: data.certificates.filter((c) => c.id !== id) });
+    },
+    [data.certificates, onChange]
+  );
+
+  const updateCert = useCallback(
+    (id: string, patch: Partial<Certificate>) => {
+      onChange({
+        certificates: data.certificates.map((c) =>
+          c.id === id ? { ...c, ...patch } : c
+        ),
+      });
+    },
+    [data.certificates, onChange]
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-[#737373]">
+          Certifications and compliance documentation.{" "}
+          {data.certificates.length > 0 && (
+            <span className="font-mono text-xs">
+              {data.certificates.length} certificate{data.certificates.length !== 1 ? "s" : ""}
+            </span>
+          )}
+        </p>
+        <button
+          type="button"
+          onClick={addCert}
+          className="cta-primary !px-3 !py-1.5 !text-xs"
+        >
+          <Plus className="h-3 w-3" /> Add Certificate
+        </button>
+      </div>
+
+      {data.certificates.length === 0 ? (
+        <div className="dashed-card flex flex-col items-center py-10 text-center">
+          <ShieldCheck className="h-8 w-8 text-[#D9D9D9]" />
+          <p className="mt-3 text-sm font-medium text-[#737373]">
+            No certificates added
+          </p>
+          <p className="mt-1 text-xs text-[#A3A3A3]">
+            Add IEC, UL, BIS, or CE certificates for this module.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {data.certificates.map((cert, idx) => (
+            <div key={cert.id} className="clean-card p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+                  Certificate {idx + 1}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex items-center px-2 py-0.5 text-[0.6875rem] font-semibold",
+                      cert.status === "valid" && "status-valid",
+                      cert.status === "pending" && "status-pending",
+                      cert.status === "expired" && "status-expired"
+                    )}
+                  >
+                    {cert.status ? cert.status.charAt(0).toUpperCase() + cert.status.slice(1) : "Valid"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeCert(cert.id)}
+                    className="flex h-6 w-6 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <FieldLabel label="Standard" required />
+                  <select
+                    value={cert.standard}
+                    onChange={(e) => updateCert(cert.id, { standard: e.target.value })}
+                    className={cn(
+                      "mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]",
+                      !cert.standard && "text-[#A3A3A3]"
+                    )}
+                  >
+                    <option value="">Select standard...</option>
+                    {CERTIFICATE_STANDARDS.map((s) => (
+                      <option key={s.value} value={s.value}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <FieldLabel label="Certificate Number" />
+                  <input
+                    value={cert.certificateNumber}
+                    onChange={(e) => updateCert(cert.id, { certificateNumber: e.target.value })}
+                    placeholder="e.g. IEC-2025-44781"
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Issuer" />
+                  <input
+                    value={cert.issuer}
+                    onChange={(e) => updateCert(cert.id, { issuer: e.target.value })}
+                    placeholder="e.g. TUV Rheinland"
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Issued Date" />
+                  <input
+                    type="date"
+                    value={cert.issuedDate}
+                    onChange={(e) => updateCert(cert.id, { issuedDate: e.target.value })}
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Expiry Date" />
+                  <input
+                    type="date"
+                    value={cert.expiryDate}
+                    onChange={(e) => updateCert(cert.id, { expiryDate: e.target.value })}
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Status" />
+                  <select
+                    value={cert.status}
+                    onChange={(e) => updateCert(cert.id, { status: e.target.value })}
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                  >
+                    {CERT_STATUSES.map((s) => (
+                      <option key={s.value} value={s.value}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StepCircularity({
+  data,
+  onChange,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+}) {
+  return (
+    <div className="space-y-5">
+      <SectionDivider label="Recyclability & Content" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Recyclability Rate (%)"
+          value={data.recyclabilityRate}
+          onChange={(v) => onChange({ recyclabilityRate: v })}
+          placeholder="e.g. 92.5"
+          type="number"
+        />
+        <TextField
+          label="Recycled Content (%)"
+          value={data.recycledContent}
+          onChange={(v) => onChange({ recycledContent: v })}
+          placeholder="e.g. 15.0"
+          type="number"
+        />
+        <TextField
+          label="Renewable Content (%)"
+          value={data.renewableContent}
+          onChange={(v) => onChange({ renewableContent: v })}
+          placeholder="e.g. 0"
+          type="number"
+        />
+      </div>
+
+      <SectionDivider label="Hazardous Substances" />
+      <div className="space-y-3">
+        <ToggleField
+          label="Contains Hazardous Substances"
+          checked={data.isHazardous}
+          onChange={(v) => onChange({ isHazardous: v })}
+          description="As defined under EU REACH / RoHS directives"
+        />
+        {data.isHazardous && (
+          <TextArea
+            label="Hazardous Notes"
+            value={data.hazardousNotes}
+            onChange={(v) => onChange({ hazardousNotes: v })}
+            placeholder="Describe hazardous substances, concentrations, and applicable regulations..."
+          />
+        )}
+      </div>
+
+      <SectionDivider label="Dismantling & Repair" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <TextField
+          label="Dismantling Time (minutes)"
+          value={data.dismantlingTime}
+          onChange={(v) => onChange({ dismantlingTime: v })}
+          placeholder="e.g. 25"
+          type="number"
+        />
+        <TextField
+          label="Collection Scheme"
+          value={data.collectionScheme}
+          onChange={(v) => onChange({ collectionScheme: v })}
+          placeholder="e.g. WEEE Directive"
+        />
+      </div>
+      <TextArea
+        label="Dismantling Instructions"
+        value={data.dismantlingInstructions}
+        onChange={(v) => onChange({ dismantlingInstructions: v })}
+        placeholder="Step-by-step dismantling procedure for end-of-life recovery..."
+        rows={4}
+      />
+
+      <SectionDivider label="Recycler Information" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <TextField
+          label="Recycler Name"
+          value={data.recyclerName}
+          onChange={(v) => onChange({ recyclerName: v })}
+          placeholder="e.g. Veolia Environmental Services"
+        />
+        <TextField
+          label="Recycler Contact"
+          value={data.recyclerContact}
+          onChange={(v) => onChange({ recyclerContact: v })}
+          placeholder="Email or phone"
+        />
+      </div>
+
+      <SectionDivider label="Material Recovery" />
+      <p className="text-xs text-[#737373]">
+        Select materials that can be recovered from this module at end of life.
+      </p>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ToggleField
+          label="Aluminium Recovery"
+          checked={data.recoveryAluminium}
+          onChange={(v) => onChange({ recoveryAluminium: v })}
+        />
+        <ToggleField
+          label="Glass Recovery"
+          checked={data.recoveryGlass}
+          onChange={(v) => onChange({ recoveryGlass: v })}
+        />
+        <ToggleField
+          label="Silicon Recovery"
+          checked={data.recoverySilicon}
+          onChange={(v) => onChange({ recoverySilicon: v })}
+        />
+        <ToggleField
+          label="Copper Recovery"
+          checked={data.recoveryCopper}
+          onChange={(v) => onChange({ recoveryCopper: v })}
+        />
+        <ToggleField
+          label="Silver Recovery"
+          checked={data.recoverySilver}
+          onChange={(v) => onChange({ recoverySilver: v })}
+        />
+      </div>
+      <TextArea
+        label="Recovery Notes"
+        value={data.recoveryNotes}
+        onChange={(v) => onChange({ recoveryNotes: v })}
+        placeholder="Additional recovery process details..."
+        rows={2}
+      />
+
+      <SectionDivider label="End-of-Life Status" />
+      <SelectField
+        label="Current Status"
+        value={data.eolStatus}
+        onChange={(v) => onChange({ eolStatus: v })}
+        options={[
+          { value: "in_service", label: "In Service" },
+          { value: "awaiting_collection", label: "Awaiting Collection" },
+          { value: "collected", label: "Collected" },
+          { value: "being_recycled", label: "Being Recycled" },
+          { value: "recycled", label: "Recycled" },
+          { value: "landfill", label: "Landfill" },
+        ]}
+      />
+    </div>
+  );
+}
+
+function StepReview({
+  data,
+  onJumpTo,
+}: {
+  data: FormData;
+  onJumpTo: (step: number) => void;
+}) {
+  const techLabel = TECHNOLOGIES.find((t) => t.value === data.technology)?.label ?? data.technology;
+  const facilityLabel = FACILITIES.find((f) => f.id === data.facility)?.label ?? data.facility;
+  const modelLabel = MODULE_MODELS.find((m) => m.id === data.modelId)?.label ?? data.modelId;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-2 bg-[#E8FAE9] px-4 py-3 text-sm">
+        <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
+        <span className="text-[#0D0D0D]">
+          Review your passport data before submitting.
+        </span>
+      </div>
+
+      {/* Section: Identity */}
+      <ReviewSection title="Product Identity" onEdit={() => onJumpTo(0)}>
+        <ReviewRow label="Passport ID" value={data.passportId} mono />
+        <ReviewRow label="Public ID" value={data.publicId} mono />
+        <ReviewRow label="Module Model" value={modelLabel} />
+        <ReviewRow label="Serial Number" value={data.serialNumber} mono />
+        <ReviewRow label="Batch ID" value={data.batchId} mono />
+        <ReviewRow label="GTIN" value={data.gtin} mono />
+        <ReviewRow label="Manufacturer" value={data.manufacturer} />
+        <ReviewRow label="Facility" value={facilityLabel} />
+        <ReviewRow label="Manufacturing Date" value={data.manufacturingDate} />
+        <ReviewRow label="Technology" value={techLabel} />
+      </ReviewSection>
+
+      {/* Section: Specs */}
+      <ReviewSection title="Technical Specifications" onEdit={() => onJumpTo(1)}>
+        <ReviewRow label="Rated Power" value={data.ratedPower ? `${data.ratedPower} W` : ""} highlight />
+        <ReviewRow label="Efficiency" value={data.efficiency ? `${data.efficiency}%` : ""} highlight />
+        <ReviewRow label="Voc" value={data.voc ? `${data.voc} V` : ""} />
+        <ReviewRow label="Isc" value={data.isc ? `${data.isc} A` : ""} />
+        <ReviewRow label="Vmp" value={data.vmp ? `${data.vmp} V` : ""} />
+        <ReviewRow label="Imp" value={data.imp ? `${data.imp} A` : ""} />
+        <ReviewRow label="Max System Voltage" value={data.maxSystemVoltage ? `${data.maxSystemVoltage} V` : ""} />
+        <ReviewRow label="Dimensions" value={data.length && data.width && data.depth ? `${data.length} x ${data.width} x ${data.depth} mm` : ""} />
+        <ReviewRow label="Mass" value={data.mass ? `${data.mass} kg` : ""} />
+        <ReviewRow label="Cell Count" value={data.cellCount} />
+        <ReviewRow label="Cell Type" value={data.cellType} />
+        <ReviewRow label="Frame" value={data.frameType} />
+        <ReviewRow label="Glass" value={data.glassType} />
+        <ReviewRow label="Bifaciality" value={data.bifacialityFactor} />
+        <ReviewRow label="Fire Rating" value={data.fireRating} />
+        <ReviewRow label="IP Rating" value={data.ipRating} />
+        <ReviewRow label="Connector" value={data.connectorType} />
+        <ReviewRow label="Warranty" value={data.warrantyYears ? `${data.warrantyYears} years` : ""} />
+        <ReviewRow label="Performance Warranty" value={data.performanceWarranty ? `${data.performanceWarranty}%` : ""} />
+        <ReviewRow label="Degradation" value={data.degradationRate ? `${data.degradationRate}%/yr` : ""} />
+        <ReviewRow label="Expected Lifetime" value={data.expectedLifetime ? `${data.expectedLifetime} years` : ""} />
+      </ReviewSection>
+
+      {/* Section: Composition */}
+      <ReviewSection title="Material Composition" onEdit={() => onJumpTo(2)}>
+        {data.bom.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-[#A3A3A3] italic">No materials added</p>
+        ) : (
+          <div>
+            <div className="hidden sm:grid sm:grid-cols-[1fr_0.7fr_0.5fr_0.3fr] gap-2 px-4 py-2 bg-[#FAFAFA] border-b border-[#D9D9D9]">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Material</span>
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Component</span>
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Mass</span>
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Flags</span>
+            </div>
+            {data.bom.map((b) => (
+              <div key={b.id} className="grid sm:grid-cols-[1fr_0.7fr_0.5fr_0.3fr] gap-2 px-4 py-2 border-b border-[#D9D9D9] last:border-0 text-sm">
+                <span className="text-[#0D0D0D] font-medium">{b.materialName || "—"}</span>
+                <span className="text-[#737373]">{b.componentType || "—"}</span>
+                <span className="font-mono text-[#0D0D0D]">{b.massGrams}g ({b.massPercent}%)</span>
+                <div className="flex gap-1">
+                  {b.isCriticalRaw && (
+                    <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[#E8FAE9] text-[#22C55E]">CRM</span>
+                  )}
+                  {b.isSubstanceOfConcern && (
+                    <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[#FEF3C7] text-[#F59E0B]">SoC</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </ReviewSection>
+
+      {/* Section: Compliance */}
+      <ReviewSection title="Compliance & Certificates" onEdit={() => onJumpTo(3)}>
+        {data.certificates.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-[#A3A3A3] italic">No certificates added</p>
+        ) : (
+          <div className="divide-y divide-[#D9D9D9]">
+            {data.certificates.map((c) => (
+              <div key={c.id} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
+                <span className="text-sm font-medium text-[#0D0D0D]">{c.standard || "—"}</span>
+                {c.certificateNumber && (
+                  <span className="font-mono text-xs text-[#737373]">{c.certificateNumber}</span>
+                )}
+                {c.issuer && (
+                  <span className="text-xs text-[#737373]">{c.issuer}</span>
+                )}
+                <span
+                  className={cn(
+                    "ml-auto inline-flex items-center px-2 py-0.5 text-[0.6875rem] font-semibold",
+                    c.status === "valid" && "status-valid",
+                    c.status === "pending" && "status-pending",
+                    c.status === "expired" && "status-expired"
+                  )}
+                >
+                  {c.status ? c.status.charAt(0).toUpperCase() + c.status.slice(1) : "—"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </ReviewSection>
+
+      {/* Section: Circularity */}
+      <ReviewSection title="Circularity & End-of-Life" onEdit={() => onJumpTo(4)}>
+        <ReviewRow label="Recyclability Rate" value={data.recyclabilityRate ? `${data.recyclabilityRate}%` : ""} highlight />
+        <ReviewRow label="Recycled Content" value={data.recycledContent ? `${data.recycledContent}%` : ""} />
+        <ReviewRow label="Renewable Content" value={data.renewableContent ? `${data.renewableContent}%` : ""} />
+        <ReviewRow label="Hazardous" value={data.isHazardous ? "Yes" : "No"} />
+        {data.isHazardous && <ReviewRow label="Hazardous Notes" value={data.hazardousNotes} />}
+        <ReviewRow label="Dismantling Time" value={data.dismantlingTime ? `${data.dismantlingTime} min` : ""} />
+        <ReviewRow label="Collection Scheme" value={data.collectionScheme} />
+        <ReviewRow label="Recycler" value={data.recyclerName} />
+        <ReviewRow
+          label="Recovery"
+          value={[
+            data.recoveryAluminium && "Al",
+            data.recoveryGlass && "Glass",
+            data.recoverySilicon && "Si",
+            data.recoveryCopper && "Cu",
+            data.recoverySilver && "Ag",
+          ]
+            .filter(Boolean)
+            .join(", ")}
+        />
+        <ReviewRow
+          label="EoL Status"
+          value={
+            {
+              in_service: "In Service",
+              awaiting_collection: "Awaiting Collection",
+              collected: "Collected",
+              being_recycled: "Being Recycled",
+              recycled: "Recycled",
+              landfill: "Landfill",
+            }[data.eolStatus] ?? data.eolStatus
+          }
+        />
+      </ReviewSection>
+    </div>
+  );
+}
+
+function ReviewSection({
+  title,
+  onEdit,
+  children,
+}: {
+  title: string;
+  onEdit: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="clean-card overflow-hidden">
+      <div className="flex items-center justify-between bg-[#FAFAFA] border-b border-[#D9D9D9] px-4 py-2.5">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+          {title}
+        </h3>
+        <button
+          type="button"
+          onClick={onEdit}
+          className="flex items-center gap-1 text-xs font-medium text-[#22C55E] hover:text-[#0D0D0D]"
+        >
+          <Pencil className="h-3 w-3" />
+          Edit
+        </button>
+      </div>
+      <div>{children}</div>
+    </div>
+  );
+}
+
+function ReviewRow({
+  label,
+  value,
+  mono,
+  highlight,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  highlight?: boolean;
+}) {
+  return (
+    <div className="passport-table-row">
+      <span className="table-label">{label}</span>
+      <span
+        className={cn(
+          "table-value",
+          mono && "mono",
+          highlight && "highlight"
+        )}
+      >
+        {value || "—"}
+      </span>
+    </div>
+  );
+}
+
+/* ============================================
+   MAIN WIZARD PAGE
+   ============================================ */
 
 export default function CreatePassportPage() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [submitted, setSubmitted] = useState(false);
+  const [savedDraft, setSavedDraft] = useState(false);
+
+  // Generate IDs client-side only to avoid hydration mismatch
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      passportId: prev.passportId || generatePassportId(),
+      publicId: prev.publicId || generateUUID(),
+    }));
+  }, []);
 
   const step = WIZARD_STEPS[currentStep];
+
+  const completedSteps = useMemo(() => {
+    const completed = new Set<number>();
+    // Identity complete if model + manufacturer + technology set
+    if (formData.modelId && formData.manufacturer && formData.technology)
+      completed.add(0);
+    // Specs complete if power + efficiency set
+    if (formData.ratedPower && formData.efficiency) completed.add(1);
+    // Composition complete if BOM has items
+    if (formData.bom.length > 0) completed.add(2);
+    // Compliance complete if at least one cert
+    if (formData.certificates.length > 0) completed.add(3);
+    // Circularity complete if recyclability rate set
+    if (formData.recyclabilityRate) completed.add(4);
+    // Review is never "complete" by itself
+    return completed;
+  }, [formData]);
+
+  const handleChange = useCallback((patch: Partial<FormData>) => {
+    setFormData((prev) => ({ ...prev, ...patch }));
+    setSavedDraft(false);
+  }, []);
+
+  const handleNext = useCallback(() => {
+    const stepErrors = validateStep(step.id, formData);
+    if (Object.keys(stepErrors).length > 0) {
+      setErrors(stepErrors);
+      return;
+    }
+    setErrors({});
+    if (currentStep < WIZARD_STEPS.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  }, [currentStep, formData, step.id]);
+
+  const handleBack = useCallback(() => {
+    if (currentStep > 0) {
+      setErrors({});
+      setCurrentStep(currentStep - 1);
+    }
+  }, [currentStep]);
+
+  const handleSaveDraft = useCallback(() => {
+    setSavedDraft(true);
+    setTimeout(() => setSavedDraft(false), 2500);
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    setSubmitted(true);
+  }, []);
+
+  const handleJumpTo = useCallback((idx: number) => {
+    setErrors({});
+    setCurrentStep(idx);
+  }, []);
+
+  if (submitted) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <Link
+            href="/app/passports"
+            className="inline-flex items-center gap-1 text-xs text-[#737373] hover:text-[#0D0D0D]"
+          >
+            <ArrowLeft className="h-3 w-3" />
+            Back to Passports
+          </Link>
+        </div>
+        <div className="clean-card flex flex-col items-center py-16 text-center">
+          <div className="flex h-12 w-12 items-center justify-center bg-[#E8FAE9]">
+            <CheckCircle2 className="h-6 w-6 text-[#22C55E]" />
+          </div>
+          <h2 className="mt-4 text-xl font-bold text-[#0D0D0D]">
+            Passport Submitted for Approval
+          </h2>
+          <p className="mt-2 text-sm text-[#737373] max-w-md">
+            Passport{" "}
+            <span className="font-mono font-semibold text-[#0D0D0D]">
+              {formData.passportId}
+            </span>{" "}
+            has been submitted. It will be reviewed by your compliance team
+            before publication.
+          </p>
+          <div className="mt-6 flex gap-3">
+            <Link href="/app/passports" className="cta-secondary !text-sm">
+              <span>View All Passports</span>
+            </Link>
+            <button
+              onClick={() => {
+                setFormData(initialFormData());
+                setCurrentStep(0);
+                setSubmitted(false);
+              }}
+              className="cta-primary !text-sm"
+            >
+              Create Another <ArrowRight className="h-3.5 w-3.5 arrow-icon" />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -45,126 +2029,146 @@ export default function CreatePassportPage() {
           <ArrowLeft className="h-3 w-3" />
           Back to Passports
         </Link>
-        <h1 className="mt-2 text-2xl font-bold text-[#0D0D0D]">
-          Create Passport
-        </h1>
+        <div className="mt-2 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-[#0D0D0D]">
+              Create Passport
+            </h1>
+            <p className="mt-0.5 text-xs text-[#737373]">
+              <span className="font-mono">{formData.passportId}</span>
+            </p>
+          </div>
+          {savedDraft && (
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-[#22C55E]">
+              <CheckCircle2 className="h-3 w-3" /> Draft saved
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="flex gap-6">
-        {/* Left stepper */}
-        <nav className="hidden w-48 shrink-0 lg:block">
+        {/* Left stepper (desktop) */}
+        <nav className="hidden w-52 shrink-0 lg:block">
           <div className="sticky top-20 space-y-0.5">
-            {WIZARD_STEPS.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => setCurrentStep(i)}
-                className={cn(
-                  "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors",
-                  i === currentStep
-                    ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-[#0D0D0D]"
-                    : i < currentStep
-                      ? "border-l-2 border-[#22C55E]/30 text-[#22C55E]"
-                      : "border-l-2 border-transparent text-[#737373] hover:bg-[#F2F2F2]"
-                )}
-              >
-                <s.icon className="h-3.5 w-3.5 shrink-0" />
-                {s.label}
-              </button>
-            ))}
+            {WIZARD_STEPS.map((s, i) => {
+              const isCompleted = completedSteps.has(i);
+              const isCurrent = i === currentStep;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => handleJumpTo(i)}
+                  className={cn(
+                    "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors",
+                    isCurrent
+                      ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-[#0D0D0D]"
+                      : isCompleted
+                        ? "border-l-2 border-[#22C55E]/40 text-[#0D0D0D]"
+                        : "border-l-2 border-transparent text-[#737373] hover:bg-[#F2F2F2]"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex h-5 w-5 shrink-0 items-center justify-center text-[0.65rem] font-bold",
+                      isCurrent
+                        ? "bg-[#22C55E] text-white"
+                        : isCompleted
+                          ? "bg-[#22C55E]/15 text-[#22C55E]"
+                          : "bg-[#F2F2F2] text-[#737373]"
+                    )}
+                  >
+                    {isCompleted && !isCurrent ? (
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    ) : (
+                      i + 1
+                    )}
+                  </span>
+                  <span className="truncate">{s.label}</span>
+                </button>
+              );
+            })}
           </div>
         </nav>
 
         {/* Main form area */}
         <div className="min-w-0 flex-1">
-          <div className="clean-card p-6">
-            {/* Step indicator (mobile) */}
-            <div className="mb-4 flex items-center gap-2 text-xs text-[#737373] lg:hidden">
-              <step.icon className="h-3.5 w-3.5" />
-              Step {currentStep + 1} of {WIZARD_STEPS.length}: {step.label}
+          {/* Mobile step indicator */}
+          <div className="mb-4 lg:hidden">
+            <div className="flex items-center gap-1 overflow-x-auto pb-2">
+              {WIZARD_STEPS.map((s, i) => {
+                const isCompleted = completedSteps.has(i);
+                const isCurrent = i === currentStep;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => handleJumpTo(i)}
+                    className={cn(
+                      "flex shrink-0 items-center gap-1 px-2 py-1 text-[0.6875rem] font-medium transition-colors",
+                      isCurrent
+                        ? "bg-[#E8FAE9] text-[#0D0D0D] border border-[#22C55E]"
+                        : isCompleted
+                          ? "bg-[#FAFAFA] text-[#22C55E] border border-[#D9D9D9]"
+                          : "bg-white text-[#A3A3A3] border border-[#D9D9D9]"
+                    )}
+                  >
+                    {isCompleted && !isCurrent ? (
+                      <CheckCircle2 className="h-3 w-3" />
+                    ) : (
+                      <span>{i + 1}</span>
+                    )}
+                    <span className="hidden sm:inline">{s.label}</span>
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
-            <h2 className="text-lg font-bold text-[#0D0D0D]">{step.label}</h2>
+          <div className="clean-card p-6">
+            <div className="flex items-center gap-2">
+              <step.icon className="h-4 w-4 text-[#22C55E]" />
+              <h2 className="text-lg font-bold text-[#0D0D0D]">{step.label}</h2>
+              <span className="ml-auto text-xs text-[#A3A3A3]">
+                Step {currentStep + 1} of {WIZARD_STEPS.length}
+              </span>
+            </div>
 
             {/* Step content */}
             <div className="mt-6">
               {step.id === "identity" && (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField label="Model ID" placeholder="e.g. WRM-700-TOPCON-BiN-03" required />
-                  <FormField label="Serial Number" placeholder="Serial or batch ID" />
-                  <FormField label="Batch ID" placeholder="Production batch" />
-                  <FormField label="GTIN" placeholder="Global Trade Item Number" />
-                  <FormField label="Manufacturer" placeholder="Manufacturer name" required />
-                  <FormField label="Facility" placeholder="Manufacturing facility" />
-                  <FormField label="Manufacturing Date" placeholder="YYYY-MM-DD" type="date" />
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#737373]">
-                      Technology *
-                    </label>
-                    <select className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]">
-                      <option value="">Select technology</option>
-                      <option value="crystalline_silicon_topcon">TOPCon</option>
-                      <option value="crystalline_silicon_perc">PERC</option>
-                      <option value="crystalline_silicon_hjt">HJT</option>
-                      <option value="thin_film_cdte">CdTe</option>
-                      <option value="thin_film_cigs">CIGS</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                </div>
+                <StepIdentity
+                  data={formData}
+                  onChange={handleChange}
+                  errors={errors}
+                />
               )}
-
               {step.id === "specs" && (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <FormField label="Rated Power (W)" placeholder="e.g. 700" type="number" />
-                  <FormField label="Efficiency (%)" placeholder="e.g. 22.53" type="number" />
-                  <FormField label="Voc (V)" placeholder="Open circuit voltage" type="number" />
-                  <FormField label="Isc (A)" placeholder="Short circuit current" type="number" />
-                  <FormField label="Vmp (V)" placeholder="Voltage at max power" type="number" />
-                  <FormField label="Imp (A)" placeholder="Current at max power" type="number" />
-                  <FormField label="Max System Voltage (V)" placeholder="e.g. 1500" type="number" />
-                  <FormField label="Length (mm)" placeholder="Module length" type="number" />
-                  <FormField label="Width (mm)" placeholder="Module width" type="number" />
-                  <FormField label="Depth (mm)" placeholder="Module depth" type="number" />
-                  <FormField label="Weight (kg)" placeholder="Module weight" type="number" />
-                  <FormField label="Cell Count" placeholder="e.g. 144" type="number" />
-                  <FormField label="Cell Type" placeholder="e.g. M10 N-Type Mono" />
-                  <FormField label="Frame Type" placeholder="e.g. Anodized aluminium" />
-                  <FormField label="Glass Type" placeholder="e.g. 2mm Low Iron ARC" />
-                </div>
+                <StepSpecs
+                  data={formData}
+                  onChange={handleChange}
+                  errors={errors}
+                />
               )}
-
-              {step.id !== "identity" && step.id !== "specs" && step.id !== "review" && (
-                <div className="dashed-card flex flex-col items-center py-12 text-center">
-                  <step.icon className="h-8 w-8 text-[#D9D9D9]" />
-                  <p className="mt-3 text-sm font-medium text-[#737373]">
-                    {step.label} form
-                  </p>
-                  <p className="mt-1 text-xs text-[#A3A3A3]">
-                    Add {step.label.toLowerCase()} data for this passport.
-                  </p>
-                </div>
+              {step.id === "composition" && (
+                <StepComposition data={formData} onChange={handleChange} />
               )}
-
+              {step.id === "compliance" && (
+                <StepCompliance data={formData} onChange={handleChange} />
+              )}
+              {step.id === "circularity" && (
+                <StepCircularity data={formData} onChange={handleChange} />
+              )}
               {step.id === "review" && (
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 bg-[#E8FAE9] px-4 py-3 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
-                    <span className="text-[#0D0D0D]">
-                      Review your passport data before submitting
-                    </span>
-                  </div>
-                  <p className="text-sm text-[#737373]">
-                    Check all sections for completeness. Missing fields will be
-                    flagged during review.
-                  </p>
-                </div>
+                <StepReview data={formData} onJumpTo={handleJumpTo} />
               )}
             </div>
           </div>
 
           {/* Footer actions */}
           <div className="mt-4 flex items-center justify-between">
-            <button className="cta-secondary text-xs">
+            <button
+              type="button"
+              onClick={handleSaveDraft}
+              className="cta-secondary !text-xs"
+            >
               <span className="flex items-center gap-1">
                 <Save className="h-3 w-3" /> Save Draft
               </span>
@@ -172,8 +2176,9 @@ export default function CreatePassportPage() {
             <div className="flex items-center gap-2">
               {currentStep > 0 && (
                 <button
-                  onClick={() => setCurrentStep(currentStep - 1)}
-                  className="cta-secondary text-xs"
+                  type="button"
+                  onClick={handleBack}
+                  className="cta-secondary !text-xs"
                 >
                   <span className="flex items-center gap-1">
                     <ArrowLeft className="h-3 w-3" /> Back
@@ -182,13 +2187,18 @@ export default function CreatePassportPage() {
               )}
               {currentStep < WIZARD_STEPS.length - 1 ? (
                 <button
-                  onClick={() => setCurrentStep(currentStep + 1)}
-                  className="cta-primary text-xs"
+                  type="button"
+                  onClick={handleNext}
+                  className="cta-primary !text-xs"
                 >
                   Next <ArrowRight className="h-3 w-3 arrow-icon" />
                 </button>
               ) : (
-                <button className="cta-primary text-xs">
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="cta-primary !text-xs"
+                >
                   <Send className="h-3 w-3" /> Submit for Approval
                 </button>
               )}
@@ -196,32 +2206,6 @@ export default function CreatePassportPage() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function FormField({
-  label,
-  placeholder,
-  type = "text",
-  required,
-}: {
-  label: string;
-  placeholder: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <div>
-      <label className="block text-xs font-semibold uppercase tracking-wider text-[#737373]">
-        {label}
-        {required && " *"}
-      </label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
-      />
     </div>
   );
 }

@@ -8,6 +8,9 @@ const COLORS = [
   [236, 253, 236], // #ECFDEC
 ];
 
+// Bright green for flicker highlights (#22C55E)
+const FLICKER_COLOR = [34, 197, 94];
+
 const COL_W = 14;
 const GAP = 4;
 const STEP = COL_W + GAP;
@@ -31,6 +34,11 @@ interface Block {
   freq: number; // pulse frequency
   colorSpeed: number;
   colorPhase: number;
+  // Flicker properties
+  flickerPhase: number; // offset so tiles don't flicker in sync
+  flickerFreq: number; // how fast this tile flickers
+  flickerIntensity: number; // max brightness of the flicker (0-1)
+  flickerThreshold: number; // only flicker when sin > threshold (creates sparse bursts)
 }
 
 function buildBlocks(cols: number, maxH: number, seed: number): Block[] {
@@ -52,6 +60,11 @@ function buildBlocks(cols: number, maxH: number, seed: number): Block[] {
         freq: 0.015 + r() * 0.025,
         colorSpeed: 0.008 + r() * 0.012,
         colorPhase: r() * Math.PI * 2,
+        // Flicker: staggered timing, varied intensity
+        flickerPhase: r() * Math.PI * 2,
+        flickerFreq: 0.3 + r() * 1.2, // different rates per tile
+        flickerIntensity: 0.15 + r() * 0.25, // 0.15-0.40 max opacity
+        flickerThreshold: 0.6 + r() * 0.3, // 0.6-0.9 — higher = rarer flickers
       });
       y += h + GAP;
     }
@@ -84,6 +97,7 @@ export function GreenMosaic() {
     const cy = H * 0.45;
     const rx = W * 0.3;
     const ry = H * 0.32;
+    const maxDist = Math.sqrt(2); // max normalized distance for radial falloff
 
     let frame = 0;
     let animId: number;
@@ -118,6 +132,26 @@ export function GreenMosaic() {
 
         ctx!.fillStyle = `rgba(${r},${g},${bl},${alpha})`;
         ctx!.fillRect(b.x, b.y, b.w, b.h);
+
+        // ---- Flicker overlay ----
+        // Tiles closer to center flicker more frequently (inverted radial)
+        const proximityBoost = Math.max(0, 1 - dist / maxDist);
+        const flickerSin = Math.sin(t * b.flickerFreq + b.flickerPhase);
+        // Only show flicker when sin exceeds threshold (creates sparse, random-looking bursts)
+        if (flickerSin > b.flickerThreshold) {
+          // Normalize the above-threshold portion to 0-1 for smooth fade in/out
+          const flickerAmount =
+            (flickerSin - b.flickerThreshold) / (1 - b.flickerThreshold);
+          // Quadratic ease for smoother pulse
+          const flickerAlpha =
+            flickerAmount *
+            flickerAmount *
+            b.flickerIntensity *
+            edgeFade *
+            (0.4 + 0.6 * proximityBoost); // center tiles get up to 100%, edges down to 40%
+          ctx!.fillStyle = `rgba(${FLICKER_COLOR[0]},${FLICKER_COLOR[1]},${FLICKER_COLOR[2]},${flickerAlpha})`;
+          ctx!.fillRect(b.x, b.y, b.w, b.h);
+        }
       }
 
       animId = requestAnimationFrame(draw);

@@ -37,9 +37,9 @@ const capabilities = [
   },
   {
     icon: ScanLineIcon,
-    title: "QR-Based Access",
+    title: "Digital Access",
     description:
-      "Every passport has a unique public ID and QR code. Scan at the installation site to instantly access the full digital record.",
+      "Every passport has a unique public ID. Access it from any device to instantly view the full digital record at the installation site.",
   },
   {
     icon: UsersIcon,

@@ -16,7 +16,7 @@ const items = [
   { icon: LockIcon, label: "Immutable Records", sublabel: "Tamper-proof data" },
   { icon: GlobeIcon, label: "Open Standards", sublabel: "Interoperable DPP" },
   { icon: DatabaseIcon, label: "Real-Time Data", sublabel: "Always current" },
-  { icon: ZapIcon, label: "Instant Verification", sublabel: "QR scan access" },
+  { icon: ZapIcon, label: "Instant Verification", sublabel: "Instant access" },
 ];
 
 export function TrustBar() {
