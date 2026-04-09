@@ -13,6 +13,8 @@ import {
   ShieldCheck,
   Recycle,
   CheckCircle2,
+  Leaf,
+  FileText,
   Plus,
   Trash2,
   FileDown,
@@ -34,6 +36,8 @@ const WIZARD_STEPS = [
   { id: "composition", label: "Material Composition", icon: Layers },
   { id: "compliance", label: "Compliance & Certificates", icon: ShieldCheck },
   { id: "circularity", label: "Circularity & End-of-Life", icon: Recycle },
+  { id: "carbon", label: "Carbon & Environmental", icon: Leaf },
+  { id: "documents", label: "Documents", icon: FileText },
   { id: "review", label: "Review & Submit", icon: CheckCircle2 },
 ] as const;
 
@@ -42,6 +46,10 @@ type StepId = (typeof WIZARD_STEPS)[number]["id"];
 interface ModuleModel {
   id: string;
   label: string;
+  company: string;
+  manufacturer: string;
+  manufacturerAddress: string;
+  manufacturerUrl: string;
   power: number;
   technology: string;
   efficiency: number;
@@ -56,7 +64,6 @@ interface ModuleModel {
   mass: number;
   cellCount: number;
   cellType: string;
-  // Extended specs
   tempCoeffPmax: string;
   tempCoeffVoc: string;
   tempCoeffIsc: string;
@@ -71,92 +78,152 @@ interface ModuleModel {
   performanceWarranty: string;
   degradationRate: string;
   expectedLifetime: string;
-  // Facility
   facility: string;
+  certIssuer: string;
+  recyclerName: string;
+  recyclerContact: string;
 }
 
-// Shared extended specs for TOPCon modules
-const TOPCON_EXT = {
-  tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.24", tempCoeffIsc: "0.048",
-  noct: "43", fireRating: "Class A", ipRating: "IP68",
-  connectorType: "MC4 Compatible", frameType: "Anodized Aluminium Alloy 6063-T5",
-  glassType: "3.2mm Low-Iron Tempered ARC", bifacialityFactor: "0.70",
-  warrantyYears: "15", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "30",
+// Company-specific shared defaults
+const WRM_COMPANY = {
+  company: "Waaree Energies", manufacturer: "Waaree Energies Ltd.",
+  manufacturerAddress: "602 Western Edge II, Borivali East, Mumbai 400066",
+  manufacturerUrl: "https://waaree.com",
+  certIssuer: "TUV Rheinland", recyclerName: "Veolia PV Recycling", recyclerContact: "pvrecycling@veolia.com",
+};
+const ADS_COMPANY = {
+  company: "Adani Solar", manufacturer: "Mundra Solar PV Ltd. (Adani Solar)",
+  manufacturerAddress: "Adani Corporate House, Shantigram, Ahmedabad 382421",
+  manufacturerUrl: "https://www.adanisolar.com",
+  certIssuer: "Bureau Veritas", recyclerName: "First Solar Recycling", recyclerContact: "recycling@firstsolar.com",
+};
+const VKS_COMPANY = {
+  company: "Vikram Solar", manufacturer: "Vikram Solar Limited",
+  manufacturerAddress: "Chinar Park, Rajarhat, Kolkata, WB 700156",
+  manufacturerUrl: "https://www.vikramsolar.com",
+  certIssuer: "UL LLC", recyclerName: "ROSI Solar", recyclerContact: "contact@rfrosi.com",
 };
 
 const MODULE_MODELS: ModuleModel[] = [
+  // ── Waaree Energies ──
   {
-    id: "WRM-700-TOPCON-BiN-03", label: "WRM-700-TOPCON-BiN-03 (700W TOPCon)",
+    id: "WRM-700-TOPCON-BiN-03", label: "WRM-700-TOPCON-BiN-03 (700W TOPCon)", ...WRM_COMPANY,
     power: 700, technology: "crystalline_silicon_topcon", efficiency: 22.53,
-    voc: 46.8, isc: 19.42, vmp: 39.1, imp: 17.9, maxSystemVoltage: 1500,
-    length: 2384, width: 1303, depth: 33, mass: 34.5, cellCount: 132,
-    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-SRT-001", ...TOPCON_EXT,
+    voc: 54.80, isc: 18.30, vmp: 46.10, imp: 17.40, maxSystemVoltage: 1500,
+    length: 2384, width: 1303, depth: 35, mass: 39.0, cellCount: 132,
+    cellType: "G12 N-type TOPCon bifacial", facility: "FAC-WRM-SRT-001",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.25", tempCoeffIsc: "0.045",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "2mm Low Iron HTAR semi-tempered", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
   },
   {
-    id: "WRM-685-TOPCON-BiN-03", label: "WRM-685-TOPCON-BiN-03 (685W TOPCon)",
-    power: 685, technology: "crystalline_silicon_topcon", efficiency: 22.05,
-    voc: 46.4, isc: 19.2, vmp: 38.8, imp: 17.65, maxSystemVoltage: 1500,
-    length: 2384, width: 1303, depth: 33, mass: 34.5, cellCount: 132,
-    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-SRT-001", ...TOPCON_EXT,
+    id: "WRM-590-TOPCON-BiN-08", label: "WRM-590-TOPCON-BiN-08 (590W TOPCon)", ...WRM_COMPANY,
+    power: 590, technology: "crystalline_silicon_topcon", efficiency: 22.84,
+    voc: 51.80, isc: 14.60, vmp: 43.80, imp: 13.47, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 32.5, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-WRM-SRT-001",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.26", tempCoeffIsc: "0.046",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "2mm Low Iron ARC tempered", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
   },
   {
-    id: "WRM-600-TOPCON-BiN-08", label: "WRM-600-TOPCON-BiN-08 (600W TOPCon)",
-    power: 600, technology: "crystalline_silicon_topcon", efficiency: 21.86,
-    voc: 38.5, isc: 20.15, vmp: 32.4, imp: 18.52, maxSystemVoltage: 1500,
-    length: 2278, width: 1134, depth: 33, mass: 29.8, cellCount: 120,
-    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-CHI-002", ...TOPCON_EXT,
+    id: "WRM-580-TOPCON-BiN-08", label: "WRM-580-TOPCON-BiN-08 (580W TOPCon)", ...WRM_COMPANY,
+    power: 580, technology: "crystalline_silicon_topcon", efficiency: 22.45,
+    voc: 51.20, isc: 14.50, vmp: 43.20, imp: 13.43, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 32.5, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-WRM-CHK-002",
+    tempCoeffPmax: "-0.29", tempCoeffVoc: "-0.24", tempCoeffIsc: "0.044",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "2mm Low Iron ARC tempered", bifacialityFactor: "0.75",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
+  },
+  // ── Adani Solar ──
+  {
+    id: "ASM-590-TOPCON-BiN", label: "ASM-590-TOPCON-BiN (590W TOPCon)", ...ADS_COMPANY,
+    power: 590, technology: "crystalline_silicon_topcon", efficiency: 22.80,
+    voc: 51.60, isc: 14.55, vmp: 43.50, imp: 13.56, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 32.0, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-ADS-MND-001",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.26", tempCoeffIsc: "0.045",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "3.2mm high-transmission tempered", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "30",
   },
   {
-    id: "WRM-580-TOPCON-BiN-08", label: "WRM-580-TOPCON-BiN-08 (580W TOPCon)",
-    power: 580, technology: "crystalline_silicon_topcon", efficiency: 21.13,
-    voc: 38.1, isc: 19.7, vmp: 32.1, imp: 18.07, maxSystemVoltage: 1500,
-    length: 2278, width: 1134, depth: 33, mass: 29.8, cellCount: 120,
-    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-CHI-002", ...TOPCON_EXT,
+    id: "ASM-580-TOPCON-BiN", label: "ASM-580-TOPCON-BiN (580W TOPCon)", ...ADS_COMPANY,
+    power: 580, technology: "crystalline_silicon_topcon", efficiency: 22.40,
+    voc: 51.10, isc: 14.45, vmp: 43.00, imp: 13.49, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 33, mass: 32.0, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-ADS-MND-001",
+    tempCoeffPmax: "-0.29", tempCoeffVoc: "-0.25", tempCoeffIsc: "0.044",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "3.2mm high-transmission tempered", bifacialityFactor: "0.78",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "30",
   },
   {
-    id: "WRM-590-TOPCON-BiN-08", label: "WRM-590-TOPCON-BiN-08 (590W TOPCon)",
-    power: 590, technology: "crystalline_silicon_topcon", efficiency: 21.5,
-    voc: 38.3, isc: 19.95, vmp: 32.25, imp: 18.29, maxSystemVoltage: 1500,
-    length: 2278, width: 1134, depth: 33, mass: 29.8, cellCount: 120,
-    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-CHI-002", ...TOPCON_EXT,
+    id: "ASM-545-PERC-Mono", label: "ASM-545-PERC-Mono (545W PERC)", ...ADS_COMPANY,
+    power: 545, technology: "crystalline_silicon_perc", efficiency: 21.10,
+    voc: 49.50, isc: 13.90, vmp: 41.50, imp: 13.13, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 35, mass: 28.0, cellCount: 144,
+    cellType: "M10 P-type mono PERC", facility: "FAC-ADS-MND-001",
+    tempCoeffPmax: "-0.35", tempCoeffVoc: "-0.28", tempCoeffIsc: "0.048",
+    noct: "45", fireRating: "Class C", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "3.2mm tempered glass", bifacialityFactor: "0",
+    warrantyYears: "12", performanceWarranty: "84.8", degradationRate: "0.55", expectedLifetime: "30",
+  },
+  // ── Vikram Solar ──
+  {
+    id: "VSMDH-595-TOPCON", label: "VSMDH-595-TOPCON (595W TOPCon)", ...VKS_COMPANY,
+    power: 595, technology: "crystalline_silicon_topcon", efficiency: 23.06,
+    voc: 51.50, isc: 14.37, vmp: 43.40, imp: 13.72, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 30, mass: 33.4, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-VKS-FLT-001",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.26", tempCoeffIsc: "0.045",
+    noct: "45", fireRating: "Class C", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 30mm",
+    glassType: "2.0mm ARC semi-tempered", bifacialityFactor: "0.85",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
   },
   {
-    id: "HT-550N-72-BF", label: "HT-550N-72-BF (550W TOPCon)",
-    power: 550, technology: "crystalline_silicon_topcon", efficiency: 21.33,
-    voc: 49.65, isc: 14.1, vmp: 41.8, imp: 13.16, maxSystemVoltage: 1500,
-    length: 2278, width: 1134, depth: 30, mass: 28.6, cellCount: 144,
-    cellType: "M10 N-Type Mono TOPCon", facility: "FAC-WRM-SRT-001", ...TOPCON_EXT,
-    bifacialityFactor: "0.65",
+    id: "VSMDH-590-TOPCON", label: "VSMDH-590-TOPCON (590W TOPCon)", ...VKS_COMPANY,
+    power: 590, technology: "crystalline_silicon_topcon", efficiency: 22.87,
+    voc: 50.30, isc: 14.32, vmp: 43.20, imp: 13.67, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 30, mass: 33.4, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-VKS-OGD-002",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.26", tempCoeffIsc: "0.045",
+    noct: "45", fireRating: "Class C", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 30mm",
+    glassType: "2.0mm ARC semi-tempered", bifacialityFactor: "0.82",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
   },
   {
-    id: "HT-450M-60-PERC", label: "HT-450M-60-PERC (450W PERC)",
-    power: 450, technology: "crystalline_silicon_perc", efficiency: 20.74,
-    voc: 41.32, isc: 13.85, vmp: 34.68, imp: 12.98, maxSystemVoltage: 1500,
-    length: 2094, width: 1038, depth: 35, mass: 24.5, cellCount: 120,
-    cellType: "M10 P-Type Mono PERC", facility: "FAC-WRM-SRT-001",
-    tempCoeffPmax: "-0.35", tempCoeffVoc: "-0.28", tempCoeffIsc: "0.050",
-    noct: "45", fireRating: "Class A", ipRating: "IP67",
-    connectorType: "MC4 Compatible", frameType: "Anodized Aluminium Alloy",
-    glassType: "3.2mm Tempered Glass", bifacialityFactor: "0",
-    warrantyYears: "12", performanceWarranty: "84.8", degradationRate: "0.55", expectedLifetime: "25",
-  },
-  {
-    id: "HT-420H-66-HJT", label: "HT-420H-66-HJT (420W HJT)",
-    power: 420, technology: "crystalline_silicon_hjt", efficiency: 21.8,
-    voc: 51.2, isc: 10.58, vmp: 43.5, imp: 9.66, maxSystemVoltage: 1500,
-    length: 1855, width: 1038, depth: 30, mass: 21.5, cellCount: 132,
-    cellType: "M6 N-Type HJT", facility: "FAC-WRM-SRT-001",
-    tempCoeffPmax: "-0.26", tempCoeffVoc: "-0.22", tempCoeffIsc: "0.046",
-    noct: "42", fireRating: "Class A", ipRating: "IP68",
-    connectorType: "MC4 Compatible", frameType: "Anodized Aluminium Alloy",
-    glassType: "2mm Low-Iron Tempered Glass / Glass", bifacialityFactor: "0.85",
-    warrantyYears: "15", performanceWarranty: "88.0", degradationRate: "0.35", expectedLifetime: "30",
+    id: "VSMDH-580-TOPCON", label: "VSMDH-580-TOPCON (580W TOPCon)", ...VKS_COMPANY,
+    power: 580, technology: "crystalline_silicon_topcon", efficiency: 22.49,
+    voc: 50.70, isc: 14.14, vmp: 42.80, imp: 13.55, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 30, mass: 33.4, cellCount: 144,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-VKS-FLT-001",
+    tempCoeffPmax: "-0.29", tempCoeffVoc: "-0.25", tempCoeffIsc: "0.044",
+    noct: "45", fireRating: "Class C", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 30mm",
+    glassType: "2.0mm ARC semi-tempered", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
   },
 ];
 
 const FACILITIES = [
-  { id: "FAC-WRM-SRT-001", label: "Surat Mega Factory (FAC-WRM-SRT-001), Gujarat, India" },
-  { id: "FAC-WRM-CHI-002", label: "Chikhli Plant (FAC-WRM-CHI-002), Gujarat, India" },
+  { id: "FAC-WRM-SRT-001", label: "Waaree Surat SEZ GigaFactory, Gujarat" },
+  { id: "FAC-WRM-CHK-002", label: "Waaree Chikhli Plant, Gujarat" },
+  { id: "FAC-ADS-MND-001", label: "Adani Mundra GigaFactory, Kutch, Gujarat" },
+  { id: "FAC-VKS-FLT-001", label: "Vikram Solar Falta SEZ, West Bengal" },
+  { id: "FAC-VKS-OGD-002", label: "Vikram Solar Oragadam Plant, Chennai" },
 ];
 
 const TECHNOLOGIES = [
@@ -205,6 +272,15 @@ interface Certificate {
   expiryDate: string;
   status: string;
 }
+
+const TEMPLATE_DOCUMENTS = (company: string) => [
+  { name: `${company} - Datasheet`, documentType: "datasheet", accessLevel: "public", url: "", issuer: company, issuedDate: "2025-07-01" },
+  { name: "Declaration of Conformity", documentType: "declaration_of_conformity", accessLevel: "public", url: "", issuer: company, issuedDate: "2025-07-01" },
+  { name: "User Manual", documentType: "user_manual", accessLevel: "public", url: "", issuer: company, issuedDate: "2025-07-01" },
+  { name: "Safety Instructions", documentType: "safety_instructions", accessLevel: "public", url: "", issuer: company, issuedDate: "2025-07-01" },
+  { name: "Environmental Product Declaration", documentType: "epd", accessLevel: "public", url: "", issuer: company, issuedDate: "2025-07-01" },
+  { name: "Recycling Guide", documentType: "recycling_guide", accessLevel: "recycler", url: "", issuer: company, issuedDate: "2025-07-01" },
+];
 
 const TEMPLATE_BOM: Omit<BomItem, "id">[] = [
   { materialName: "Tempered Solar Glass", componentType: "Cover Glass", massGrams: 21700, massPercent: 64.6, casNumber: "65997-17-3", isCriticalRaw: false, isSubstanceOfConcern: false },
@@ -303,6 +379,28 @@ interface FormData {
   recoverySilver: boolean;
   recoveryNotes: string;
   eolStatus: string;
+  // Carbon & Environmental
+  carbonFootprint: string;
+  carbonIntensity: string;
+  carbonLcaBoundary: string;
+  carbonMethodology: string;
+  carbonVerificationRef: string;
+  // Documents
+  documents: Array<{
+    name: string;
+    documentType: string;
+    accessLevel: string;
+    url: string;
+    issuer: string;
+    issuedDate: string;
+  }>;
+  // Importer (in identity step)
+  importerName: string;
+  importerOperatorId: string;
+  importerCountry: string;
+  // REACH/RoHS (in circularity step)
+  reachStatus: string;
+  rohsStatus: string;
 }
 
 function initialFormData(): FormData {
@@ -313,7 +411,7 @@ function initialFormData(): FormData {
     serialNumber: "",
     batchId: "",
     gtin: "",
-    manufacturer: "Waaree Energies Ltd.",
+    manufacturer: "",
     facility: "",
     manufacturingDate: "",
     technology: "",
@@ -363,6 +461,17 @@ function initialFormData(): FormData {
     recoverySilver: true,
     recoveryNotes: "",
     eolStatus: "in_service",
+    carbonFootprint: "",
+    carbonIntensity: "",
+    carbonLcaBoundary: "cradle_to_gate",
+    carbonMethodology: "JRC_harmonized_2025",
+    carbonVerificationRef: "",
+    documents: [],
+    importerName: "",
+    importerOperatorId: "",
+    importerCountry: "",
+    reachStatus: "compliant",
+    rohsStatus: "compliant_with_exemption",
   };
 }
 
@@ -680,11 +789,12 @@ function StepIdentity({
     (modelId: string) => {
       const model = MODULE_MODELS.find((m) => m.id === modelId);
       if (model) {
+        const isPERC = model.technology === "crystalline_silicon_perc";
         onChange({
           modelId,
+          manufacturer: model.manufacturer,
           technology: model.technology,
           facility: model.facility,
-          // Core specs
           ratedPower: String(model.power),
           efficiency: String(model.efficiency),
           voc: String(model.voc),
@@ -698,7 +808,6 @@ function StepIdentity({
           mass: String(model.mass),
           cellCount: String(model.cellCount),
           cellType: model.cellType,
-          // Extended specs
           tempCoeffPmax: model.tempCoeffPmax,
           tempCoeffVoc: model.tempCoeffVoc,
           tempCoeffIsc: model.tempCoeffIsc,
@@ -713,27 +822,24 @@ function StepIdentity({
           performanceWarranty: model.performanceWarranty,
           degradationRate: model.degradationRate,
           expectedLifetime: model.expectedLifetime,
-          // Pre-fill BOM with TOPCon template
           bom: TEMPLATE_BOM.map((item) => ({ ...item, id: generateId() })),
-          // Pre-fill certificates (typical Waaree certification suite)
           certificates: [
-            { id: generateId(), standard: "IEC 61215", certificateNumber: "IEC-61215-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
-            { id: generateId(), standard: "IEC 61730", certificateNumber: "IEC-61730-2024-" + modelId.substring(0, 7), issuer: "TÜV Rheinland", issuedDate: "2025-08-15", expiryDate: "2030-08-15", status: "valid" as const },
-            { id: generateId(), standard: "IEC 61701", certificateNumber: "IEC-61701-2024-" + modelId.substring(0, 7), issuer: "TÜV SÜD", issuedDate: "2025-09-01", expiryDate: "2030-09-01", status: "valid" as const },
-            { id: generateId(), standard: "BIS IS 14286", certificateNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-06-01", expiryDate: "2027-06-01", status: "valid" as const },
-            { id: generateId(), standard: "CE Declaration", certificateNumber: "CE-DoC-WRM-2025", issuer: "Waaree Energies Ltd.", issuedDate: "2025-07-01", expiryDate: "", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61215", certificateNumber: "IEC-61215-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-08-15", expiryDate: "2029-08-14", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61730", certificateNumber: "IEC-61730-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-09-01", expiryDate: "2029-08-31", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61701", certificateNumber: "IEC-61701-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-10-01", expiryDate: "2029-09-30", status: "valid" as const },
+            { id: generateId(), standard: "BIS IS 14286", certificateNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-07-01", expiryDate: "2028-06-30", status: "valid" as const },
+            { id: generateId(), standard: "CE Declaration", certificateNumber: "CE-DoC-" + modelId.substring(0, 3) + "-2025", issuer: model.manufacturer, issuedDate: "2025-08-01", expiryDate: "2030-07-31", status: "valid" as const },
           ],
-          // Pre-fill circularity
           recyclabilityRate: "92",
-          recycledContent: "28",
+          recycledContent: isPERC ? "22" : "28",
           renewableContent: "0",
           isHazardous: true,
           hazardousNotes: "Contains lead traces in solder alloy (<0.1% by weight). RoHS exemption 7(a) applies.",
           dismantlingTime: "35",
-          dismantlingInstructions: "1. Remove junction box and cables\n2. Detach aluminium frame (4 corner screws)\n3. Separate front glass from encapsulant (thermal process 150°C)\n4. Extract solar cells from EVA\n5. Recover copper ribbons\n6. Sort materials for recycling",
-          collectionScheme: "EU WEEE / India EPR",
-          recyclerName: "Veolia Environmental Services",
-          recyclerContact: "recycling@veolia.com",
+          dismantlingInstructions: "1. Disconnect and verify zero voltage\n2. Remove mounting clamps (2-person lift for >30kg)\n3. Separate junction box and cables\n4. Remove aluminium frame (hand tools)\n5. Separate glass via thermal delamination (350°C)\n6. Recover silicon, copper, silver via chemical processing",
+          collectionScheme: "EU WEEE Directive 2012/19/EU / India E-Waste Management Rules 2022",
+          recyclerName: model.recyclerName,
+          recyclerContact: model.recyclerContact,
           recoveryAluminium: true,
           recoveryGlass: true,
           recoverySilicon: true,
@@ -741,6 +847,18 @@ function StepIdentity({
           recoverySilver: true,
           recoveryNotes: "95%+ aluminium recovery via mechanical separation. Glass recovery via thermal delamination at 500°C.",
           eolStatus: "in_use",
+          carbonFootprint: isPERC ? "750" : String(800 + Math.round(model.power / 14)),
+          carbonIntensity: isPERC ? "24.0" : "22.5",
+          carbonLcaBoundary: "cradle_to_gate",
+          carbonMethodology: "JRC_harmonized_2025",
+          carbonVerificationRef: model.company === "Waaree Energies"
+            ? "EPD-WRM-2025-001"
+            : model.company === "Adani Solar"
+              ? "EPD-ADS-2025-001"
+              : "EPD-VKS-2025-001",
+          reachStatus: "compliant",
+          rohsStatus: "compliant_with_exemption",
+          documents: TEMPLATE_DOCUMENTS(model.company),
         });
       } else {
         onChange({ modelId });
@@ -845,6 +963,29 @@ function StepIdentity({
           placeholder="Select technology..."
           required
           error={errors.technology}
+        />
+      </div>
+
+      <SectionDivider label="EU Importer (required for non-EU manufacturers)" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Importer Name"
+          value={data.importerName}
+          onChange={(v) => onChange({ importerName: v })}
+          placeholder="e.g. SolarTech EU GmbH"
+        />
+        <TextField
+          label="Importer Operator ID"
+          value={data.importerOperatorId}
+          onChange={(v) => onChange({ importerOperatorId: v })}
+          placeholder="e.g. EU-OP-2025-00123"
+          mono
+        />
+        <TextField
+          label="Importer Country"
+          value={data.importerCountry}
+          onChange={(v) => onChange({ importerCountry: v })}
+          placeholder="e.g. Germany"
         />
       </div>
     </div>
@@ -1673,6 +1814,261 @@ function StepCircularity({
           { value: "landfill", label: "Landfill" },
         ]}
       />
+
+      <SectionDivider label="REACH / RoHS Compliance" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SelectField
+          label="REACH Compliance Status"
+          value={data.reachStatus}
+          onChange={(v) => onChange({ reachStatus: v })}
+          options={[
+            { value: "compliant", label: "Compliant" },
+            { value: "non_compliant", label: "Non-Compliant" },
+            { value: "exempt", label: "Exempt" },
+            { value: "under_review", label: "Under Review" },
+          ]}
+        />
+        <SelectField
+          label="RoHS Compliance Status"
+          value={data.rohsStatus}
+          onChange={(v) => onChange({ rohsStatus: v })}
+          options={[
+            { value: "compliant", label: "Compliant" },
+            { value: "compliant_with_exemption", label: "Compliant with Exemption" },
+            { value: "exempt", label: "Exempt" },
+            { value: "non_compliant", label: "Non-Compliant" },
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ── Step: Carbon & Environmental ── */
+
+function StepCarbon({
+  data,
+  onChange,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+}) {
+  return (
+    <div className="space-y-5">
+      <SectionDivider label="Carbon Footprint" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Carbon Footprint Total (kg CO2e)"
+          value={data.carbonFootprint}
+          onChange={(v) => onChange({ carbonFootprint: v })}
+          placeholder="e.g. 850"
+          type="number"
+        />
+        <TextField
+          label="Carbon Intensity (gCO2e/kWh)"
+          value={data.carbonIntensity}
+          onChange={(v) => onChange({ carbonIntensity: v })}
+          placeholder="e.g. 22.5"
+          type="number"
+        />
+        <SelectField
+          label="LCA Boundary"
+          value={data.carbonLcaBoundary}
+          onChange={(v) => onChange({ carbonLcaBoundary: v })}
+          options={[
+            { value: "cradle_to_gate", label: "Cradle-to-Gate" },
+            { value: "cradle_to_grave", label: "Cradle-to-Grave" },
+          ]}
+        />
+        <SelectField
+          label="Methodology"
+          value={data.carbonMethodology}
+          onChange={(v) => onChange({ carbonMethodology: v })}
+          options={[
+            { value: "JRC_harmonized_2025", label: "JRC Harmonized 2025" },
+            { value: "PEF", label: "PEF" },
+            { value: "ISO_14040", label: "ISO 14040" },
+          ]}
+        />
+        <TextField
+          label="Verification Reference (EPD ID)"
+          value={data.carbonVerificationRef}
+          onChange={(v) => onChange({ carbonVerificationRef: v })}
+          placeholder="e.g. EPD-WRM-2025-001"
+          mono
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ── Step: Documents ── */
+
+const DOCUMENT_TYPES = [
+  { value: "declaration_of_conformity", label: "Declaration of Conformity" },
+  { value: "test_report", label: "Test Report" },
+  { value: "user_manual", label: "User Manual" },
+  { value: "installation_instructions", label: "Installation Instructions" },
+  { value: "safety_instructions", label: "Safety Instructions" },
+  { value: "datasheet", label: "Datasheet" },
+  { value: "epd", label: "Environmental Product Declaration" },
+  { value: "due_diligence_report", label: "Due Diligence Report" },
+  { value: "recycling_guide", label: "Recycling Guide" },
+  { value: "other", label: "Other" },
+];
+
+const ACCESS_LEVELS = [
+  { value: "public", label: "Public" },
+  { value: "restricted", label: "Restricted" },
+  { value: "recycler", label: "Recycler" },
+  { value: "authority", label: "Authority" },
+  { value: "internal", label: "Internal" },
+];
+
+function StepDocuments({
+  data,
+  onChange,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+}) {
+  const addDocument = useCallback(() => {
+    onChange({
+      documents: [
+        ...data.documents,
+        { name: "", documentType: "other", accessLevel: "public", url: "", issuer: "", issuedDate: "" },
+      ],
+    });
+  }, [data.documents, onChange]);
+
+  const removeDocument = useCallback(
+    (idx: number) => {
+      onChange({ documents: data.documents.filter((_, i) => i !== idx) });
+    },
+    [data.documents, onChange]
+  );
+
+  const updateDocument = useCallback(
+    (idx: number, patch: Partial<FormData["documents"][number]>) => {
+      onChange({
+        documents: data.documents.map((d, i) => (i === idx ? { ...d, ...patch } : d)),
+      });
+    },
+    [data.documents, onChange]
+  );
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-[#737373]">
+          Attach documents to this passport.{" "}
+          {data.documents.length > 0 && (
+            <span className="font-mono text-xs">
+              {data.documents.length} document{data.documents.length !== 1 ? "s" : ""}
+            </span>
+          )}
+        </p>
+        <button
+          type="button"
+          onClick={addDocument}
+          className="cta-primary !px-3 !py-1.5 !text-xs"
+        >
+          <Plus className="h-3 w-3" /> Add Document
+        </button>
+      </div>
+
+      {data.documents.length === 0 ? (
+        <div className="dashed-card flex flex-col items-center py-10 text-center">
+          <FileText className="h-8 w-8 text-[#D9D9D9]" />
+          <p className="mt-3 text-sm font-medium text-[#737373]">
+            No documents added
+          </p>
+          <p className="mt-1 text-xs text-[#A3A3A3]">
+            Add datasheets, declarations of conformity, EPDs, and other documents.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {data.documents.map((doc, idx) => (
+            <div key={idx} className="clean-card p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+                  Document {idx + 1}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removeDocument(idx)}
+                  className="flex h-6 w-6 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <FieldLabel label="Document Name" required />
+                  <input
+                    value={doc.name}
+                    onChange={(e) => updateDocument(idx, { name: e.target.value })}
+                    placeholder="e.g. Datasheet"
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Document Type" required />
+                  <select
+                    value={doc.documentType}
+                    onChange={(e) => updateDocument(idx, { documentType: e.target.value })}
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                  >
+                    {DOCUMENT_TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <FieldLabel label="Access Level" />
+                  <select
+                    value={doc.accessLevel}
+                    onChange={(e) => updateDocument(idx, { accessLevel: e.target.value })}
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                  >
+                    {ACCESS_LEVELS.map((l) => (
+                      <option key={l.value} value={l.value}>{l.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <FieldLabel label="URL (optional)" />
+                  <input
+                    value={doc.url}
+                    onChange={(e) => updateDocument(idx, { url: e.target.value })}
+                    placeholder="https://..."
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Issuer" />
+                  <input
+                    value={doc.issuer}
+                    onChange={(e) => updateDocument(idx, { issuer: e.target.value })}
+                    placeholder="e.g. Waaree Energies"
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <FieldLabel label="Issued Date" />
+                  <input
+                    type="date"
+                    value={doc.issuedDate}
+                    onChange={(e) => updateDocument(idx, { issuedDate: e.target.value })}
+                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -1709,6 +2105,9 @@ function StepReview({
         <ReviewRow label="Facility" value={facilityLabel} />
         <ReviewRow label="Manufacturing Date" value={data.manufacturingDate} />
         <ReviewRow label="Technology" value={techLabel} />
+        {data.importerName && <ReviewRow label="Importer" value={data.importerName} />}
+        {data.importerOperatorId && <ReviewRow label="Importer Operator ID" value={data.importerOperatorId} mono />}
+        {data.importerCountry && <ReviewRow label="Importer Country" value={data.importerCountry} />}
       </ReviewSection>
 
       {/* Section: Specs */}
@@ -1833,6 +2232,59 @@ function StepReview({
             }[data.eolStatus] ?? data.eolStatus
           }
         />
+        <ReviewRow
+          label="REACH Status"
+          value={
+            { compliant: "Compliant", non_compliant: "Non-Compliant", exempt: "Exempt", under_review: "Under Review" }[data.reachStatus] ?? data.reachStatus
+          }
+        />
+        <ReviewRow
+          label="RoHS Status"
+          value={
+            { compliant: "Compliant", compliant_with_exemption: "Compliant with Exemption", exempt: "Exempt", non_compliant: "Non-Compliant" }[data.rohsStatus] ?? data.rohsStatus
+          }
+        />
+      </ReviewSection>
+
+      {/* Section: Carbon & Environmental */}
+      <ReviewSection title="Carbon & Environmental" onEdit={() => onJumpTo(5)}>
+        <ReviewRow label="Carbon Footprint" value={data.carbonFootprint ? `${data.carbonFootprint} kg CO2e` : ""} highlight />
+        <ReviewRow label="Carbon Intensity" value={data.carbonIntensity ? `${data.carbonIntensity} gCO2e/kWh` : ""} />
+        <ReviewRow
+          label="LCA Boundary"
+          value={
+            { cradle_to_gate: "Cradle-to-Gate", cradle_to_grave: "Cradle-to-Grave" }[data.carbonLcaBoundary] ?? data.carbonLcaBoundary
+          }
+        />
+        <ReviewRow
+          label="Methodology"
+          value={
+            { JRC_harmonized_2025: "JRC Harmonized 2025", PEF: "PEF", ISO_14040: "ISO 14040" }[data.carbonMethodology] ?? data.carbonMethodology
+          }
+        />
+        <ReviewRow label="Verification Ref" value={data.carbonVerificationRef} mono />
+      </ReviewSection>
+
+      {/* Section: Documents */}
+      <ReviewSection title="Documents" onEdit={() => onJumpTo(6)}>
+        {data.documents.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-[#A3A3A3] italic">No documents added</p>
+        ) : (
+          <div className="divide-y divide-[#D9D9D9]">
+            {data.documents.map((doc, idx) => (
+              <div key={idx} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
+                <span className="text-sm font-medium text-[#0D0D0D]">{doc.name || "—"}</span>
+                <span className="text-xs text-[#737373]">
+                  {DOCUMENT_TYPES.find((t) => t.value === doc.documentType)?.label ?? doc.documentType}
+                </span>
+                <span className="text-xs text-[#737373]">
+                  {ACCESS_LEVELS.find((l) => l.value === doc.accessLevel)?.label ?? doc.accessLevel}
+                </span>
+                {doc.issuer && <span className="text-xs text-[#737373]">{doc.issuer}</span>}
+              </div>
+            ))}
+          </div>
+        )}
       </ReviewSection>
     </div>
   );
@@ -1929,6 +2381,10 @@ export default function CreatePassportPage() {
     if (formData.certificates.length > 0) completed.add(3);
     // Circularity complete if recyclability rate set
     if (formData.recyclabilityRate) completed.add(4);
+    // Carbon complete if carbonFootprint is set
+    if (formData.carbonFootprint) completed.add(5);
+    // Documents complete if at least one document
+    if (formData.documents.length > 0) completed.add(6);
     // Review is never "complete" by itself
     return completed;
   }, [formData]);
@@ -2155,6 +2611,12 @@ export default function CreatePassportPage() {
               )}
               {step.id === "circularity" && (
                 <StepCircularity data={formData} onChange={handleChange} />
+              )}
+              {step.id === "carbon" && (
+                <StepCarbon data={formData} onChange={handleChange} />
+              )}
+              {step.id === "documents" && (
+                <StepDocuments data={formData} onChange={handleChange} />
               )}
               {step.id === "review" && (
                 <StepReview data={formData} onJumpTo={handleJumpTo} />
