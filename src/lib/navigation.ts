@@ -25,16 +25,39 @@ export interface NavItem {
   badge?: "count";
 }
 
-/** Global app sidebar items (authenticated shell) */
-export const GLOBAL_NAV: NavItem[] = [
-  { label: "Dashboard", href: "/app", icon: LayoutDashboard },
-  { label: "Passports", href: "/app/passports", icon: FileStack, badge: "count" },
-  { label: "Evidence Vault", href: "/app/evidence", icon: FolderOpen },
-  { label: "Approvals", href: "/app/approvals", icon: CheckSquare, badge: "count" },
-  { label: "Analytics", href: "/app/analytics", icon: BarChart3 },
-  { label: "Integrations", href: "/app/integrations", icon: Plug },
-  { label: "Settings", href: "/app/settings", icon: Settings },
+export interface NavSection {
+  title: string;
+  items: NavItem[];
+}
+
+/** Global app sidebar — grouped by section */
+export const SIDEBAR_SECTIONS: NavSection[] = [
+  {
+    title: "MAIN",
+    items: [
+      { label: "Dashboard", href: "/app", icon: LayoutDashboard },
+      { label: "Passports", href: "/app/passports", icon: FileStack, badge: "count" },
+    ],
+  },
+  {
+    title: "INTELLIGENCE",
+    items: [
+      { label: "Evidence Vault", href: "/app/evidence", icon: FolderOpen },
+      { label: "Approvals", href: "/app/approvals", icon: CheckSquare, badge: "count" },
+      { label: "Analytics", href: "/app/analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    title: "SYSTEM",
+    items: [
+      { label: "Integrations", href: "/app/integrations", icon: Plug },
+      { label: "Settings", href: "/app/settings", icon: Settings },
+    ],
+  },
 ];
+
+/** Flat list for backward compat */
+export const GLOBAL_NAV: NavItem[] = SIDEBAR_SECTIONS.flatMap((s) => s.items);
 
 /** Context sidebar items within a passport workspace */
 export const PASSPORT_SECTIONS: NavItem[] = [

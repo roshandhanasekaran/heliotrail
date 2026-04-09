@@ -1,0 +1,271 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e35] [cursor=pointer]:
+    - img [ref=e36]
+  - alert [ref=e39]: HelioTrail
+  - generic [ref=e48]:
+    - complementary [ref=e49]:
+      - link "HT HelioTrail" [ref=e51] [cursor=pointer]:
+        - /url: /app
+        - generic [ref=e53]: HT
+        - generic [ref=e54]: HelioTrail
+      - navigation [ref=e55]:
+        - link "Dashboard" [ref=e56] [cursor=pointer]:
+          - /url: /app
+          - img [ref=e57]
+          - generic [ref=e62]: Dashboard
+        - link "Passports" [ref=e63] [cursor=pointer]:
+          - /url: /app/passports
+          - img [ref=e64]
+          - generic [ref=e68]: Passports
+        - link "Evidence Vault" [ref=e69] [cursor=pointer]:
+          - /url: /app/evidence
+          - img [ref=e70]
+          - generic [ref=e72]: Evidence Vault
+        - link "Approvals" [ref=e73] [cursor=pointer]:
+          - /url: /app/approvals
+          - img [ref=e74]
+          - generic [ref=e77]: Approvals
+        - link "Analytics" [ref=e78] [cursor=pointer]:
+          - /url: /app/analytics
+          - img [ref=e79]
+          - generic [ref=e81]: Analytics
+        - link "Integrations" [ref=e82] [cursor=pointer]:
+          - /url: /app/integrations
+          - img [ref=e83]
+          - generic [ref=e85]: Integrations
+        - link "Settings" [ref=e86] [cursor=pointer]:
+          - /url: /app/settings
+          - img [ref=e87]
+          - generic [ref=e90]: Settings
+      - button "Collapse sidebar" [ref=e92]:
+        - img
+        - generic [ref=e93]: Collapse sidebar
+    - generic [ref=e94]:
+      - banner [ref=e95]:
+        - navigation "Breadcrumb" [ref=e97]:
+          - list [ref=e98]:
+            - listitem [ref=e99]:
+              - generic [ref=e100]: Dashboard
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - img [ref=e103]
+            - textbox "Search passports..." [ref=e106]
+          - button "3 Notifications" [ref=e107]:
+            - img
+            - generic [ref=e108]: "3"
+            - generic [ref=e109]: Notifications
+          - button "D User menu" [ref=e111]:
+            - generic [ref=e112]: D
+            - generic [ref=e113]: User menu
+      - main [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - heading "Dashboard" [level=1] [ref=e118]
+              - paragraph [ref=e119]: Waaree Energies Ltd. — Portfolio Intelligence
+            - link "Create Passport" [ref=e120] [cursor=pointer]:
+              - /url: /app/passports/new
+              - img [ref=e121]
+              - text: Create Passport
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - generic [ref=e124]:
+                - img [ref=e126]
+                - generic [ref=e130]: Total Passports
+              - paragraph [ref=e131]: "8"
+              - paragraph [ref=e132]: 5 published
+            - generic [ref=e133]:
+              - generic [ref=e134]:
+                - img [ref=e136]
+                - generic [ref=e139]: Published Rate
+              - paragraph [ref=e140]: 63%
+              - paragraph [ref=e141]: 5 of 8
+            - generic [ref=e142]:
+              - generic [ref=e143]:
+                - img [ref=e145]
+                - generic [ref=e148]: Compliance
+              - paragraph [ref=e149]: 95%
+              - paragraph [ref=e150]: 21/22 certs valid
+            - generic [ref=e151]:
+              - generic [ref=e152]:
+                - img [ref=e154]
+                - generic [ref=e157]: Avg Carbon
+              - paragraph [ref=e158]: "416"
+              - paragraph [ref=e159]: kg CO₂e / module
+            - generic [ref=e160]:
+              - generic [ref=e161]:
+                - img [ref=e163]
+                - generic [ref=e165]: Materials Tracked
+              - paragraph [ref=e166]: "42"
+              - paragraph [ref=e167]: 10 CRM · 2 SoC
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - heading "Passport Status" [level=2] [ref=e171]
+                - generic [ref=e173]:
+                  - img [ref=e174]
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: "95"
+                    - generic [ref=e179]: / 100
+              - application [ref=e182]:
+                - generic [ref=e197]:
+                  - generic [ref=e199]: Published
+                  - generic [ref=e201]: UnderReview
+                  - generic [ref=e203]: Draft
+              - generic [ref=e204]:
+                - generic [ref=e205]: 21 valid certificates
+                - generic [ref=e206]: ·
+                - generic [ref=e207]: 1 pending
+            - generic [ref=e208]:
+              - heading "Carbon Footprint by Model" [level=2] [ref=e209]
+              - paragraph [ref=e210]: kg CO₂e (cradle-to-gate)
+              - application [ref=e213]:
+                - generic [ref=e230]:
+                  - generic [ref=e231]:
+                    - generic [ref=e233]: 550N-72-BF
+                    - generic [ref=e235]: 450M-60-PERC
+                    - generic [ref=e237]: 700-TOPCON-BiN-03
+                  - generic [ref=e238]:
+                    - generic [ref=e240]: "0"
+                    - generic [ref=e242]: "150"
+                    - generic [ref=e244]: "300"
+                    - generic [ref=e246]: "450"
+                    - generic [ref=e248]: "600"
+          - generic [ref=e249]:
+            - generic [ref=e250]:
+              - generic [ref=e251]:
+                - heading "Fleet Material Composition" [level=2] [ref=e252]
+                - paragraph [ref=e253]: Aggregated across all passports · 42 materials tracked
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - img [ref=e256]
+                  - text: 10 CRM
+                - generic [ref=e258]:
+                  - img [ref=e259]
+                  - text: 2 SoC
+            - generic [ref=e262]:
+              - list [ref=e264]:
+                - listitem [ref=e265]:
+                  - img "aluminium legend icon" [ref=e266]
+                  - text: aluminium
+                - listitem [ref=e268]:
+                  - img "copper legend icon" [ref=e269]
+                  - text: copper
+                - listitem [ref=e271]:
+                  - img "encapsulant legend icon" [ref=e272]
+                  - text: encapsulant
+                - listitem [ref=e274]:
+                  - img "glass legend icon" [ref=e275]
+                  - text: glass
+                - listitem [ref=e277]:
+                  - img "other legend icon" [ref=e278]
+                  - text: other
+                - listitem [ref=e280]:
+                  - img "silicon legend icon" [ref=e281]
+                  - text: silicon
+              - application [ref=e283]:
+                - generic [ref=e321]:
+                  - generic [ref=e322]:
+                    - generic [ref=e324]: 0%
+                    - generic [ref=e326]: 30%
+                    - generic [ref=e328]: 60%
+                    - generic [ref=e330]: 90%
+                    - generic [ref=e332]: 120%
+                  - generic [ref=e335]: Fleet Avg
+          - generic [ref=e336]:
+            - generic [ref=e338]:
+              - generic [ref=e339]:
+                - heading "Recent Passports" [level=2] [ref=e340]
+                - link "View all" [ref=e341] [cursor=pointer]:
+                  - /url: /app/passports
+                  - text: View all
+                  - img [ref=e342]
+              - generic [ref=e344]:
+                - link "WRM-700-TOPCON-BiN-03 WRM-PVP-2026-0004 700W Published" [ref=e345] [cursor=pointer]:
+                  - /url: /app/passports/569e65ee-e406-4983-9db8-76b44e4dbb4c/overview
+                  - generic [ref=e346]:
+                    - paragraph [ref=e347]: WRM-700-TOPCON-BiN-03
+                    - paragraph [ref=e348]: WRM-PVP-2026-0004
+                  - generic [ref=e349]:
+                    - generic [ref=e350]: 700W
+                    - generic [ref=e351]: Published
+                - link "WRM-580-TOPCON-BiN-08 WRM-PVP-2026-0005 580W Published" [ref=e352] [cursor=pointer]:
+                  - /url: /app/passports/e7bb65db-8ab5-45a0-95db-90d346eac389/overview
+                  - generic [ref=e353]:
+                    - paragraph [ref=e354]: WRM-580-TOPCON-BiN-08
+                    - paragraph [ref=e355]: WRM-PVP-2026-0005
+                  - generic [ref=e356]:
+                    - generic [ref=e357]: 580W
+                    - generic [ref=e358]: Published
+                - link "WRM-590-TOPCON-BiN-08 WRM-PVP-2026-0006 590W Under Review" [ref=e359] [cursor=pointer]:
+                  - /url: /app/passports/9ae4cd41-cbee-4a7c-9705-1c70766b3cf2/overview
+                  - generic [ref=e360]:
+                    - paragraph [ref=e361]: WRM-590-TOPCON-BiN-08
+                    - paragraph [ref=e362]: WRM-PVP-2026-0006
+                  - generic [ref=e363]:
+                    - generic [ref=e364]: 590W
+                    - generic [ref=e365]: Under Review
+                - link "WRM-685-TOPCON-BiN-03 WRM-PVP-2026-0007 685W Draft" [ref=e366] [cursor=pointer]:
+                  - /url: /app/passports/71356ac8-94d5-4782-aa22-2dd1d3c0732f/overview
+                  - generic [ref=e367]:
+                    - paragraph [ref=e368]: WRM-685-TOPCON-BiN-03
+                    - paragraph [ref=e369]: WRM-PVP-2026-0007
+                  - generic [ref=e370]:
+                    - generic [ref=e371]: 685W
+                    - generic [ref=e372]: Draft
+                - link "WRM-600-TOPCON-BiN-08 WRM-PVP-2026-0008 600W Draft" [ref=e373] [cursor=pointer]:
+                  - /url: /app/passports/38d7137b-d8b8-4300-96e6-ba9ade16911d/overview
+                  - generic [ref=e374]:
+                    - paragraph [ref=e375]: WRM-600-TOPCON-BiN-08
+                    - paragraph [ref=e376]: WRM-PVP-2026-0008
+                  - generic [ref=e377]:
+                    - generic [ref=e378]: 600W
+                    - generic [ref=e379]: Draft
+            - generic [ref=e380]:
+              - generic [ref=e381]:
+                - heading "Pending Actions" [level=2] [ref=e383]
+                - generic [ref=e384]:
+                  - link "1 awaiting approval" [ref=e385] [cursor=pointer]:
+                    - /url: /app/approvals
+                    - img [ref=e386]
+                    - generic [ref=e389]:
+                      - strong [ref=e390]: "1"
+                      - text: awaiting approval
+                  - link "2 drafts in progress" [ref=e391] [cursor=pointer]:
+                    - /url: /app/passports
+                    - img [ref=e392]
+                    - generic [ref=e396]:
+                      - strong [ref=e397]: "2"
+                      - text: drafts in progress
+              - generic [ref=e398]:
+                - heading "EU ESPR Readiness" [level=2] [ref=e399]
+                - generic [ref=e400]:
+                  - generic [ref=e401]:
+                    - generic [ref=e402]: Product Identity
+                    - generic [ref=e403]: ✓
+                  - generic [ref=e404]:
+                    - generic [ref=e405]: Technical Specs
+                    - generic [ref=e406]: ✓
+                  - generic [ref=e407]:
+                    - generic [ref=e408]: Material Composition
+                    - generic [ref=e409]: ✓
+                  - generic [ref=e410]:
+                    - generic [ref=e411]: Carbon Footprint
+                    - generic [ref=e412]: ✓
+                  - generic [ref=e413]:
+                    - generic [ref=e414]: Compliance Certs
+                    - generic [ref=e415]: ✓
+                  - generic [ref=e416]:
+                    - generic [ref=e417]: Circularity Data
+                    - generic [ref=e418]: ✓
+                  - generic [ref=e419]:
+                    - generic [ref=e420]: Supply Chain
+                    - generic [ref=e421]: ○
+                  - generic [ref=e422]:
+                    - generic [ref=e423]: Dynamic Data
+                    - generic [ref=e424]: ○
+                - link "View Analytics" [ref=e426] [cursor=pointer]:
+                  - /url: /app/analytics
+                  - text: View Analytics
+                  - img [ref=e427]
+  - generic [ref=e429]: Fleet Avg

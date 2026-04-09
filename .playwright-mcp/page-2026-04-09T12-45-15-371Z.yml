@@ -1,0 +1,183 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "HT HelioTrail" [ref=e5] [cursor=pointer]:
+        - /url: /app
+        - generic [ref=e7]: HT
+        - generic [ref=e8]: HelioTrail
+      - navigation [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /app
+          - img [ref=e11]
+          - generic [ref=e16]: Dashboard
+        - link "Passports" [ref=e17] [cursor=pointer]:
+          - /url: /app/passports
+          - img [ref=e18]
+          - generic [ref=e22]: Passports
+        - link "Evidence Vault" [ref=e23] [cursor=pointer]:
+          - /url: /app/evidence
+          - img [ref=e24]
+          - generic [ref=e26]: Evidence Vault
+        - link "Approvals" [ref=e27] [cursor=pointer]:
+          - /url: /app/approvals
+          - img [ref=e28]
+          - generic [ref=e31]: Approvals
+        - link "Analytics" [ref=e32] [cursor=pointer]:
+          - /url: /app/analytics
+          - img [ref=e33]
+          - generic [ref=e35]: Analytics
+        - link "Integrations" [ref=e36] [cursor=pointer]:
+          - /url: /app/integrations
+          - img [ref=e37]
+          - generic [ref=e39]: Integrations
+        - link "Settings" [ref=e40] [cursor=pointer]:
+          - /url: /app/settings
+          - img [ref=e41]
+          - generic [ref=e44]: Settings
+      - button "Collapse sidebar" [ref=e46]:
+        - img
+        - generic [ref=e47]: Collapse sidebar
+    - generic [ref=e48]:
+      - banner [ref=e49]:
+        - navigation "Breadcrumb" [ref=e51]:
+          - list [ref=e52]:
+            - listitem [ref=e53]:
+              - generic [ref=e54]: Passports
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - img [ref=e57]
+            - textbox "Search passports..." [ref=e60]
+          - button "3 Notifications" [ref=e61]:
+            - img
+            - generic [ref=e62]: "3"
+            - generic [ref=e63]: Notifications
+          - button "D User menu" [ref=e65]:
+            - generic [ref=e66]: D
+            - generic [ref=e67]: User menu
+      - main [ref=e68]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - heading "Passports" [level=1] [ref=e72]
+              - paragraph [ref=e73]: 8 passports in your portfolio
+            - link "Create Passport" [ref=e74] [cursor=pointer]:
+              - /url: /app/passports/new
+              - img [ref=e75]
+              - text: Create Passport
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - textbox "Search by model, serial, or passport ID..." [ref=e81]
+            - button "Filters" [ref=e82]:
+              - img [ref=e83]
+              - text: Filters
+          - table [ref=e87]:
+            - rowgroup [ref=e88]:
+              - row "Passport ID Model Technology Power Status Verification Updated" [ref=e89]:
+                - columnheader "Passport ID" [ref=e90]
+                - columnheader "Model" [ref=e91]
+                - columnheader "Technology" [ref=e92]
+                - columnheader "Power" [ref=e93]
+                - columnheader "Status" [ref=e94]
+                - columnheader "Verification" [ref=e95]
+                - columnheader "Updated" [ref=e96]
+            - rowgroup [ref=e97]:
+              - row "WRM-PVP-2026-0008 WRM-600-TOPCON-BiN-08 TOPCon 600W Draft Pending 9 Apr 2026" [ref=e98]:
+                - cell "WRM-PVP-2026-0008" [ref=e99]:
+                  - link "WRM-PVP-2026-0008" [ref=e100] [cursor=pointer]:
+                    - /url: /app/passports/38d7137b-d8b8-4300-96e6-ba9ade16911d/overview
+                - cell "WRM-600-TOPCON-BiN-08" [ref=e101]
+                - cell "TOPCon" [ref=e102]
+                - cell "600W" [ref=e103]
+                - cell "Draft" [ref=e104]:
+                  - generic [ref=e105]: Draft
+                - cell "Pending" [ref=e106]:
+                  - generic [ref=e107]: Pending
+                - cell "9 Apr 2026" [ref=e108]
+              - row "WRM-PVP-2026-0005 WRM-580-TOPCON-BiN-08 TOPCon 580W Published Verified 9 Apr 2026" [ref=e109]:
+                - cell "WRM-PVP-2026-0005" [ref=e110]:
+                  - link "WRM-PVP-2026-0005" [ref=e111] [cursor=pointer]:
+                    - /url: /app/passports/e7bb65db-8ab5-45a0-95db-90d346eac389/overview
+                - cell "WRM-580-TOPCON-BiN-08" [ref=e112]
+                - cell "TOPCon" [ref=e113]
+                - cell "580W" [ref=e114]
+                - cell "Published" [ref=e115]:
+                  - generic [ref=e116]: Published
+                - cell "Verified" [ref=e117]:
+                  - generic [ref=e118]: Verified
+                - cell "9 Apr 2026" [ref=e119]
+              - row "WRM-PVP-2026-0006 WRM-590-TOPCON-BiN-08 TOPCon 590W Under Review Pending 9 Apr 2026" [ref=e120]:
+                - cell "WRM-PVP-2026-0006" [ref=e121]:
+                  - link "WRM-PVP-2026-0006" [ref=e122] [cursor=pointer]:
+                    - /url: /app/passports/9ae4cd41-cbee-4a7c-9705-1c70766b3cf2/overview
+                - cell "WRM-590-TOPCON-BiN-08" [ref=e123]
+                - cell "TOPCon" [ref=e124]
+                - cell "590W" [ref=e125]
+                - cell "Under Review" [ref=e126]:
+                  - generic [ref=e127]: Under Review
+                - cell "Pending" [ref=e128]:
+                  - generic [ref=e129]: Pending
+                - cell "9 Apr 2026" [ref=e130]
+              - row "WRM-PVP-2026-0007 WRM-685-TOPCON-BiN-03 TOPCon 685W Draft Pending 9 Apr 2026" [ref=e131]:
+                - cell "WRM-PVP-2026-0007" [ref=e132]:
+                  - link "WRM-PVP-2026-0007" [ref=e133] [cursor=pointer]:
+                    - /url: /app/passports/71356ac8-94d5-4782-aa22-2dd1d3c0732f/overview
+                - cell "WRM-685-TOPCON-BiN-03" [ref=e134]
+                - cell "TOPCon" [ref=e135]
+                - cell "685W" [ref=e136]
+                - cell "Draft" [ref=e137]:
+                  - generic [ref=e138]: Draft
+                - cell "Pending" [ref=e139]:
+                  - generic [ref=e140]: Pending
+                - cell "9 Apr 2026" [ref=e141]
+              - row "WRM-PVP-2026-0004 WRM-700-TOPCON-BiN-03 TOPCon 700W Published Verified 9 Apr 2026" [ref=e142]:
+                - cell "WRM-PVP-2026-0004" [ref=e143]:
+                  - link "WRM-PVP-2026-0004" [ref=e144] [cursor=pointer]:
+                    - /url: /app/passports/569e65ee-e406-4983-9db8-76b44e4dbb4c/overview
+                - cell "WRM-700-TOPCON-BiN-03" [ref=e145]
+                - cell "TOPCon" [ref=e146]
+                - cell "700W" [ref=e147]
+                - cell "Published" [ref=e148]:
+                  - generic [ref=e149]: Published
+                - cell "Verified" [ref=e150]:
+                  - generic [ref=e151]: Verified
+                - cell "9 Apr 2026" [ref=e152]
+              - row "PVP-2026-0002 HT-450M-60-PERC PERC 450W Published Verified 8 Apr 2026" [ref=e153]:
+                - cell "PVP-2026-0002" [ref=e154]:
+                  - link "PVP-2026-0002" [ref=e155] [cursor=pointer]:
+                    - /url: /app/passports/8bf4b9ac-b155-4a79-baa4-9d1d7c82ab3f/overview
+                - cell "HT-450M-60-PERC" [ref=e156]
+                - cell "PERC" [ref=e157]
+                - cell "450W" [ref=e158]
+                - cell "Published" [ref=e159]:
+                  - generic [ref=e160]: Published
+                - cell "Verified" [ref=e161]:
+                  - generic [ref=e162]: Verified
+                - cell "8 Apr 2026" [ref=e163]
+              - row "PVP-2026-0003 HT-420H-66-HJT HJT 420W Published Verified 8 Apr 2026" [ref=e164]:
+                - cell "PVP-2026-0003" [ref=e165]:
+                  - link "PVP-2026-0003" [ref=e166] [cursor=pointer]:
+                    - /url: /app/passports/ea8605fd-e808-4c23-94ad-5e08a858e2b0/overview
+                - cell "HT-420H-66-HJT" [ref=e167]
+                - cell "HJT" [ref=e168]
+                - cell "420W" [ref=e169]
+                - cell "Published" [ref=e170]:
+                  - generic [ref=e171]: Published
+                - cell "Verified" [ref=e172]:
+                  - generic [ref=e173]: Verified
+                - cell "8 Apr 2026" [ref=e174]
+              - row "PVP-2026-0001 HT-550N-72-BF TOPCon 550W Published Verified 8 Apr 2026" [ref=e175]:
+                - cell "PVP-2026-0001" [ref=e176]:
+                  - link "PVP-2026-0001" [ref=e177] [cursor=pointer]:
+                    - /url: /app/passports/18d6adc1-88b9-455e-a1fd-898760dbc1f5/overview
+                - cell "HT-550N-72-BF" [ref=e178]
+                - cell "TOPCon" [ref=e179]
+                - cell "550W" [ref=e180]
+                - cell "Published" [ref=e181]:
+                  - generic [ref=e182]: Published
+                - cell "Verified" [ref=e183]:
+                  - generic [ref=e184]: Verified
+                - cell "8 Apr 2026" [ref=e185]
+  - button "Open Next.js Dev Tools" [ref=e191] [cursor=pointer]:
+    - img [ref=e192]
+  - alert [ref=e195]

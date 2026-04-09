@@ -1,0 +1,613 @@
+- generic [active] [ref=e1]:
+  - main [ref=e80]:
+    - banner [ref=e81]:
+      - generic [ref=e82]:
+        - link "home" [ref=e83] [cursor=pointer]:
+          - /url: /
+          - img [ref=e85]
+          - img [ref=e94]
+        - navigation [ref=e104]:
+          - generic [ref=e105]:
+            - button "Product" [ref=e107] [cursor=pointer]:
+              - generic [ref=e108]: Product
+            - button "Solutions" [ref=e110] [cursor=pointer]:
+              - generic [ref=e111]: Solutions
+            - button "Resources" [ref=e113] [cursor=pointer]:
+              - generic [ref=e114]: Resources
+            - button "Company" [ref=e116] [cursor=pointer]:
+              - generic [ref=e117]: Company
+          - generic [ref=e118]:
+            - link "Login" [ref=e119] [cursor=pointer]:
+              - /url: https://dashboard.datashake.com/signin
+              - generic [ref=e120]: Login
+            - link "Book a call" [ref=e122] [cursor=pointer]:
+              - /url: /demo
+              - generic [ref=e123]: Book a call
+    - generic [ref=e128]:
+      - generic [ref=e130]:
+        - generic [ref=e131]:
+          - link "The Social Data Coverage Report 2026 is here ⚡" [ref=e134] [cursor=pointer]:
+            - /url: https://www.datashake.com/resources/social-data-coverage-report-2026
+          - generic [ref=e135]:
+            - heading "One API. One schema. Cleaned, normalized. Search and filter across" [level=1] [ref=e136]
+            - generic [ref=e138]:
+              - generic [ref=e140]: social media
+              - generic [ref=e142]: review sites
+              - generic [ref=e144]: app stores
+              - generic [ref=e146]: forums
+              - generic [ref=e148]: e-commerce platforms
+              - generic [ref=e150]: ratings directories
+              - generic [ref=e152]: 150+ sources
+              - generic [ref=e154]: social media
+              - generic [ref=e156]: review sites
+              - generic [ref=e158]: app stores
+              - generic [ref=e160]: forums
+              - generic [ref=e162]: e-commerce platforms
+              - generic [ref=e164]: ratings directories
+              - generic [ref=e166]: 150+ sources
+        - generic [ref=e167]:
+          - generic [ref=e169]: Replace multiple vendors with one partner you can trust for comprehensive, fast and scalable data from 150+ sources.
+          - generic [ref=e170]:
+            - link "Book a demo" [ref=e171] [cursor=pointer]:
+              - /url: /demo
+              - generic [ref=e172]: Book a demo
+              - img [ref=e174]
+            - link "Explore the platform" [ref=e176] [cursor=pointer]:
+              - /url: /platform
+              - generic [ref=e177]: Explore the platform
+      - generic [ref=e178]:
+        - img [ref=e181]:
+          - generic:
+            - generic:
+              - generic:
+                - generic "November 21, 14:25"
+                - generic "Dante Roberts"
+                - generic "jump from the 16."
+                - generic "Picked up the iPhone 17 after launch. Good phone, but not a huge"
+                - generic "Review Site"
+                - generic "Real-Time"
+            - generic:
+              - generic:
+                - generic "November 21, 14:25"
+                - generic "Dante Roberts"
+                - generic "jump from the 16."
+                - generic "Picked up the iPhone 17 after launch. Good phone, but not a huge"
+                - generic "Review Site"
+                - generic "Real-Time"
+          - generic [ref=e182]:
+            - generic [ref=e4484]:
+              - generic [ref=e4485]:
+                - generic [ref=e4517]:
+                  - generic "95" [ref=e4518]
+                  - generic "640" [ref=e4531]
+                  - generic "December 21, 10:01" [ref=e4548]
+                  - generic "Sarah Chen" [ref=e4613]
+                  - generic "anything." [ref=e4650]
+                  - generic "With all these battery fire stories, I’m waiting before installing" [ref=e4687]
+                  - generic "There was apparently a recall on Tesla Powerwall 2 earlier this year." [ref=e4916]
+                  - generic "Social Media" [ref=e5152]
+                  - generic "Real-Time" [ref=e5200]
+                - generic [ref=e5238]:
+                  - generic "November 21, 14:25" [ref=e5259]
+                  - generic "Dante Roberts" [ref=e5324]
+                  - generic "Tesla ownership is a mixed bag. Performance is great, but recalls and service delays are frustrating." [ref=e5373]
+                  - generic "Review Site" [ref=e5721]
+                  - generic "Real-Time" [ref=e5765]
+              - generic "API Call" [ref=e5833]
+              - generic "CSV/XLS" [ref=e5862]
+              - generic "Export as" [ref=e5891]
+              - generic "results" [ref=e5924]
+              - generic "384,589" [ref=e5953]
+            - generic [ref=e6005]:
+              - generic [ref=e6006]:
+                - generic [ref=e6007]:
+                  - generic "4d ago" [ref=e6041]
+                  - generic "Review Sites" [ref=e6062]
+                - generic "Tesla ownership is a mixed bag." [ref=e6111]
+              - generic [ref=e6216]:
+                - generic "If I recall correctly, Tesla was proud of not doing focus groups. Looks like that finally caught up with them." [ref=e6221]
+                - generic [ref=e6586]:
+                  - generic "1d ago" [ref=e6587]
+                  - generic "Social Media" [ref=e6612]
+              - generic [ref=e6657]:
+                - generic "Why Tesla Recalls All Cybertrucks YouTube gets it first" [ref=e6680]
+                - generic "2d ago" [ref=e6869]
+                - generic "6.1K" [ref=e6890]
+                - generic "410" [ref=e6907]
+              - generic [ref=e6922]:
+                - generic "2d ago" [ref=e6939]
+                - generic "540" [ref=e6960]
+                - generic "9.6K" [ref=e6973]
+                - generic "The true meaning of a Tesla Recall!!" [ref=e6990]
+            - generic [ref=e7111]:
+              - generic "File Exported" [ref=e7123]
+              - generic "tesla-or-tsla_and_recall-or-defect..." [ref=e7172]
+        - img "User reviews and social media post excerpts showing reactions to new iPhone features and Nike Air Max launch, with a search result count of 384,589 and export options." [ref=e702]
+    - generic [ref=e705]:
+      - generic [ref=e708]: Powering data intelligence for leading platforms & global brands
+      - generic [ref=e710]:
+        - link "Qualtrics logo Qualtrics logo Customer experience" [ref=e711] [cursor=pointer]:
+          - /url: /industry/cx-platforms
+          - generic [ref=e712]:
+            - img "Qualtrics logo" [ref=e713]
+            - img "Qualtrics logo" [ref=e714]
+          - generic [ref=e715]: Customer experience
+          - img [ref=e718]
+        - link "Yext logo Yext logo Reputation management" [ref=e720] [cursor=pointer]:
+          - /url: /industry/reputation-and-review-management
+          - generic [ref=e721]:
+            - img "Yext logo" [ref=e722]
+            - img "Yext logo" [ref=e723]
+          - generic [ref=e724]: Reputation management
+          - img [ref=e727]
+        - link "The Home Depot logo The Home Depot logo Retail" [ref=e729] [cursor=pointer]:
+          - /url: /industry/retail
+          - generic [ref=e730]:
+            - img "The Home Depot logo" [ref=e731]
+            - img "The Home Depot logo" [ref=e732]
+          - generic [ref=e733]: Retail
+          - img [ref=e736]
+        - link "Brightlocal logo Brightlocal logo Marketing automation" [ref=e738] [cursor=pointer]:
+          - /url: /industry/marketing-automation
+          - generic [ref=e739]:
+            - img "Brightlocal logo" [ref=e740]
+            - img "Brightlocal logo" [ref=e741]
+          - generic [ref=e742]: Marketing automation
+          - img [ref=e745]
+        - link "Epicor logo Epicor logo Agencies" [ref=e747] [cursor=pointer]:
+          - /url: /industry/agencies
+          - generic [ref=e748]:
+            - img "Epicor logo" [ref=e749]
+            - img "Epicor logo" [ref=e750]
+          - generic [ref=e752]: Agencies
+          - img [ref=e755]
+        - link "Talkwalker logo Talkwalker logo Social listening" [ref=e757] [cursor=pointer]:
+          - /url: /industry/social-listening
+          - generic [ref=e758]:
+            - img "Talkwalker logo" [ref=e759]
+            - img "Talkwalker logo" [ref=e760]
+          - generic [ref=e761]: Social listening
+          - img [ref=e764]
+    - generic [ref=e772]:
+      - generic [ref=e774]:
+        - generic [ref=e776]: The Problem
+        - generic [ref=e777]:
+          - heading "You’re making decisions on incomplete data foundations" [level=2] [ref=e778]
+          - generic [ref=e780]: Public data powers modern business decisions, yet most teams rely on fragile, stitched-together systems to collect it.
+      - generic [ref=e787]:
+        - img [ref=e791]:
+          - generic [ref=e794]:
+            - generic "Forum Threads" [ref=e810]
+            - generic "19m ago" [ref=e859]
+            - generic "From the specs alone, iPhone 17 doesn’t look revolutionary. But Apple usually nails optimization, so I’m guessing it’ll feel better in daily use than it sounds on paper." [ref=e884]
+        - generic [ref=e1456]: Juggling multiple providers means your team is always fixing something. Different data formats drain engineering hours, coverage gaps mean missing critical data daily. And when a provider's API changes or a platform goes down, your entire pipeline breaks – taking insights and decisions with it.
+    - generic [ref=e1464]:
+      - generic [ref=e1466]:
+        - generic [ref=e1468]: The Solution
+        - generic [ref=e1469]:
+          - heading "Get the most complete data to power your insights" [level=2] [ref=e1470]
+          - generic [ref=e1472]: Datashake provides the reliable foundation of public data that your business has always needed.
+      - generic [ref=e1479]:
+        - img [ref=e1482]:
+          - generic [ref=e2308]:
+            - generic [ref=e2313]:
+              - generic [ref=e2318]:
+                - generic "This Week" [ref=e2319]
+                - generic "5 Jan - 11 Jan" [ref=e2352]
+              - generic "Date Range" [ref=e2393]
+            - generic "Enter keyword, hashtag, or boolean" [ref=e2452]
+            - generic "Datashake Engine" [ref=e2595]
+        - generic [ref=e2656]:
+          - generic [ref=e2658]: We unify 150+ social media and online review sources into one resilient API, standardizing formats and absorbing platform shifts so your pipelines never fail. Data arrives analysis-ready while your team expands coverage without compounding complexity. Infrastructure engineered for the decisions that define your businesses success.
+          - link "See Datashake in action" [ref=e2660] [cursor=pointer]:
+            - /url: /demo
+            - generic [ref=e2661]: See Datashake in action
+            - img [ref=e2663]
+      - generic [ref=e2670]:
+        - generic [ref=e2671]:
+          - generic [ref=e2673]: 98.3% uptime
+          - generic [ref=e2675]: Proven reliability across sources with proactive monitoring
+        - generic [ref=e2676]:
+          - generic [ref=e2678]: Enterprise security
+          - generic [ref=e2680]: Encryption at every step with compliance-ready infrastructure
+        - generic [ref=e2681]:
+          - generic [ref=e2683]: Massive scale
+          - generic [ref=e2685]: Scale your workflow to hundreds of millions of daily fetches
+        - generic [ref=e2686]:
+          - generic [ref=e2688]: Industry standard
+          - generic [ref=e2690]: Proven reliability across sources with proactive monitoring
+        - generic [ref=e2691]:
+          - generic [ref=e2693]: Earned media coverage
+          - generic [ref=e2695]: Detect conversations outside channels you own
+    - generic [ref=e2704]:
+      - heading "What would you build with unlimited access to public conversation data?" [level=2] [ref=e2705]
+      - generic [ref=e2708]: Cust|
+    - generic [ref=e2716]:
+      - generic [ref=e2718]:
+        - heading "Your most reliable source of social & review data at scale" [level=2] [ref=e2719]
+        - generic [ref=e2720]:
+          - generic [ref=e2721]: Datashake powers the next generation of data-driven solutions — from customer experience and trend analytics to KYC and competitive monitoring.
+          - generic [ref=e2722]:
+            - generic [ref=e2723]:
+              - img [ref=e2725]
+              - generic [ref=e2730]: Collect, normalize, and deliver data from different sources
+            - generic [ref=e2731]:
+              - img [ref=e2733]
+              - generic [ref=e2738]: Focus on getting insights, not managing infrastructure.
+          - link "Book a demo" [ref=e2741] [cursor=pointer]:
+            - /url: /demo
+            - generic [ref=e2742]: Book a demo
+            - img [ref=e2744]
+      - generic:
+        - generic:
+          - img:
+            - generic:
+              - generic:
+                - generic:
+                  - generic "Results"
+                - generic:
+                  - generic "Filters"
+                - generic:
+                  - generic "Search"
+              - generic:
+                - generic "Social Media Platforms"
+                - generic "10+"
+              - generic:
+                - generic "Review Sites"
+                - generic "150+"
+    - generic [ref=e2754]:
+      - tablist [ref=e2755]:
+        - tab "Speed" [ref=e2756] [cursor=pointer]:
+          - generic [ref=e2757]:
+            - img [ref=e2759]
+            - generic [ref=e2761]: Speed
+        - tab "Depth" [ref=e2762] [cursor=pointer]:
+          - generic [ref=e2763]:
+            - img [ref=e2765]
+            - generic [ref=e2769]: Depth
+        - tab "Coverage" [selected] [ref=e2770] [cursor=pointer]:
+          - generic [ref=e2771]:
+            - img [ref=e2773]
+            - generic [ref=e2775]: Coverage
+        - tab "Relevance" [ref=e2776] [cursor=pointer]:
+          - generic [ref=e2777]:
+            - img [ref=e2779]
+            - generic [ref=e2782]: Relevance
+      - tabpanel "Coverage" [ref=e8146]:
+        - generic [ref=e8147]:
+          - generic [ref=e8148]:
+            - generic [ref=e8149]:
+              - generic [ref=e8150]:
+                - img [ref=e8152]
+                - generic [ref=e8156]: Coverage
+              - heading "Scale your coverage without scaling complexity" [level=3] [ref=e8157]
+              - generic [ref=e8158]: Access review sites, social platforms, forums, and e-commerce channels without shopping for multiple vendors. Get data from billions of public conversations across sources, all through one trusted partner. When we add new sources based on customer needs, they become available to you automatically, without re-engineering or additional integration work.
+            - generic [ref=e8159]:
+              - generic [ref=e8160]:
+                - img [ref=e8162]
+                - generic [ref=e8167]: 150+ sources and growing, across review sites, social platforms, forums
+              - generic [ref=e8168]:
+                - img [ref=e8170]
+                - generic [ref=e8175]: Multi-language and regional coverage globally
+              - generic [ref=e8176]:
+                - img [ref=e8178]
+                - generic [ref=e8183]: New sources added as you need them
+          - img [ref=e8186]:
+            - generic [ref=e8189]:
+              - generic "Review Site" [ref=e8209]
+              - generic "Social Media" [ref=e8254]
+              - generic "Apply Filters" [ref=e8306]
+              - generic "English" [ref=e8362]
+              - generic "Select Language" [ref=e8394]
+    - generic [ref=e3809]:
+      - generic [ref=e3810]:
+        - generic [ref=e3811]:
+          - generic [ref=e3813]: Free Benchmark Trial
+          - heading "Test your use case with Datashake — for free." [level=2] [ref=e3814]
+        - generic [ref=e3816]:
+          - generic [ref=e3817]: We’ll run your search to show you how Datashake uncovers more data.
+          - link "Start your free benchmark check" [ref=e3819] [cursor=pointer]:
+            - /url: /demo
+            - generic [ref=e3820]: Start your free benchmark check
+            - img [ref=e3822]
+      - generic [ref=e3824]:
+        - generic [ref=e3826]: Detect data gaps in your infrastructure and expand your data coverage seamlessly.
+        - generic [ref=e3827]:
+          - generic [ref=e3828]:
+            - img [ref=e3830]
+            - generic [ref=e3833]: Free, no-commitment benchmark test
+          - generic [ref=e3834]:
+            - img [ref=e3836]
+            - generic [ref=e3839]: Investigate any search request and topic
+          - generic [ref=e3840]:
+            - img [ref=e3842]
+            - generic [ref=e3845]: Compare results side-by-side
+          - generic [ref=e3846]:
+            - img [ref=e3848]
+            - generic [ref=e3851]: Expand your current source coverage
+    - generic [ref=e3858]:
+      - generic [ref=e3860]:
+        - generic [ref=e3861]:
+          - generic [ref=e3863]: Power Your Data
+          - heading "What global companies use Datashake for" [level=2] [ref=e3865]
+        - generic [ref=e3867]: From trend detection and crisis monitoring to competitive intelligence and risk assessment — we support all your use cases with the most comprehensive data coverage available.
+      - generic [ref=e3873]:
+        - generic [ref=e3874]:
+          - img "illustration depicting crises and risk monitoring from social platforms" [ref=e3876]
+          - generic [ref=e3877]:
+            - generic [ref=e3878]: Crisis Monitoring & Risk Detection
+            - generic [ref=e3879]: Detect potential crises before they escalate. Monitor reputation threats, product issues, and negative sentiment spikes in real-time across all channels.
+        - generic [ref=e3880]:
+          - img "illustration depicting predicted data volumes" [ref=e3882]
+          - generic [ref=e3883]:
+            - generic [ref=e3884]: Trend Detection
+            - generic [ref=e3885]: Identify emerging trends before they become mainstream. Track conversation volume and topic evolution across any source you need.
+        - generic [ref=e3886]:
+          - img "Diagram listing review sites and social media platforms with related content types, including E-Commerce, Product, Service, Physical Shop, Posts, User Profiles, Videos, and Reviews." [ref=e3888]
+          - generic [ref=e3889]:
+            - generic [ref=e3890]: Win Competitive RFPs
+            - generic [ref=e3891]: Win enterprise contracts with deep coverage from 150+ sources that becomes the deciding factor in RFP evaluations.
+        - generic [ref=e3892]:
+          - img "illustration showing deal closure increases with Datashake API" [ref=e3894]
+          - generic [ref=e3895]:
+            - generic [ref=e3896]: Close More Deals
+            - generic [ref=e3897]: Close more deals when you integrate Datashake data. Get access to coverage that becomes undeniable competitive differentiation
+        - generic [ref=e3898]:
+          - img "illustration showing competitive analysis of data streams" [ref=e3900]
+          - generic [ref=e3901]:
+            - generic [ref=e3902]: Competitive Analysis
+            - generic [ref=e3903]: Track competitive activity across all channels simultaneously. Monitor pricing, promotions, product launches, and more to compete smarter.
+        - generic [ref=e3904]:
+          - img "Map of North America with orange rectangular markers indicating locations across the United States, Mexico, and the Caribbean." [ref=e3906]
+          - generic [ref=e3907]:
+            - generic [ref=e3908]: Retain Enterprise Customers
+            - generic [ref=e3909]: Retains your most valuable enterprise customers by delivering the comprehensive data your clients need across global markets.
+        - generic [ref=e3910]:
+          - img "Task labeled 'Hire 2 software engineers to improve face ID' marked as approved, linked to a social media comment from 4 days ago stating 'iPhone 17 face ID feels much slower than my 14 Pro.'" [ref=e3912]
+          - generic [ref=e3913]:
+            - generic [ref=e3914]: Due Diligence & KYC
+            - generic [ref=e3915]: Finance teams strengthen KYC processes and risk assessment with comprehensive social and review data.
+        - generic [ref=e3916]:
+          - img "illustration depicting abstract data streams being scanned" [ref=e3918]
+          - generic [ref=e3919]:
+            - generic [ref=e3920]: Regulatory Compliance
+            - generic [ref=e3921]: Pharmaceutical companies monitor adverse events and post-market surveillance through complete coverage that manual monitoring can't match.
+        - generic [ref=e3922]:
+          - img "Report highlighting great customer response to new features with 11,234 mentions and suggested marketing actions." [ref=e3924]
+          - generic [ref=e3925]:
+            - generic [ref=e3926]: Client Reporting
+            - generic [ref=e3927]: Agencies deliver stronger client insights with comprehensive data coverage, flexible access, and predictable pricing.
+      - link "Book a demo" [ref=e3933] [cursor=pointer]:
+        - /url: /demo
+        - generic [ref=e3934]: Book a demo
+        - img [ref=e3936]
+    - generic [ref=e3945]:
+      - link "Tech Lead Review Management Services":
+        - /url: "#"
+        - generic [ref=e3946] [cursor=pointer]: Tech Lead
+        - generic [ref=e3947] [cursor=pointer]: Review Management Services
+      - generic [ref=e3949]:
+        - generic [ref=e3951]: "\"We’ve been using Datashake for over six years, and it’s been a big part of our business growth during that time. It has really helped improve our operations by providing consistent, reliable data that we can easily plug into our workflows.\""
+        - generic [ref=e3952]:
+          - generic [ref=e3953]: Tech Lead
+          - generic [ref=e3954]: Review Management Services
+      - link "Arkadiusz Software Engineering Manager, Software development" [ref=e3955] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e3956]: Arkadiusz
+        - generic [ref=e3957]: Software Engineering Manager, Software development
+      - generic [ref=e3958]:
+        - generic [ref=e3960]: “Datashake delivers exceptional value through their unique features and flexible APIs. Their team is highly collaborative and responsive, making them a pleasure to work with. I highly recommend their services.”
+        - generic [ref=e3961]:
+          - generic [ref=e3962]: Arkadiusz
+          - generic [ref=e3963]: Software Engineering Manager, Software development
+      - link "Founder & Product Lead Review Management Software" [ref=e3964] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e3965]: Founder & Product Lead
+        - generic [ref=e3966]: Review Management Software
+      - generic [ref=e3967]:
+        - generic [ref=e3969]: “Working with Datashake has been a game-changer for our review management platform. Their review aggregation service covers 100+ sites and saves us a huge amount of development time and maintenance. Instead of constantly building and updating our own integrations, we can stay focused on making a great product.”
+        - generic [ref=e3970]:
+          - generic [ref=e3971]: Founder & Product Lead
+          - generic [ref=e3972]: Review Management Software
+      - link "Senior Technical Partner Manager Brand Digital Presence & Marketing Software" [ref=e3973] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e3974]: Senior Technical Partner Manager
+        - generic [ref=e3975]: Brand Digital Presence & Marketing Software
+      - generic [ref=e3976]:
+        - generic [ref=e3978]: “Partnering with Datashake has been a great experience. Their customer success team is responsive, knowledgeable, and always quick to help. They’re open to evolving the product as our needs grow, and their framework makes scaling up or down extremely easy.”
+        - generic [ref=e3979]:
+          - generic [ref=e3980]: Senior Technical Partner Manager
+          - generic [ref=e3981]: Brand Digital Presence & Marketing Software
+    - generic [ref=e3989]:
+      - generic [ref=e3991]:
+        - generic [ref=e3993]: FAQs
+        - heading "Your questions, answered" [level=2] [ref=e3994]:
+          - text: Your questions,
+          - text: answered
+      - generic [ref=e3996]:
+        - generic [ref=e3997] [cursor=pointer]:
+          - generic [ref=e3998]:
+            - generic [ref=e3999]: What types of data does Datashake collect?
+            - img [ref=e4002]
+          - generic [ref=e4005]: Everything publicly available, with the depth your use case needs. Social posts, reviews, forums, news, and e-commerce data from 150+ sources. Complete threads, engagement metrics, 5+ years of history. All normalized and analysis-ready.
+        - generic [ref=e4006] [cursor=pointer]:
+          - generic [ref=e4007]:
+            - generic [ref=e4008]: How is Datashake different from other social listening tools?
+            - img [ref=e4011]
+          - generic [ref=e4014]: We're infrastructure, not an end-user platform. You get the raw data layer (150+ sources vs. typical 20-30) with deeper coverage, faster access, and no per-seat fees. We replace multiple vendor relationships with one reliable integration that powers your products and analytics.
+        - generic [ref=e4015] [cursor=pointer]:
+          - generic [ref=e4016]:
+            - generic [ref=e4017]: Can Datashake access private social media content?
+            - img [ref=e4020]
+          - generic [ref=e4023]: No, we only collect publicly available data accessible without login.
+        - generic [ref=e4024] [cursor=pointer]:
+          - generic [ref=e4025]:
+            - generic [ref=e4026]: How quickly can I access historical data?
+            - img [ref=e4029]
+          - generic [ref=e4032]: Instantly. Our archive search returns 5+ years of historical data in seconds with no advance setup required. If a topic becomes relevant today, you can analyze years of conversation history immediately, plus capture real-time discussions as they unfold.
+        - generic [ref=e4033] [cursor=pointer]:
+          - generic [ref=e4034]:
+            - generic [ref=e4035]: What sources does Datashake cover?
+            - img [ref=e4038]
+          - generic [ref=e4041]: Major social platforms, 100+ review sites, news outlets, forums, and e-commerce channels. Multi-language with global coverage. We add new sources based on customer needs and make them automatically available to everyone.
+        - generic [ref=e4042] [cursor=pointer]:
+          - generic [ref=e4043]:
+            - generic [ref=e4044]: How does pricing work?
+            - img [ref=e4047]
+          - generic [ref=e4050]: We use a credit-based model where you pay only for data consumed. Your per-mention cost decreases automatically as volume grows, with no per-seat fees. Get in touch for a custom proposal.
+        - generic [ref=e4051] [cursor=pointer]:
+          - generic [ref=e4052]:
+            - generic [ref=e4053]: Do I need technical expertise to use Datashake?
+            - img [ref=e4056]
+          - generic [ref=e4059]: Yes. Datashake is designed for technical teams building data products or analytics workflows, with integration via API, webhooks, or direct feeds. We're not a dashboard tool, but we do provide ready-made templates if you're building visualizations on top of our data.
+        - generic [ref=e4060] [cursor=pointer]:
+          - generic [ref=e4061]:
+            - generic [ref=e4062]: Can Datashake handle enterprise-scale needs?
+            - img [ref=e4065]
+          - generic [ref=e4068]: Absolutely. We're built to handle hundreds of millions of daily fetches with 98.3% uptime, dedicated support, custom SLAs, and compliance-ready infrastructure. Enterprise customers rely on us to power mission-critical workflows across global markets.
+        - generic [ref=e4069] [cursor=pointer]:
+          - generic [ref=e4070]:
+            - generic [ref=e4071]: What if you don't cover a source I need?
+            - img [ref=e4074]
+          - generic [ref=e4077]: Just tell us. We regularly add sources based on customer requests and make them available to all customers automatically, with no re-engineering required and no extra costs. Many of our current sources exist because customers asked for them.
+        - generic [ref=e4078] [cursor=pointer]:
+          - generic [ref=e4079]:
+            - generic [ref=e4080]: How long does setup take?
+            - img [ref=e4083]
+          - generic [ref=e4086]: Most teams are collecting data within days. We configure your sources, set up API access, and provide technical documentation to get you running quickly. Standard implementations move fast, while complex custom integrations take a bit longer – but we prioritize speed either way.
+        - generic [ref=e4087] [cursor=pointer]:
+          - generic [ref=e4088]:
+            - generic [ref=e4089]: Can I try Datashake first?
+            - img [ref=e4092]
+          - generic [ref=e4095]: Yes. We offer a free benchmark test using your actual queries to show you what you're missing compared to your current tools.
+        - generic [ref=e4096] [cursor=pointer]:
+          - generic [ref=e4097]:
+            - generic [ref=e4098]: Is Datashake compliant with data privacy regulations?
+            - img [ref=e4101]
+          - generic [ref=e4104]: Yes. We collect only public data and maintain compliance-ready infrastructure with encryption at every step.
+        - generic [ref=e4105] [cursor=pointer]:
+          - generic [ref=e4106]:
+            - generic [ref=e4107]: What support do you provide?
+            - img [ref=e4110]
+          - generic [ref=e4113]: Get direct access to real humans who understand data infrastructure challenges. Enterprise customers receive priority support, custom SLAs, and direct access to our data engineering team. We're invested in your long-term success, not just your initial setup.
+        - generic [ref=e4114] [cursor=pointer]:
+          - generic [ref=e4115]:
+            - generic [ref=e4116]: Who uses Datashake?
+            - img [ref=e4119]
+          - generic [ref=e4121]:
+            - text: "-Software companies building customer experience platforms, competitive intelligence tools, and analytics products"
+            - text: "- Enterprise brands monitoring reputation and detecting emerging trends"
+            - text: "-Agencies delivering comprehensive data-driven client reporting"
+            - text: "-Finance teams conducting due diligence and risk assessment"
+            - text: "-Pharma companies tracking adverse events for regulatory compliance"
+            - text: "-Any organization that needs reliable data infrastructure at scale"
+    - generic [ref=e4129]:
+      - generic [ref=e4131]:
+        - heading "Book a call with one of our data experts" [level=2] [ref=e4132]
+        - generic [ref=e4133]: Schedule a quick call to see how Datashake can power your platform’s next leap
+        - generic [ref=e4134]: Trusted by enterprise brands and data platforms worldwide
+        - link "Book a demo" [ref=e4137] [cursor=pointer]:
+          - /url: /demo
+          - generic [ref=e4138]: Book a demo
+          - img [ref=e4140]
+      - generic:
+        - img "White background with thin dashed green lines connecting small solid green rectangles in a stepped pattern across the image."
+    - generic [ref=e4148]:
+      - generic [ref=e4149]:
+        - generic [ref=e4150]: Get social data insights delivered fresh
+        - form "HubSpot Form" [ref=e4158]:
+          - generic [ref=e4160]:
+            - generic [ref=e4162]:
+              - generic [ref=e4164]: Email*
+              - textbox "Email*" [ref=e4165]:
+                - /placeholder: ""
+            - iframe [ref=e4171]:
+              - generic [ref=f6e4]:
+                - text: protected by
+                - strong [ref=f6e5]: reCAPTCHA
+            - button "Submit" [ref=e4174] [cursor=pointer]
+      - generic [ref=e4176]:
+        - generic [ref=e4177]:
+          - generic [ref=e4179]:
+            - link "Datashake logo":
+              - /url: /
+              - img "Datashake logo"
+            - generic [ref=e4180]:
+              - link [ref=e4181] [cursor=pointer]:
+                - /url: https://www.linkedin.com/company/atdatashake
+                - img [ref=e4183]
+              - link [ref=e4185] [cursor=pointer]:
+                - /url: https://www.facebook.com/datashake
+                - img [ref=e4187]
+              - link [ref=e4189] [cursor=pointer]:
+                - /url: https://www.instagram.com/datashakehq/
+                - img [ref=e4191]
+              - link [ref=e4193] [cursor=pointer]:
+                - /url: https://x.com/DatashakeHQ
+                - img [ref=e4195]
+          - generic [ref=e4197]:
+            - link "Book a demo" [ref=e4200] [cursor=pointer]:
+              - /url: /demo
+              - generic [ref=e4201]: Book a demo
+              - img [ref=e4203]
+            - generic [ref=e4206]: All Rights Reserved © Datashake
+        - generic [ref=e4208]:
+          - generic [ref=e4209]:
+            - generic [ref=e4210]: Solutions
+            - generic [ref=e4211]:
+              - link "Customer Experience Tools" [ref=e4212] [cursor=pointer]:
+                - /url: /industry/cx-platforms
+              - link "Social Listening" [ref=e4213] [cursor=pointer]:
+                - /url: /industry/social-listening
+              - link "Reputation & Review Management" [ref=e4214] [cursor=pointer]:
+                - /url: /industry/reputation-and-review-management
+              - link "Marketing Automation" [ref=e4215] [cursor=pointer]:
+                - /url: /industry/marketing-automation
+              - link "Retail" [ref=e4216] [cursor=pointer]:
+                - /url: /industry/retail
+              - link "Pharmaceutical" [ref=e4217] [cursor=pointer]:
+                - /url: /industry/pharmaceutical
+              - link "Finance" [ref=e4218] [cursor=pointer]:
+                - /url: /industry/finance
+              - link "Agencies" [ref=e4219] [cursor=pointer]:
+                - /url: /industry/agencies
+          - generic [ref=e4220]:
+            - generic [ref=e4221]: Product
+            - generic [ref=e4222]:
+              - link "Platform" [ref=e4223] [cursor=pointer]:
+                - /url: /platform
+              - link "Enterprise" [ref=e4224] [cursor=pointer]:
+                - /url: /enterprise
+              - link "Why Datashake" [ref=e4225] [cursor=pointer]:
+                - /url: /why-datashake
+              - link "Status" [ref=e4226] [cursor=pointer]:
+                - /url: https://status.datashake.com/
+          - generic [ref=e4227]:
+            - generic [ref=e4228]: Company
+            - generic [ref=e4229]:
+              - link "About" [ref=e4230] [cursor=pointer]:
+                - /url: /about-us
+              - link "Blog" [ref=e4231] [cursor=pointer]:
+                - /url: /blog
+              - link "Book a Demo" [ref=e4232] [cursor=pointer]:
+                - /url: /demo
+              - link "Contact" [ref=e4233] [cursor=pointer]:
+                - /url: /contact-us
+          - generic [ref=e4234]:
+            - generic [ref=e4235]: Legal
+            - generic [ref=e4236]:
+              - link "Terms of Service" [ref=e4237] [cursor=pointer]:
+                - /url: /terms-of-service
+              - link "Privacy Policy" [ref=e4238] [cursor=pointer]:
+                - /url: /privacy-policy
+  - generic [ref=e4243]:
+    - generic [ref=e4244]:
+      - text: Chat with us through WhatsApp!
+      - button "Dismiss" [ref=e4245] [cursor=pointer]: ×
+    - link "Chat on WhatsApp" [ref=e4246] [cursor=pointer]:
+      - /url: https://wa.me/13025101955
+      - img [ref=e4247]
+  - iframe [ref=e4249]:
+    
+  - button "Open CMP widget" [ref=e8507] [cursor=pointer]:
+    - img [ref=e8508]

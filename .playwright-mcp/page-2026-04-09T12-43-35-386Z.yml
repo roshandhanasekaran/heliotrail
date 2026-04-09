@@ -1,0 +1,151 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "HT HelioTrail" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e7]: HT
+        - generic [ref=e8]: HelioTrail
+      - navigation [ref=e9]:
+        - link "Scan" [ref=e10] [cursor=pointer]:
+          - /url: /scan
+          - img
+          - text: Scan
+        - link "Sign In" [ref=e11] [cursor=pointer]:
+          - /url: /sign-in
+          - img
+          - text: Sign In
+        - button "Toggle theme" [ref=e12]:
+          - img
+          - generic [ref=e13]: Toggle theme
+  - main [ref=e14]:
+    - generic [ref=e17]:
+      - generic [ref=e19]: EU ESPR Digital Product Passport Platform
+      - heading "The Digital Identity of Every Solar Panel" [level=1] [ref=e22]
+      - paragraph [ref=e24]: Full lifecycle traceability — from raw materials to end-of-life recycling. Compliance, carbon footprint, and circularity data in one immutable digital passport.
+      - generic [ref=e26]:
+        - link "Explore Demo Passport" [ref=e27] [cursor=pointer]:
+          - /url: /passport/topcon-550-bf-2026-001
+          - button "Explore Demo Passport" [ref=e28]:
+            - generic [ref=e29]: Explore Demo Passport
+            - img [ref=e30]
+        - link "Scan QR Code" [ref=e32] [cursor=pointer]:
+          - /url: /scan
+          - button "Scan QR Code" [ref=e33]:
+            - generic [ref=e34]:
+              - img [ref=e35]
+              - text: Scan QR Code
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - img [ref=e44]
+            - paragraph [ref=e51]: Recyclability Rate
+          - generic [ref=e52]:
+            - generic [ref=e53]: "92"
+            - generic [ref=e54]: "%"
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - img [ref=e57]
+            - paragraph [ref=e59]: CO₂e / Module
+          - generic [ref=e60]:
+            - generic [ref=e61]: "385"
+            - generic [ref=e62]: kg
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - img [ref=e65]
+            - paragraph [ref=e68]: Expected Lifetime
+          - generic [ref=e69]:
+            - generic [ref=e70]: "35"
+            - generic [ref=e71]: yr
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - img [ref=e78]
+        - generic [ref=e81]:
+          - paragraph [ref=e82]: EU ESPR Aligned
+          - paragraph [ref=e83]: Regulation 2024/1781
+      - generic [ref=e84]:
+        - img [ref=e86]
+        - generic [ref=e93]:
+          - paragraph [ref=e94]: Circularity Tracked
+          - paragraph [ref=e95]: End-of-life ready
+      - generic [ref=e96]:
+        - img [ref=e98]
+        - generic [ref=e101]:
+          - paragraph [ref=e102]: Immutable Records
+          - paragraph [ref=e103]: Tamper-proof data
+      - generic [ref=e104]:
+        - img [ref=e106]
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: Open Standards
+          - paragraph [ref=e111]: Interoperable DPP
+      - generic [ref=e112]:
+        - img [ref=e114]
+        - generic [ref=e118]:
+          - paragraph [ref=e119]: Real-Time Data
+          - paragraph [ref=e120]: Always current
+      - generic [ref=e121]:
+        - img [ref=e123]
+        - generic [ref=e125]:
+          - paragraph [ref=e126]: Instant Verification
+          - paragraph [ref=e127]: QR scan access
+    - generic [ref=e129]:
+      - generic [ref=e131]:
+        - generic [ref=e132]: Platform Capabilities
+        - heading "Everything a PV passport needs" [level=2] [ref=e133]
+        - paragraph [ref=e134]: From manufacturing data to end-of-life recycling, HelioTrail captures the full lifecycle of every solar module.
+      - generic [ref=e135]:
+        - generic [ref=e137]:
+          - img [ref=e140]
+          - heading "Complete Product Identity" [level=3] [ref=e143]
+          - paragraph [ref=e144]: Every module gets a unique digital passport with manufacturer data, specifications, and full traceability from factory to field.
+        - generic [ref=e146]:
+          - img [ref=e149]
+          - heading "Compliance & Certifications" [level=3] [ref=e152]
+          - paragraph [ref=e153]: Track IEC standards, CE declarations, and safety certifications with automatic expiry monitoring and status verification.
+        - generic [ref=e155]:
+          - img [ref=e158]
+          - heading "Circularity Intelligence" [level=3] [ref=e165]
+          - paragraph [ref=e166]: Material composition, recyclability rates, dismantling guides, and critical raw material tracking for end-of-life planning.
+        - generic [ref=e168]:
+          - img [ref=e171]
+          - heading "Carbon Footprint Tracking" [level=3] [ref=e173]
+          - paragraph [ref=e174]: Cradle-to-gate carbon footprint per ISO 14067 with full methodology transparency and environmental product declarations.
+        - generic [ref=e176]:
+          - img [ref=e179]
+          - heading "QR-Based Access" [level=3] [ref=e184]
+          - paragraph [ref=e185]: Every passport has a unique public ID and QR code. Scan at the installation site to instantly access the full digital record.
+        - generic [ref=e187]:
+          - img [ref=e190]
+          - heading "Role-Based Visibility" [level=3] [ref=e195]
+          - paragraph [ref=e196]: Public data for consumers, restricted data for recyclers, full access for manufacturers — all enforced at the database level.
+    - generic [ref=e198]:
+      - generic [ref=e199]:
+        - heading "Ready to see it in action?" [level=2] [ref=e200]
+        - paragraph [ref=e201]: Explore fully populated demo passports with real specifications, certifications, material data, and circularity information.
+      - generic [ref=e203]:
+        - link "View TOPCon 550W Passport" [ref=e204] [cursor=pointer]:
+          - /url: /passport/topcon-550-bf-2026-001
+          - button "View TOPCon 550W Passport" [ref=e205]:
+            - generic [ref=e206]: View TOPCon 550W Passport
+            - img [ref=e207]
+        - link "View PERC 450W Passport" [ref=e209] [cursor=pointer]:
+          - /url: /passport/perc-450-mono-2026-002
+          - button "View PERC 450W Passport" [ref=e210]:
+            - generic [ref=e211]: View PERC 450W Passport
+        - link "View HJT 420W Passport" [ref=e212] [cursor=pointer]:
+          - /url: /passport/hjt-420-2026-003
+          - button "View HJT 420W Passport" [ref=e213]:
+            - generic [ref=e214]: View HJT 420W Passport
+  - contentinfo [ref=e216]:
+    - generic [ref=e217]:
+      - generic [ref=e218]:
+        - generic [ref=e219]:
+          - generic [ref=e221]: HT
+          - generic [ref=e222]: HelioTrail— Digital Product Passports for PV Solar
+        - navigation [ref=e223]:
+          - link "Scan Passport" [ref=e224] [cursor=pointer]:
+            - /url: /scan
+          - link "About" [ref=e225] [cursor=pointer]:
+            - /url: /
+      - paragraph [ref=e226]: © 2026 HelioTrail. Aligned with EU ESPR Digital Product Passport requirements.
+  - button "Open Next.js Dev Tools" [ref=e232] [cursor=pointer]:
+    - img [ref=e233]

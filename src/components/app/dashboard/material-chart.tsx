@@ -1,85 +1,50 @@
 "use client";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
-
-interface MaterialChartProps {
-  data: {
-    name: string;
-    glass: number;
-    aluminium: number;
-    silicon: number;
-    encapsulant: number;
-    copper: number;
-    other: number;
-  }[];
+interface MaterialSegment {
+  name: string;
+  percent: number;
+  color: string;
 }
 
-const MATERIAL_COLORS: Record<string, string> = {
-  glass: "#22C55E",
-  aluminium: "#737373",
-  silicon: "#3B82F6",
-  encapsulant: "#F59E0B",
-  copper: "#EF4444",
-  other: "#D9D9D9",
-};
+interface MaterialChartProps {
+  segments: MaterialSegment[];
+}
 
-export function MaterialChart({ data }: MaterialChartProps) {
+export function MaterialChart({ segments }: MaterialChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={220}>
-      <BarChart
-        data={data}
-        layout="vertical"
-        margin={{ left: 0, right: 8, top: 8, bottom: 8 }}
-      >
-        <XAxis
-          type="number"
-          tick={{ fontSize: 11, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
-          tickLine={false}
-          tickFormatter={(v) => `${v}%`}
-        />
-        <YAxis
-          type="category"
-          dataKey="name"
-          width={80}
-          tick={{ fontSize: 11, fill: "#737373" }}
-          axisLine={false}
-          tickLine={false}
-        />
-        <Tooltip
-          contentStyle={{
-            background: "#fff",
-            border: "1px solid #D9D9D9",
-            fontSize: 12,
-          }}
-          formatter={(value, name) => [
-            `${Number(value).toFixed(1)}%`,
-            String(name).charAt(0).toUpperCase() + String(name).slice(1),
-          ]}
-        />
-        <Legend
-          iconType="square"
-          iconSize={8}
-          wrapperStyle={{ fontSize: 11, color: "#737373" }}
-        />
-        {Object.entries(MATERIAL_COLORS).map(([key, color]) => (
-          <Bar
-            key={key}
-            dataKey={key}
-            stackId="a"
-            fill={color}
-            radius={key === "other" ? [0, 2, 2, 0] : undefined}
+    <div>
+      {/* Proportional strip */}
+      <div className="flex h-5 w-full overflow-hidden">
+        {segments.map((seg) => (
+          <div
+            key={seg.name}
+            className="group relative transition-opacity hover:opacity-80"
+            style={{
+              width: `${seg.percent}%`,
+              backgroundColor: seg.color,
+            }}
+            title={`${seg.name}: ${seg.percent.toFixed(1)}%`}
           />
         ))}
-      </BarChart>
-    </ResponsiveContainer>
+      </div>
+
+      {/* Legend */}
+      <div className="mt-3 grid grid-cols-3 gap-x-4 gap-y-2">
+        {segments.map((seg) => (
+          <div key={seg.name} className="flex items-center gap-2">
+            <span
+              className="inline-block h-2.5 w-2.5 shrink-0"
+              style={{ backgroundColor: seg.color }}
+            />
+            <div className="min-w-0">
+              <span className="text-xs text-[#737373]">{seg.name}</span>
+              <span className="ml-1 font-mono text-xs font-semibold text-[#0D0D0D]">
+                {seg.percent.toFixed(1)}%
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

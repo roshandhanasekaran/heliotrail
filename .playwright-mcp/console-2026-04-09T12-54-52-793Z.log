@@ -1,0 +1,277 @@
+[    3394ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    3564ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    3718ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[    4177ms] [LOG] [Fast Refresh] done in 576ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   22159ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   22302ms] [LOG] [Fast Refresh] done in 244ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   35256ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[   35312ms] [LOG] [Fast Refresh] done in 158ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  114645ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  114839ms] [LOG] [Fast Refresh] done in 298ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  117077ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  118160ms] [LOG] [Fast Refresh] done in 1185ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  123442ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  123732ms] [LOG] [Fast Refresh] done in 392ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  130943ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  130949ms] [LOG] [Fast Refresh] done in 107ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  138575ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  138963ms] [LOG] [Fast Refresh] done in 489ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  165219ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  165242ms] [LOG] [Fast Refresh] done in 125ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  209803ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  209822ms] [LOG] [Fast Refresh] done in 121ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  384446ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  384461ms] [LOG] [Fast Refresh] done in 117ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  399538ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  401491ms] [LOG] [Fast Refresh] done in 1909ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  404869ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  404898ms] [LOG] [Fast Refresh] done in 131ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  432593ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  435055ms] [LOG] [Fast Refresh] done in 2369ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  455561ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  456065ms] [LOG] [Fast Refresh] done in 524ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  474098ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  474315ms] [LOG] [Fast Refresh] done in 280ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  481837ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  483750ms] [LOG] [Fast Refresh] done in 1746ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  489459ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  490477ms] [LOG] [Fast Refresh] done in 1080ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  490723ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  490882ms] [LOG] [Fast Refresh] done in 261ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  491656ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  491711ms] [LOG] [Fast Refresh] done in 157ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  493166ms] TypeError: Cannot read properties of undefined (reading 'map')
+    at MaterialChart (http://localhost:3000/_next/static/chunks/Developer_heliotrail_src_components_app_dashboard_0~h2mo4._.js?id=%255Bproject%255D%252FDeveloper%252Fheliotrail%252Fsrc%252Fcomponents%252Fapp%252Fdashboard%252Fmaterial-chart.tsx+%255Bapp-client%255D+%2528ecmascript%2529:16:36)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:6691:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9061:186)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10179:316)
+    at processRootScheduleInMicrotask (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10200:106)
+    at http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10274:158
+[  493439ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  493609ms] [LOG] [Fast Refresh] done in 290ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  499110ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  499351ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  499719ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  499726ms] [ERROR] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  499823ms] TypeError: Cannot read properties of undefined (reading 'map')
+    at MaterialChart (http://localhost:3000/_next/static/chunks/Developer_heliotrail_src_components_app_dashboard_0~h2mo4._.js?id=%255Bproject%255D%252FDeveloper%252Fheliotrail%252Fsrc%252Fcomponents%252Fapp%252Fdashboard%252Fmaterial-chart.tsx+%255Bapp-client%255D+%2528ecmascript%2529:16:36)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9098:47)
+    at performSyncWorkOnRoot (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10179:316)
+    at flushSyncWork$1 (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9230:86)
+    at Object.scheduleRefresh (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:299:13)
+    at http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_0xm-g7s._.js:391:33
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_0xm-g7s._.js:384:38)
+    at applyUpdate (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_0xm-g7s._.js:878:31)
+    at http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_0xm-g7s._.js:886:13
+[  500175ms] [LOG] [Fast Refresh] done in 708ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  500326ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  500534ms] [LOG] [Fast Refresh] done in 310ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  503092ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/app:0
+[  503164ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  503206ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  503250ms] [ERROR] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  503566ms] TypeError: Cannot read properties of undefined (reading 'map')
+    at MaterialChart (http://localhost:3000/_next/static/chunks/Developer_heliotrail_src_components_0qztxt6._.js:294:36)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:15037:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:4620:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:6081:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:6665:639)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9555:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9449:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9433:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:9098:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_react-dom_098wsmm._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/0ia0_next_dist_compiled_0xm-g7s._.js:2647:64)
+[  503540ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  503555ms] [LOG] [Fast Refresh] done in 116ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  563829ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  565377ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  566001ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  566114ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  566424ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  566517ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  566545ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  566925ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  566965ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  567042ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  567169ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  567220ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:3272
+[  567248ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/app:0
+[  570497ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_react-dom_0dd1076._.js:15305
+[  570826ms] Error: ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./Developer/heliotrail/src/app/app/page.tsx:23:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///Users/roshandhanashekeran/Developer/heliotrail/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file:///Users/roshandhanashekeran/Developer/heliotrail/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/roshandhanashekeran/Developer/heliotrail/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///Users/roshandhanashekeran/Developer/heliotrail/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/roshandhanashekeran/Developer/heliotrail/node_modules/next/dist/server/base-server.js:1745:26)
+[  570837ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  571004ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1945
+[  571066ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  572157ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1945
+[  572381ms] [ERROR] ./Developer/heliotrail/src/app/app/page.tsx:23:1
+Module not found: Can't resolve './dashboard-kpis'
+  21 | import { MaterialChart } from "@/components/app/dashboard/material-chart";
+  22 | import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
+> 23 | import { DashboardKpis } from "./dashboard-kpis";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 |
+  25 | export default async function DashboardPage() {
+  26 |   const supabase = await createClient();
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1945
+[  572426ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  587242ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  588257ms] [LOG] [Fast Refresh] done in 1115ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  589494ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  589829ms] [LOG] [Fast Refresh] done in 437ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  590944ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  591094ms] [LOG] [Fast Refresh] done in 251ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_07i0dlj._.js:1226
+[  594000ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  594578ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  596269ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  596381ms] [LOG] [Fast Refresh] done in 219ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  596674ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  597726ms] [LOG] [Fast Refresh] done in 1179ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  607749ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  608257ms] [LOG] [Fast Refresh] done in 598ms @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  649930ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=mTkqvfcX05cJZh-UNXmH8' failed:  @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_client_03ra_hu._.js:13299
+[  651501ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=mTkqvfcX05cJZh-UNXmH8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_client_03ra_hu._.js:13299
+[  652504ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=mTkqvfcX05cJZh-UNXmH8' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_client_03ra_hu._.js:13299
+[  659010ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  674853ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431
+[  674997ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/0ia0_next_dist_0s2j5~~._.js:2431

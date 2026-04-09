@@ -121,11 +121,25 @@
   background: var(--passport-bg);
   border: 1px solid var(--passport-border);
   box-shadow: var(--passport-shadow);
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .clean-card:hover {
   box-shadow: var(--passport-shadow-hover);
+}
+
+/* Interactive hover card — lifts on hover */
+.hover-card {
+  cursor: default;
+}
+
+.hover-card:hover {
+  box-shadow: var(--passport-shadow-lg);
+  transform: translateY(-1px);
+}
+
+.hover-card:active {
+  transform: translateY(0);
 }
 
 /* Dashed card variant (Datashake signature) */
