@@ -14,6 +14,7 @@ import {
   LeafIcon,
   UserIcon,
   InfoIcon,
+  LockIcon,
 } from "lucide-react";
 
 interface MaterialData {
@@ -55,6 +56,7 @@ interface CircularityData {
 interface CircularityClientProps {
   circularity: CircularityData;
   materials: MaterialData[];
+  accessLevel?: "public" | "authenticated";
 }
 
 /* Monochrome material dot colors — green reserved for primary material only */
@@ -86,10 +88,24 @@ const eolStatusLabels: Record<string, { bg: string; text: string }> = {
   incineration: { bg: "#F2F2F2", text: "#737373" },
 };
 
+function AccessRestricted({ label }: { label: string }) {
+  return (
+    <GlassCard>
+      <div className="flex items-center gap-3 px-5 py-4 text-[#737373]">
+        <LockIcon className="h-4 w-4 shrink-0" />
+        <span className="text-xs font-medium">{label}</span>
+      </div>
+    </GlassCard>
+  );
+}
+
 export function CircularityClient({
   circularity,
   materials,
+  accessLevel = "authenticated",
 }: CircularityClientProps) {
+  const isPublic = accessLevel === "public";
+
   const recoveryItems = [
     { name: "Aluminium", recoverable: circularity.recovery.aluminium, method: "Direct smelting" },
     { name: "Glass", recoverable: circularity.recovery.glass, method: "Cullet for glass industry" },
@@ -160,16 +176,20 @@ export function CircularityClient({
                 color="#404040"
                 showTicks
               />
-              <div className="hidden sm:block w-px h-20 bg-[#D9D9D9]" />
-              <RadialGauge
-                value={circularity.dismantlingTime}
-                max={120}
-                label="Dismantling"
-                unit="min"
-                size={130}
-                color="#737373"
-                showTicks
-              />
+              {!isPublic && (
+                <>
+                  <div className="hidden sm:block w-px h-20 bg-[#D9D9D9]" />
+                  <RadialGauge
+                    value={circularity.dismantlingTime}
+                    max={120}
+                    label="Dismantling"
+                    unit="min"
+                    size={130}
+                    color="#737373"
+                    showTicks
+                  />
+                </>
+              )}
             </div>
           </div>
         </GlassCard>
@@ -192,7 +212,7 @@ export function CircularityClient({
               materials={materials.map((m, i) => ({
                 name: m.name,
                 massPercent: m.massPercent,
-                massG: m.massG ?? undefined,
+                massG: isPublic ? undefined : (m.massG ?? undefined),
                 color: monochromeSegmentColors[i % monochromeSegmentColors.length],
                 isCritical: m.isCritical,
                 isSoC: m.isSoC,
@@ -227,12 +247,12 @@ export function CircularityClient({
                   <div key={m.id} className="passport-table-row !items-start !py-3">
                     <div>
                       <span className="table-label font-medium text-[#0D0D0D]">{m.name}</span>
-                      {m.componentType && (
+                      {!isPublic && m.componentType && (
                         <span className="ml-2 text-[10px] text-[#737373]">({m.componentType})</span>
                       )}
                     </div>
                     <div className="text-right space-y-0.5">
-                      {m.casNumber && (
+                      {!isPublic && m.casNumber && (
                         <div className="text-[11px] text-[#0D0D0D] font-mono">CAS {m.casNumber}</div>
                       )}
                       {m.concentrationPercent != null && (
@@ -309,80 +329,92 @@ export function CircularityClient({
       {/* Recycler Information */}
       {(circularity.recyclerName || circularity.recyclerContact) && (
         <FadeIn>
-          <GlassCard>
-            <div className="p-5">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                  <UserIcon className="h-4 w-4 text-[#0D0D0D]" />
+          {isPublic ? (
+            <AccessRestricted label="Recycler Access Required — Certified recycler details are restricted" />
+          ) : (
+            <GlassCard>
+              <div className="p-5">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
+                    <UserIcon className="h-4 w-4 text-[#0D0D0D]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#0D0D0D]">Certified Recycler</h3>
+                    <p className="text-[11px] text-[#737373]">Authorized end-of-life handler</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-[#0D0D0D]">Certified Recycler</h3>
-                  <p className="text-[11px] text-[#737373]">Authorized end-of-life handler</p>
+                <div className="passport-table">
+                  <div className="passport-table-header">
+                    <span>Field</span>
+                    <span>Value</span>
+                  </div>
+                  {circularity.recyclerName && (
+                    <div className="passport-table-row">
+                      <span className="table-label">Recycler</span>
+                      <span className="table-value">{circularity.recyclerName}</span>
+                    </div>
+                  )}
+                  {circularity.recyclerContact && (
+                    <div className="passport-table-row">
+                      <span className="table-label">Contact</span>
+                      <span className="table-value mono">{circularity.recyclerContact}</span>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="passport-table">
-                <div className="passport-table-header">
-                  <span>Field</span>
-                  <span>Value</span>
-                </div>
-                {circularity.recyclerName && (
-                  <div className="passport-table-row">
-                    <span className="table-label">Recycler</span>
-                    <span className="table-value">{circularity.recyclerName}</span>
-                  </div>
-                )}
-                {circularity.recyclerContact && (
-                  <div className="passport-table-row">
-                    <span className="table-label">Contact</span>
-                    <span className="table-value mono">{circularity.recyclerContact}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </GlassCard>
+            </GlassCard>
+          )}
         </FadeIn>
       )}
 
       {/* Additional info cards */}
       <div className="grid gap-5 lg:grid-cols-2">
         {circularity.isHazardous && (
-          <GlassCard>
-            <div className="p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                  <AlertTriangleIcon className="h-4 w-4 text-[#0D0D0D]" />
+          isPublic ? (
+            <AccessRestricted label="Restricted Access Required — Hazardous substance details are restricted" />
+          ) : (
+            <GlassCard>
+              <div className="p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
+                    <AlertTriangleIcon className="h-4 w-4 text-[#0D0D0D]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#0D0D0D]">Hazardous Substances</h3>
+                    <p className="text-[11px] text-[#737373]">Safety & handling warnings</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-[#0D0D0D]">Hazardous Substances</h3>
-                  <p className="text-[11px] text-[#737373]">Safety & handling warnings</p>
-                </div>
+                {circularity.hazardousNotes && (
+                  <p className="text-sm text-[#0D0D0D] leading-relaxed">
+                    {circularity.hazardousNotes}
+                  </p>
+                )}
               </div>
-              {circularity.hazardousNotes && (
-                <p className="text-sm text-[#0D0D0D] leading-relaxed">
-                  {circularity.hazardousNotes}
-                </p>
-              )}
-            </div>
-          </GlassCard>
+            </GlassCard>
+          )
         )}
 
         {circularity.dismantlingInstructions && (
-          <GlassCard>
-            <div className="p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                  <WrenchIcon className="h-4 w-4 text-[#0D0D0D]" />
+          isPublic ? (
+            <AccessRestricted label="Recycler Access Required — Dismantling instructions are restricted" />
+          ) : (
+            <GlassCard>
+              <div className="p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
+                    <WrenchIcon className="h-4 w-4 text-[#0D0D0D]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#0D0D0D]">Dismantling Instructions</h3>
+                    <p className="text-[11px] text-[#737373]">End-of-life procedures</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-semibold text-[#0D0D0D]">Dismantling Instructions</h3>
-                  <p className="text-[11px] text-[#737373]">End-of-life procedures</p>
-                </div>
+                <pre className="whitespace-pre-wrap font-mono text-sm text-[#0D0D0D] leading-relaxed">
+                  {circularity.dismantlingInstructions}
+                </pre>
               </div>
-              <pre className="whitespace-pre-wrap font-mono text-sm text-[#0D0D0D] leading-relaxed">
-                {circularity.dismantlingInstructions}
-              </pre>
-            </div>
-          </GlassCard>
+            </GlassCard>
+          )
         )}
 
         {circularity.collectionScheme && (
