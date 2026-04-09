@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import QRCode from "qrcode";
 import {
   MODULE_TECHNOLOGY_LABELS,
   VERIFICATION_STATUS_LABELS,
 } from "@/lib/constants";
 import { formatWatts, formatDate } from "@/lib/utils";
 import type { Passport } from "@/types/passport";
+import { CirpassSubmitDialog } from "@/components/passport/cirpass-submit-dialog";
 import {
   ShieldCheckIcon,
   ClockIcon,
@@ -17,6 +19,7 @@ import {
   LeafIcon,
   CalendarIcon,
   GridIcon,
+  SendIcon,
 } from "lucide-react";
 
 interface PassportHeroProps {
@@ -36,11 +39,17 @@ export function PassportHero({ passport }: PassportHeroProps) {
   const stats = quickStats(passport);
   const canonicalUrl = `https://heliotrail.com/passport/${passport.public_id}`;
   const [passportUrl, setPassportUrl] = useState(canonicalUrl);
+  const [submitOpen, setSubmitOpen] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    setPassportUrl(
-      window.location.href.split(/\/(?:specs|compliance|circularity|documents)$/)[0]
-    );
+    const url = window.location.href.split(/\/(?:specs|compliance|circularity|documents|registry)$/)[0];
+    setPassportUrl(url);
+    QRCode.toDataURL(url, {
+      width: 120,
+      margin: 1,
+      color: { dark: "#0D0D0D", light: "#FFFFFF" },
+    }).then(setQrDataUrl);
   }, []);
 
   return (
@@ -64,18 +73,29 @@ export function PassportHero({ passport }: PassportHeroProps) {
               {VERIFICATION_STATUS_LABELS[passport.verification_status]}
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-2 border border-[#D9D9D9] px-3 py-1.5">
-            <span className="font-mono text-xs text-[#737373]">
-              {passport.pv_passport_id}
-            </span>
-            <button
-              className="p-0.5 hover:text-[#22C55E] transition-colors"
-              onClick={() =>
-                navigator.clipboard.writeText(passport.pv_passport_id)
-              }
-            >
-              <CopyIcon className="h-3 w-3 text-[#737373]" />
-            </button>
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="flex items-center gap-2 border border-[#D9D9D9] px-3 py-1.5">
+              <span className="font-mono text-xs text-[#737373]">
+                {passport.pv_passport_id}
+              </span>
+              <button
+                className="p-0.5 hover:text-[#22C55E] transition-colors"
+                onClick={() =>
+                  navigator.clipboard.writeText(passport.pv_passport_id)
+                }
+              >
+                <CopyIcon className="h-3 w-3 text-[#737373]" />
+              </button>
+            </div>
+            {passport.status === "published" && (
+              <button
+                onClick={() => setSubmitOpen(true)}
+                className="flex items-center gap-2 bg-[#22C55E] px-3.5 py-1.5 text-xs font-semibold text-[#0D0D0D] hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
+              >
+                <SendIcon className="h-3 w-3" />
+                Submit to CIRPASS 2
+              </button>
+            )}
           </div>
         </div>
 
@@ -115,6 +135,12 @@ export function PassportHero({ passport }: PassportHeroProps) {
                 {passport.pv_passport_id}
               </span>
             </div>
+            {qrDataUrl && (
+              <div className="flex flex-col items-center gap-1">
+                <img src={qrDataUrl} alt="DPP QR Code" width={100} height={100} className="border border-[#D9D9D9]" />
+                <span className="text-[9px] font-medium text-[#A3A3A3] uppercase tracking-wider">Scan for DPP</span>
+              </div>
+            )}
             <span className="text-[10px] font-medium text-[#737373] uppercase tracking-wider">
               Digital Passport
             </span>
@@ -150,6 +176,13 @@ export function PassportHero({ passport }: PassportHeroProps) {
             );
           })}
         </div>
+
+        {/* CIRPASS 2 submit dialog */}
+        <CirpassSubmitDialog
+          passport={passport}
+          open={submitOpen}
+          onClose={() => setSubmitOpen(false)}
+        />
       </div>
     </div>
   );
