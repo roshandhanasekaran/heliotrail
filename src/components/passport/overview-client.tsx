@@ -31,12 +31,12 @@ export function OverviewClient({
         <GlassCard>
           <div className="p-5">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                <FactoryIcon className="h-4 w-4 text-[#0D0D0D]" />
+              <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                <FactoryIcon className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0D]">Manufacturer</h3>
-                <p className="text-[11px] text-[#737373]">Origin & production details</p>
+                <h3 className="text-sm font-semibold text-foreground">Manufacturer</h3>
+                <p className="text-[11px] text-muted-foreground">Origin & production details</p>
               </div>
             </div>
 
@@ -62,14 +62,14 @@ export function OverviewClient({
         <GlassCard>
           <div className="p-5">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                <ShieldCheckIcon className="h-4 w-4 text-[#0D0D0D]" />
+              <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                <ShieldCheckIcon className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0D]">
+                <h3 className="text-sm font-semibold text-foreground">
                   Warranty &amp; Identification
                 </h3>
-                <p className="text-[11px] text-[#737373]">Coverage & serial details</p>
+                <p className="text-[11px] text-muted-foreground">Coverage & serial details</p>
               </div>
             </div>
 

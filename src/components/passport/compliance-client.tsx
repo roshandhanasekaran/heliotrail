@@ -35,19 +35,19 @@ const statusConfig: Record<
   { badgeClass: string; icon: typeof CheckCircleIcon }
 > = {
   valid: {
-    badgeClass: "bg-[#E8FAE9] text-[#0D0D0D]",
+    badgeClass: "bg-[#E8FAE9] dark:bg-[#22C55E]/10 text-foreground",
     icon: CheckCircleIcon,
   },
   expired: {
-    badgeClass: "bg-[#FEE2E2] text-[#0D0D0D]",
+    badgeClass: "bg-[#FEE2E2] dark:bg-red-500/10 text-foreground",
     icon: XCircleIcon,
   },
   revoked: {
-    badgeClass: "bg-[#FEE2E2] text-[#0D0D0D]",
+    badgeClass: "bg-[#FEE2E2] dark:bg-red-500/10 text-foreground",
     icon: XCircleIcon,
   },
   pending: {
-    badgeClass: "bg-[#FEF3C7] text-[#0D0D0D]",
+    badgeClass: "bg-[#FEF3C7] dark:bg-amber-500/10 text-foreground",
     icon: ClockIcon,
   },
 };
@@ -71,13 +71,13 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
             const Icon = config.icon;
             return (
               <div key={status} className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center bg-[#F2F2F2]">
-                  <Icon className="h-3.5 w-3.5 text-[#0D0D0D]" />
+                <div className="flex h-7 w-7 items-center justify-center bg-muted">
+                  <Icon className="h-3.5 w-3.5 text-foreground" />
                 </div>
-                <span className="text-2xl font-bold tabular-nums text-[#0D0D0D]">
+                <span className="text-2xl font-bold tabular-nums text-foreground">
                   {count}
                 </span>
-                <span className="text-xs text-[#737373] capitalize font-medium">{status}</span>
+                <span className="text-xs text-muted-foreground capitalize font-medium">{status}</span>
               </div>
             );
           })}
@@ -88,12 +88,12 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
       <GlassCard>
         <div className="p-5">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-              <AwardIcon className="h-4 w-4 text-[#0D0D0D]" />
+            <div className="flex h-9 w-9 items-center justify-center bg-muted">
+              <AwardIcon className="h-4 w-4 text-foreground" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-[#0D0D0D]">Certificates</h3>
-              <p className="text-[11px] text-[#737373]">{certs.length} certification{certs.length !== 1 ? "s" : ""} on file</p>
+              <h3 className="text-sm font-semibold text-foreground">Certificates</h3>
+              <p className="text-[11px] text-muted-foreground">{certs.length} certification{certs.length !== 1 ? "s" : ""} on file</p>
             </div>
           </div>
 
@@ -105,12 +105,12 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
               return (
                 <div
                   key={cert.id}
-                  className="border border-[#D9D9D9] bg-white p-4 transition-colors hover:bg-[#FAFAFA]"
+                  className="border border-border bg-background p-4 transition-colors hover:bg-muted"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2.5">
-                        <h4 className="text-sm font-semibold text-[#0D0D0D] truncate">
+                        <h4 className="text-sm font-semibold text-foreground truncate">
                           {cert.standardName}
                         </h4>
                         <div
@@ -124,38 +124,38 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
                       {/* Details as inline table */}
                       <div className="mt-2.5 grid grid-cols-2 gap-x-6 gap-y-1">
                         <div className="flex justify-between text-xs">
-                          <span className="text-[#737373]">Issuer</span>
-                          <span className="text-[#0D0D0D] font-medium">{cert.issuer}</span>
+                          <span className="text-muted-foreground">Issuer</span>
+                          <span className="text-foreground font-medium">{cert.issuer}</span>
                         </div>
                         {cert.certificateNumber && (
                           <div className="flex justify-between text-xs">
-                            <span className="text-[#737373]">Cert #</span>
-                            <span className="text-[#0D0D0D] font-mono text-[11px]">
+                            <span className="text-muted-foreground">Cert #</span>
+                            <span className="text-foreground font-mono text-[11px]">
                               {cert.certificateNumber}
                             </span>
                           </div>
                         )}
                         <div className="flex justify-between text-xs">
-                          <span className="text-[#737373]">Issued</span>
-                          <span className="text-[#0D0D0D]">{cert.issuedDate}</span>
+                          <span className="text-muted-foreground">Issued</span>
+                          <span className="text-foreground">{cert.issuedDate}</span>
                         </div>
                         <div className="flex justify-between text-xs">
-                          <span className="text-[#737373]">Expires</span>
-                          <span className="text-[#0D0D0D]">{cert.expiryDate}</span>
+                          <span className="text-muted-foreground">Expires</span>
+                          <span className="text-foreground">{cert.expiryDate}</span>
                         </div>
                       </div>
 
                       {cert.documentHash && (
                         <div className="col-span-2 flex justify-between text-xs mt-1">
-                          <span className="text-[#737373]">Integrity</span>
-                          <span className="text-[#737373] font-mono text-[10px] truncate max-w-[200px]" title={cert.documentHash}>
+                          <span className="text-muted-foreground">Integrity</span>
+                          <span className="text-muted-foreground font-mono text-[10px] truncate max-w-[200px]" title={cert.documentHash}>
                             {cert.hashAlgorithm?.toUpperCase()}: {cert.documentHash.slice(0, 16)}...
                           </span>
                         </div>
                       )}
 
                       {cert.scopeNotes && (
-                        <p className="col-span-2 mt-2 text-[11px] text-[#737373] leading-relaxed">
+                        <p className="col-span-2 mt-2 text-[11px] text-muted-foreground leading-relaxed">
                           {cert.scopeNotes}
                         </p>
                       )}
@@ -166,7 +166,7 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
                         href={cert.documentUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="clean-button flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#0D0D0D] shrink-0"
+                        className="clean-button flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground shrink-0"
                       >
                         <ExternalLinkIcon className="h-3 w-3" />
                         View

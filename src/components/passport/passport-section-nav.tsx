@@ -10,6 +10,7 @@ import {
   ShieldCheckIcon,
   RecycleIcon,
   FileTextIcon,
+  AnchorIcon,
 } from "lucide-react";
 
 interface PassportSectionNavProps {
@@ -22,6 +23,7 @@ const sections = [
   { label: "Compliance", segment: "/compliance", icon: ShieldCheckIcon },
   { label: "Circularity", segment: "/circularity", icon: RecycleIcon },
   { label: "Documents", segment: "/documents", icon: FileTextIcon },
+  { label: "Registry", segment: "/registry", icon: AnchorIcon },
 ];
 
 export function PassportSectionNav({ publicId }: PassportSectionNavProps) {
@@ -52,11 +54,11 @@ export function PassportSectionNav({ publicId }: PassportSectionNavProps) {
                     className={cn(
                       "flex items-center gap-2 whitespace-nowrap px-3.5 py-1.5 text-sm font-medium transition-all duration-200",
                       isActive
-                        ? "nav-pill-active text-[#0D0D0D]"
-                        : "text-[#737373] hover:text-[#0D0D0D] hover:bg-[#F2F2F2]"
+                        ? "nav-pill-active text-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     )}
                   >
-                    <Icon className={cn("h-3.5 w-3.5", isActive ? "text-[#22C55E]" : "text-[#737373]")} />
+                    <Icon className={cn("h-3.5 w-3.5", isActive ? "text-[#22C55E]" : "text-muted-foreground")} />
                     <span>{s.label}</span>
                   </div>
                 </Link>

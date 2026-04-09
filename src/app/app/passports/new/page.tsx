@@ -503,7 +503,7 @@ function validateStep(step: StepId, data: FormData): ValidationErrors {
 
 function FieldLabel({ label, required }: { label: string; required?: boolean }) {
   return (
-    <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
+    <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
       {label}
       {required && <span className="ml-0.5 text-red-500">*</span>}
     </label>
@@ -551,7 +551,7 @@ function TextField({
         placeholder={placeholder}
         disabled={disabled}
         className={cn(
-          "mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] disabled:bg-[#FAFAFA] disabled:text-[#737373]",
+          "mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] disabled:bg-muted disabled:text-muted-foreground",
           mono && "font-mono",
           error && "border-red-400 focus:border-red-500 focus:ring-red-500/30"
         )}
@@ -610,8 +610,8 @@ function SelectField({
           setSearch("");
         }}
         className={cn(
-          "mt-1 flex w-full items-center justify-between border border-[#D9D9D9] bg-white px-3 py-2 text-left text-sm transition-colors hover:border-[#A3A3A3]",
-          value ? "text-[#0D0D0D]" : "text-[#A3A3A3]",
+          "mt-1 flex w-full items-center justify-between border border-border bg-background px-3 py-2 text-left text-sm transition-colors hover:border-[#A3A3A3]",
+          value ? "text-foreground" : "text-muted-foreground",
           open && "border-[#22C55E] ring-1 ring-[#22C55E]",
           error &&
             !open &&
@@ -623,7 +623,7 @@ function SelectField({
         </span>
         <ChevronDown
           className={cn(
-            "h-3.5 w-3.5 shrink-0 text-[#A3A3A3] transition-transform",
+            "h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform",
             open && "rotate-180",
           )}
         />
@@ -635,26 +635,26 @@ function SelectField({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-50 mt-1 w-full border border-[#D9D9D9] bg-white shadow-lg"
+            className="absolute z-50 mt-1 w-full border border-border bg-background shadow-lg"
           >
             {options.length > 5 && (
               <div className="border-b border-[#F2F2F2] p-2">
                 <div className="relative">
-                  <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#A3A3A3]" />
+                  <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                   <input
                     autoFocus
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search..."
-                    className="w-full border border-[#D9D9D9] bg-[#FAFAFA] py-1.5 pl-7 pr-3 text-xs text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none"
+                    className="w-full border border-border bg-muted py-1.5 pl-7 pr-3 text-xs text-foreground focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
               </div>
             )}
             <ul className="max-h-48 overflow-y-auto py-1">
               {filtered.length === 0 ? (
-                <li className="px-3 py-2 text-xs text-[#A3A3A3]">
+                <li className="px-3 py-2 text-xs text-muted-foreground">
                   No results found
                 </li>
               ) : (
@@ -668,9 +668,9 @@ function SelectField({
                         setSearch("");
                       }}
                       className={cn(
-                        "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-[#F2F2F2]",
+                        "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-muted",
                         o.value === value &&
-                          "bg-[#E8FAE9] font-medium text-[#0D0D0D]",
+                          "bg-[#E8FAE9] font-medium text-foreground",
                       )}
                     >
                       {o.value === value && (
@@ -714,20 +714,20 @@ function ToggleField({
           "mt-0.5 flex h-5 w-9 shrink-0 items-center border-2 transition-colors",
           checked
             ? "border-[#22C55E] bg-[#22C55E]"
-            : "border-[#D9D9D9] bg-[#F2F2F2]"
+            : "border-border bg-muted"
         )}
       >
         <span
           className={cn(
-            "block h-3.5 w-3.5 bg-white transition-transform",
+            "block h-3.5 w-3.5 bg-background transition-transform",
             checked ? "translate-x-[15px]" : "translate-x-[1px]"
           )}
         />
       </button>
       <div>
-        <span className="text-sm font-medium text-[#0D0D0D]">{label}</span>
+        <span className="text-sm font-medium text-foreground">{label}</span>
         {description && (
-          <p className="text-xs text-[#737373]">{description}</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         )}
       </div>
     </label>
@@ -755,7 +755,7 @@ function TextArea({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] resize-y"
+        className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] resize-y"
       />
     </div>
   );
@@ -764,7 +764,7 @@ function TextArea({
 function SectionDivider({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 pt-2">
-      <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] whitespace-nowrap">
+      <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
         {label}
       </span>
       <div className="h-px flex-1 bg-[#D9D9D9]" />
@@ -877,25 +877,25 @@ function StepIdentity({
           className="w-full border-2 border-dashed border-[#22C55E] bg-[#E8FAE9] px-4 py-3 text-left transition-colors hover:bg-[#d4f5d8]"
         >
           <p className="text-xs font-bold text-[#22C55E]">Quick Fill: WRM-700-TOPCON-BiN-03</p>
-          <p className="text-[10px] text-[#737373]">Auto-populate all steps with real Waaree 700W TOPCon module data</p>
+          <p className="text-[10px] text-muted-foreground">Auto-populate all steps with real Waaree 700W TOPCon module data</p>
         </button>
       )}
 
       {/* Auto-generated IDs */}
-      <div className="bg-[#FAFAFA] border border-dashed border-[#D9D9D9] px-4 py-3">
-        <p className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] mb-2">
+      <div className="bg-muted border border-dashed border-border px-4 py-3">
+        <p className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground mb-2">
           Auto-Generated Identifiers
         </p>
         <div className="flex flex-wrap gap-x-8 gap-y-1">
           <div>
-            <span className="text-xs text-[#737373]">Passport ID: </span>
-            <span className="font-mono text-xs font-semibold text-[#0D0D0D]">
+            <span className="text-xs text-muted-foreground">Passport ID: </span>
+            <span className="font-mono text-xs font-semibold text-foreground">
               {data.passportId}
             </span>
           </div>
           <div>
-            <span className="text-xs text-[#737373]">Public ID: </span>
-            <span className="font-mono text-[0.65rem] text-[#737373]">
+            <span className="text-xs text-muted-foreground">Public ID: </span>
+            <span className="font-mono text-[0.65rem] text-muted-foreground">
               {data.publicId}
             </span>
           </div>
@@ -1266,7 +1266,7 @@ function StepComposition({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm text-[#737373]">
+        <p className="text-sm text-muted-foreground">
           Bill of Materials for this module.{" "}
           {data.bom.length > 0 && (
             <span className="font-mono text-xs">
@@ -1297,24 +1297,24 @@ function StepComposition({
       {data.bom.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-10 text-center">
           <Layers className="h-8 w-8 text-[#D9D9D9]" />
-          <p className="mt-3 text-sm font-medium text-[#737373]">
+          <p className="mt-3 text-sm font-medium text-muted-foreground">
             No materials added
           </p>
-          <p className="mt-1 text-xs text-[#A3A3A3]">
+          <p className="mt-1 text-xs text-muted-foreground">
             Click &quot;Load TOPCon Template&quot; for a standard BOM or add materials manually.
           </p>
         </div>
       ) : (
         <div className="space-y-3">
           {/* Table header (desktop) */}
-          <div className="hidden lg:grid lg:grid-cols-[1fr_0.7fr_0.5fr_0.4fr_0.6fr_auto_auto_2.5rem] gap-2 px-3 py-1.5 bg-[#FAFAFA] border border-[#D9D9D9]">
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Material</span>
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Component</span>
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Mass (g)</span>
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Mass %</span>
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">CAS No.</span>
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">CRM</span>
-            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">SoC</span>
+          <div className="hidden lg:grid lg:grid-cols-[1fr_0.7fr_0.5fr_0.4fr_0.6fr_auto_auto_2.5rem] gap-2 px-3 py-1.5 bg-muted border border-border">
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Material</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Component</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Mass (g)</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Mass %</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">CAS No.</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">CRM</span>
+            <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">SoC</span>
             <span />
           </div>
           {data.bom.map((item) => (
@@ -1328,33 +1328,33 @@ function StepComposition({
                   value={item.materialName}
                   onChange={(e) => updateItem(item.id, { materialName: e.target.value })}
                   placeholder="Material name"
-                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
                 />
                 <input
                   value={item.componentType}
                   onChange={(e) => updateItem(item.id, { componentType: e.target.value })}
                   placeholder="Component"
-                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
                 />
                 <input
                   type="number"
                   value={item.massGrams || ""}
                   onChange={(e) => updateItem(item.id, { massGrams: Number(e.target.value) })}
                   placeholder="0"
-                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
                 />
                 <input
                   type="number"
                   value={item.massPercent || ""}
                   onChange={(e) => updateItem(item.id, { massPercent: Number(e.target.value) })}
                   placeholder="0"
-                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
                 />
                 <input
                   value={item.casNumber}
                   onChange={(e) => updateItem(item.id, { casNumber: e.target.value })}
                   placeholder="e.g. 7440-21-3"
-                  className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
                 />
                 <button
                   type="button"
@@ -1363,7 +1363,7 @@ function StepComposition({
                     "h-7 w-7 flex items-center justify-center border text-xs font-bold",
                     item.isCriticalRaw
                       ? "border-[#22C55E] bg-[#E8FAE9] text-[#22C55E]"
-                      : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                      : "border-border bg-background text-muted-foreground"
                   )}
                   title="Critical Raw Material"
                 >
@@ -1376,7 +1376,7 @@ function StepComposition({
                     "h-7 w-7 flex items-center justify-center border text-xs font-bold",
                     item.isSubstanceOfConcern
                       ? "border-[#F59E0B] bg-[#FEF3C7] text-[#F59E0B]"
-                      : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                      : "border-border bg-background text-muted-foreground"
                   )}
                   title="Substance of Concern"
                 >
@@ -1385,7 +1385,7 @@ function StepComposition({
                 <button
                   type="button"
                   onClick={() => removeItem(item.id)}
-                  className="flex h-7 w-7 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                  className="flex h-7 w-7 items-center justify-center text-muted-foreground hover:text-red-500"
                   title="Remove"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -1399,12 +1399,12 @@ function StepComposition({
                     value={item.materialName}
                     onChange={(e) => updateItem(item.id, { materialName: e.target.value })}
                     placeholder="Material name"
-                    className="flex-1 border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="flex-1 border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={() => removeItem(item.id)}
-                    className="ml-2 flex h-7 w-7 shrink-0 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                    className="ml-2 flex h-7 w-7 shrink-0 items-center justify-center text-muted-foreground hover:text-red-500"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -1414,13 +1414,13 @@ function StepComposition({
                     value={item.componentType}
                     onChange={(e) => updateItem(item.id, { componentType: e.target.value })}
                     placeholder="Component type"
-                    className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                   <input
                     value={item.casNumber}
                     onChange={(e) => updateItem(item.id, { casNumber: e.target.value })}
                     placeholder="CAS No."
-                    className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
+                    className="w-full border border-border bg-background px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -1430,7 +1430,7 @@ function StepComposition({
                       value={item.massGrams || ""}
                       onChange={(e) => updateItem(item.id, { massGrams: Number(e.target.value) })}
                       placeholder="Mass (g)"
-                      className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                      className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
                     />
                   </div>
                   <div className="flex items-center gap-1">
@@ -1439,7 +1439,7 @@ function StepComposition({
                       value={item.massPercent || ""}
                       onChange={(e) => updateItem(item.id, { massPercent: Number(e.target.value) })}
                       placeholder="Mass %"
-                      className="w-full border border-[#D9D9D9] bg-white px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                      className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1450,8 +1450,8 @@ function StepComposition({
                     className={cn(
                       "flex-1 py-1 border text-xs font-semibold",
                       item.isCriticalRaw
-                        ? "border-[#22C55E] bg-[#E8FAE9] text-[#0D0D0D]"
-                        : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                        ? "border-[#22C55E] bg-[#E8FAE9] text-foreground"
+                        : "border-border bg-background text-muted-foreground"
                     )}
                   >
                     Critical Raw Material
@@ -1462,8 +1462,8 @@ function StepComposition({
                     className={cn(
                       "flex-1 py-1 border text-xs font-semibold",
                       item.isSubstanceOfConcern
-                        ? "border-[#F59E0B] bg-[#FEF3C7] text-[#0D0D0D]"
-                        : "border-[#D9D9D9] bg-white text-[#A3A3A3]"
+                        ? "border-[#F59E0B] bg-[#FEF3C7] text-foreground"
+                        : "border-border bg-background text-muted-foreground"
                     )}
                   >
                     Substance of Concern
@@ -1474,11 +1474,11 @@ function StepComposition({
           ))}
 
           {/* Total row */}
-          <div className="flex items-center justify-between border-t border-dashed border-[#D9D9D9] px-3 pt-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+          <div className="flex items-center justify-between border-t border-dashed border-border px-3 pt-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Total
             </span>
-            <div className="flex gap-6 text-sm font-semibold text-[#0D0D0D]">
+            <div className="flex gap-6 text-sm font-semibold text-foreground">
               <span className="font-mono">{(totalMass / 1000).toFixed(2)} kg</span>
               <span className={cn("font-mono", Math.abs(totalPercent - 100) > 0.5 && "text-[#F59E0B]")}>
                 {totalPercent.toFixed(2)}%
@@ -1536,7 +1536,7 @@ function StepCompliance({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm text-[#737373]">
+        <p className="text-sm text-muted-foreground">
           Certifications and compliance documentation.{" "}
           {data.certificates.length > 0 && (
             <span className="font-mono text-xs">
@@ -1556,10 +1556,10 @@ function StepCompliance({
       {data.certificates.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-10 text-center">
           <ShieldCheck className="h-8 w-8 text-[#D9D9D9]" />
-          <p className="mt-3 text-sm font-medium text-[#737373]">
+          <p className="mt-3 text-sm font-medium text-muted-foreground">
             No certificates added
           </p>
-          <p className="mt-1 text-xs text-[#A3A3A3]">
+          <p className="mt-1 text-xs text-muted-foreground">
             Add IEC, UL, BIS, or CE certificates for this module.
           </p>
         </div>
@@ -1568,7 +1568,7 @@ function StepCompliance({
           {data.certificates.map((cert, idx) => (
             <div key={cert.id} className="clean-card p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Certificate {idx + 1}
                 </span>
                 <div className="flex items-center gap-2">
@@ -1585,7 +1585,7 @@ function StepCompliance({
                   <button
                     type="button"
                     onClick={() => removeCert(cert.id)}
-                    className="flex h-6 w-6 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                    className="flex h-6 w-6 items-center justify-center text-muted-foreground hover:text-red-500"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -1598,8 +1598,8 @@ function StepCompliance({
                     value={cert.standard}
                     onChange={(e) => updateCert(cert.id, { standard: e.target.value })}
                     className={cn(
-                      "mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]",
-                      !cert.standard && "text-[#A3A3A3]"
+                      "mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]",
+                      !cert.standard && "text-muted-foreground"
                     )}
                   >
                     <option value="">Select standard...</option>
@@ -1616,7 +1616,7 @@ function StepCompliance({
                     value={cert.certificateNumber}
                     onChange={(e) => updateCert(cert.id, { certificateNumber: e.target.value })}
                     placeholder="e.g. IEC-2025-44781"
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1625,7 +1625,7 @@ function StepCompliance({
                     value={cert.issuer}
                     onChange={(e) => updateCert(cert.id, { issuer: e.target.value })}
                     placeholder="e.g. TUV Rheinland"
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1634,7 +1634,7 @@ function StepCompliance({
                     type="date"
                     value={cert.issuedDate}
                     onChange={(e) => updateCert(cert.id, { issuedDate: e.target.value })}
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1643,7 +1643,7 @@ function StepCompliance({
                     type="date"
                     value={cert.expiryDate}
                     onChange={(e) => updateCert(cert.id, { expiryDate: e.target.value })}
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1651,7 +1651,7 @@ function StepCompliance({
                   <select
                     value={cert.status}
                     onChange={(e) => updateCert(cert.id, { status: e.target.value })}
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
                   >
                     {CERT_STATUSES.map((s) => (
                       <option key={s.value} value={s.value}>
@@ -1762,7 +1762,7 @@ function StepCircularity({
       </div>
 
       <SectionDivider label="Material Recovery" />
-      <p className="text-xs text-[#737373]">
+      <p className="text-xs text-muted-foreground">
         Select materials that can be recovered from this module at end of life.
       </p>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1960,7 +1960,7 @@ function StepDocuments({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm text-[#737373]">
+        <p className="text-sm text-muted-foreground">
           Attach documents to this passport.{" "}
           {data.documents.length > 0 && (
             <span className="font-mono text-xs">
@@ -1980,10 +1980,10 @@ function StepDocuments({
       {data.documents.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-10 text-center">
           <FileText className="h-8 w-8 text-[#D9D9D9]" />
-          <p className="mt-3 text-sm font-medium text-[#737373]">
+          <p className="mt-3 text-sm font-medium text-muted-foreground">
             No documents added
           </p>
-          <p className="mt-1 text-xs text-[#A3A3A3]">
+          <p className="mt-1 text-xs text-muted-foreground">
             Add datasheets, declarations of conformity, EPDs, and other documents.
           </p>
         </div>
@@ -1992,13 +1992,13 @@ function StepDocuments({
           {data.documents.map((doc, idx) => (
             <div key={idx} className="clean-card p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Document {idx + 1}
                 </span>
                 <button
                   type="button"
                   onClick={() => removeDocument(idx)}
-                  className="flex h-6 w-6 items-center justify-center text-[#A3A3A3] hover:text-red-500"
+                  className="flex h-6 w-6 items-center justify-center text-muted-foreground hover:text-red-500"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
@@ -2010,7 +2010,7 @@ function StepDocuments({
                     value={doc.name}
                     onChange={(e) => updateDocument(idx, { name: e.target.value })}
                     placeholder="e.g. Datasheet"
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -2018,7 +2018,7 @@ function StepDocuments({
                   <select
                     value={doc.documentType}
                     onChange={(e) => updateDocument(idx, { documentType: e.target.value })}
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
                   >
                     {DOCUMENT_TYPES.map((t) => (
                       <option key={t.value} value={t.value}>{t.label}</option>
@@ -2030,7 +2030,7 @@ function StepDocuments({
                   <select
                     value={doc.accessLevel}
                     onChange={(e) => updateDocument(idx, { accessLevel: e.target.value })}
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
                   >
                     {ACCESS_LEVELS.map((l) => (
                       <option key={l.value} value={l.value}>{l.label}</option>
@@ -2043,7 +2043,7 @@ function StepDocuments({
                     value={doc.url}
                     onChange={(e) => updateDocument(idx, { url: e.target.value })}
                     placeholder="https://..."
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -2052,7 +2052,7 @@ function StepDocuments({
                     value={doc.issuer}
                     onChange={(e) => updateDocument(idx, { issuer: e.target.value })}
                     placeholder="e.g. Waaree Energies"
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
                 <div>
@@ -2061,7 +2061,7 @@ function StepDocuments({
                     type="date"
                     value={doc.issuedDate}
                     onChange={(e) => updateDocument(idx, { issuedDate: e.target.value })}
-                    className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
               </div>
@@ -2088,7 +2088,7 @@ function StepReview({
     <div className="space-y-6">
       <div className="flex items-center gap-2 bg-[#E8FAE9] px-4 py-3 text-sm">
         <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
-        <span className="text-[#0D0D0D]">
+        <span className="text-foreground">
           Review your passport data before submitting.
         </span>
       </div>
@@ -2138,20 +2138,20 @@ function StepReview({
       {/* Section: Composition */}
       <ReviewSection title="Material Composition" onEdit={() => onJumpTo(2)}>
         {data.bom.length === 0 ? (
-          <p className="px-4 py-3 text-sm text-[#A3A3A3] italic">No materials added</p>
+          <p className="px-4 py-3 text-sm text-muted-foreground italic">No materials added</p>
         ) : (
           <div>
-            <div className="hidden sm:grid sm:grid-cols-[1fr_0.7fr_0.5fr_0.3fr] gap-2 px-4 py-2 bg-[#FAFAFA] border-b border-[#D9D9D9]">
-              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Material</span>
-              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Component</span>
-              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Mass</span>
-              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">Flags</span>
+            <div className="hidden sm:grid sm:grid-cols-[1fr_0.7fr_0.5fr_0.3fr] gap-2 px-4 py-2 bg-muted border-b border-border">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Material</span>
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Component</span>
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Mass</span>
+              <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">Flags</span>
             </div>
             {data.bom.map((b) => (
-              <div key={b.id} className="grid sm:grid-cols-[1fr_0.7fr_0.5fr_0.3fr] gap-2 px-4 py-2 border-b border-[#D9D9D9] last:border-0 text-sm">
-                <span className="text-[#0D0D0D] font-medium">{b.materialName || "—"}</span>
-                <span className="text-[#737373]">{b.componentType || "—"}</span>
-                <span className="font-mono text-[#0D0D0D]">{b.massGrams}g ({b.massPercent}%)</span>
+              <div key={b.id} className="grid sm:grid-cols-[1fr_0.7fr_0.5fr_0.3fr] gap-2 px-4 py-2 border-b border-border last:border-0 text-sm">
+                <span className="text-foreground font-medium">{b.materialName || "—"}</span>
+                <span className="text-muted-foreground">{b.componentType || "—"}</span>
+                <span className="font-mono text-foreground">{b.massGrams}g ({b.massPercent}%)</span>
                 <div className="flex gap-1">
                   {b.isCriticalRaw && (
                     <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[#E8FAE9] text-[#22C55E]">CRM</span>
@@ -2169,17 +2169,17 @@ function StepReview({
       {/* Section: Compliance */}
       <ReviewSection title="Compliance & Certificates" onEdit={() => onJumpTo(3)}>
         {data.certificates.length === 0 ? (
-          <p className="px-4 py-3 text-sm text-[#A3A3A3] italic">No certificates added</p>
+          <p className="px-4 py-3 text-sm text-muted-foreground italic">No certificates added</p>
         ) : (
           <div className="divide-y divide-[#D9D9D9]">
             {data.certificates.map((c) => (
               <div key={c.id} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
-                <span className="text-sm font-medium text-[#0D0D0D]">{c.standard || "—"}</span>
+                <span className="text-sm font-medium text-foreground">{c.standard || "—"}</span>
                 {c.certificateNumber && (
-                  <span className="font-mono text-xs text-[#737373]">{c.certificateNumber}</span>
+                  <span className="font-mono text-xs text-muted-foreground">{c.certificateNumber}</span>
                 )}
                 {c.issuer && (
-                  <span className="text-xs text-[#737373]">{c.issuer}</span>
+                  <span className="text-xs text-muted-foreground">{c.issuer}</span>
                 )}
                 <span
                   className={cn(
@@ -2268,19 +2268,19 @@ function StepReview({
       {/* Section: Documents */}
       <ReviewSection title="Documents" onEdit={() => onJumpTo(6)}>
         {data.documents.length === 0 ? (
-          <p className="px-4 py-3 text-sm text-[#A3A3A3] italic">No documents added</p>
+          <p className="px-4 py-3 text-sm text-muted-foreground italic">No documents added</p>
         ) : (
           <div className="divide-y divide-[#D9D9D9]">
             {data.documents.map((doc, idx) => (
               <div key={idx} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
-                <span className="text-sm font-medium text-[#0D0D0D]">{doc.name || "—"}</span>
-                <span className="text-xs text-[#737373]">
+                <span className="text-sm font-medium text-foreground">{doc.name || "—"}</span>
+                <span className="text-xs text-muted-foreground">
                   {DOCUMENT_TYPES.find((t) => t.value === doc.documentType)?.label ?? doc.documentType}
                 </span>
-                <span className="text-xs text-[#737373]">
+                <span className="text-xs text-muted-foreground">
                   {ACCESS_LEVELS.find((l) => l.value === doc.accessLevel)?.label ?? doc.accessLevel}
                 </span>
-                {doc.issuer && <span className="text-xs text-[#737373]">{doc.issuer}</span>}
+                {doc.issuer && <span className="text-xs text-muted-foreground">{doc.issuer}</span>}
               </div>
             ))}
           </div>
@@ -2301,14 +2301,14 @@ function ReviewSection({
 }) {
   return (
     <div className="clean-card overflow-hidden">
-      <div className="flex items-center justify-between bg-[#FAFAFA] border-b border-[#D9D9D9] px-4 py-2.5">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#737373]">
+      <div className="flex items-center justify-between bg-muted border-b border-border px-4 py-2.5">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
           {title}
         </h3>
         <button
           type="button"
           onClick={onEdit}
-          className="flex items-center gap-1 text-xs font-medium text-[#22C55E] hover:text-[#0D0D0D]"
+          className="flex items-center gap-1 text-xs font-medium text-[#22C55E] hover:text-foreground"
         >
           <Pencil className="h-3 w-3" />
           Edit
@@ -2433,7 +2433,7 @@ export default function CreatePassportPage() {
         <div>
           <Link
             href="/app/passports"
-            className="inline-flex items-center gap-1 text-xs text-[#737373] hover:text-[#0D0D0D]"
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="h-3 w-3" />
             Back to Passports
@@ -2443,12 +2443,12 @@ export default function CreatePassportPage() {
           <div className="flex h-12 w-12 items-center justify-center bg-[#E8FAE9]">
             <CheckCircle2 className="h-6 w-6 text-[#22C55E]" />
           </div>
-          <h2 className="mt-4 text-xl font-bold text-[#0D0D0D]">
+          <h2 className="mt-4 text-xl font-bold text-foreground">
             Passport Submitted for Approval
           </h2>
-          <p className="mt-2 text-sm text-[#737373] max-w-md">
+          <p className="mt-2 text-sm text-muted-foreground max-w-md">
             Passport{" "}
-            <span className="font-mono font-semibold text-[#0D0D0D]">
+            <span className="font-mono font-semibold text-foreground">
               {formData.passportId}
             </span>{" "}
             has been submitted. It will be reviewed by your compliance team
@@ -2480,17 +2480,17 @@ export default function CreatePassportPage() {
       <div>
         <Link
           href="/app/passports"
-          className="inline-flex items-center gap-1 text-xs text-[#737373] hover:text-[#0D0D0D]"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-3 w-3" />
           Back to Passports
         </Link>
         <div className="mt-2 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-[#0D0D0D]">
+            <h1 className="text-2xl font-bold text-foreground">
               Create Passport
             </h1>
-            <p className="mt-0.5 text-xs text-[#737373]">
+            <p className="mt-0.5 text-xs text-muted-foreground">
               <span className="font-mono">{formData.passportId}</span>
             </p>
           </div>
@@ -2516,10 +2516,10 @@ export default function CreatePassportPage() {
                   className={cn(
                     "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors",
                     isCurrent
-                      ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-[#0D0D0D]"
+                      ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-foreground"
                       : isCompleted
-                        ? "border-l-2 border-[#22C55E]/40 text-[#0D0D0D]"
-                        : "border-l-2 border-transparent text-[#737373] hover:bg-[#F2F2F2]"
+                        ? "border-l-2 border-[#22C55E]/40 text-foreground"
+                        : "border-l-2 border-transparent text-muted-foreground hover:bg-muted"
                   )}
                 >
                   <span
@@ -2529,7 +2529,7 @@ export default function CreatePassportPage() {
                         ? "bg-[#22C55E] text-white"
                         : isCompleted
                           ? "bg-[#22C55E]/15 text-[#22C55E]"
-                          : "bg-[#F2F2F2] text-[#737373]"
+                          : "bg-muted text-muted-foreground"
                     )}
                   >
                     {isCompleted && !isCurrent ? (
@@ -2560,10 +2560,10 @@ export default function CreatePassportPage() {
                     className={cn(
                       "flex shrink-0 items-center gap-1 px-2 py-1 text-[0.6875rem] font-medium transition-colors",
                       isCurrent
-                        ? "bg-[#E8FAE9] text-[#0D0D0D] border border-[#22C55E]"
+                        ? "bg-[#E8FAE9] text-foreground border border-[#22C55E]"
                         : isCompleted
-                          ? "bg-[#FAFAFA] text-[#22C55E] border border-[#D9D9D9]"
-                          : "bg-white text-[#A3A3A3] border border-[#D9D9D9]"
+                          ? "bg-muted text-[#22C55E] border border-border"
+                          : "bg-background text-muted-foreground border border-border"
                     )}
                   >
                     {isCompleted && !isCurrent ? (
@@ -2581,8 +2581,8 @@ export default function CreatePassportPage() {
           <div className="clean-card p-6">
             <div className="flex items-center gap-2">
               <step.icon className="h-4 w-4 text-[#22C55E]" />
-              <h2 className="text-lg font-bold text-[#0D0D0D]">{step.label}</h2>
-              <span className="ml-auto text-xs text-[#A3A3A3]">
+              <h2 className="text-lg font-bold text-foreground">{step.label}</h2>
+              <span className="ml-auto text-xs text-muted-foreground">
                 Step {currentStep + 1} of {WIZARD_STEPS.length}
               </span>
             </div>

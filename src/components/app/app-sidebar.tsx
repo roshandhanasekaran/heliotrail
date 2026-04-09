@@ -18,18 +18,18 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-30 flex flex-col border-r border-[#D9D9D9] bg-[#FAFAFA] transition-all duration-200",
+        "fixed inset-y-0 left-0 z-30 flex flex-col border-r border-border bg-sidebar transition-all duration-200",
         collapsed ? "w-16" : "w-60"
       )}
     >
       {/* Logo */}
-      <div className="flex h-14 items-center border-b border-[#D9D9D9] px-4">
+      <div className="flex h-14 items-center border-b border-border px-4">
         <Link href="/app" className="flex items-center gap-2.5 group">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#22C55E] text-[#0D0D0D] transition-opacity group-hover:opacity-80">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#22C55E] text-foreground transition-opacity group-hover:opacity-80">
             <span className="text-sm font-bold">HT</span>
           </div>
           {!collapsed && (
-            <span className="text-lg font-bold tracking-tight text-[#0D0D0D]">
+            <span className="text-lg font-bold tracking-tight text-foreground">
               HelioTrail
             </span>
           )}
@@ -42,7 +42,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           <div key={section.title} className={si > 0 ? "mt-5" : "mt-1"}>
             {/* Section header */}
             {!collapsed && (
-              <div className="mb-1 px-3 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-[#A3A3A3]">
+              <div className="mb-1 px-3 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
                 {section.title}
               </div>
             )}
@@ -65,8 +65,8 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                       "group/nav relative flex items-center gap-3 px-3 py-2 text-[0.8125rem] font-medium transition-all duration-150",
                       collapsed && "justify-center px-0",
                       isActive
-                        ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] text-[#0D0D0D]"
-                        : "border-l-2 border-transparent text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+                        ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] dark:bg-[#22C55E]/10 text-foreground"
+                        : "border-l-2 border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                     title={collapsed ? item.label : undefined}
                   >
@@ -94,30 +94,30 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       {/* Fleet Health mini-widget */}
       {!collapsed && (
         <div className="mx-2 mb-2">
-          <div className="mb-1 px-3 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-[#A3A3A3]">
+          <div className="mb-1 px-3 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-muted-foreground">
             Fleet Health
           </div>
           <div className="dashed-card p-2.5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#737373]">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
                 <span className="h-1.5 w-1.5 bg-[#22C55E]" />
                 Fleet PR
               </span>
-              <span className="font-mono text-[0.6875rem] font-semibold text-[#0D0D0D]">
+              <span className="font-mono text-[0.6875rem] font-semibold text-foreground">
                 81.4%
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#737373]">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
                 <span className="h-1.5 w-1.5 bg-[#22C55E]" />
                 Avg Degradation
               </span>
-              <span className="font-mono text-[0.6875rem] font-semibold text-[#0D0D0D]">
+              <span className="font-mono text-[0.6875rem] font-semibold text-foreground">
                 0.41%/yr
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#737373]">
+              <span className="flex items-center gap-1.5 text-[0.6875rem] text-muted-foreground">
                 <span className="h-1.5 w-1.5 bg-[#F59E0B]" />
                 Alerts
               </span>
@@ -127,7 +127,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
             </div>
             <Link
               href="/app/analytics"
-              className="flex items-center gap-1 pt-1 text-[0.625rem] font-medium text-[#22C55E] transition-colors hover:text-[#0D0D0D]"
+              className="flex items-center gap-1 pt-1 text-[0.625rem] font-medium text-[#22C55E] transition-colors hover:text-foreground"
             >
               View Details <ArrowRight className="h-2.5 w-2.5" />
             </Link>
@@ -136,17 +136,17 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       )}
 
       {/* Bottom: Collapse + user */}
-      <div className="border-t border-[#D9D9D9] p-2">
+      <div className="border-t border-border p-2">
         {!collapsed && (
           <div className="mb-2 flex items-center gap-2 px-2 py-1.5">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center bg-[#22C55E] text-xs font-bold text-[#0D0D0D]">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center bg-[#22C55E] text-xs font-bold text-foreground">
               W
             </div>
             <div className="min-w-0">
-              <p className="truncate text-xs font-medium text-[#0D0D0D]">
+              <p className="truncate text-xs font-medium text-foreground">
                 Waaree Energies
               </p>
-              <p className="truncate text-[0.625rem] text-[#A3A3A3]">
+              <p className="truncate text-[0.625rem] text-muted-foreground">
                 demo@heliotrail.com
               </p>
             </div>
@@ -155,7 +155,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-[#737373] hover:text-[#0D0D0D]"
+          className="h-8 w-8 text-muted-foreground hover:text-foreground"
           onClick={onToggle}
         >
           {collapsed ? (

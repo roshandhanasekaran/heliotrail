@@ -46,7 +46,7 @@ export function SpecsClient({
               color="#22C55E"
               showTicks
             />
-            <div className="hidden sm:block w-px h-24 bg-[#D9D9D9]" />
+            <div className="hidden sm:block w-px h-24 bg-border" />
             <RadialGauge
               value={gaugeData.efficiency}
               max={30}
@@ -66,12 +66,12 @@ export function SpecsClient({
         <GlassCard>
           <div className="p-5">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                <ZapIcon className="h-4 w-4 text-[#0D0D0D]" />
+              <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                <ZapIcon className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0D]">Electrical Parameters</h3>
-                <p className="text-[11px] text-[#737373]">Standard Test Conditions</p>
+                <h3 className="text-sm font-semibold text-foreground">Electrical Parameters</h3>
+                <p className="text-[11px] text-muted-foreground">Standard Test Conditions</p>
               </div>
             </div>
 
@@ -99,12 +99,12 @@ export function SpecsClient({
         <GlassCard>
           <div className="p-5">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                <BoxIcon className="h-4 w-4 text-[#0D0D0D]" />
+              <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                <BoxIcon className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0D]">Mechanical Parameters</h3>
-                <p className="text-[11px] text-[#737373]">Physical dimensions & construction</p>
+                <h3 className="text-sm font-semibold text-foreground">Mechanical Parameters</h3>
+                <p className="text-[11px] text-muted-foreground">Physical dimensions & construction</p>
               </div>
             </div>
 

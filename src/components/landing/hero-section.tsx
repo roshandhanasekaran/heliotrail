@@ -6,31 +6,26 @@ import { GreenMosaic } from "@/components/landing/green-mosaic";
 import {
   ArrowRightIcon,
   ScanLineIcon,
-  RecycleIcon,
-  ZapIcon,
+  FileTextIcon,
+  GitBranchIcon,
   ShieldCheckIcon,
 } from "lucide-react";
 
 const stats = [
-  { value: "92", suffix: "%", label: "Recyclability Rate", icon: RecycleIcon },
-  { value: "385", suffix: "kg", label: "CO\u2082e / Module", icon: ZapIcon },
-  {
-    value: "35",
-    suffix: "yr",
-    label: "Expected Lifetime",
-    icon: ShieldCheckIcon,
-  },
+  { value: "127", suffix: "", label: "Passport Data Fields", icon: FileTextIcon },
+  { value: "4", suffix: " tiers", label: "Supply Chain Traceability", icon: GitBranchIcon },
+  { value: "12", suffix: "", label: "ESPR Article Requirements", icon: ShieldCheckIcon },
 ];
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-hidden bg-background">
       <GreenMosaic />
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
         <div className="flex flex-col items-center text-center">
           {/* Badge */}
           <FadeIn>
-            <div className="inline-flex items-center gap-2 border border-[#D9D9D9] px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#737373]">
+            <div className="inline-flex items-center gap-2 border border-border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <span className="inline-flex h-2 w-2 bg-[#22C55E]" />
               EU ESPR Digital Product Passport Platform
             </div>
@@ -38,7 +33,7 @@ export function HeroSection() {
 
           {/* Headline */}
           <FadeIn delay={0.1}>
-            <h1 className="mt-8 max-w-4xl text-5xl font-bold tracking-tight text-[#0D0D0D] sm:text-6xl lg:text-7xl">
+            <h1 className="mt-8 max-w-4xl text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
               The Digital Identity of{" "}
               <span className="text-[#22C55E]">Every Solar Panel</span>
             </h1>
@@ -46,7 +41,7 @@ export function HeroSection() {
 
           {/* Subtitle */}
           <FadeIn delay={0.15}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[#737373]">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
               Full lifecycle traceability — from raw materials to end-of-life
               recycling. Compliance, carbon footprint, and circularity data in
               one immutable digital passport.
@@ -79,19 +74,19 @@ export function HeroSection() {
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="border border-dashed border-[#D9D9D9] px-4 py-3 text-center transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
+                  className="border border-dashed border-border px-4 py-3 text-center transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
                 >
                   <div className="flex items-center justify-center gap-1.5">
-                    <stat.icon className="h-3 w-3 text-[#737373]" />
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#737373]">
+                    <stat.icon className="h-3 w-3 text-muted-foreground" />
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                       {stat.label}
                     </p>
                   </div>
                   <div className="mt-1 flex items-baseline justify-center gap-0.5">
-                    <span className="text-3xl font-bold tabular-nums tracking-tight text-[#0D0D0D] sm:text-4xl">
+                    <span className="text-3xl font-bold tabular-nums tracking-tight text-foreground sm:text-4xl">
                       {stat.value}
                     </span>
-                    <span className="text-[10px] font-medium uppercase text-[#737373]">
+                    <span className="text-[10px] font-medium uppercase text-muted-foreground">
                       {stat.suffix}
                     </span>
                   </div>

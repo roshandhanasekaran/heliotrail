@@ -18,7 +18,7 @@ interface CarbonChartProps {
 
 export function CarbonChart({ data }: CarbonChartProps) {
   return (
-    <ResponsiveContainer width="100%" height={220}>
+    <ResponsiveContainer width="100%" height={280}>
       <BarChart data={data} margin={{ left: 0, right: 8, top: 24, bottom: 8 }}>
         <defs>
           <linearGradient id="carbonGradient" x1="0" y1="0" x2="0" y2="1">
@@ -57,7 +57,7 @@ export function CarbonChart({ data }: CarbonChartProps) {
           dataKey="co2"
           fill="url(#carbonGradient)"
           radius={[3, 3, 0, 0]}
-          barSize={36}
+          maxBarSize={32}
           animationDuration={800}
         >
           <LabelList

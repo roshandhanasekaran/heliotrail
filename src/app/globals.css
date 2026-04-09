@@ -100,6 +100,57 @@
   --passport-blue-muted: #DBEAFE;
 }
 
+.dark {
+  --card: #111111;
+  --ring: #22C55E;
+  --input: #262626;
+  --muted: #1A1A1A;
+  --accent: #1A1A1A;
+  --border: #262626;
+  --chart-1: #EBEBEB;
+  --chart-2: #22C55E;
+  --chart-3: #737373;
+  --chart-4: #404040;
+  --chart-5: #262626;
+  --popover: #111111;
+  --primary: #22C55E;
+  --sidebar: #0D0D0D;
+  --secondary: #1A1A1A;
+  --background: #0A0A0A;
+  --foreground: #EBEBEB;
+  --destructive: #ef4444;
+  --sidebar-ring: #22C55E;
+  --sidebar-accent: #1A1A1A;
+  --sidebar-border: #1A1A1A;
+  --card-foreground: #EBEBEB;
+  --sidebar-primary: #22C55E;
+  --muted-foreground: #737373;
+  --accent-foreground: #EBEBEB;
+  --popover-foreground: #EBEBEB;
+  --primary-foreground: #0A0A0A;
+  --sidebar-foreground: #EBEBEB;
+  --secondary-foreground: #EBEBEB;
+  --destructive-foreground: #ffffff;
+  --sidebar-accent-foreground: #EBEBEB;
+  --sidebar-primary-foreground: #0A0A0A;
+
+  /* Passport-specific tokens */
+  --passport-bg: #0D0D0D;
+  --passport-bg-alt: #111111;
+  --passport-text: #EBEBEB;
+  --passport-text-muted: #737373;
+  --passport-border: #262626;
+  --passport-green: #22C55E;
+  --passport-green-muted: rgba(34, 197, 94, 0.10);
+  --passport-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --passport-shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.7);
+  --passport-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.9);
+  --passport-amber: #F59E0B;
+  --passport-amber-muted: rgba(245, 158, 11, 0.12);
+  --passport-blue: #3B82F6;
+  --passport-blue-muted: rgba(59, 130, 246, 0.12);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -195,7 +246,7 @@
 }
 
 .passport-table-row:hover {
-  background: #F5F5F5;
+  background: var(--passport-bg-alt);
 }
 
 .passport-table-row .table-label {
@@ -264,6 +315,22 @@
 .status-pending {
   background: #FEF3C7;
   color: #0D0D0D;
+}
+
+.dark .status-valid {
+  background: rgba(34, 197, 94, 0.12);
+  color: #EBEBEB;
+}
+.dark .status-pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: #EBEBEB;
+}
+.dark .status-expired {
+  background: rgba(239, 68, 68, 0.12);
+  color: #EBEBEB;
+}
+.dark .passport-table-row:hover {
+  background: #1A1A1A;
 }
 
 /* ============================================

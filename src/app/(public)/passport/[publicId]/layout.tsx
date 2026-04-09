@@ -37,7 +37,7 @@ export default async function PassportLayout({ params, children }: Props) {
   if (!passport) notFound();
 
   return (
-    <div className="relative min-h-screen passport-page bg-white text-[#0D0D0D]">
+    <div className="relative min-h-screen passport-page bg-background text-foreground">
       <PassportHero passport={passport} />
       <PassportSectionNav publicId={publicId} />
       <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">

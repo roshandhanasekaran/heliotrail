@@ -37,8 +37,8 @@ export default function IntegrationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#0D0D0D]">Integrations</h1>
-        <p className="mt-1 text-sm text-[#737373]">
+        <h1 className="text-2xl font-bold text-foreground">Integrations</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Connect external systems to automate passport data flows
         </p>
       </div>
@@ -47,19 +47,19 @@ export default function IntegrationsPage() {
         {integrations.map((integration) => (
           <div key={integration.name} className="clean-card p-4">
             <div className="flex items-start justify-between">
-              <div className="flex h-10 w-10 items-center justify-center bg-[#F2F2F2]">
-                <integration.icon className="h-5 w-5 text-[#737373]" />
+              <div className="flex h-10 w-10 items-center justify-center bg-muted">
+                <integration.icon className="h-5 w-5 text-muted-foreground" />
               </div>
               {integration.status === "coming_soon" && (
-                <span className="bg-[#F2F2F2] px-2 py-0.5 text-[0.6875rem] font-semibold text-[#737373]">
+                <span className="bg-muted px-2 py-0.5 text-[0.6875rem] font-semibold text-muted-foreground">
                   Coming Soon
                 </span>
               )}
             </div>
-            <h3 className="mt-3 text-sm font-bold text-[#0D0D0D]">
+            <h3 className="mt-3 text-sm font-bold text-foreground">
               {integration.name}
             </h3>
-            <p className="mt-1 text-xs text-[#737373]">
+            <p className="mt-1 text-xs text-muted-foreground">
               {integration.description}
             </p>
             {integration.status === "available" && (

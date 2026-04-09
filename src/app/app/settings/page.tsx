@@ -49,8 +49,8 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#0D0D0D]">Settings</h1>
-        <p className="mt-1 text-sm text-[#737373]">
+        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Manage your account, organization, and workspace configuration
         </p>
       </div>
@@ -58,22 +58,22 @@ export default function SettingsPage() {
       <div className="space-y-4">
         {sections.map((section) => (
           <div key={section.id} className="clean-card">
-            <div className="flex items-center justify-between border-b border-[#D9D9D9] px-4 py-3">
+            <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <div className="flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center bg-[#F2F2F2]">
-                  <section.icon className="h-4 w-4 text-[#737373]" />
+                <div className="flex h-8 w-8 items-center justify-center bg-muted">
+                  <section.icon className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-[#0D0D0D]">
+                  <h2 className="text-sm font-bold text-foreground">
                     {section.title}
                   </h2>
-                  <p className="text-xs text-[#737373]">
+                  <p className="text-xs text-muted-foreground">
                     {section.description}
                   </p>
                 </div>
               </div>
               {"count" in section && section.count && (
-                <span className="bg-[#F2F2F2] px-2 py-0.5 text-xs font-semibold text-[#737373]">
+                <span className="bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
                   {section.count}
                 </span>
               )}
@@ -84,14 +84,14 @@ export default function SettingsPage() {
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {section.fields.map((field) => (
                     <div key={field.label}>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-[#737373]">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         {field.label}
                       </label>
                       <input
                         type={field.type === "readonly" ? "text" : field.type}
                         defaultValue={field.value}
                         readOnly={field.type === "readonly"}
-                        className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] read-only:bg-[#FAFAFA] read-only:text-[#737373] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                        className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground read-only:bg-muted read-only:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
                       />
                     </div>
                   ))}

@@ -1,11 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTheme } from "next-themes";
 
 const COLORS = [
-  [217, 250, 218], // #D9FADA
-  [245, 254, 246], // #F5FEF6
-  [236, 253, 236], // #ECFDEC
+  [134, 239, 172], // #86EFAC - green-300
+  [187, 247, 208], // #BBF7D0 - green-200
+  [167, 243, 208], // #A7F3D0 - emerald-200
+];
+
+const DARK_COLORS = [
+  [15, 60, 30],   // very dark green
+  [10, 45, 22],   // darker green
+  [20, 75, 40],   // slightly less dark
 ];
 
 // Bright green for flicker highlights (#22C55E)
@@ -63,7 +70,7 @@ function buildBlocks(cols: number, maxH: number, seed: number): Block[] {
         // Flicker: staggered timing, varied intensity
         flickerPhase: r() * Math.PI * 2,
         flickerFreq: 0.3 + r() * 1.2, // different rates per tile
-        flickerIntensity: 0.15 + r() * 0.25, // 0.15-0.40 max opacity
+        flickerIntensity: 0.40 + r() * 0.40, // 0.40-0.80 max opacity
         flickerThreshold: 0.6 + r() * 0.3, // 0.6-0.9 — higher = rarer flickers
       });
       y += h + GAP;
@@ -75,6 +82,7 @@ function buildBlocks(cols: number, maxH: number, seed: number): Block[] {
 export function GreenMosaic() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const blocksRef = useRef<Block[]>([]);
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -82,6 +90,9 @@ export function GreenMosaic() {
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    const isDark = resolvedTheme === "dark";
+    const activeColors = isDark ? DARK_COLORS : COLORS;
 
     const W = 1600;
     const H = 750;
@@ -118,14 +129,15 @@ export function GreenMosaic() {
         if (dist < 0.6) continue; // skip blocks in the center
         const edgeFade = Math.min(1, (dist - 0.6) / 0.8);
 
-        // Pulsing opacity
+        // Pulsing opacity — slightly higher base alpha in dark mode
         const pulse = Math.sin(t * b.freq + b.phase);
-        const alpha = (0.3 + 0.55 * (pulse * 0.5 + 0.5)) * edgeFade;
+        const baseAlpha = isDark ? 0.5 : 0.3;
+        const alpha = (baseAlpha + 0.55 * (pulse * 0.5 + 0.5)) * edgeFade;
 
         // Color cycling between two greens
         const colorBlend = Math.sin(t * b.colorSpeed + b.colorPhase) * 0.5 + 0.5;
-        const c1 = COLORS[b.ci];
-        const c2 = COLORS[(b.ci + 1) % COLORS.length];
+        const c1 = activeColors[b.ci % activeColors.length];
+        const c2 = activeColors[(b.ci + 1) % activeColors.length];
         const r = Math.round(c1[0] + (c2[0] - c1[0]) * colorBlend);
         const g = Math.round(c1[1] + (c2[1] - c1[1]) * colorBlend);
         const bl = Math.round(c1[2] + (c2[2] - c1[2]) * colorBlend);
@@ -142,11 +154,13 @@ export function GreenMosaic() {
           // Normalize the above-threshold portion to 0-1 for smooth fade in/out
           const flickerAmount =
             (flickerSin - b.flickerThreshold) / (1 - b.flickerThreshold);
+          // In dark mode, flicker intensity is higher so bright green sparkles pop
+          const intensityScale = isDark ? (0.5 + (flickerAmount) * 0.5) : b.flickerIntensity;
           // Quadratic ease for smoother pulse
           const flickerAlpha =
             flickerAmount *
             flickerAmount *
-            b.flickerIntensity *
+            intensityScale *
             edgeFade *
             (0.4 + 0.6 * proximityBoost); // center tiles get up to 100%, edges down to 40%
           ctx!.fillStyle = `rgba(${FLICKER_COLOR[0]},${FLICKER_COLOR[1]},${FLICKER_COLOR[2]},${flickerAlpha})`;
@@ -160,7 +174,7 @@ export function GreenMosaic() {
     animId = requestAnimationFrame(draw);
 
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [resolvedTheme]);
 
   return (
     <div

@@ -11,6 +11,10 @@ import {
   ShieldIcon,
   FileIcon,
   LockIcon,
+  WrenchIcon,
+  AlertTriangleIcon,
+  ScaleIcon,
+  RecycleIcon,
 } from "lucide-react";
 
 interface DocData {
@@ -35,10 +39,13 @@ interface DocumentsClientProps {
 const typeConfig: Record<string, { icon: typeof FileIcon }> = {
   datasheet: { icon: FileTextIcon },
   declaration_of_conformity: { icon: FileCheckIcon },
-  manual: { icon: BookOpenIcon },
+  user_manual: { icon: BookOpenIcon },
+  installation_instructions: { icon: WrenchIcon },
+  safety_instructions: { icon: AlertTriangleIcon },
   epd: { icon: FlaskConicalIcon },
   test_report: { icon: ShieldIcon },
-  warranty: { icon: ShieldIcon },
+  due_diligence_report: { icon: ScaleIcon },
+  recycling_guide: { icon: RecycleIcon },
   other: { icon: FileIcon },
 };
 

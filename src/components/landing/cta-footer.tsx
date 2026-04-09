@@ -6,13 +6,13 @@ import { ArrowRightIcon } from "lucide-react";
 
 export function CTAFooter() {
   return (
-    <section className="border-t border-[#D9D9D9] bg-[#FAFAFA]">
+    <section className="border-t border-border bg-muted">
       <div className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8">
         <FadeIn>
-          <h2 className="text-3xl font-bold tracking-tight text-[#0D0D0D] sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
             Ready to see it in action?
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-[#737373]">
+          <p className="mx-auto mt-4 max-w-lg text-muted-foreground">
             Explore fully populated demo passports with real specifications,
             certifications, material data, and circularity information.
           </p>

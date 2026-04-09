@@ -51,17 +51,17 @@ const capabilities = [
 
 export function CapabilitySection() {
   return (
-    <section className="bg-white py-24">
+    <section className="bg-background py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <FadeIn>
           <div className="text-center">
-            <div className="inline-flex items-center gap-2 border border-[#D9D9D9] px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#737373]">
+            <div className="inline-flex items-center gap-2 border border-border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Platform Capabilities
             </div>
-            <h2 className="mt-6 text-3xl font-bold tracking-tight text-[#0D0D0D] sm:text-4xl">
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Everything a PV passport needs
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-[#737373]">
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
               From manufacturing data to end-of-life recycling, HelioTrail
               captures the full lifecycle of every solar module.
             </p>
@@ -75,14 +75,14 @@ export function CapabilitySection() {
               <FadeIn key={cap.title} delay={i * 0.05}>
                 <div className="clean-card h-full p-6">
                   <div className="mb-5">
-                    <div className="flex h-10 w-10 items-center justify-center bg-[#F2F2F2]">
-                      <Icon className="h-5 w-5 text-[#0D0D0D]" />
+                    <div className="flex h-10 w-10 items-center justify-center bg-muted">
+                      <Icon className="h-5 w-5 text-foreground" />
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold tracking-tight text-[#0D0D0D]">
+                  <h3 className="text-lg font-semibold tracking-tight text-foreground">
                     {cap.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#737373]">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {cap.description}
                   </p>
                 </div>

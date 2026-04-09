@@ -25,13 +25,13 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
   const crumbs = getBreadcrumbs(pathname);
 
   return (
-    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[#D9D9D9] bg-white px-4 lg:px-6">
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-border bg-background px-4 lg:px-6">
       {/* Left: mobile menu + breadcrumbs */}
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 lg:hidden text-[#737373]"
+          className="h-8 w-8 lg:hidden text-muted-foreground"
           onClick={onMobileMenuToggle}
         >
           <Menu className="h-4 w-4" />
@@ -48,8 +48,8 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
                 <span
                   className={
                     i === crumbs.length - 1
-                      ? "font-medium text-[#0D0D0D]"
-                      : "text-[#737373]"
+                      ? "font-medium text-foreground"
+                      : "text-muted-foreground"
                   }
                 >
                   {crumb}
@@ -64,11 +64,11 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
       <div className="flex items-center gap-1">
         {/* Search */}
         <div className="relative mr-2 hidden md:block">
-          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#A3A3A3]" />
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search passports..."
-            className="h-8 w-56 border border-[#D9D9D9] bg-[#FAFAFA] pl-8 pr-3 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+            className="h-8 w-56 border border-border bg-muted pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
           />
         </div>
 
@@ -76,10 +76,10 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="relative h-8 w-8 text-[#737373] hover:text-[#0D0D0D]"
+          className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
         >
           <Bell className="h-4 w-4" />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center bg-[#22C55E] text-[9px] font-bold text-[#0D0D0D]">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center bg-[#22C55E] text-[9px] font-bold text-foreground">
             3
           </span>
           <span className="sr-only">Notifications</span>

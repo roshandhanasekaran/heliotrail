@@ -52,6 +52,18 @@ export const ACCESS_LEVEL_LABELS: Record<string, string> = {
   internal: "Internal",
 };
 
+export const SUBMISSION_STATUS_LABELS: Record<string, string> = {
+  pending: "Pending",
+  accepted: "Accepted",
+  rejected: "Rejected",
+  error: "Error",
+};
+
+export const ANCHOR_TYPE_LABELS: Record<string, string> = {
+  local: "Local Hash",
+  blockchain: "Blockchain",
+};
+
 export const SITE_CONFIG = {
   name: "HelioTrail",
   description:

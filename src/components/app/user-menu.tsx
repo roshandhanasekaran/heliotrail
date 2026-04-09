@@ -25,27 +25,27 @@ export function UserMenu() {
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 text-[#737373] hover:text-[#0D0D0D]"
+        className="h-8 w-8 text-muted-foreground hover:text-foreground"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <div className="flex h-6 w-6 items-center justify-center bg-[#F2F2F2] text-xs font-bold text-[#737373]">
+        <div className="flex h-6 w-6 items-center justify-center bg-muted text-xs font-bold text-muted-foreground">
           D
         </div>
         <span className="sr-only">User menu</span>
       </Button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 w-48 border border-[#D9D9D9] bg-white shadow-md">
-          <div className="border-b border-[#D9D9D9] px-3 py-2">
-            <p className="text-sm font-medium text-[#0D0D0D]">Demo User</p>
-            <p className="text-xs text-[#737373]">demo@heliotrail.com</p>
+        <div className="absolute right-0 top-full mt-1 w-48 border border-border bg-background shadow-md">
+          <div className="border-b border-border px-3 py-2">
+            <p className="text-sm font-medium text-foreground">Demo User</p>
+            <p className="text-xs text-muted-foreground">demo@heliotrail.com</p>
           </div>
           <div className="py-1">
             <Link
               href="/app/settings"
-              className="flex items-center gap-2 px-3 py-1.5 text-sm text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+              className="flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
               onClick={() => setOpen(false)}
             >
               <Settings className="h-3.5 w-3.5" />
@@ -54,7 +54,7 @@ export function UserMenu() {
             <form action={signOut}>
               <button
                 type="submit"
-                className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+                className="flex w-full items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
               >
                 <LogOut className="h-3.5 w-3.5" />
                 Sign out

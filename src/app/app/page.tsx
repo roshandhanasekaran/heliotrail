@@ -145,27 +145,8 @@ export default async function DashboardPage() {
       {/* KPI Cards (client component for animations) */}
       <DashboardKpis data={kpiData} />
 
-      {/* Charts row: Compliance + Status Donut */}
+      {/* Passport Status — cert breakdown in 2-col with ESPR readiness context */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="clean-card hover-card p-5">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
-            Compliance Health
-          </h2>
-          <p className="text-xs text-[#737373]">
-            Certificate status across {all.length} passports
-          </p>
-          <div className="mt-4">
-            <ComplianceGauge
-              score={complianceScore}
-              size={160}
-              validCerts={validCerts}
-              pendingCerts={pendingCerts}
-              expiredCerts={expiredCerts}
-              totalCerts={certs.length}
-            />
-          </div>
-        </div>
-
         <div className="clean-card hover-card p-5">
           <h2 className="text-sm font-bold text-[#0D0D0D]">
             Passport Status
@@ -180,28 +161,46 @@ export default async function DashboardPage() {
             />
           </div>
         </div>
-      </div>
 
-      {/* Charts row: Carbon + Materials */}
-      <div className="grid gap-4 lg:grid-cols-2">
         <div className="clean-card hover-card p-5">
           <h2 className="text-sm font-bold text-[#0D0D0D]">
-            Carbon Footprint
+            Certificate Breakdown
           </h2>
           <p className="text-xs text-[#737373]">
-            kg CO₂e per module (cradle-to-gate, ISO 14067)
+            {certs.length} certificates across {all.length} passports
           </p>
-          {carbonData.length > 0 ? (
-            <div className="mt-2">
-              <CarbonChart data={carbonData} />
-            </div>
-          ) : (
-            <div className="flex h-[220px] items-center justify-center text-sm text-[#A3A3A3]">
-              No carbon data available
-            </div>
-          )}
+          <div className="mt-4">
+            <ComplianceGauge
+              score={complianceScore}
+              size={160}
+              validCerts={validCerts}
+              pendingCerts={pendingCerts}
+              expiredCerts={expiredCerts}
+              totalCerts={certs.length}
+            />
+          </div>
         </div>
+      </div>
 
+      {/* Carbon Footprint — full width */}
+      <div className="clean-card hover-card p-5">
+        <h2 className="text-sm font-bold text-[#0D0D0D]">Carbon Footprint</h2>
+        <p className="text-xs text-[#737373]">
+          kg CO₂e per module (cradle-to-gate, ISO 14067)
+        </p>
+        {carbonData.length > 0 ? (
+          <div className="mt-2">
+            <CarbonChart data={carbonData} />
+          </div>
+        ) : (
+          <div className="flex h-[280px] items-center justify-center text-sm text-[#A3A3A3]">
+            No carbon data available
+          </div>
+        )}
+      </div>
+
+      {/* Materials + Fleet Intelligence */}
+      <div className="grid gap-4 lg:grid-cols-3">
         <div className="clean-card hover-card p-5">
           <div className="flex items-center justify-between">
             <div>
@@ -225,10 +224,6 @@ export default async function DashboardPage() {
             <MaterialChart segments={materialSegments} />
           </div>
         </div>
-      </div>
-
-      {/* Fleet Intelligence */}
-      <div className="grid gap-4 lg:grid-cols-2">
         <div className="clean-card hover-card p-5">
           <FleetPRWidget />
         </div>
