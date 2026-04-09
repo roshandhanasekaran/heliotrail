@@ -43,14 +43,16 @@ export function PassportHero({ passport }: PassportHeroProps) {
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    const url = window.location.href.split(/\/(?:specs|compliance|circularity|documents|registry)$/)[0];
+    const url = `${window.location.origin}/passport/${passport.public_id}`;
     setPassportUrl(url);
     QRCode.toDataURL(url, {
       width: 120,
       margin: 1,
       color: { dark: "#0D0D0D", light: "#FFFFFF" },
-    }).then(setQrDataUrl);
-  }, []);
+    })
+      .then(setQrDataUrl)
+      .catch(() => {});
+  }, [passport.public_id]);
 
   return (
     <div className="border-b border-[#D9D9D9] bg-white">
