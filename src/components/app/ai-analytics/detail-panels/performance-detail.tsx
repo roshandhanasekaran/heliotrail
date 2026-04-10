@@ -177,12 +177,19 @@ export function PerformanceDetail({
 
       return {
         moduleId: profile.id,
+        model: profile.model,
         personality: profile.personality,
         avgPR: prCount > 0 ? Math.round((prSum / prCount) * 1000) / 10 : 0,
         avgIrradiance: irrCount > 0 ? Math.round(irrSum / irrCount) : 0,
       };
     });
   }, [moduleProfiles, days]);
+
+  // Filter scatter data by model
+  const filteredScatterData = useMemo(() => {
+    if (modelFilter === "all") return scatterData;
+    return scatterData.filter((d) => d.model === modelFilter);
+  }, [scatterData, modelFilter]);
 
   /* ─── Model vs Datasheet data (manufacturer persona) ─── */
   const modelDatasheetData = useMemo(() => {
@@ -229,16 +236,22 @@ export function PerformanceDetail({
     return revMap;
   }, [persona, moduleProfiles, days]);
 
-  const sorted = [...benchmarks].sort((a, b) => {
+  // Apply model filter to benchmarks
+  const filteredBenchmarks = useMemo(() => {
+    if (modelFilter === "all") return benchmarks;
+    return benchmarks.filter((b) => b.modelId === modelFilter);
+  }, [modelFilter]);
+
+  const sorted = [...filteredBenchmarks].sort((a, b) => {
     const mul = sortAsc ? 1 : -1;
     if (sortKey === "rank") return (a.rank - b.rank) * mul;
     return (a.pr - b.pr) * mul;
   });
 
   const statusCounts = {
-    outperforming: benchmarks.filter((b) => b.status === "outperforming").length,
-    normal: benchmarks.filter((b) => b.status === "normal").length,
-    underperforming: benchmarks.filter((b) => b.status === "underperforming").length,
+    outperforming: filteredBenchmarks.filter((b) => b.status === "outperforming").length,
+    normal: filteredBenchmarks.filter((b) => b.status === "normal").length,
+    underperforming: filteredBenchmarks.filter((b) => b.status === "underperforming").length,
   };
 
   function handleSort(key: SortKey) {
@@ -415,7 +428,7 @@ export function PerformanceDetail({
         </div>
       </div>
 
-      {/* NEW: PR vs Irradiance Scatter Plot */}
+      {/* PR vs Irradiance Scatter Plot */}
       <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
         <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
           PR vs Irradiance by Module Personality
@@ -423,21 +436,22 @@ export function PerformanceDetail({
         <p className="text-[9px] text-[#A3A3A3] mb-3">
           Each dot is a module. Color indicates personality type. Reveals low-light performance drops.
         </p>
-        <ResponsiveContainer width="100%" height={280}>
-          <ScatterChart margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
+        <ResponsiveContainer width="100%" height={320}>
+          <ScatterChart margin={{ left: 10, right: 24, top: 16, bottom: 28 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
             <XAxis
               type="number"
               dataKey="avgIrradiance"
               name="Avg Irradiance"
-              unit=" W/m\u00B2"
-              tick={{ fontSize: 9, fill: "#737373" }}
+              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
               axisLine={{ stroke: "#D9D9D9" }}
               tickLine={false}
+              domain={["dataMin - 30", "dataMax + 30"]}
+              tickFormatter={(v: number) => `${v} W/m\u00B2`}
               label={{
                 value: "Avg Irradiance (W/m\u00B2)",
                 position: "insideBottom",
-                offset: -2,
+                offset: -12,
                 fontSize: 9,
                 fill: "#A3A3A3",
               }}
@@ -446,17 +460,17 @@ export function PerformanceDetail({
               type="number"
               dataKey="avgPR"
               name="Avg PR"
-              unit="%"
-              tick={{ fontSize: 9, fill: "#737373" }}
+              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
               axisLine={false}
               tickLine={false}
-              width={45}
-              domain={[70, 90]}
+              width={50}
+              domain={["dataMin - 2", "dataMax + 2"]}
+              tickFormatter={(v: number) => `${v}%`}
               label={{
                 value: "Avg PR (%)",
                 angle: -90,
                 position: "insideLeft",
-                offset: 10,
+                offset: 4,
                 fontSize: 9,
                 fill: "#A3A3A3",
               }}
@@ -469,19 +483,20 @@ export function PerformanceDetail({
                 return (
                   <div style={CHART_TOOLTIP_STYLE}>
                     <p className="font-mono text-[10px] font-bold">{data.moduleId}</p>
-                    <p className="text-[9px] text-[#737373]">{data.personality.replace("_", " ")}</p>
+                    <p className="text-[9px] text-[#737373] capitalize">{data.personality.replace(/_/g, " ")}</p>
                     <p className="text-[9px]">PR: {data.avgPR}%</p>
-                    <p className="text-[9px]">Irradiance: {data.avgIrradiance} W/m&sup2;</p>
+                    <p className="text-[9px]">Irradiance: {data.avgIrradiance} W/m{"\u00B2"}</p>
                   </div>
                 );
               }}
             />
-            <Scatter name="Modules" data={scatterData}>
-              {scatterData.map((entry, index) => (
+            <Scatter name="Modules" data={filteredScatterData}>
+              {filteredScatterData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={PERSONALITY_COLORS[entry.personality] ?? "#737373"}
-                  r={6}
+                  r={7}
+                  opacity={0.85}
                 />
               ))}
             </Scatter>
@@ -538,7 +553,7 @@ export function PerformanceDetail({
             { label: "Normal", value: statusCounts.normal, color: "#737373" },
             { label: "Underperforming", value: statusCounts.underperforming, color: "#EF4444" },
           ]}
-          maxValue={benchmarks.length}
+          maxValue={filteredBenchmarks.length}
           showValues={true}
           barHeight={24}
         />
@@ -590,7 +605,7 @@ export function PerformanceDetail({
       {/* Full Fleet Benchmarking Table */}
       <div>
         <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
-          Fleet Benchmarking ({benchmarks.length} modules)
+          Fleet Benchmarking ({filteredBenchmarks.length} modules)
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full border border-[#D9D9D9] text-xs">
