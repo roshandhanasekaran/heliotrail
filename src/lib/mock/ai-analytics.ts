@@ -126,7 +126,7 @@ export function getAIInsights(): AIInsight[] {
       confidence: 91,
       title: "WRM-600 PR dropped below 75%",
       detail:
-        "Module WRM-600-LOT-07 underperforming fleet average by 10.3%. Pattern suggests partial shading or bypass diode failure.",
+        "WRM-600-LOT-07 performance ratio dropped 10.3% below fleet average. PR trend consistent with soiling accumulation or partial shading. Recommend on-site inspection to confirm root cause.",
       action: { label: "Investigate", href: "/app/passports" },
       timestamp: "18 min ago",
     },
@@ -146,9 +146,9 @@ export function getAIInsights(): AIInsight[] {
       category: "anomaly",
       severity: "warning",
       confidence: 86,
-      title: "Degradation anomaly detected",
+      title: "Elevated batch degradation — EVA supplier correlation",
       detail:
-        "Year-1 degradation of 1.1% on WRM-600-LOT-07 exceeds expected 0.8%. ML model flags 72% probability of exceeding warranty rate by Year 5.",
+        "Year-1 degradation of 1.1% on WRM-600-LOT-07 exceeds fleet average of 0.38%. EVA encapsulant supplier SUP-EV-001 shows +0.14% elevated degradation across 3 of 8 modules. Recommend batch monitoring and thermal imaging review.",
       action: { label: "Details", href: "/app/analytics" },
       timestamp: "3h ago",
     },
