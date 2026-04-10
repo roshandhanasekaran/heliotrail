@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { redirect } from "next/navigation";
 import { Users, UserPlus, Clock, Mail, X } from "lucide-react";
 import {
   teamMembers,
   pendingInvites,
+  currentUser,
   type MockTeamMember,
   type MockInvite,
 } from "@/lib/mock/settings";
-import { ROLE_LABELS, ROLE_COLORS, type Role } from "@/lib/rbac";
+import { ROLE_LABELS, ROLE_COLORS, canDo, type Role } from "@/lib/rbac";
 import { formatDate } from "@/lib/utils";
 
 const inputClass =
@@ -47,6 +49,10 @@ export default function TeamPage() {
   }
 
   const inviteRoleOptions: Role[] = ["admin", "compliance", "editor", "viewer"];
+
+  if (!canDo(currentUser.role, "team.view")) {
+    redirect("/app/settings/profile");
+  }
 
   return (
     <div className="space-y-5">

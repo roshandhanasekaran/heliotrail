@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { redirect } from "next/navigation";
 import { AlertTriangle, ArrowRightLeft, Trash2 } from "lucide-react";
-import { organization } from "@/lib/mock/settings";
+import { organization, currentUser } from "@/lib/mock/settings";
+import { canDo } from "@/lib/rbac";
 
 export default function DangerZonePage() {
   const [transferEmail, setTransferEmail] = useState("");
@@ -14,6 +16,10 @@ export default function DangerZonePage() {
     "text-xs font-semibold uppercase tracking-wider text-[#737373]";
   const redButtonClass =
     "rounded bg-red-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40";
+
+  if (!canDo(currentUser.role, "org.delete")) {
+    redirect("/app/settings/profile");
+  }
 
   return (
     <div className="space-y-5">

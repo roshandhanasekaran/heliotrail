@@ -1,12 +1,16 @@
+import { Fragment } from "react";
 import { Shield, Check, Minus } from "lucide-react";
+import { redirect } from "next/navigation";
 import {
   ROLE_LABELS,
   ROLE_DESCRIPTIONS,
   ROLE_COLORS,
   PERMISSIONS,
   hasPermission,
+  canDo,
   type Role,
 } from "@/lib/rbac";
+import { currentUser } from "@/lib/mock/settings";
 
 const ROLES: Role[] = ["owner", "admin", "compliance", "editor", "viewer"];
 
@@ -68,6 +72,10 @@ function capabilityLabel(key: string): string {
 }
 
 export default function RolesPage() {
+  if (!canDo(currentUser.role, "team.view")) {
+    redirect("/app/settings/profile");
+  }
+
   return (
     <div className="space-y-5">
       {/* Page heading */}
@@ -136,9 +144,9 @@ export default function RolesPage() {
             </thead>
             <tbody>
               {PERMISSION_GROUPS.map((group) => (
-                <>
+                <Fragment key={group.label}>
                   {/* Group header row */}
-                  <tr key={`group-${group.label}`} className="bg-[#FAFAFA]">
+                  <tr className="bg-[#FAFAFA]">
                     <td
                       colSpan={ROLES.length + 1}
                       className="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-[#737373]"
@@ -184,7 +192,7 @@ export default function RolesPage() {
                       </tr>
                     );
                   })}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

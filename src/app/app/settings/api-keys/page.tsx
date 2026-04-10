@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { redirect } from "next/navigation";
 import { Key, Plus, Copy, Check, Trash2 } from "lucide-react";
-import { apiKeys as initialKeys, type MockApiKey } from "@/lib/mock/settings";
+import { apiKeys as initialKeys, currentUser, type MockApiKey } from "@/lib/mock/settings";
+import { canDo } from "@/lib/rbac";
 import { formatDate } from "@/lib/utils";
 
 const labelClass =
@@ -48,6 +50,10 @@ export default function ApiKeysPage() {
     navigator.clipboard.writeText(prefix + "••••••••••••••••").catch(() => {});
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  }
+
+  if (!canDo(currentUser.role, "api-keys.manage")) {
+    redirect("/app/settings/profile");
   }
 
   return (

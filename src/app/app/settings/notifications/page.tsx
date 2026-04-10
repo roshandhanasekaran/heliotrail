@@ -10,13 +10,18 @@ import {
 function Toggle({
   on,
   onToggle,
+  ariaLabel,
 }: {
   on: boolean;
   onToggle: () => void;
+  ariaLabel: string;
 }) {
   return (
     <button
       onClick={onToggle}
+      role="switch"
+      aria-checked={on}
+      aria-label={ariaLabel}
       className={`flex h-5 w-9 items-center rounded-full transition-colors ${
         on ? "bg-[#22C55E]" : "bg-[#D9D9D9]"
       }`}
@@ -105,10 +110,12 @@ export default function NotificationsPage() {
                 <Toggle
                   on={pref.email}
                   onToggle={() => toggle(pref.key, "email")}
+                  ariaLabel={`${pref.label} email notifications`}
                 />
                 <Toggle
                   on={pref.inApp}
                   onToggle={() => toggle(pref.key, "inApp")}
+                  ariaLabel={`${pref.label} in-app notifications`}
                 />
               </div>
             </div>

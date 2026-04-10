@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { redirect } from "next/navigation";
 import { Leaf, ShieldCheck, Scale, FileCheck } from "lucide-react";
 import { regulatoryConfig, currentUser } from "@/lib/mock/settings";
 import { canDo } from "@/lib/rbac";
@@ -27,6 +28,10 @@ export default function RegulatoryPage() {
     regulatoryConfig.uflpaAttestationMode,
   );
   const [saved, setSaved] = useState(false);
+
+  if (!canDo(currentUser.role, "regulatory.edit")) {
+    redirect("/app/settings/profile");
+  }
 
   function handleSave() {
     setSaved(true);
