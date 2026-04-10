@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { SolarPanelDiagram } from "@/components/passport/solar-panel-diagram";
 import { OverviewClient } from "@/components/passport/overview-client";
 import { formatNumber, formatDate } from "@/lib/utils";
 import type { Passport } from "@/types/passport";
@@ -58,11 +57,6 @@ export default async function OverviewPage({ params }: Props) {
 
   return (
     <div className="space-y-12">
-      {/* Interactive Solar Panel Diagram */}
-      <section>
-        <SolarPanelDiagram passport={p} publicId={publicId} />
-      </section>
-
       {/* Client-side animated section */}
       <OverviewClient
         manufacturerData={manufacturerData}
