@@ -27,18 +27,20 @@ import { DashboardKpis } from "./dashboard-kpis";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const [{ data: passports }, { data: certificates }, { data: materials }, { data: documents }] =
+  const [{ data: passports }, { data: certificates }, { data: materials }, { data: documents }, { count: supplyChainCount }] =
     await Promise.all([
       supabase.from("passports").select("*"),
       supabase.from("passport_certificates").select("*"),
       supabase.from("passport_materials").select("*"),
       supabase.from("passport_documents").select("*"),
+      supabase.from("passport_supply_chain_actors").select("*", { count: "exact", head: true }),
     ]);
 
   const all = passports ?? [];
   const certs = certificates ?? [];
   const mats = materials ?? [];
   const docs = documents ?? [];
+  const hasSupplyChain = (supplyChainCount ?? 0) > 0;
 
   const published = all.filter((p) => p.status === "published");
   const drafts = all.filter((p) => p.status === "draft");
@@ -342,8 +344,8 @@ export default async function DashboardPage() {
                 ["Carbon Footprint", carbonData.length > 0],
                 ["Compliance Certs", validCerts > 0],
                 ["Circularity Data", true],
-                ["Supply Chain", false],
-                ["Dynamic Data", false],
+                ["Supply Chain", hasSupplyChain],
+                ["Dynamic Data", all.length > 0],
               ].map(([label, ok]) => (
                 <div
                   key={label as string}
