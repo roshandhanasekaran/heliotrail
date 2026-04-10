@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { createPassport } from "@/app/actions/passport";
 import {
   ArrowLeft,
   ArrowRight,
@@ -579,7 +581,7 @@ function TextField({
         placeholder={placeholder}
         disabled={disabled}
         className={cn(
-          "mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] disabled:bg-muted disabled:text-muted-foreground",
+          "mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:bg-muted disabled:text-muted-foreground",
           mono && "font-mono",
           error && "border-red-400 focus:border-red-500 focus:ring-red-500/30"
         )}
@@ -638,9 +640,9 @@ function SelectField({
           setSearch("");
         }}
         className={cn(
-          "mt-1 flex w-full items-center justify-between border border-border bg-background px-3 py-2 text-left text-sm transition-colors hover:border-[#A3A3A3]",
+          "mt-1 flex w-full items-center justify-between border border-border bg-background px-3 py-2 text-left text-sm transition-colors hover:border-muted-foreground/70",
           value ? "text-foreground" : "text-muted-foreground",
-          open && "border-[#22C55E] ring-1 ring-[#22C55E]",
+          open && "border-primary ring-1 ring-[#22C55E]",
           error &&
             !open &&
             "border-red-400 focus:border-red-500 focus:ring-red-500/30",
@@ -666,7 +668,7 @@ function SelectField({
             className="absolute z-50 mt-1 w-full border border-border bg-background shadow-lg"
           >
             {options.length > 5 && (
-              <div className="border-b border-[#F2F2F2] p-2">
+              <div className="border-b border-muted p-2">
                 <div className="relative">
                   <Search className="absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
                   <input
@@ -675,7 +677,7 @@ function SelectField({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search..."
-                    className="w-full border border-border bg-muted py-1.5 pl-7 pr-3 text-xs text-foreground focus:border-[#22C55E] focus:outline-none"
+                    className="w-full border border-border bg-muted py-1.5 pl-7 pr-3 text-xs text-foreground focus:border-primary focus:outline-none"
                   />
                 </div>
               </div>
@@ -698,11 +700,11 @@ function SelectField({
                       className={cn(
                         "flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-colors hover:bg-muted",
                         o.value === value &&
-                          "bg-[#E8FAE9] font-medium text-foreground",
+                          "bg-[var(--passport-green-muted)] font-medium text-foreground",
                       )}
                     >
                       {o.value === value && (
-                        <CheckCircle2 className="h-3 w-3 shrink-0 text-[#22C55E]" />
+                        <CheckCircle2 className="h-3 w-3 shrink-0 text-primary" />
                       )}
                       <span className={o.value === value ? "" : "ml-5"}>
                         {o.label}
@@ -741,7 +743,7 @@ function ToggleField({
         className={cn(
           "mt-0.5 flex h-5 w-9 shrink-0 items-center border-2 transition-colors",
           checked
-            ? "border-[#22C55E] bg-[#22C55E]"
+            ? "border-primary bg-primary"
             : "border-border bg-muted"
         )}
       >
@@ -783,7 +785,7 @@ function TextArea({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E] resize-y"
+        className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary resize-y"
       />
     </div>
   );
@@ -795,7 +797,7 @@ function SectionDivider({ label }: { label: string }) {
       <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
         {label}
       </span>
-      <div className="h-px flex-1 bg-[#D9D9D9]" />
+      <div className="h-px flex-1 bg-border" />
     </div>
   );
 }
@@ -913,9 +915,9 @@ function StepIdentity({
         <button
           type="button"
           onClick={() => handleModelSelect("WRM-700-TOPCON-BiN-03")}
-          className="w-full border-2 border-dashed border-[#22C55E] bg-[#E8FAE9] px-4 py-3 text-left transition-colors hover:bg-[#d4f5d8]"
+          className="w-full border-2 border-dashed border-primary bg-[var(--passport-green-muted)] px-4 py-3 text-left transition-colors hover:bg-[#d4f5d8]"
         >
-          <p className="text-xs font-bold text-[#22C55E]">Quick Fill: WRM-700-TOPCON-BiN-03</p>
+          <p className="text-xs font-bold text-primary">Quick Fill: WRM-700-TOPCON-BiN-03</p>
           <p className="text-[10px] text-muted-foreground">Auto-populate all steps with real Waaree 700W TOPCon module data</p>
         </button>
       )}
@@ -1370,7 +1372,7 @@ function StepComposition({
 
       {data.bom.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-10 text-center">
-          <Layers className="h-8 w-8 text-[#D9D9D9]" />
+          <Layers className="h-8 w-8 text-border" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
             No materials added
           </p>
@@ -1402,33 +1404,33 @@ function StepComposition({
                   value={item.materialName}
                   onChange={(e) => updateItem(item.id, { materialName: e.target.value })}
                   placeholder="Material name"
-                  className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-primary focus:outline-none"
                 />
                 <input
                   value={item.componentType}
                   onChange={(e) => updateItem(item.id, { componentType: e.target.value })}
                   placeholder="Component"
-                  className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-primary focus:outline-none"
                 />
                 <input
                   type="number"
                   value={item.massGrams || ""}
                   onChange={(e) => updateItem(item.id, { massGrams: Number(e.target.value) })}
                   placeholder="0"
-                  className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-primary focus:outline-none"
                 />
                 <input
                   type="number"
                   value={item.massPercent || ""}
                   onChange={(e) => updateItem(item.id, { massPercent: Number(e.target.value) })}
                   placeholder="0"
-                  className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-primary focus:outline-none"
                 />
                 <input
                   value={item.casNumber}
                   onChange={(e) => updateItem(item.id, { casNumber: e.target.value })}
                   placeholder="e.g. 7440-21-3"
-                  className="w-full border border-border bg-background px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
+                  className="w-full border border-border bg-background px-2 py-1.5 text-xs font-mono focus:border-primary focus:outline-none"
                 />
                 <button
                   type="button"
@@ -1436,7 +1438,7 @@ function StepComposition({
                   className={cn(
                     "h-7 w-7 flex items-center justify-center border text-xs font-bold",
                     item.isCriticalRaw
-                      ? "border-[#22C55E] bg-[#E8FAE9] text-[#22C55E]"
+                      ? "border-primary bg-[var(--passport-green-muted)] text-primary"
                       : "border-border bg-background text-muted-foreground"
                   )}
                   title="Critical Raw Material"
@@ -1449,7 +1451,7 @@ function StepComposition({
                   className={cn(
                     "h-7 w-7 flex items-center justify-center border text-xs font-bold",
                     item.isSubstanceOfConcern
-                      ? "border-[#F59E0B] bg-[#FEF3C7] text-[#F59E0B]"
+                      ? "border-[#F59E0B] bg-[var(--passport-amber-muted)] text-[#F59E0B]"
                       : "border-border bg-background text-muted-foreground"
                   )}
                   title="Substance of Concern"
@@ -1473,7 +1475,7 @@ function StepComposition({
                     value={item.materialName}
                     onChange={(e) => updateItem(item.id, { materialName: e.target.value })}
                     placeholder="Material name"
-                    className="flex-1 border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="flex-1 border border-border bg-background px-2 py-1.5 text-sm focus:border-primary focus:outline-none"
                   />
                   <button
                     type="button"
@@ -1488,13 +1490,13 @@ function StepComposition({
                     value={item.componentType}
                     onChange={(e) => updateItem(item.id, { componentType: e.target.value })}
                     placeholder="Component type"
-                    className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="w-full border border-border bg-background px-2 py-1.5 text-sm focus:border-primary focus:outline-none"
                   />
                   <input
                     value={item.casNumber}
                     onChange={(e) => updateItem(item.id, { casNumber: e.target.value })}
                     placeholder="CAS No."
-                    className="w-full border border-border bg-background px-2 py-1.5 text-xs font-mono focus:border-[#22C55E] focus:outline-none"
+                    className="w-full border border-border bg-background px-2 py-1.5 text-xs font-mono focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -1504,7 +1506,7 @@ function StepComposition({
                       value={item.massGrams || ""}
                       onChange={(e) => updateItem(item.id, { massGrams: Number(e.target.value) })}
                       placeholder="Mass (g)"
-                      className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                      className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-primary focus:outline-none"
                     />
                   </div>
                   <div className="flex items-center gap-1">
@@ -1513,7 +1515,7 @@ function StepComposition({
                       value={item.massPercent || ""}
                       onChange={(e) => updateItem(item.id, { massPercent: Number(e.target.value) })}
                       placeholder="Mass %"
-                      className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                      className="w-full border border-border bg-background px-2 py-1.5 text-sm font-mono focus:border-primary focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1524,7 +1526,7 @@ function StepComposition({
                     className={cn(
                       "flex-1 py-1 border text-xs font-semibold",
                       item.isCriticalRaw
-                        ? "border-[#22C55E] bg-[#E8FAE9] text-foreground"
+                        ? "border-primary bg-[var(--passport-green-muted)] text-foreground"
                         : "border-border bg-background text-muted-foreground"
                     )}
                   >
@@ -1536,7 +1538,7 @@ function StepComposition({
                     className={cn(
                       "flex-1 py-1 border text-xs font-semibold",
                       item.isSubstanceOfConcern
-                        ? "border-[#F59E0B] bg-[#FEF3C7] text-foreground"
+                        ? "border-[#F59E0B] bg-[var(--passport-amber-muted)] text-foreground"
                         : "border-border bg-background text-muted-foreground"
                     )}
                   >
@@ -1631,7 +1633,7 @@ function StepCompliance({
 
       {data.certificates.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-10 text-center">
-          <ShieldCheck className="h-8 w-8 text-[#D9D9D9]" />
+          <ShieldCheck className="h-8 w-8 text-border" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
             No certificates added
           </p>
@@ -1674,7 +1676,7 @@ function StepCompliance({
                     value={cert.standard}
                     onChange={(e) => updateCert(cert.id, { standard: e.target.value })}
                     className={cn(
-                      "mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]",
+                      "mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary",
                       !cert.standard && "text-muted-foreground"
                     )}
                   >
@@ -1692,7 +1694,7 @@ function StepCompliance({
                     value={cert.certificateNumber}
                     onChange={(e) => updateCert(cert.id, { certificateNumber: e.target.value })}
                     placeholder="e.g. IEC-2025-44781"
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm font-mono focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm font-mono focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1701,7 +1703,7 @@ function StepCompliance({
                     value={cert.issuer}
                     onChange={(e) => updateCert(cert.id, { issuer: e.target.value })}
                     placeholder="e.g. TUV Rheinland"
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1710,7 +1712,7 @@ function StepCompliance({
                     type="date"
                     value={cert.issuedDate}
                     onChange={(e) => updateCert(cert.id, { issuedDate: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1719,7 +1721,7 @@ function StepCompliance({
                     type="date"
                     value={cert.expiryDate}
                     onChange={(e) => updateCert(cert.id, { expiryDate: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1727,7 +1729,7 @@ function StepCompliance({
                   <select
                     value={cert.status}
                     onChange={(e) => updateCert(cert.id, { status: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {CERT_STATUSES.map((s) => (
                       <option key={s.value} value={s.value}>
@@ -1744,7 +1746,7 @@ function StepCompliance({
                     type="url"
                     value={cert.documentUrl}
                     onChange={(e) => updateCert(cert.id, { documentUrl: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     placeholder="https://..."
                   />
                 </div>
@@ -1754,7 +1756,7 @@ function StepCompliance({
                     type="text"
                     value={cert.scopeNotes}
                     onChange={(e) => updateCert(cert.id, { scopeNotes: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     placeholder="e.g. Terrestrial PV modules — Design qualification"
                   />
                 </div>
@@ -2077,7 +2079,7 @@ function StepDocuments({
 
       {data.documents.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-10 text-center">
-          <FileText className="h-8 w-8 text-[#D9D9D9]" />
+          <FileText className="h-8 w-8 text-border" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
             No documents added
           </p>
@@ -2108,7 +2110,7 @@ function StepDocuments({
                     value={doc.name}
                     onChange={(e) => updateDocument(idx, { name: e.target.value })}
                     placeholder="e.g. Datasheet"
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -2116,7 +2118,7 @@ function StepDocuments({
                   <select
                     value={doc.documentType}
                     onChange={(e) => updateDocument(idx, { documentType: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {DOCUMENT_TYPES.map((t) => (
                       <option key={t.value} value={t.value}>{t.label}</option>
@@ -2128,7 +2130,7 @@ function StepDocuments({
                   <select
                     value={doc.accessLevel}
                     onChange={(e) => updateDocument(idx, { accessLevel: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   >
                     {ACCESS_LEVELS.map((l) => (
                       <option key={l.value} value={l.value}>{l.label}</option>
@@ -2141,7 +2143,7 @@ function StepDocuments({
                     value={doc.url}
                     onChange={(e) => updateDocument(idx, { url: e.target.value })}
                     placeholder="https://..."
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -2150,7 +2152,7 @@ function StepDocuments({
                     value={doc.issuer}
                     onChange={(e) => updateDocument(idx, { issuer: e.target.value })}
                     placeholder="e.g. Roshan"
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -2159,7 +2161,7 @@ function StepDocuments({
                     type="date"
                     value={doc.issuedDate}
                     onChange={(e) => updateDocument(idx, { issuedDate: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                   />
                 </div>
               </div>
@@ -2244,7 +2246,7 @@ function StepSupplyChain({
                     type="text"
                     value={actor.actorName}
                     onChange={(e) => updateActor(actor.id, { actorName: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     placeholder="e.g. Tongwei Co., Ltd."
                   />
                 </div>
@@ -2253,7 +2255,7 @@ function StepSupplyChain({
                   <select
                     value={actor.actorRole}
                     onChange={(e) => updateActor(actor.id, { actorRole: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
                   >
                     <option value="">Select role...</option>
                     {ACTOR_ROLES.map((r) => (
@@ -2267,7 +2269,7 @@ function StepSupplyChain({
                     type="text"
                     value={actor.country}
                     onChange={(e) => updateActor(actor.id, { country: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     placeholder="e.g. China"
                   />
                 </div>
@@ -2277,7 +2279,7 @@ function StepSupplyChain({
                     type="text"
                     value={actor.facilityName}
                     onChange={(e) => updateActor(actor.id, { facilityName: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     placeholder="e.g. Leshan Facility"
                   />
                 </div>
@@ -2286,7 +2288,7 @@ function StepSupplyChain({
                   <select
                     value={actor.tierLevel}
                     onChange={(e) => updateActor(actor.id, { tierLevel: e.target.value })}
-                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none"
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
                   >
                     {["1", "2", "3", "4", "5"].map((t) => (
                       <option key={t} value={t}>Tier {t}</option>
@@ -2301,7 +2303,7 @@ function StepSupplyChain({
                       className={cn(
                         "flex h-5 w-5 items-center justify-center border text-xs font-bold",
                         actor.uflpaCompliant
-                          ? "border-[#22C55E] bg-[#E8FAE9] text-[#22C55E]"
+                          ? "border-primary bg-[var(--passport-green-muted)] text-primary"
                           : "border-border bg-background text-transparent"
                       )}
                     >
@@ -2332,8 +2334,8 @@ function StepReview({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-2 bg-[#E8FAE9] px-4 py-3 text-sm">
-        <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
+      <div className="flex items-center gap-2 bg-[var(--passport-green-muted)] px-4 py-3 text-sm">
+        <CheckCircle2 className="h-4 w-4 text-primary" />
         <span className="text-foreground">
           Review your passport data before submitting.
         </span>
@@ -2405,10 +2407,10 @@ function StepReview({
                 <span className="font-mono text-foreground">{b.massGrams}g ({b.massPercent}%)</span>
                 <div className="flex gap-1">
                   {b.isCriticalRaw && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[#E8FAE9] text-[#22C55E]">CRM</span>
+                    <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[var(--passport-green-muted)] text-primary">CRM</span>
                   )}
                   {b.isSubstanceOfConcern && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[#FEF3C7] text-[#F59E0B]">SoC</span>
+                    <span className="inline-flex items-center px-1.5 py-0.5 text-[0.6rem] font-bold bg-[var(--passport-amber-muted)] text-[#F59E0B]">SoC</span>
                   )}
                 </div>
               </div>
@@ -2422,7 +2424,7 @@ function StepReview({
         {data.certificates.length === 0 ? (
           <p className="px-4 py-3 text-sm text-muted-foreground italic">No certificates added</p>
         ) : (
-          <div className="divide-y divide-[#D9D9D9]">
+          <div className="divide-y divide-border">
             {data.certificates.map((c) => (
               <div key={c.id} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
                 <span className="text-sm font-medium text-foreground">{c.standard || "—"}</span>
@@ -2521,7 +2523,7 @@ function StepReview({
         {data.documents.length === 0 ? (
           <p className="px-4 py-3 text-sm text-muted-foreground italic">No documents added</p>
         ) : (
-          <div className="divide-y divide-[#D9D9D9]">
+          <div className="divide-y divide-border">
             {data.documents.map((doc, idx) => (
               <div key={idx} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
                 <span className="text-sm font-medium text-foreground">{doc.name || "—"}</span>
@@ -2543,7 +2545,7 @@ function StepReview({
         {data.supplyChainActors.length === 0 ? (
           <p className="px-4 py-3 text-sm text-muted-foreground italic">No supply chain actors added</p>
         ) : (
-          <div className="divide-y divide-[#D9D9D9]">
+          <div className="divide-y divide-border">
             {data.supplyChainActors.map((actor, idx) => (
               <div key={idx} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
                 <span className="text-sm font-medium text-foreground">{actor.actorName || "—"}</span>
@@ -2551,7 +2553,7 @@ function StepReview({
                 <span className="text-xs text-muted-foreground">Tier {actor.tierLevel}</span>
                 {actor.country && <span className="text-xs text-muted-foreground">{actor.country}</span>}
                 {actor.uflpaCompliant && (
-                  <span className="inline-flex items-center gap-1 text-xs text-[#22C55E]">
+                  <span className="inline-flex items-center gap-1 text-xs text-primary">
                     <CheckCircle2 className="h-3 w-3" /> UFLPA
                   </span>
                 )}
@@ -2582,7 +2584,7 @@ function ReviewSection({
         <button
           type="button"
           onClick={onEdit}
-          className="flex items-center gap-1 text-xs font-medium text-[#22C55E] hover:text-foreground"
+          className="flex items-center gap-1 text-xs font-medium text-primary hover:text-foreground"
         >
           <Pencil className="h-3 w-3" />
           Edit
@@ -2625,11 +2627,16 @@ function ReviewRow({
    ============================================ */
 
 export default function CreatePassportPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [savedDraft, setSavedDraft] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [createdPassportId, setCreatedPassportId] = useState<string | null>(null);
+  const [createdPvPassportId, setCreatedPvPassportId] = useState<string | null>(null);
 
   // Generate IDs client-side only to avoid hydration mismatch
   useEffect(() => {
@@ -2692,9 +2699,128 @@ export default function CreatePassportPage() {
     setTimeout(() => setSavedDraft(false), 2500);
   }, []);
 
-  const handleSubmit = useCallback(() => {
-    setSubmitted(true);
-  }, []);
+  const handleSubmit = useCallback(async () => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const facilityName =
+      FACILITIES.find((f) => f.id === formData.facility)?.label ?? "";
+
+    const result = await createPassport({
+      modelId: formData.modelId,
+      serialNumber: formData.serialNumber,
+      batchId: formData.batchId,
+      gtin: formData.gtin,
+      manufacturer: formData.manufacturer,
+      facility: formData.facility,
+      facilityName,
+      facilityCountry: formData.facilityCountry,
+      manufacturingDate: formData.manufacturingDate,
+      technology: formData.technology,
+      manufacturerOperatorId: formData.manufacturerOperatorId,
+      manufacturerCountry: formData.manufacturerCountry,
+      manufacturerAddress: formData.manufacturerAddress,
+      manufacturerContactUrl: formData.manufacturerContactUrl,
+      importerName: formData.importerName,
+      importerOperatorId: formData.importerOperatorId,
+      importerCountry: formData.importerCountry,
+      ratedPower: formData.ratedPower,
+      efficiency: formData.efficiency,
+      voc: formData.voc,
+      isc: formData.isc,
+      vmp: formData.vmp,
+      imp: formData.imp,
+      maxSystemVoltage: formData.maxSystemVoltage,
+      length: formData.length,
+      width: formData.width,
+      depth: formData.depth,
+      mass: formData.mass,
+      cellCount: formData.cellCount,
+      cellType: formData.cellType,
+      tempCoeffPmax: formData.tempCoeffPmax,
+      tempCoeffVoc: formData.tempCoeffVoc,
+      tempCoeffIsc: formData.tempCoeffIsc,
+      noct: formData.noct,
+      fireRating: formData.fireRating,
+      ipRating: formData.ipRating,
+      connectorType: formData.connectorType,
+      frameType: formData.frameType,
+      glassType: formData.glassType,
+      bifacialityFactor: formData.bifacialityFactor,
+      warrantyYears: formData.warrantyYears,
+      performanceWarranty: formData.performanceWarranty,
+      degradationRate: formData.degradationRate,
+      expectedLifetime: formData.expectedLifetime,
+      carbonFootprint: formData.carbonFootprint,
+      carbonIntensity: formData.carbonIntensity,
+      carbonLcaBoundary: formData.carbonLcaBoundary,
+      carbonMethodology: formData.carbonMethodology,
+      carbonVerificationRef: formData.carbonVerificationRef,
+      reachStatus: formData.reachStatus,
+      rohsStatus: formData.rohsStatus,
+      recyclabilityRate: formData.recyclabilityRate,
+      recycledContent: formData.recycledContent,
+      renewableContent: formData.renewableContent,
+      isHazardous: formData.isHazardous,
+      hazardousNotes: formData.hazardousNotes,
+      dismantlingTime: formData.dismantlingTime,
+      dismantlingInstructions: formData.dismantlingInstructions,
+      collectionScheme: formData.collectionScheme,
+      recyclerName: formData.recyclerName,
+      recyclerContact: formData.recyclerContact,
+      recoveryAluminium: formData.recoveryAluminium,
+      recoveryGlass: formData.recoveryGlass,
+      recoverySilicon: formData.recoverySilicon,
+      recoveryCopper: formData.recoveryCopper,
+      recoverySilver: formData.recoverySilver,
+      recoveryNotes: formData.recoveryNotes,
+      eolStatus: formData.eolStatus,
+      bom: formData.bom.map((b) => ({
+        materialName: b.materialName,
+        componentType: b.componentType,
+        massGrams: b.massGrams,
+        massPercent: b.massPercent,
+        casNumber: b.casNumber,
+        isCriticalRaw: b.isCriticalRaw,
+        isSubstanceOfConcern: b.isSubstanceOfConcern,
+      })),
+      certificates: formData.certificates.map((c) => ({
+        standard: c.standard,
+        certificateNumber: c.certificateNumber,
+        issuer: c.issuer,
+        issuedDate: c.issuedDate,
+        expiryDate: c.expiryDate,
+        status: c.status,
+        documentUrl: c.documentUrl,
+        scopeNotes: c.scopeNotes,
+      })),
+      documents: formData.documents.map((d) => ({
+        name: d.name,
+        documentType: d.documentType,
+        accessLevel: d.accessLevel,
+        url: d.url,
+        issuer: d.issuer,
+        issuedDate: d.issuedDate,
+      })),
+      supplyChainActors: formData.supplyChainActors.map((a) => ({
+        actorName: a.actorName,
+        actorRole: a.actorRole,
+        country: a.country,
+        facilityName: a.facilityName,
+        tierLevel: a.tierLevel,
+        uflpaCompliant: a.uflpaCompliant,
+      })),
+    });
+
+    if (result.success) {
+      setCreatedPassportId(result.passportId);
+      setCreatedPvPassportId(result.pvPassportId);
+      setSubmitted(true);
+    } else {
+      setSubmitError(result.error);
+    }
+    setIsSubmitting(false);
+  }, [formData]);
 
   const handleJumpTo = useCallback((idx: number) => {
     setErrors({});
@@ -2714,8 +2840,8 @@ export default function CreatePassportPage() {
           </Link>
         </div>
         <div className="clean-card flex flex-col items-center py-16 text-center">
-          <div className="flex h-12 w-12 items-center justify-center bg-[#E8FAE9]">
-            <CheckCircle2 className="h-6 w-6 text-[#22C55E]" />
+          <div className="flex h-12 w-12 items-center justify-center bg-[var(--passport-green-muted)]">
+            <CheckCircle2 className="h-6 w-6 text-primary" />
           </div>
           <h2 className="mt-4 text-xl font-bold text-foreground">
             Passport Submitted for Approval
@@ -2723,12 +2849,17 @@ export default function CreatePassportPage() {
           <p className="mt-2 text-sm text-muted-foreground max-w-md">
             Passport{" "}
             <span className="font-mono font-semibold text-foreground">
-              {formData.passportId}
+              {createdPvPassportId ?? formData.passportId}
             </span>{" "}
-            has been submitted. It will be reviewed by your compliance team
+            has been saved and submitted. It will be reviewed by your compliance team
             before publication.
           </p>
           <div className="mt-6 flex gap-3">
+            {createdPassportId && (
+              <Link href={`/app/passports/${createdPassportId}`} className="cta-secondary !text-sm">
+                <span>View Passport</span>
+              </Link>
+            )}
             <Link href="/app/passports" className="cta-secondary !text-sm">
               <span>View All Passports</span>
             </Link>
@@ -2737,6 +2868,8 @@ export default function CreatePassportPage() {
                 setFormData(initialFormData());
                 setCurrentStep(0);
                 setSubmitted(false);
+                setCreatedPassportId(null);
+                setCreatedPvPassportId(null);
               }}
               className="cta-primary !text-sm"
             >
@@ -2769,7 +2902,7 @@ export default function CreatePassportPage() {
             </p>
           </div>
           {savedDraft && (
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-[#22C55E]">
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-primary">
               <CheckCircle2 className="h-3 w-3" /> Draft saved
             </span>
           )}
@@ -2790,9 +2923,9 @@ export default function CreatePassportPage() {
                   className={cn(
                     "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors",
                     isCurrent
-                      ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-foreground"
+                      ? "border-l-2 border-primary bg-[var(--passport-green-muted)] font-medium text-foreground"
                       : isCompleted
-                        ? "border-l-2 border-[#22C55E]/40 text-foreground"
+                        ? "border-l-2 border-primary/40 text-foreground"
                         : "border-l-2 border-transparent text-muted-foreground hover:bg-muted"
                   )}
                 >
@@ -2800,9 +2933,9 @@ export default function CreatePassportPage() {
                     className={cn(
                       "flex h-5 w-5 shrink-0 items-center justify-center text-[0.65rem] font-bold",
                       isCurrent
-                        ? "bg-[#22C55E] text-white"
+                        ? "bg-primary text-white"
                         : isCompleted
-                          ? "bg-[#22C55E]/15 text-[#22C55E]"
+                          ? "bg-primary/15 text-primary"
                           : "bg-muted text-muted-foreground"
                     )}
                   >
@@ -2834,9 +2967,9 @@ export default function CreatePassportPage() {
                     className={cn(
                       "flex shrink-0 items-center gap-1 px-2 py-1 text-[0.6875rem] font-medium transition-colors",
                       isCurrent
-                        ? "bg-[#E8FAE9] text-foreground border border-[#22C55E]"
+                        ? "bg-[var(--passport-green-muted)] text-foreground border border-primary"
                         : isCompleted
-                          ? "bg-muted text-[#22C55E] border border-border"
+                          ? "bg-muted text-primary border border-border"
                           : "bg-background text-muted-foreground border border-border"
                     )}
                   >
@@ -2854,7 +2987,7 @@ export default function CreatePassportPage() {
 
           <div className="clean-card p-6">
             <div className="flex items-center gap-2">
-              <step.icon className="h-4 w-4 text-[#22C55E]" />
+              <step.icon className="h-4 w-4 text-primary" />
               <h2 className="text-lg font-bold text-foreground">{step.label}</h2>
               <span className="ml-auto text-xs text-muted-foreground">
                 Step {currentStep + 1} of {WIZARD_STEPS.length}
@@ -2901,6 +3034,14 @@ export default function CreatePassportPage() {
             </div>
           </div>
 
+          {/* Submit error */}
+          {submitError && (
+            <div className="mt-4 flex items-center gap-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 px-4 py-3 text-sm text-red-700 dark:text-red-400">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{submitError}</span>
+            </div>
+          )}
+
           {/* Footer actions */}
           <div className="mt-4 flex items-center justify-between">
             <button
@@ -2936,9 +3077,19 @@ export default function CreatePassportPage() {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="cta-primary !text-xs"
+                  disabled={isSubmitting}
+                  className="cta-primary !text-xs disabled:opacity-50"
                 >
-                  <Send className="h-3 w-3" /> Submit for Approval
+                  {isSubmitting ? (
+                    <>
+                      <span className="h-3 w-3 animate-spin border-2 border-white border-t-transparent rounded-full inline-block" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-3 w-3" /> Submit for Approval
+                    </>
+                  )}
                 </button>
               )}
             </div>
