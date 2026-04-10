@@ -149,14 +149,14 @@ export function PassportHero({ passport }: PassportHeroProps) {
           </div>
 
           {/* Right: Premium Floating Solar Panel */}
-          <div className="relative shrink-0 w-full max-w-[240px] mx-auto lg:mx-0 lg:mt-0 -mt-2">
+          <div className="relative shrink-0 w-48 lg:w-56 mx-auto lg:mx-0 overflow-visible">
             {/* Ambient glow beneath */}
-            <div className="absolute inset-x-6 -bottom-3 h-12 bg-gradient-to-t from-black/8 to-transparent blur-2xl" />
+            <div className="absolute inset-x-4 -bottom-2 h-8 bg-gradient-to-t from-black/6 to-transparent blur-xl" />
             <div
               className="relative transition-all duration-700 ease-out hover:scale-[1.03] hover:-translate-y-1"
               style={{
-                transform: "perspective(900px) rotateY(-5deg) rotateX(3deg)",
-                filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.18)) drop-shadow(0 12px 24px rgba(0,0,0,0.08))",
+                transform: "perspective(900px) rotateY(-6deg) rotateX(3deg)",
+                filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.15)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
               }}
             >
               <svg viewBox="0 0 320 420" className="w-full">
