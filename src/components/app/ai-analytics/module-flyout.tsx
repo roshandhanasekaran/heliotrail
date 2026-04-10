@@ -25,7 +25,7 @@ import {
 import type {
   ModuleProfile,
   ThermalEvent,
-  IVCurveData,
+  IVCurveTrace,
   AnomalyAlert,
 } from "@/lib/mock/ai-analytics-timeseries";
 
@@ -53,12 +53,50 @@ const CHART_TOOLTIP_STYLE = {
   boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
 };
 
+// ─── Derived stats from personality ──────────────────────
+
+const DEGRADATION_RATES: Record<string, number> = {
+  hotspot: 0.62,
+  batch_defect: 0.55,
+  connector_fault: 0.48,
+  high_performer: 0.35,
+  normal: 0.40,
+};
+
+const EVIDENCE_SCORES: Record<string, number> = {
+  hotspot: 89,
+  batch_defect: 72,
+  connector_fault: 65,
+  high_performer: 40,
+  normal: 50,
+};
+
+function derivedModuleStats(profile: ModuleProfile, moduleIndex: number) {
+  const scada = getScadaData(moduleIndex, 7);
+  const daytimePoints = scada.filter((p) => p.irradiance_poa_wm2 > 50);
+  const avgPr =
+    daytimePoints.length > 0
+      ? (daytimePoints.reduce((s, p) => s + p.performance_ratio, 0) /
+          daytimePoints.length) *
+        100
+      : 80;
+  return {
+    pr: Math.round(avgPr * 10) / 10,
+    degradationRate: DEGRADATION_RATES[profile.personality] ?? 0.40,
+    warrantyEvidenceScore: EVIDENCE_SCORES[profile.personality] ?? 50,
+  };
+}
+
 // ─── Helpers ──────────────────────────────────────────────
 
 function parseModuleIndex(moduleId: string): number {
   const match = moduleId.match(/(\d+)$/);
   if (!match) return 0;
   return parseInt(match[1], 10) - 1;
+}
+
+function formatModuleId(moduleIndex: number): string {
+  return `Module-${String(moduleIndex + 1).padStart(2, "0")}`;
 }
 
 function prColor(pr: number): string {
@@ -94,7 +132,7 @@ function statusBadge(
   pr: number,
   personality: string,
 ): { label: string; bg: string; text: string } {
-  if (personality === "outperforming" || pr >= 85)
+  if (personality === "high_performer" || pr >= 85)
     return { label: "OUTPERFORMING", bg: "#DCFCE7", text: "#166534" };
   if (
     personality === "hotspot" ||
@@ -157,8 +195,8 @@ const BOM_DATA = [
 
 // ─── Warranty Evidence Factors ────────────────────────────
 
-function getEvidenceFactors(profile: ModuleProfile) {
-  const score = profile.warrantyEvidenceScore;
+function getEvidenceFactors(profile: ModuleProfile, warrantyEvidenceScore: number) {
+  const score = warrantyEvidenceScore;
   return [
     { label: "SCADA data continuity (365 days)", pass: score >= 50 },
     { label: "Flash test comparison available", pass: score >= 60 },
@@ -181,8 +219,10 @@ function PerformanceTab({ moduleIndex }: { moduleIndex: number }) {
     for (const pt of scadaData) {
       const day = pt.timestamp.slice(0, 10);
       if (!byDay[day]) byDay[day] = { powers: [], expecteds: [] };
-      byDay[day].powers.push(pt.power);
-      byDay[day].expecteds.push(pt.expected);
+      byDay[day].powers.push(pt.power_ac_kw * 1000); // kW to W for chart
+      // Expected power: irradiance * nameplate kW * typical efficiency
+      const expectedW = (pt.irradiance_poa_wm2 * 0.55) / 1000 * 0.85 * 1000;
+      byDay[day].expecteds.push(expectedW);
     }
     return Object.entries(byDay).map(([day, vals]) => ({
       day: day.slice(5),
@@ -257,8 +297,9 @@ function PerformanceTab({ moduleIndex }: { moduleIndex: number }) {
 
 function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
   const thermalEvents = useMemo(() => getThermalEvents(), []);
+  const resolvedId = formatModuleId(moduleIndex);
   const event: ThermalEvent | undefined = thermalEvents.find(
-    (e) => e.moduleIndex === moduleIndex,
+    (e) => e.module_id === resolvedId,
   );
 
   if (!event) {
@@ -288,7 +329,7 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
             maxWidth: 400,
           }}
         >
-          {event.cells.map((row, r) =>
+          {event.heatmap.map((row, r) =>
             row.map((temp, c) => (
               <div
                 key={`${r}-${c}`}
@@ -296,7 +337,7 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
                 style={{ backgroundColor: tempToColor(temp) }}
                 title={`${temp.toFixed(1)}\u00B0C`}
               >
-                {r === event.hotspotRow && c === event.hotspotCol && (
+                {r === event.location.row && c === event.location.col && (
                   <div className="absolute inset-0 rounded-sm border-2 border-white" />
                 )}
               </div>
@@ -321,13 +362,13 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
           <div>
             <p className="text-[10px] uppercase tracking-wider text-[#737373]">Delta Temperature</p>
             <p className="font-mono text-lg font-bold text-[#EF4444]">
-              {event.deltaT.toFixed(1)}°C
+              {event.hotspot_delta_c.toFixed(1)}°C
             </p>
           </div>
           <div>
             <p className="text-[10px] uppercase tracking-wider text-[#737373]">Inspection Date</p>
             <p className="font-mono text-sm font-semibold text-[#0D0D0D]">
-              {event.inspectionDate}
+              {event.date}
             </p>
           </div>
         </div>
@@ -338,7 +379,15 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
 
 function IVCurvesTab({ moduleIndex }: { moduleIndex: number }) {
   const allCurves = useMemo(() => getIVCurves(), []);
-  const curve: IVCurveData | undefined = allCurves[moduleIndex];
+  const curve: IVCurveTrace | undefined = allCurves[moduleIndex];
+
+  const chartData = useMemo(() => {
+    if (!curve) return [];
+    return curve.voltage_points.map((v, i) => ({
+      voltage: v,
+      current: curve.current_points[i] ?? 0,
+    }));
+  }, [curve]);
 
   if (!curve) return null;
 
@@ -349,7 +398,7 @@ function IVCurvesTab({ moduleIndex }: { moduleIndex: number }) {
       </p>
       <div className="border border-[#E5E5E5] bg-white p-3">
         <ResponsiveContainer width="100%" height={220}>
-          <LineChart data={curve.points} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
+          <LineChart data={chartData} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
             <XAxis
               dataKey="voltage"
@@ -388,20 +437,20 @@ function IVCurvesTab({ moduleIndex }: { moduleIndex: number }) {
       <div className="grid grid-cols-3 gap-3 mt-4">
         <div className="border border-[#E5E5E5] bg-white p-3">
           <p className="text-[10px] uppercase tracking-wider text-[#737373]">Fill Factor</p>
-          <p className="font-mono text-lg font-bold" style={{ color: fillFactorColor(curve.fillFactor) }}>
-            {curve.fillFactor.toFixed(3)}
+          <p className="font-mono text-lg font-bold" style={{ color: fillFactorColor(curve.fill_factor) }}>
+            {curve.fill_factor.toFixed(3)}
           </p>
         </div>
         <div className="border border-[#E5E5E5] bg-white p-3">
           <p className="text-[10px] uppercase tracking-wider text-[#737373]">Series R</p>
           <p className="font-mono text-lg font-bold text-[#0D0D0D]">
-            {curve.seriesResistance.toFixed(2)} &#8486;
+            {curve.series_resistance_ohm.toFixed(2)} &#8486;
           </p>
         </div>
         <div className="border border-[#E5E5E5] bg-white p-3">
           <p className="text-[10px] uppercase tracking-wider text-[#737373]">Shunt R</p>
           <p className="font-mono text-lg font-bold text-[#0D0D0D]">
-            {curve.shuntResistance} &#8486;
+            {curve.shunt_resistance_ohm} &#8486;
           </p>
         </div>
       </div>
@@ -440,7 +489,7 @@ function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
               { label: "Model", value: profile.model },
               { label: "Technology", value: profile.technology },
               { label: "Batch", value: profile.batch },
-              { label: "Installation Date", value: profile.installationDate },
+              { label: "Installation Date", value: profile.install_date },
             ].map((row, i) => (
               <tr key={row.label} className={i % 2 === 0 ? "bg-white" : "bg-[#FAFAFA]"}>
                 <td className="px-4 py-2.5 text-[#737373] font-medium">{row.label}</td>
@@ -451,7 +500,7 @@ function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
               <td className="px-4 py-2.5 text-[#737373] font-medium">Origin Country</td>
               <td className="px-4 py-2.5 font-mono text-[#0D0D0D] text-right">
                 <span className="inline-flex items-center gap-2">
-                  {profile.originCountry} {riskBadge(profile.originRisk)}
+                  India {riskBadge("Low")}
                 </span>
               </td>
             </tr>
@@ -482,21 +531,26 @@ function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
   );
 }
 
-function WarrantyTab({ profile }: { profile: ModuleProfile }) {
+function WarrantyTab({ profile, moduleIndex }: { profile: ModuleProfile; moduleIndex: number }) {
+  const stats = useMemo(() => derivedModuleStats(profile, moduleIndex), [profile, moduleIndex]);
+
   const degradationData = useMemo(() => {
-    const actualRate = profile.degradationRate;
+    const actualRate = stats.degradationRate;
     const warrantyRate = 0.4;
     return Array.from({ length: 31 }, (_, year) => ({
       year,
       actual: Math.round((100 - actualRate * year) * 10) / 10,
       warranty: Math.round((100 - warrantyRate * year) * 10) / 10,
     }));
-  }, [profile.degradationRate]);
+  }, [stats.degradationRate]);
 
-  const evidenceFactors = useMemo(() => getEvidenceFactors(profile), [profile]);
+  const evidenceFactors = useMemo(
+    () => getEvidenceFactors(profile, stats.warrantyEvidenceScore),
+    [profile, stats.warrantyEvidenceScore],
+  );
   const passCount = evidenceFactors.filter((f) => f.pass).length;
 
-  const excessDegradation = Math.max(0, profile.degradationRate - 0.4);
+  const excessDegradation = Math.max(0, stats.degradationRate - 0.4);
   const estimatedClaimEur = Math.round(excessDegradation * 2000);
 
   return (
@@ -552,7 +606,7 @@ function WarrantyTab({ profile }: { profile: ModuleProfile }) {
         <div className="flex items-center gap-4 mt-2 justify-center">
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-0.5 bg-[#22C55E]" />
-            <span className="text-[9px] text-[#737373]">Actual ({profile.degradationRate}%/yr)</span>
+            <span className="text-[9px] text-[#737373]">Actual ({stats.degradationRate}%/yr)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-0.5 border-t border-dashed border-[#F59E0B]" />
@@ -601,14 +655,21 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
   const profiles = useMemo(() => getModuleProfiles(), []);
   const profile: ModuleProfile | undefined = moduleIndex >= 0 ? profiles[moduleIndex] : undefined;
 
+  const resolvedModuleId = moduleIndex >= 0 ? formatModuleId(moduleIndex) : "";
+
   const anomalyAlerts = useMemo(() => getAnomalyAlerts(), []);
   const alert: AnomalyAlert | undefined = anomalyAlerts.find(
-    (a) => a.moduleIndex === moduleIndex,
+    (a) => a.module_id === resolvedModuleId,
   );
 
   const thermalEvents = useMemo(() => getThermalEvents(), []);
   const thermalEvent: ThermalEvent | undefined = thermalEvents.find(
-    (e) => e.moduleIndex === moduleIndex,
+    (e) => e.module_id === resolvedModuleId,
+  );
+
+  const stats = useMemo(
+    () => (profile ? derivedModuleStats(profile, moduleIndex) : null),
+    [profile, moduleIndex],
   );
 
   const handleClose = useCallback(() => {
@@ -617,15 +678,15 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
 
   const isOpen = moduleId !== null;
 
-  const badge = profile
-    ? statusBadge(profile.currentPR, profile.personality)
+  const badge = profile && stats
+    ? statusBadge(stats.pr, profile.personality)
     : { label: "NORMAL", bg: "#F2F2F2", text: "#525252" };
 
   const showAIRecommendation =
     alert &&
-    (alert.personality === "hotspot" ||
-      alert.personality === "batch_defect" ||
-      alert.personality === "connector_fault");
+    (alert.pattern === "hotspot" ||
+      alert.pattern === "batch_defect" ||
+      alert.pattern === "connector_fault");
 
   return (
     <AnimatePresence>
@@ -685,7 +746,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                     style={{ fontSize: 10 }}
                   >
                     {profile.manufacturer} &middot; {profile.technology} &middot;{" "}
-                    {profile.ratedPower}Wp &middot; {profile.batch}
+                    {profile.rated_power_w}Wp &middot; {profile.batch}
                   </p>
                 </div>
                 <button
@@ -707,18 +768,18 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                 <p className="text-[10px] uppercase tracking-wider text-[#737373]">Current PR</p>
                 <p
                   className="font-mono text-xl font-bold mt-0.5"
-                  style={{ color: prColor(profile.currentPR) }}
+                  style={{ color: prColor(stats?.pr ?? 80) }}
                 >
-                  {profile.currentPR}%
+                  {stats?.pr ?? 80}%
                 </p>
               </div>
               <div className="px-4 py-3" style={{ borderRight: "1px solid #E5E5E5" }}>
                 <p className="text-[10px] uppercase tracking-wider text-[#737373]">Degrad. Rate/yr</p>
                 <p
                   className="font-mono text-xl font-bold mt-0.5"
-                  style={{ color: degradationColor(profile.degradationRate) }}
+                  style={{ color: degradationColor(stats?.degradationRate ?? 0.40) }}
                 >
-                  {profile.degradationRate.toFixed(2)}%
+                  {(stats?.degradationRate ?? 0.40).toFixed(2)}%
                 </p>
               </div>
               <div className="px-4 py-3" style={{ borderRight: "1px solid #E5E5E5" }}>
@@ -729,11 +790,11 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                   className="font-mono text-xl font-bold mt-0.5"
                   style={{
                     color: thermalEvent
-                      ? hotspotColor(thermalEvent.deltaT)
+                      ? hotspotColor(thermalEvent.hotspot_delta_c)
                       : "#737373",
                   }}
                 >
-                  {thermalEvent ? `${thermalEvent.deltaT.toFixed(1)}\u00B0C` : "\u2014"}
+                  {thermalEvent ? `${thermalEvent.hotspot_delta_c.toFixed(1)}\u00B0C` : "\u2014"}
                 </p>
               </div>
               <div className="px-4 py-3">
@@ -742,9 +803,9 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                 </p>
                 <p
                   className="font-mono text-xl font-bold mt-0.5"
-                  style={{ color: warrantyScoreColor(profile.warrantyEvidenceScore) }}
+                  style={{ color: warrantyScoreColor(stats?.warrantyEvidenceScore ?? 50) }}
                 >
-                  {profile.warrantyEvidenceScore}%
+                  {stats?.warrantyEvidenceScore ?? 50}%
                 </p>
               </div>
             </div>
@@ -793,7 +854,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                 <SupplyChainTab profile={profile} />
               )}
               {activeTab === "warranty" && (
-                <WarrantyTab profile={profile} />
+                <WarrantyTab profile={profile} moduleIndex={moduleIndex} />
               )}
             </div>
 
@@ -815,7 +876,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                   </span>
                 </div>
                 <p className="text-[11px] leading-relaxed">
-                  {renderBoldText(alert.recommendation)}
+                  {renderBoldText(alert.description)}
                 </p>
               </div>
             )}
