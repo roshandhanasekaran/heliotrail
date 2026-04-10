@@ -31,8 +31,8 @@ export function InsightCard({ insight }: InsightCardProps) {
           >
             {CATEGORY_LABELS[insight.category]}
           </span>
-          <span className="font-mono text-[8px] text-[#A3A3A3]">
-            {insight.confidence}% conf
+          <span className={`font-mono text-[8px] ${insight.evidence.available >= insight.evidence.required ? "text-[#A3A3A3]" : "text-[#F59E0B]"}`}>
+            {insight.evidence.available}/{insight.evidence.required} evidence
           </span>
         </div>
         <span className="shrink-0 text-[8px] text-[#A3A3A3]">

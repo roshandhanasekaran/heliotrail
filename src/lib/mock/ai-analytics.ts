@@ -90,6 +90,7 @@ export interface AIInsight {
   category: "performance" | "maintenance" | "financial" | "compliance" | "anomaly";
   severity: "info" | "warning" | "critical" | "success";
   confidence: number; // 0-100
+  evidence: { available: number; required: number; sources: string[] };
   title: string;
   detail: string;
   action?: { label: string; href: string };
@@ -113,6 +114,7 @@ export function getAIInsights(): AIInsight[] {
       category: "maintenance",
       severity: "warning",
       confidence: 94,
+      evidence: { available: 3, required: 3, sources: ["Irradiance sensor", "Dust trend", "Rainfall data"] },
       title: "Cleaning recommended in 5 days",
       detail:
         "Soiling loss pattern analysis suggests optimal cleaning window Apr 14-16. Delaying 10+ days costs an estimated €156/mo.",
@@ -124,6 +126,7 @@ export function getAIInsights(): AIInsight[] {
       category: "performance",
       severity: "critical",
       confidence: 91,
+      evidence: { available: 1, required: 3, sources: ["Performance ratio"] },
       title: "WRM-600 PR dropped below 75%",
       detail:
         "WRM-600-LOT-07 performance ratio dropped 10.3% below fleet average. PR trend consistent with soiling accumulation or partial shading. Recommend on-site inspection to confirm root cause.",
@@ -135,6 +138,7 @@ export function getAIInsights(): AIInsight[] {
       category: "financial",
       severity: "info",
       confidence: 88,
+      evidence: { available: 2, required: 3, sources: ["Soiling model", "Cleaning schedule"] },
       title: "€2,400/yr optimization identified",
       detail:
         "Switching to 21-day cleaning cycles (from 30-day) and fixing clipping on 2 inverters recovers 3.2% annual yield.",
@@ -146,6 +150,7 @@ export function getAIInsights(): AIInsight[] {
       category: "anomaly",
       severity: "warning",
       confidence: 86,
+      evidence: { available: 2, required: 3, sources: ["Degradation curve", "Batch correlation"] },
       title: "Elevated batch degradation — EVA supplier correlation",
       detail:
         "Year-1 degradation of 1.1% on WRM-600-LOT-07 exceeds fleet average of 0.38%. EVA encapsulant supplier SUP-EV-001 shows +0.14% elevated degradation across 3 of 8 modules. Recommend batch monitoring and thermal imaging review.",
@@ -157,6 +162,7 @@ export function getAIInsights(): AIInsight[] {
       category: "compliance",
       severity: "success",
       confidence: 99,
+      evidence: { available: 2, required: 2, sources: ["Certificate registry", "Expiry date"] },
       title: "IEC 61215 renewed successfully",
       detail:
         "Certificate auto-verified via registry. Valid until 2028-04-01. No action required.",
@@ -167,6 +173,7 @@ export function getAIInsights(): AIInsight[] {
       category: "performance",
       severity: "info",
       confidence: 82,
+      evidence: { available: 3, required: 3, sources: ["Fleet PR data", "Irradiance model", "Seasonal baseline"] },
       title: "Fleet PR stabilizing at 81.4%",
       detail:
         "After declining 2.1% QoQ, PR trend shows stabilization. Seasonal irradiance increase expected to push PR to 83%+ by May.",
