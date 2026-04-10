@@ -2,12 +2,6 @@
 
 import { useEffect, useState } from "react";
 import type { Persona, TimeRange } from "@/lib/ai-analytics-types";
-import { getFleetBenchmarking } from "@/lib/mock/ai-analytics";
-
-// ─── Derived model list from fleet benchmarking data ──────────
-const benchmarks = getFleetBenchmarking();
-const uniqueModels = Array.from(new Set(benchmarks.map((b) => b.modelId)));
-const totalModules = benchmarks.length;
 
 // ─── Constants ────────────────────────────────────────────────
 const PERSONA_OPTIONS: { value: Persona; label: string }[] = [
@@ -28,8 +22,6 @@ interface AnalyticsControlBarProps {
   onPersonaChange: (persona: Persona) => void;
   timeRange: TimeRange;
   onTimeRangeChange: (range: TimeRange) => void;
-  modelFilter: string;
-  onModelFilterChange: (model: string) => void;
 }
 
 // ─── Component ────────────────────────────────────────────────
@@ -38,8 +30,6 @@ export function AnalyticsControlBar({
   onPersonaChange,
   timeRange,
   onTimeRangeChange,
-  modelFilter,
-  onModelFilterChange,
 }: AnalyticsControlBarProps) {
   const [minutesAgo, setMinutesAgo] = useState(2);
 
@@ -107,34 +97,6 @@ export function AnalyticsControlBar({
           ))}
         </div>
       </div>
-
-      {/* ── Divider ─────────────────────────────────────── */}
-      <div className="h-6 w-px bg-[#E5E5E5]" />
-
-      {/* ── Model Filter ────────────────────────────────── */}
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#737373]">
-          Model
-        </span>
-        <select
-          value={modelFilter}
-          onChange={(e) => onModelFilterChange(e.target.value)}
-          className="rounded border border-[#E5E5E5] bg-white px-2 py-1 text-[11px] text-[#0D0D0D] outline-none focus:border-[#22C55E]"
-        >
-          <option value="all">All Models ({totalModules})</option>
-          {uniqueModels.map((model) => {
-            const count = benchmarks.filter((b) => b.modelId === model).length;
-            return (
-              <option key={model} value={model}>
-                {model} ({count})
-              </option>
-            );
-          })}
-        </select>
-      </div>
-
-      {/* ── Divider ─────────────────────────────────────── */}
-      <div className="h-6 w-px bg-[#E5E5E5]" />
 
       {/* ── Sync Indicator ──────────────────────────────── */}
       <div className="ml-auto flex items-center gap-1.5">

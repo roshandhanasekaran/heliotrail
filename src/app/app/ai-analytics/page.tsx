@@ -26,7 +26,6 @@ export default function AIAnalyticsPage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [persona, setPersona] = useState<Persona>("manufacturer");
   const [timeRange, setTimeRange] = useState<TimeRange>("30d");
-  const [modelFilter, setModelFilter] = useState("all");
   const [flyoutModuleId, setFlyoutModuleId] = useState<string | null>(null);
 
   const DetailPanel = activeSection ? DETAIL_PANELS[activeSection] : null;
@@ -50,14 +49,11 @@ export default function AIAnalyticsPage() {
           onPersonaChange={setPersona}
           timeRange={timeRange}
           onTimeRangeChange={setTimeRange}
-          modelFilter={modelFilter}
-          onModelFilterChange={setModelFilter}
         />
         <main className="flex-1 overflow-y-auto bg-[#FAFAFA] p-6">
           <Panel
             persona={persona}
             timeRange={timeRange}
-            modelFilter={modelFilter}
             onModuleClick={handleModuleClick}
           />
         </main>

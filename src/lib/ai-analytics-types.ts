@@ -9,6 +9,5 @@ export type TimeRange = "7d" | "30d" | "90d" | "1y";
 export interface DetailPanelProps {
   persona: Persona;
   timeRange: TimeRange;
-  modelFilter: string;
   onModuleClick: (moduleId: string) => void;
 }
