@@ -52,9 +52,9 @@ const MANDATORY_REQUIREMENTS = [
   { id: "dur", label: "Durability information", status: "partial" as const },
 ];
 
-const VOLUNTARY_REQUIREMENTS = [
-  { id: "rep", label: "Repairability score", status: "partial" as const },
-  { id: "scd", label: "Supply chain due diligence", status: "incomplete" as const },
+const VOLUNTARY_REQUIREMENTS: { id: string; label: string; status: "complete" | "partial" | "incomplete" }[] = [
+  { id: "rep", label: "Repairability score", status: "partial" },
+  { id: "scd", label: "Supply chain due diligence", status: "incomplete" },
 ];
 
 interface ComplianceDetailProps {
