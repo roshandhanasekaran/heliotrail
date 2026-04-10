@@ -2,7 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { DOCUMENT_TYPE_LABELS, ACCESS_LEVEL_LABELS } from "@/lib/constants";
 import { formatDate, formatFileSize } from "@/lib/utils";
-import { FolderOpen, Upload, FileText, Lock, Globe, ExternalLink } from "lucide-react";
+import { FolderOpen, FileText, Lock, Globe, ExternalLink } from "lucide-react";
+import { UploadEvidenceButton } from "@/components/app/upload-evidence-button";
 
 export default async function EvidencePage({
   params,
@@ -29,10 +30,7 @@ export default async function EvidencePage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-[#0D0D0D]">Evidence</h2>
-        <button className="cta-primary text-xs">
-          <Upload className="h-3.5 w-3.5" />
-          Upload Evidence
-        </button>
+        <UploadEvidenceButton className="cta-primary text-xs" />
       </div>
 
       {docs.length === 0 ? (

@@ -1,7 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { DOCUMENT_TYPE_LABELS, ACCESS_LEVEL_LABELS } from "@/lib/constants";
 import { formatDate, formatFileSize } from "@/lib/utils";
-import { FolderOpen, Upload, Search, FileText, Lock, Globe, CheckCircle2 } from "lucide-react";
+import { FolderOpen, Search, FileText, Lock, Globe, CheckCircle2 } from "lucide-react";
+import { UploadEvidenceButton } from "@/components/app/upload-evidence-button";
 
 export default async function EvidenceVaultPage() {
   const supabase = await createClient();
@@ -21,10 +22,7 @@ export default async function EvidenceVaultPage() {
             {docs.length} document{docs.length !== 1 ? "s" : ""} across all passports
           </p>
         </div>
-        <button className="cta-primary text-sm">
-          <Upload className="h-4 w-4" />
-          Upload Evidence
-        </button>
+        <UploadEvidenceButton />
       </div>
 
       {/* Search */}

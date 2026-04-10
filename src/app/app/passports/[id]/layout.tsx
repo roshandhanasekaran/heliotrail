@@ -4,7 +4,8 @@ import { PASSPORT_STATUS_LABELS, VERIFICATION_STATUS_LABELS } from "@/lib/consta
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { PassportContextNav } from "@/components/app/passports/passport-context-nav";
-import { ArrowLeft, ExternalLink, Send } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+import { SubmitForApprovalButton } from "@/components/app/passports/submit-for-approval-button";
 
 export default async function PassportWorkspaceLayout({
   children,
@@ -84,10 +85,10 @@ export default async function PassportWorkspaceLayout({
                 <ExternalLink className="h-3 w-3" /> Preview Public
               </span>
             </Link>
-            <button className="cta-primary text-xs">
-              <Send className="h-3 w-3" />
-              Submit for Approval
-            </button>
+            <SubmitForApprovalButton
+              passportId={id}
+              currentStatus={passport.status}
+            />
           </div>
         </div>
       </div>
