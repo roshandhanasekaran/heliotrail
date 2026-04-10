@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PassportHero } from "@/components/passport/passport-hero";
 import { PassportSectionNav } from "@/components/passport/passport-section-nav";
 import { PublicFooter } from "@/components/layout/public-footer";
+import { PageTransition } from "@/components/passport/page-transition";
 import type { Passport } from "@/types/passport";
 import type { Metadata } from "next";
 
@@ -40,8 +41,10 @@ export default async function PassportLayout({ params, children }: Props) {
     <div className="relative min-h-screen passport-page bg-background text-foreground">
       <PassportHero passport={passport} />
       <PassportSectionNav publicId={publicId} />
-      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {children}
+      <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <PageTransition>
+          {children}
+        </PageTransition>
       </div>
 
       <PublicFooter />
