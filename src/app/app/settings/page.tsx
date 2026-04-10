@@ -18,7 +18,7 @@ const sections = [
     title: "Organization",
     description: "Configure your tenant settings",
     fields: [
-      { label: "Organization Name", value: "Waaree Energies Ltd.", type: "text" },
+      { label: "Organization Name", value: "Roshan", type: "text" },
       { label: "Domain", value: "waaree.com", type: "text" },
       { label: "Default Facility", value: "Surat Mega Factory", type: "text" },
     ],

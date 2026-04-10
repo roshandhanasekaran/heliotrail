@@ -133,7 +133,7 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-[#0D0D0D]">Dashboard</h1>
           <p className="mt-0.5 text-sm text-[#737373]">
-            Waaree Energies Ltd. — Portfolio Intelligence
+            Roshan — Portfolio Intelligence
           </p>
         </div>
         <Link href="/app/passports/new" className="cta-primary text-sm">

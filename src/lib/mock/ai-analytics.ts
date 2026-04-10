@@ -374,7 +374,7 @@ export function getFleetBenchmarking(): FleetBenchmark[] {
     {
       moduleId: "WRM-600-LOT-01",
       modelId: "WRM-600",
-      manufacturer: "Waaree Energies",
+      manufacturer: "Roshan",
       pr: 87.2,
       delta: 5.8,
       rank: 1,
@@ -401,7 +401,7 @@ export function getFleetBenchmarking(): FleetBenchmark[] {
     {
       moduleId: "WRM-600-LOT-03",
       modelId: "WRM-600",
-      manufacturer: "Waaree Energies",
+      manufacturer: "Roshan",
       pr: 83.8,
       delta: 2.4,
       rank: 4,
@@ -428,7 +428,7 @@ export function getFleetBenchmarking(): FleetBenchmark[] {
     {
       moduleId: "WRM-600-LOT-05",
       modelId: "WRM-600",
-      manufacturer: "Waaree Energies",
+      manufacturer: "Roshan",
       pr: 80.1,
       delta: -1.3,
       rank: 7,
@@ -455,7 +455,7 @@ export function getFleetBenchmarking(): FleetBenchmark[] {
     {
       moduleId: "WRM-600-LOT-07",
       modelId: "WRM-600",
-      manufacturer: "Waaree Energies",
+      manufacturer: "Roshan",
       pr: 74.8,
       delta: -6.6,
       rank: 10,
@@ -680,7 +680,7 @@ export function getProvenanceCorrelations(): ProvenanceCorrelations {
     batchAnomalies: [
       {
         batchId: "LOT-2026-Q1-SRT-003",
-        company: "Waaree Energies",
+        company: "Roshan",
         modulesAffected: 3,
         modulesTotal: 6,
         anomalyType: "Elevated PID susceptibility — voltage-driven leakage current above threshold",

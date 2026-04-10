@@ -86,7 +86,7 @@ interface ModuleModel {
 
 // Company-specific shared defaults
 const WRM_COMPANY = {
-  company: "Waaree Energies", manufacturer: "Waaree Energies Ltd.",
+  company: "Roshan", manufacturer: "Roshan",
   manufacturerAddress: "602 Western Edge II, Borivali East, Mumbai 400066",
   manufacturerUrl: "https://waaree.com",
   certIssuer: "TUV Rheinland", recyclerName: "Veolia PV Recycling", recyclerContact: "pvrecycling@veolia.com",
@@ -105,7 +105,7 @@ const VKS_COMPANY = {
 };
 
 const MODULE_MODELS: ModuleModel[] = [
-  // ── Waaree Energies ──
+  // ── Roshan ──
   {
     id: "WRM-700-TOPCON-BiN-03", label: "WRM-700-TOPCON-BiN-03 (700W TOPCon)", ...WRM_COMPANY,
     power: 700, technology: "crystalline_silicon_topcon", efficiency: 22.53,
@@ -851,7 +851,7 @@ function StepIdentity({
           carbonIntensity: isPERC ? "24.0" : "22.5",
           carbonLcaBoundary: "cradle_to_gate",
           carbonMethodology: "JRC_harmonized_2025",
-          carbonVerificationRef: model.company === "Waaree Energies"
+          carbonVerificationRef: model.company === "Roshan"
             ? "EPD-WRM-2025-001"
             : model.company === "Adani Solar"
               ? "EPD-ADS-2025-001"
@@ -2051,7 +2051,7 @@ function StepDocuments({
                   <input
                     value={doc.issuer}
                     onChange={(e) => updateDocument(idx, { issuer: e.target.value })}
-                    placeholder="e.g. Waaree Energies"
+                    placeholder="e.g. Roshan"
                     className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
                   />
                 </div>
