@@ -20,6 +20,19 @@ export default async function OverviewPage({ params }: Props) {
   if (!passport) notFound();
   const p = passport as Passport;
 
+  const technologyLabels: Record<string, string> = {
+    crystalline_silicon_topcon: "TOPCon",
+    crystalline_silicon_perc: "PERC",
+    crystalline_silicon_hjt: "HJT",
+    thin_film_cdte: "CdTe",
+    thin_film_cigs: "CIGS",
+    topcon: "TOPCon",
+    perc: "PERC",
+    hjt: "HJT",
+    cdte: "CdTe",
+    cigs: "CIGS",
+  };
+
   const manufacturerData = [
     { label: "Manufacturer", value: p.manufacturer_name },
     { label: "Operator ID", value: p.manufacturer_operator_id ?? "—" },
@@ -28,6 +41,7 @@ export default async function OverviewPage({ params }: Props) {
     ...(p.manufacturer_contact_url ? [{ label: "Contact", value: p.manufacturer_contact_url }] : []),
     { label: "Facility", value: p.facility_name ?? "—" },
     { label: "Location", value: p.facility_location ?? "—" },
+    { label: "Technology", value: p.module_technology ? (technologyLabels[p.module_technology] ?? p.module_technology) : "—" },
     { label: "Manufacturing Date", value: formatDate(p.manufacturing_date) },
   ];
 
@@ -68,6 +82,10 @@ export default async function OverviewPage({ params }: Props) {
     {
       label: "Carbon Methodology",
       value: p.carbon_footprint_methodology ?? "—",
+    },
+    {
+      label: "Verification Reference",
+      value: p.carbon_verification_ref ?? "—",
     },
     ...(p.published_at ? [{ label: "Published", value: formatDate(p.published_at) }] : []),
     { label: "Passport Version", value: `v${p.passport_version}` },

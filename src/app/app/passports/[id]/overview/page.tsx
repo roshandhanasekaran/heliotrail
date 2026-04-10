@@ -238,6 +238,14 @@ export default async function OverviewPage({
                 : "—"
             }
           />
+          <InfoRow
+            label="Expected Lifetime"
+            value={
+              passport.expected_lifetime_years
+                ? `${passport.expected_lifetime_years} years`
+                : "—"
+            }
+          />
         </div>
       </div>
       {/* EU Importer (conditional) */}
