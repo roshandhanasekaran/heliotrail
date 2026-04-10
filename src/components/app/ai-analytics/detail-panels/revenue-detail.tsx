@@ -209,6 +209,9 @@ export function RevenueDetail({
             </p>
           </div>
         </div>
+        <p className="text-[9px] text-[#A3A3A3] mt-3">
+          * Financial estimates assume €0.15/kWh average tariff. Actual values depend on operator&apos;s PPA and grid conditions.
+        </p>
       </section>
 
       {/* Full Loss Driver Breakdown */}

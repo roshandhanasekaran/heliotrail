@@ -349,6 +349,9 @@ export function IntelligenceSidebar() {
                 <LossDriverBar key={d.category} {...d} />
               ))}
             </div>
+            <p className="text-[7px] text-[#A3A3A3] mt-1.5 leading-tight">
+              * Assumes €0.15/kWh tariff
+            </p>
           </div>
         </section>
 
