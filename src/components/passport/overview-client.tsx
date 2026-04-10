@@ -2,7 +2,7 @@
 
 import { GlassCard } from "@/components/passport/glass-card";
 import { SectionTitle } from "@/components/passport/section-title";
-import { FactoryIcon, ShieldCheckIcon, FingerprintIcon } from "lucide-react";
+import { FactoryIcon, ShieldCheckIcon, FingerprintIcon, ShipIcon } from "lucide-react";
 
 interface DataItem {
   label: string;
@@ -12,11 +12,13 @@ interface DataItem {
 interface OverviewClientProps {
   manufacturerData: DataItem[];
   warrantyData: DataItem[];
+  importerData?: DataItem[] | null;
 }
 
 export function OverviewClient({
   manufacturerData,
   warrantyData,
+  importerData,
 }: OverviewClientProps) {
   return (
     <section>
@@ -91,6 +93,41 @@ export function OverviewClient({
           </div>
         </GlassCard>
       </div>
+
+      {/* Importer Card (conditional) */}
+      {importerData && importerData.length > 0 && (
+        <div className="mt-5">
+          <GlassCard>
+            <div className="p-5">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                  <ShipIcon className="h-4 w-4 text-foreground" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground">EU Importer</h3>
+                  <p className="text-[11px] text-muted-foreground">Authorized EU representative</p>
+                </div>
+              </div>
+
+              <div className="passport-table">
+                <div className="passport-table-header">
+                  <span>Field</span>
+                  <span>Value</span>
+                </div>
+                {importerData.map((item) => (
+                  <div
+                    key={item.label}
+                    className="passport-table-row"
+                  >
+                    <span className="table-label">{item.label}</span>
+                    <span className="table-value">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </GlassCard>
+        </div>
+      )}
     </section>
   );
 }

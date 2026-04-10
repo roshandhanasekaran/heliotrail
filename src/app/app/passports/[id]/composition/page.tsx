@@ -83,6 +83,9 @@ export default async function CompositionPage({
                 <th className="px-4 py-2.5 text-right text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
                   %
                 </th>
+                <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] md:table-cell">
+                  CAS #
+                </th>
                 <th className="hidden px-4 py-2.5 text-center text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] sm:table-cell">
                   CRM
                 </th>
@@ -105,6 +108,9 @@ export default async function CompositionPage({
                   </td>
                   <td className="px-4 py-2.5 text-right font-mono text-sm text-[#0D0D0D]">
                     {m.mass_percent ? `${m.mass_percent.toFixed(2)}%` : "—"}
+                  </td>
+                  <td className="hidden px-4 py-2.5 font-mono text-xs text-[#737373] md:table-cell">
+                    {m.cas_number || "—"}
                   </td>
                   <td className="hidden px-4 py-2.5 text-center sm:table-cell">
                     {m.is_critical_raw_material ? (

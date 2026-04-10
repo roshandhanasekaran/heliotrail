@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { RefreshCcw, Recycle, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { RefreshCcw, Recycle, AlertTriangle, CheckCircle2, Leaf, Wrench, Phone, FileText, ShieldCheck } from "lucide-react";
 
 export default async function LifecyclePage({
   params,
@@ -30,7 +30,7 @@ export default async function LifecyclePage({
       {/* Circularity summary */}
       {c ? (
         <>
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
             <div className="clean-card p-4">
               <p className="text-xs text-[#737373]">Recyclability</p>
               <p className="mt-1 text-xl font-bold text-[#22C55E]">
@@ -41,6 +41,12 @@ export default async function LifecyclePage({
               <p className="text-xs text-[#737373]">Recycled Content</p>
               <p className="mt-1 text-xl font-bold text-[#0D0D0D]">
                 {c.recycled_content_percent ?? "—"}%
+              </p>
+            </div>
+            <div className="clean-card p-4">
+              <p className="text-xs text-[#737373]">Renewable Content</p>
+              <p className="mt-1 text-xl font-bold text-[#0D0D0D]">
+                {c.renewable_content_percent ?? "—"}%
               </p>
             </div>
             <div className="clean-card p-4">
@@ -65,10 +71,37 @@ export default async function LifecyclePage({
             </div>
           </div>
 
+          {/* REACH / RoHS Compliance */}
+          <div className="passport-table">
+            <div className="passport-table-header">
+              <span className="flex items-center gap-2">
+                <ShieldCheck className="h-3.5 w-3.5" /> Regulatory Compliance
+              </span>
+            </div>
+            <div className="passport-table-row">
+              <span className="table-label">REACH Status</span>
+              <span className="table-value">
+                {passport.reach_status
+                  ? ({ compliant: "Compliant", non_compliant: "Non-Compliant", exempt: "Exempt", under_review: "Under Review" } as Record<string, string>)[passport.reach_status] ?? passport.reach_status
+                  : "—"}
+              </span>
+            </div>
+            <div className="passport-table-row">
+              <span className="table-label">RoHS Status</span>
+              <span className="table-value">
+                {passport.rohs_status
+                  ? ({ compliant: "Compliant", compliant_with_exemption: "Compliant with Exemption", exempt: "Exempt", non_compliant: "Non-Compliant" } as Record<string, string>)[passport.rohs_status] ?? passport.rohs_status
+                  : "—"}
+              </span>
+            </div>
+          </div>
+
           {/* Recovery materials */}
           <div className="passport-table">
             <div className="passport-table-header">
-              <span>Material Recovery</span>
+              <span className="flex items-center gap-2">
+                <Recycle className="h-3.5 w-3.5" /> Material Recovery
+              </span>
             </div>
             {[
               ["Aluminium", c.recovery_aluminium],
@@ -90,14 +123,59 @@ export default async function LifecyclePage({
                 </span>
               </div>
             ))}
+            {c.recovery_notes && (
+              <div className="passport-table-row">
+                <span className="table-label">Recovery Notes</span>
+                <span className="table-value text-xs">{c.recovery_notes}</span>
+              </div>
+            )}
           </div>
 
-          {/* Additional info */}
-          {(c.collection_scheme || c.hazardous_substances_notes) && (
+          {/* Dismantling & Repair */}
+          {(c.dismantling_instructions || c.recycler_name) && (
             <div className="passport-table">
               <div className="passport-table-header">
-                <span>End of Life</span>
+                <span className="flex items-center gap-2">
+                  <Wrench className="h-3.5 w-3.5" /> Dismantling &amp; Recycler
+                </span>
               </div>
+              {c.dismantling_instructions && (
+                <div className="passport-table-row">
+                  <span className="table-label">Dismantling Instructions</span>
+                  <span className="table-value whitespace-pre-line text-xs">
+                    {c.dismantling_instructions}
+                  </span>
+                </div>
+              )}
+              {c.recycler_name && (
+                <div className="passport-table-row">
+                  <span className="table-label">Recycler</span>
+                  <span className="table-value">{c.recycler_name}</span>
+                </div>
+              )}
+              {c.recycler_contact && (
+                <div className="passport-table-row">
+                  <span className="table-label">Recycler Contact</span>
+                  <span className="table-value">{c.recycler_contact}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* End of Life */}
+          {(c.collection_scheme || c.hazardous_substances_notes || c.end_of_life_status) && (
+            <div className="passport-table">
+              <div className="passport-table-header">
+                <span className="flex items-center gap-2">
+                  <Leaf className="h-3.5 w-3.5" /> End of Life
+                </span>
+              </div>
+              {c.end_of_life_status && (
+                <div className="passport-table-row">
+                  <span className="table-label">EoL Status</span>
+                  <span className="table-value">{c.end_of_life_status}</span>
+                </div>
+              )}
               {c.collection_scheme && (
                 <div className="passport-table-row">
                   <span className="table-label">Collection Scheme</span>
@@ -110,12 +188,6 @@ export default async function LifecyclePage({
                   <span className="table-value text-xs">
                     {c.hazardous_substances_notes}
                   </span>
-                </div>
-              )}
-              {c.end_of_life_status && (
-                <div className="passport-table-row">
-                  <span className="table-label">EoL Status</span>
-                  <span className="table-value">{c.end_of_life_status}</span>
                 </div>
               )}
             </div>

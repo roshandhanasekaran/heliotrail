@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { CERTIFICATE_STATUS_LABELS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
-import { ShieldCheck, AlertTriangle, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { ShieldCheck, AlertTriangle, CheckCircle2, Clock, XCircle, ExternalLink, Fingerprint } from "lucide-react";
 
 export default async function CompliancePage({
   params,
@@ -106,6 +106,34 @@ export default async function CompliancePage({
                   <p className="mt-1 font-mono text-xs text-[#A3A3A3]">
                     #{cert.certificate_number}
                   </p>
+                )}
+                {cert.scope_notes && (
+                  <p className="mt-1 text-xs text-[#737373]">
+                    {cert.scope_notes}
+                  </p>
+                )}
+                {(cert.document_url || cert.document_hash) && (
+                  <div className="mt-2 flex flex-wrap items-center gap-3 text-xs">
+                    {cert.document_url && (
+                      <a
+                        href={cert.document_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[#22C55E] hover:underline"
+                      >
+                        <ExternalLink className="h-3 w-3" /> View Document
+                      </a>
+                    )}
+                    {cert.document_hash && (
+                      <span className="inline-flex items-center gap-1 text-[#737373]">
+                        <Fingerprint className="h-3 w-3" />
+                        <span className="font-mono">
+                          {cert.hash_algorithm ?? "SHA-256"}:{" "}
+                          {cert.document_hash.substring(0, 16)}...
+                        </span>
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             );

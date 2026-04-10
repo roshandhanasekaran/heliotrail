@@ -48,6 +48,24 @@ export default async function OverviewPage({ params }: Props) {
     },
     { label: "Expected Lifetime", value: formatNumber(p.expected_lifetime_years, "years") },
     {
+      label: "Carbon Footprint",
+      value: p.carbon_footprint_kg_co2e
+        ? `${p.carbon_footprint_kg_co2e} kg CO₂e`
+        : "—",
+    },
+    {
+      label: "Carbon Intensity",
+      value: p.carbon_intensity_g_co2e_per_kwh
+        ? `${p.carbon_intensity_g_co2e_per_kwh} gCO₂e/kWh`
+        : "—",
+    },
+    {
+      label: "LCA Boundary",
+      value: p.carbon_lca_boundary
+        ? ({ cradle_to_gate: "Cradle-to-Gate", cradle_to_grave: "Cradle-to-Grave" } as Record<string, string>)[p.carbon_lca_boundary!] ?? p.carbon_lca_boundary
+        : "—",
+    },
+    {
       label: "Carbon Methodology",
       value: p.carbon_footprint_methodology ?? "—",
     },
@@ -55,12 +73,21 @@ export default async function OverviewPage({ params }: Props) {
     { label: "Passport Version", value: `v${p.passport_version}` },
   ];
 
+  const importerData = p.importer_name
+    ? [
+        { label: "Importer Name", value: p.importer_name },
+        { label: "Operator ID", value: p.importer_operator_id ?? "—" },
+        { label: "Country", value: p.importer_country ?? "—" },
+      ]
+    : null;
+
   return (
     <div className="space-y-12">
       {/* Client-side animated section */}
       <OverviewClient
         manufacturerData={manufacturerData}
         warrantyData={warrantyData}
+        importerData={importerData}
       />
     </div>
   );

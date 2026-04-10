@@ -22,6 +22,7 @@ import {
   AlertCircle,
   ChevronDown,
   Search,
+  Truck,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,7 @@ const WIZARD_STEPS = [
   { id: "circularity", label: "Circularity & End-of-Life", icon: Recycle },
   { id: "carbon", label: "Carbon & Environmental", icon: Leaf },
   { id: "documents", label: "Documents", icon: FileText },
+  { id: "supplychain", label: "Supply Chain", icon: Truck },
   { id: "review", label: "Review & Submit", icon: CheckCircle2 },
 ] as const;
 
@@ -271,6 +273,8 @@ interface Certificate {
   issuedDate: string;
   expiryDate: string;
   status: string;
+  documentUrl: string;
+  scopeNotes: string;
 }
 
 const TEMPLATE_DOCUMENTS = (company: string) => [
@@ -394,6 +398,12 @@ interface FormData {
     issuer: string;
     issuedDate: string;
   }>;
+  // Manufacturer details (in identity step)
+  manufacturerOperatorId: string;
+  manufacturerCountry: string;
+  manufacturerAddress: string;
+  manufacturerContactUrl: string;
+  facilityCountry: string;
   // Importer (in identity step)
   importerName: string;
   importerOperatorId: string;
@@ -401,6 +411,18 @@ interface FormData {
   // REACH/RoHS (in circularity step)
   reachStatus: string;
   rohsStatus: string;
+  // Supply Chain
+  supplyChainActors: SupplyChainActor[];
+}
+
+interface SupplyChainActor {
+  id: string;
+  actorName: string;
+  actorRole: string;
+  country: string;
+  facilityName: string;
+  tierLevel: string;
+  uflpaCompliant: boolean;
 }
 
 function initialFormData(): FormData {
@@ -467,11 +489,17 @@ function initialFormData(): FormData {
     carbonMethodology: "JRC_harmonized_2025",
     carbonVerificationRef: "",
     documents: [],
+    manufacturerOperatorId: "",
+    manufacturerCountry: "",
+    manufacturerAddress: "",
+    manufacturerContactUrl: "",
+    facilityCountry: "",
     importerName: "",
     importerOperatorId: "",
     importerCountry: "",
     reachStatus: "compliant",
     rohsStatus: "compliant_with_exemption",
+    supplyChainActors: [],
   };
 }
 
@@ -823,12 +851,17 @@ function StepIdentity({
           degradationRate: model.degradationRate,
           expectedLifetime: model.expectedLifetime,
           bom: TEMPLATE_BOM.map((item) => ({ ...item, id: generateId() })),
+          manufacturerOperatorId: model.company === "Roshan" ? "OP-WRM-IN-2024" : model.company === "Adani Solar" ? "OP-ADS-IN-2024" : "OP-VKS-IN-2024",
+          manufacturerCountry: "India",
+          manufacturerAddress: model.manufacturerAddress,
+          manufacturerContactUrl: model.manufacturerUrl,
+          facilityCountry: "India",
           certificates: [
-            { id: generateId(), standard: "IEC 61215", certificateNumber: "IEC-61215-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-08-15", expiryDate: "2029-08-14", status: "valid" as const },
-            { id: generateId(), standard: "IEC 61730", certificateNumber: "IEC-61730-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-09-01", expiryDate: "2029-08-31", status: "valid" as const },
-            { id: generateId(), standard: "IEC 61701", certificateNumber: "IEC-61701-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-10-01", expiryDate: "2029-09-30", status: "valid" as const },
-            { id: generateId(), standard: "BIS IS 14286", certificateNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-07-01", expiryDate: "2028-06-30", status: "valid" as const },
-            { id: generateId(), standard: "CE Declaration", certificateNumber: "CE-DoC-" + modelId.substring(0, 3) + "-2025", issuer: model.manufacturer, issuedDate: "2025-08-01", expiryDate: "2030-07-31", status: "valid" as const },
+            { id: generateId(), standard: "IEC 61215", certificateNumber: "IEC-61215-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-08-15", expiryDate: "2029-08-14", status: "valid" as const, documentUrl: "", scopeNotes: "Terrestrial PV modules — Design qualification and type approval" },
+            { id: generateId(), standard: "IEC 61730", certificateNumber: "IEC-61730-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-09-01", expiryDate: "2029-08-31", status: "valid" as const, documentUrl: "", scopeNotes: "PV module safety qualification — Class A (general access)" },
+            { id: generateId(), standard: "IEC 61701", certificateNumber: "IEC-61701-2025-" + modelId.substring(0, 7), issuer: model.certIssuer, issuedDate: "2025-10-01", expiryDate: "2029-09-30", status: "valid" as const, documentUrl: "", scopeNotes: "Salt mist corrosion testing — Severity 6" },
+            { id: generateId(), standard: "BIS IS 14286", certificateNumber: "BIS-R-" + Math.floor(10000 + Math.random() * 90000), issuer: "Bureau of Indian Standards", issuedDate: "2025-07-01", expiryDate: "2028-06-30", status: "valid" as const, documentUrl: "", scopeNotes: "Indian standard for crystalline silicon PV modules" },
+            { id: generateId(), standard: "CE Declaration", certificateNumber: "CE-DoC-" + modelId.substring(0, 3) + "-2025", issuer: model.manufacturer, issuedDate: "2025-08-01", expiryDate: "2030-07-31", status: "valid" as const, documentUrl: "", scopeNotes: "EU Declaration of Conformity — Low Voltage Directive 2014/35/EU" },
           ],
           recyclabilityRate: "92",
           recycledContent: isPERC ? "22" : "28",
@@ -859,6 +892,12 @@ function StepIdentity({
           reachStatus: "compliant",
           rohsStatus: "compliant_with_exemption",
           documents: TEMPLATE_DOCUMENTS(model.company),
+          supplyChainActors: [
+            { id: generateId(), actorName: "Tongwei Co., Ltd.", actorRole: "Polysilicon Supplier", country: "China", facilityName: "Leshan Facility", tierLevel: "4", uflpaCompliant: true },
+            { id: generateId(), actorName: "LONGi Green Energy", actorRole: "Wafer Manufacturer", country: "China", facilityName: "Xian Wafer Plant", tierLevel: "3", uflpaCompliant: true },
+            { id: generateId(), actorName: model.manufacturer, actorRole: "Cell & Module Manufacturer", country: "India", facilityName: model.facility, tierLevel: "1", uflpaCompliant: true },
+            { id: generateId(), actorName: "Kuehne+Nagel", actorRole: "Logistics Provider", country: "Germany", facilityName: "Hamburg Hub", tierLevel: "1", uflpaCompliant: true },
+          ],
         });
       } else {
         onChange({ modelId });
@@ -963,6 +1002,41 @@ function StepIdentity({
           placeholder="Select technology..."
           required
           error={errors.technology}
+        />
+      </div>
+
+      <SectionDivider label="Manufacturer Details" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <TextField
+          label="Operator ID"
+          value={data.manufacturerOperatorId}
+          onChange={(v) => onChange({ manufacturerOperatorId: v })}
+          placeholder="e.g. OP-WRM-IN-2024"
+          mono
+        />
+        <TextField
+          label="Country"
+          value={data.manufacturerCountry}
+          onChange={(v) => onChange({ manufacturerCountry: v })}
+          placeholder="e.g. India"
+        />
+        <TextField
+          label="Address"
+          value={data.manufacturerAddress}
+          onChange={(v) => onChange({ manufacturerAddress: v })}
+          placeholder="e.g. 602 Western Edge II, Borivali East, Mumbai"
+        />
+        <TextField
+          label="Contact URL"
+          value={data.manufacturerContactUrl}
+          onChange={(v) => onChange({ manufacturerContactUrl: v })}
+          placeholder="e.g. https://company.com"
+        />
+        <TextField
+          label="Facility Country"
+          value={data.facilityCountry}
+          onChange={(v) => onChange({ facilityCountry: v })}
+          placeholder="e.g. India"
         />
       </div>
 
@@ -1510,6 +1584,8 @@ function StepCompliance({
           issuedDate: "",
           expiryDate: "",
           status: "valid",
+          documentUrl: "",
+          scopeNotes: "",
         },
       ],
     });
@@ -1659,6 +1735,28 @@ function StepCompliance({
                       </option>
                     ))}
                   </select>
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Document URL</label>
+                  <input
+                    type="url"
+                    value={cert.documentUrl}
+                    onChange={(e) => updateCert(cert.id, { documentUrl: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    placeholder="https://..."
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Scope Notes</label>
+                  <input
+                    type="text"
+                    value={cert.scopeNotes}
+                    onChange={(e) => updateCert(cert.id, { scopeNotes: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    placeholder="e.g. Terrestrial PV modules — Design qualification"
+                  />
                 </div>
               </div>
             </div>
@@ -2073,6 +2171,154 @@ function StepDocuments({
   );
 }
 
+function StepSupplyChain({
+  data,
+  onChange,
+}: {
+  data: FormData;
+  onChange: (patch: Partial<FormData>) => void;
+}) {
+  const addActor = () => {
+    onChange({
+      supplyChainActors: [
+        ...data.supplyChainActors,
+        { id: generateId(), actorName: "", actorRole: "", country: "", facilityName: "", tierLevel: "1", uflpaCompliant: true },
+      ],
+    });
+  };
+
+  const removeActor = (id: string) => {
+    onChange({ supplyChainActors: data.supplyChainActors.filter((a) => a.id !== id) });
+  };
+
+  const updateActor = (id: string, patch: Partial<SupplyChainActor>) => {
+    onChange({
+      supplyChainActors: data.supplyChainActors.map((a) => (a.id === id ? { ...a, ...patch } : a)),
+    });
+  };
+
+  const ACTOR_ROLES = [
+    "Polysilicon Supplier",
+    "Wafer Manufacturer",
+    "Cell Manufacturer",
+    "Cell & Module Manufacturer",
+    "Module Assembler",
+    "Glass Supplier",
+    "Frame Supplier",
+    "Encapsulant Supplier",
+    "Logistics Provider",
+    "Distributor",
+    "Installer",
+    "Other",
+  ];
+
+  return (
+    <div className="space-y-5">
+      <SectionDivider label="Supply Chain Actors" />
+
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">
+          {data.supplyChainActors.length} actor{data.supplyChainActors.length !== 1 ? "s" : ""} added
+        </p>
+        <button type="button" onClick={addActor} className="cta-secondary text-xs">
+          <Plus className="h-3 w-3" /> Add Actor
+        </button>
+      </div>
+
+      {data.supplyChainActors.length > 0 && (
+        <div className="space-y-3">
+          {data.supplyChainActors.map((actor, idx) => (
+            <div key={actor.id} className="clean-card p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-muted-foreground">
+                  Tier {actor.tierLevel} — Actor {idx + 1}
+                </span>
+                <button type="button" onClick={() => removeActor(actor.id)} className="text-muted-foreground hover:text-red-500">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Actor Name</label>
+                  <input
+                    type="text"
+                    value={actor.actorName}
+                    onChange={(e) => updateActor(actor.id, { actorName: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    placeholder="e.g. Tongwei Co., Ltd."
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Role</label>
+                  <select
+                    value={actor.actorRole}
+                    onChange={(e) => updateActor(actor.id, { actorRole: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none"
+                  >
+                    <option value="">Select role...</option>
+                    {ACTOR_ROLES.map((r) => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Country</label>
+                  <input
+                    type="text"
+                    value={actor.country}
+                    onChange={(e) => updateActor(actor.id, { country: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    placeholder="e.g. China"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Facility Name</label>
+                  <input
+                    type="text"
+                    value={actor.facilityName}
+                    onChange={(e) => updateActor(actor.id, { facilityName: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm focus:border-[#22C55E] focus:outline-none"
+                    placeholder="e.g. Leshan Facility"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-muted-foreground">Tier Level</label>
+                  <select
+                    value={actor.tierLevel}
+                    onChange={(e) => updateActor(actor.id, { tierLevel: e.target.value })}
+                    className="mt-1 block w-full border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-[#22C55E] focus:outline-none"
+                  >
+                    {["1", "2", "3", "4", "5"].map((t) => (
+                      <option key={t} value={t}>Tier {t}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-end pb-2">
+                  <label className="flex items-center gap-2 text-sm">
+                    <button
+                      type="button"
+                      onClick={() => updateActor(actor.id, { uflpaCompliant: !actor.uflpaCompliant })}
+                      className={cn(
+                        "flex h-5 w-5 items-center justify-center border text-xs font-bold",
+                        actor.uflpaCompliant
+                          ? "border-[#22C55E] bg-[#E8FAE9] text-[#22C55E]"
+                          : "border-border bg-background text-transparent"
+                      )}
+                    >
+                      ✓
+                    </button>
+                    <span className="text-xs text-muted-foreground">UFLPA Compliant</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function StepReview({
   data,
   onJumpTo,
@@ -2102,7 +2348,12 @@ function StepReview({
         <ReviewRow label="Batch ID" value={data.batchId} mono />
         <ReviewRow label="GTIN" value={data.gtin} mono />
         <ReviewRow label="Manufacturer" value={data.manufacturer} />
+        {data.manufacturerOperatorId && <ReviewRow label="Operator ID" value={data.manufacturerOperatorId} mono />}
+        {data.manufacturerCountry && <ReviewRow label="Country" value={data.manufacturerCountry} />}
+        {data.manufacturerAddress && <ReviewRow label="Address" value={data.manufacturerAddress} />}
+        {data.manufacturerContactUrl && <ReviewRow label="Contact URL" value={data.manufacturerContactUrl} />}
         <ReviewRow label="Facility" value={facilityLabel} />
+        {data.facilityCountry && <ReviewRow label="Facility Country" value={data.facilityCountry} />}
         <ReviewRow label="Manufacturing Date" value={data.manufacturingDate} />
         <ReviewRow label="Technology" value={techLabel} />
         {data.importerName && <ReviewRow label="Importer" value={data.importerName} />}
@@ -2281,6 +2532,29 @@ function StepReview({
                   {ACCESS_LEVELS.find((l) => l.value === doc.accessLevel)?.label ?? doc.accessLevel}
                 </span>
                 {doc.issuer && <span className="text-xs text-muted-foreground">{doc.issuer}</span>}
+              </div>
+            ))}
+          </div>
+        )}
+      </ReviewSection>
+
+      {/* Section: Supply Chain */}
+      <ReviewSection title="Supply Chain" onEdit={() => onJumpTo(7)}>
+        {data.supplyChainActors.length === 0 ? (
+          <p className="px-4 py-3 text-sm text-muted-foreground italic">No supply chain actors added</p>
+        ) : (
+          <div className="divide-y divide-[#D9D9D9]">
+            {data.supplyChainActors.map((actor, idx) => (
+              <div key={idx} className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
+                <span className="text-sm font-medium text-foreground">{actor.actorName || "—"}</span>
+                <span className="text-xs text-muted-foreground">{actor.actorRole}</span>
+                <span className="text-xs text-muted-foreground">Tier {actor.tierLevel}</span>
+                {actor.country && <span className="text-xs text-muted-foreground">{actor.country}</span>}
+                {actor.uflpaCompliant && (
+                  <span className="inline-flex items-center gap-1 text-xs text-[#22C55E]">
+                    <CheckCircle2 className="h-3 w-3" /> UFLPA
+                  </span>
+                )}
               </div>
             ))}
           </div>
@@ -2617,6 +2891,9 @@ export default function CreatePassportPage() {
               )}
               {step.id === "documents" && (
                 <StepDocuments data={formData} onChange={handleChange} />
+              )}
+              {step.id === "supplychain" && (
+                <StepSupplyChain data={formData} onChange={handleChange} />
               )}
               {step.id === "review" && (
                 <StepReview data={formData} onJumpTo={handleJumpTo} />

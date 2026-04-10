@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { DOCUMENT_TYPE_LABELS, ACCESS_LEVEL_LABELS } from "@/lib/constants";
 import { formatDate, formatFileSize } from "@/lib/utils";
-import { FolderOpen, Upload, FileText, Lock, Globe } from "lucide-react";
+import { FolderOpen, Upload, FileText, Lock, Globe, ExternalLink } from "lucide-react";
 
 export default async function EvidencePage({
   params,
@@ -70,6 +70,12 @@ export default async function EvidencePage({
                       <span>{doc.issuer}</span>
                     </>
                   )}
+                  {doc.issued_date && (
+                    <>
+                      <span className="text-[#D9D9D9]">·</span>
+                      <span>{formatDate(doc.issued_date)}</span>
+                    </>
+                  )}
                   {doc.file_size_bytes && (
                     <>
                       <span className="text-[#D9D9D9]">·</span>
@@ -97,6 +103,17 @@ export default async function EvidencePage({
                   </span>
                   Hashed
                 </div>
+              )}
+              {doc.url && (
+                <a
+                  href={doc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-xs text-[#22C55E] hover:underline"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  <span className="hidden sm:inline">View</span>
+                </a>
               )}
             </div>
           ))}

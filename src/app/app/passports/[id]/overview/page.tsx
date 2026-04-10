@@ -13,6 +13,8 @@ import {
   Calendar,
   MapPin,
   Weight,
+  Leaf,
+  Ship,
 } from "lucide-react";
 
 export default async function OverviewPage({
@@ -102,6 +104,21 @@ export default async function OverviewPage({
             label="Manufacturer"
             value={passport.manufacturer_name}
           />
+          <InfoRow
+            label="Operator ID"
+            value={passport.manufacturer_operator_id ?? "—"}
+            mono
+          />
+          <InfoRow
+            label="Country"
+            value={passport.manufacturer_country ?? "—"}
+          />
+          {passport.manufacturer_address && (
+            <InfoRow label="Address" value={passport.manufacturer_address} />
+          )}
+          {passport.manufacturer_contact_url && (
+            <InfoRow label="Contact URL" value={passport.manufacturer_contact_url} />
+          )}
           <InfoRow
             icon={MapPin}
             label="Facility"
@@ -220,6 +237,82 @@ export default async function OverviewPage({
                 ? `${passport.linear_degradation_percent_per_year}%/year`
                 : "—"
             }
+          />
+        </div>
+      </div>
+      {/* EU Importer (conditional) */}
+      {passport.importer_name && (
+        <div className="clean-card">
+          <div className="border-b border-[#D9D9D9] px-4 py-3">
+            <h2 className="text-sm font-bold text-[#0D0D0D]">
+              <span className="flex items-center gap-2">
+                <Ship className="h-3.5 w-3.5 text-[#737373]" />
+                EU Importer
+              </span>
+            </h2>
+          </div>
+          <div className="grid gap-0 sm:grid-cols-2">
+            <InfoRow label="Importer Name" value={passport.importer_name} />
+            <InfoRow
+              label="Operator ID"
+              value={passport.importer_operator_id ?? "—"}
+              mono
+            />
+            <InfoRow
+              label="Country"
+              value={passport.importer_country ?? "—"}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Carbon & Environmental */}
+      <div className="clean-card">
+        <div className="border-b border-[#D9D9D9] px-4 py-3">
+          <h2 className="text-sm font-bold text-[#0D0D0D]">
+            <span className="flex items-center gap-2">
+              <Leaf className="h-3.5 w-3.5 text-[#22C55E]" />
+              Carbon &amp; Environmental
+            </span>
+          </h2>
+        </div>
+        <div className="grid gap-0 sm:grid-cols-2">
+          <InfoRow
+            label="Carbon Footprint"
+            value={
+              passport.carbon_footprint_kg_co2e
+                ? `${passport.carbon_footprint_kg_co2e} kg CO₂e`
+                : "—"
+            }
+          />
+          <InfoRow
+            label="Carbon Intensity"
+            value={
+              passport.carbon_intensity_g_co2e_per_kwh
+                ? `${passport.carbon_intensity_g_co2e_per_kwh} gCO₂e/kWh`
+                : "—"
+            }
+          />
+          <InfoRow
+            label="LCA Boundary"
+            value={
+              passport.carbon_lca_boundary
+                ? ({ cradle_to_gate: "Cradle-to-Gate", cradle_to_grave: "Cradle-to-Grave" } as Record<string, string>)[passport.carbon_lca_boundary] ?? passport.carbon_lca_boundary
+                : "—"
+            }
+          />
+          <InfoRow
+            label="Methodology"
+            value={
+              passport.carbon_footprint_methodology
+                ? ({ JRC_harmonized_2025: "JRC Harmonized 2025", PEF: "PEF", ISO_14040: "ISO 14040" } as Record<string, string>)[passport.carbon_footprint_methodology] ?? passport.carbon_footprint_methodology
+                : "—"
+            }
+          />
+          <InfoRow
+            label="Verification Ref (EPD)"
+            value={passport.carbon_verification_ref ?? "—"}
+            mono
           />
         </div>
       </div>
