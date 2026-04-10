@@ -92,6 +92,13 @@ export function PerformanceDetail({
   const weatherData = useMemo(() => getWeatherData(days), [days]);
   const moduleProfiles = useMemo(() => getModuleProfiles(), []);
 
+  /* ─── Compute fleet-wide average PR from SCADA ─── */
+  const fleetAvgPR = useMemo(() => {
+    const daytimePts = fleetScada.filter((p) => p.avg_pr > 0);
+    if (daytimePts.length === 0) return 81.4;
+    return Math.round((daytimePts.reduce((s, p) => s + p.avg_pr, 0) / daytimePts.length) * 1000) / 10;
+  }, [fleetScada]);
+
   /* ─── Forecast chart data (daily aggregation for Recharts AreaChart) ─── */
   const forecastChartData = useMemo(() => {
     // Aggregate 15-min SCADA data to daily
@@ -284,7 +291,7 @@ export function PerformanceDetail({
             Fleet PR (Current)
           </p>
           <p className="font-mono text-4xl font-bold text-[#0D0D0D] mt-1">
-            81.4<span className="text-lg text-[#737373]">%</span>
+            {fleetAvgPR}<span className="text-lg text-[#737373]">%</span>
           </p>
           <p className="text-[10px] text-[#737373] mt-1">
             Target: {forecast.prTarget}%

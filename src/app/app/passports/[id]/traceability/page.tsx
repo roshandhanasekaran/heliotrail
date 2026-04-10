@@ -1,6 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import type { PassportSupplyChainActor } from "@/types/passport";
+import type {
+  PassportSupplyChainActor,
+  PassportChainOfCustody,
+  PassportSubstanceOfConcern,
+} from "@/types/passport";
 import {
   Route,
   Factory,
@@ -12,6 +16,11 @@ import {
   Layers,
   Gem,
   Mountain,
+  ArrowRight,
+  FileCheck,
+  FlaskConical,
+  AlertTriangle,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -41,18 +50,30 @@ export default async function TraceabilityPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data: p }, { data: actors }] = await Promise.all([
+  const [{ data: p }, { data: actors }, { data: custody }, { data: substances }] = await Promise.all([
     supabase.from("passports").select("*").eq("id", id).single(),
     supabase
       .from("passport_supply_chain_actors")
       .select("*")
       .eq("passport_id", id)
       .order("tier_level", { ascending: false }),
+    supabase
+      .from("passport_chain_of_custody")
+      .select("*")
+      .eq("passport_id", id)
+      .order("event_timestamp", { ascending: true }),
+    supabase
+      .from("passport_substances_of_concern")
+      .select("*")
+      .eq("passport_id", id)
+      .order("concentration_percent", { ascending: false }),
   ]);
 
   if (!p) notFound();
 
   const scActors = (actors ?? []) as PassportSupplyChainActor[];
+  const cocEvents = (custody ?? []) as PassportChainOfCustody[];
+  const socEntries = (substances ?? []) as PassportSubstanceOfConcern[];
 
   // Determine UFLPA compliance summary
   const allUflpaCompliant =
@@ -190,6 +211,148 @@ export default async function TraceabilityPage({
                 Facility ID: {p.facility_id}
               </p>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* Chain of Custody */}
+      <div className="clean-card p-5">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+          <FileCheck className="h-3.5 w-3.5" />
+          Chain of Custody
+        </div>
+        <p className="mt-1 text-xs text-[#A3A3A3]">
+          Auditable transfer events from raw material to finished module.
+        </p>
+
+        {cocEvents.length === 0 ? (
+          <p className="mt-4 text-sm text-[#A3A3A3]">
+            No chain of custody events recorded yet.
+          </p>
+        ) : (
+          <div className="mt-4 space-y-0">
+            {cocEvents.map((event, i) => (
+              <div key={event.id} className="flex gap-4">
+                {/* Timeline dot + line */}
+                <div className="flex flex-col items-center">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#EFF6FF]">
+                    <ArrowRight className="h-4 w-4 text-[#3B82F6]" />
+                  </div>
+                  {i < cocEvents.length - 1 && (
+                    <div className="h-10 w-px bg-[#D9D9D9]" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 pb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-[#0D0D0D]">
+                      {event.event_type}
+                    </span>
+                    {event.event_timestamp && (
+                      <span className="text-[0.625rem] text-[#A3A3A3]">
+                        {new Date(event.event_timestamp).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </span>
+                    )}
+                  </div>
+                  {(event.from_actor || event.to_actor) && (
+                    <p className="mt-0.5 text-xs text-[#737373]">
+                      {event.from_actor}
+                      {event.from_actor && event.to_actor && (
+                        <span className="mx-1.5 text-[#D9D9D9]">→</span>
+                      )}
+                      {event.to_actor}
+                    </p>
+                  )}
+                  {event.location && (
+                    <p className="flex items-center gap-1 text-xs text-[#A3A3A3]">
+                      <MapPin className="h-3 w-3" />
+                      {event.location}
+                    </p>
+                  )}
+                  {event.evidence_hash && (
+                    <p className="mt-1 font-mono text-[0.625rem] text-[#A3A3A3]">
+                      Evidence: {event.evidence_hash.slice(0, 16)}...
+                    </p>
+                  )}
+                  {event.notes && (
+                    <p className="mt-0.5 text-xs text-[#A3A3A3] italic">
+                      {event.notes}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Substances of Concern (REACH Article 33) */}
+      <div className="clean-card p-5">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+          <FlaskConical className="h-3.5 w-3.5" />
+          Substances of Concern
+        </div>
+        <p className="mt-1 text-xs text-[#A3A3A3]">
+          Per EU REACH Article 33 — SVHC above 0.1% w/w threshold.
+        </p>
+
+        {socEntries.length === 0 ? (
+          <div className="mt-4 flex items-center gap-2 text-sm text-[#22C55E]">
+            <ShieldCheck className="h-4 w-4" />
+            No substances of concern identified above reporting threshold.
+          </div>
+        ) : (
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-[#D9D9D9]">
+                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Substance</th>
+                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">CAS Number</th>
+                  <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Concentration</th>
+                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Location</th>
+                  <th className="py-2 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Regulatory Basis</th>
+                </tr>
+              </thead>
+              <tbody>
+                {socEntries.map((soc) => {
+                  const aboveThreshold = (soc.concentration_percent ?? 0) >= 0.1;
+                  return (
+                    <tr key={soc.id} className="border-b border-dashed border-[#F2F2F2]">
+                      <td className="py-2.5 pr-4">
+                        <span className="flex items-center gap-1.5 font-medium text-[#0D0D0D]">
+                          {aboveThreshold && <AlertTriangle className="h-3 w-3 text-[#F59E0B]" />}
+                          {soc.substance_name}
+                        </span>
+                      </td>
+                      <td className="py-2.5 pr-4 font-mono text-xs text-[#737373]">
+                        {soc.cas_number ?? "—"}
+                      </td>
+                      <td className="py-2.5 pr-4 text-right">
+                        <span className={`font-mono text-xs font-semibold ${aboveThreshold ? "text-[#F59E0B]" : "text-[#22C55E]"}`}>
+                          {soc.concentration_percent != null ? `${soc.concentration_percent}%` : "—"}
+                        </span>
+                      </td>
+                      <td className="py-2.5 pr-4 text-xs text-[#737373]">
+                        {soc.location_in_module ?? "—"}
+                      </td>
+                      <td className="py-2.5 text-xs text-[#A3A3A3]">
+                        {soc.regulatory_basis ?? "—"}
+                        {soc.exemption && (
+                          <span className="ml-1.5 bg-[#F2F2F2] px-1 py-0.5 text-[0.625rem] font-semibold">
+                            Exempt: {soc.exemption}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
       </div>

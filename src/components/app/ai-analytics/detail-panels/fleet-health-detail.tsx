@@ -46,7 +46,7 @@ function computeHeatmapRows(profiles: ModuleProfile[]) {
     "PR (%)",
     "Avail (%)",
     "Deg Score",
-    "Soiling (%)",
+    "Cleanliness (%)",
     "Temp Health (%)",
   ];
 
@@ -97,7 +97,7 @@ function computeHeatmapRows(profiles: ModuleProfile[]) {
         { label: "PR (%)", value: avgPr },
         { label: "Avail (%)", value: availability },
         { label: "Deg Score", value: degradationScore },
-        { label: "Soiling (%)", value: soiling },
+        { label: "Cleanliness (%)", value: soiling },
         { label: "Temp Health (%)", value: tempHealth },
       ],
     };

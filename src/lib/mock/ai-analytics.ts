@@ -72,7 +72,7 @@ export function getFleetHealthHistory(): FleetHealthWeek[] {
     { week: "W5", score: 89 },
     { week: "W6", score: 89 },
     { week: "W7", score: 88 },
-    { week: "W8", score: 88 },
+    { week: "W8", score: 89 },
   ];
 }
 
@@ -110,7 +110,7 @@ export function getAIInsights(): AIInsight[] {
       evidence: { available: 3, required: 3, sources: ["Irradiance sensor", "Dust trend", "Rainfall data"] },
       title: "Cleaning recommended in 5 days",
       detail:
-        "Soiling loss pattern analysis suggests optimal cleaning window Apr 14-16. Delaying 10+ days costs an estimated €156/mo.",
+        "Soiling loss pattern analysis suggests optimal cleaning window Apr 14-16. Delaying 10+ days costs an estimated €15/mo in additional soiling losses.",
       action: { label: "Schedule", href: "/app/analytics" },
       timestamp: "2 min ago",
     },
@@ -120,9 +120,9 @@ export function getAIInsights(): AIInsight[] {
       severity: "critical",
       confidence: 91,
       evidence: { available: 1, required: 3, sources: ["Performance ratio"] },
-      title: "WRM-600 PR dropped below 75%",
+      title: "Module-09 PR dropped below 75%",
       detail:
-        "WRM-600-LOT-07 performance ratio dropped 10.3% below fleet average. PR trend consistent with soiling accumulation or partial shading. Recommend on-site inspection to confirm root cause.",
+        "Module-09 performance ratio dropped 10.3% below fleet average. PR trend consistent with soiling accumulation or partial shading. Recommend on-site inspection to confirm root cause.",
       action: { label: "Investigate", href: "/app/passports" },
       timestamp: "18 min ago",
     },
@@ -132,9 +132,9 @@ export function getAIInsights(): AIInsight[] {
       severity: "info",
       confidence: 88,
       evidence: { available: 2, required: 3, sources: ["Soiling model", "Cleaning schedule"] },
-      title: "€2,400/yr optimization identified",
+      title: "€200/yr optimization identified",
       detail:
-        "Switching to 21-day cleaning cycles (from 30-day) and fixing clipping on 2 inverters recovers 3.2% annual yield.",
+        "Switching to 21-day cleaning cycles (from 30-day) and fixing clipping on 2 inverters recovers 3.2% annual yield (~€200/yr).",
       action: { label: "View Plan", href: "/app/analytics" },
       timestamp: "1h ago",
     },
@@ -146,7 +146,7 @@ export function getAIInsights(): AIInsight[] {
       evidence: { available: 2, required: 3, sources: ["Degradation curve", "Batch correlation"] },
       title: "Elevated batch degradation — EVA supplier correlation",
       detail:
-        "Year-1 degradation of 1.1% on WRM-600-LOT-07 exceeds fleet average of 0.38%. EVA encapsulant supplier SUP-EV-001 shows +0.14% elevated degradation across 3 of 8 modules. Recommend batch monitoring and thermal imaging review.",
+        "Year-1 degradation of 1.1% on Module-09 exceeds fleet average of 0.38%. EVA encapsulant supplier SUP-EV-001 shows +0.14% elevated degradation across 3 of 8 modules. Recommend batch monitoring and thermal imaging review.",
       action: { label: "Details", href: "/app/analytics" },
       timestamp: "3h ago",
     },
@@ -201,18 +201,18 @@ export function getMaintenancePredictions(): MaintenancePrediction {
     nextCleaning: {
       daysUntil: 5,
       estimatedSoilingAtCleaning: 6.8,
-      costIfDelayed: 156000,
+      costIfDelayed: 15,
     },
     componentRisk: {
-      modulesAtRisk: 247,
-      highestRisk: "WRM-600-LOT-07",
+      modulesAtRisk: 3,
+      highestRisk: "Module-09",
       failureProbability30d: 4.2,
       failureProbability90d: 11.8,
     },
     maintenanceROI: {
-      cleaningCostEur: 85000,
-      annualSavingsEur: 1872000,
-      paybackDays: 17,
+      cleaningCostEur: 180,
+      annualSavingsEur: 340,
+      paybackDays: 35,
     },
   };
 }
@@ -234,34 +234,34 @@ export interface RevenueIntelligence {
 
 export function getRevenueIntelligence(): RevenueIntelligence {
   return {
-    monthlyLoss: 12400,
-    annualProjected: 148800,
-    optimizationPotential: 2400000,
+    monthlyLoss: 22,
+    annualProjected: 264,
+    optimizationPotential: 200,
     lossDrivers: [
       {
         category: "Soiling",
-        euroPerMonth: 5600,
+        euroPerMonth: 10,
         percent: 45,
         color: "#F59E0B",
         trend: "up",
       },
       {
         category: "Clipping",
-        euroPerMonth: 2400,
+        euroPerMonth: 4,
         percent: 19,
         color: "#3B82F6",
         trend: "stable",
       },
       {
         category: "Degradation",
-        euroPerMonth: 2800,
+        euroPerMonth: 5,
         percent: 23,
         color: "#737373",
         trend: "up",
       },
       {
         category: "Downtime",
-        euroPerMonth: 1600,
+        euroPerMonth: 3,
         percent: 13,
         color: "#EF4444",
         trend: "down",
@@ -321,7 +321,7 @@ export function getAnomalyStream(): MLAnomaly[] {
       pattern: "recurring",
       description: "18% output drop detected — matches afternoon shading pattern from last 3 weeks",
       resolved: false,
-      module: "WRM-600-LOT-07",
+      module: "Module-09",
     },
     {
       id: "ML-002",
@@ -332,7 +332,7 @@ export function getAnomalyStream(): MLAnomaly[] {
       pattern: "one-off",
       description: "Module temp 62°C for 20 min — within tolerance, no degradation impact predicted",
       resolved: true,
-      module: "HT-555-BF-03",
+      module: "Module-03",
     },
     {
       id: "ML-003",
@@ -370,98 +370,36 @@ export interface FleetBenchmark {
 }
 
 export function getFleetBenchmarking(): FleetBenchmark[] {
-  return [
-    {
-      moduleId: "WRM-600-LOT-01",
-      modelId: "WRM-600",
-      manufacturer: "Roshan",
-      pr: 87.2,
-      delta: 5.8,
-      rank: 1,
-      status: "outperforming",
-    },
-    {
-      moduleId: "VSMDH-450-LOT-02",
-      modelId: "VSMDH-450",
-      manufacturer: "Vikram Solar",
-      pr: 86.1,
-      delta: 4.7,
-      rank: 2,
-      status: "outperforming",
-    },
-    {
-      moduleId: "ASM-540-LOT-01",
-      modelId: "ASM-540",
-      manufacturer: "Adani Solar",
-      pr: 85.3,
-      delta: 3.9,
-      rank: 3,
-      status: "outperforming",
-    },
-    {
-      moduleId: "WRM-600-LOT-03",
-      modelId: "WRM-600",
-      manufacturer: "Roshan",
-      pr: 83.8,
-      delta: 2.4,
-      rank: 4,
-      status: "normal",
-    },
-    {
-      moduleId: "VSMDH-450-LOT-04",
-      modelId: "VSMDH-450",
-      manufacturer: "Vikram Solar",
-      pr: 82.6,
-      delta: 1.2,
-      rank: 5,
-      status: "normal",
-    },
-    {
-      moduleId: "ASM-540-LOT-03",
-      modelId: "ASM-540",
-      manufacturer: "Adani Solar",
-      pr: 81.4,
-      delta: 0.0,
-      rank: 6,
-      status: "normal",
-    },
-    {
-      moduleId: "WRM-600-LOT-05",
-      modelId: "WRM-600",
-      manufacturer: "Roshan",
-      pr: 80.1,
-      delta: -1.3,
-      rank: 7,
-      status: "normal",
-    },
-    {
-      moduleId: "VSMDH-450-LOT-06",
-      modelId: "VSMDH-450",
-      manufacturer: "Vikram Solar",
-      pr: 78.4,
-      delta: -3.0,
-      rank: 8,
-      status: "underperforming",
-    },
-    {
-      moduleId: "ASM-540-LOT-05",
-      modelId: "ASM-540",
-      manufacturer: "Adani Solar",
-      pr: 76.9,
-      delta: -4.5,
-      rank: 9,
-      status: "underperforming",
-    },
-    {
-      moduleId: "WRM-600-LOT-07",
-      modelId: "WRM-600",
-      manufacturer: "Roshan",
-      pr: 74.8,
-      delta: -6.6,
-      rank: 10,
-      status: "underperforming",
-    },
+  // PR values aligned with MODULE_CONFIGS prBase in ai-analytics-timeseries.ts
+  const modules: Omit<FleetBenchmark, "rank" | "delta" | "status">[] = [
+    { moduleId: "Module-01", modelId: "WRM-580", manufacturer: "Waaree", pr: 85.2 },
+    { moduleId: "Module-02", modelId: "WRM-580", manufacturer: "Waaree", pr: 81.0 },
+    { moduleId: "Module-03", modelId: "WRM-580", manufacturer: "Waaree", pr: 76.2 },
+    { moduleId: "Module-04", modelId: "WRM-580", manufacturer: "Waaree", pr: 84.1 },
+    { moduleId: "Module-05", modelId: "WRM-580", manufacturer: "Waaree", pr: 80.0 },
+    { moduleId: "Module-06", modelId: "WRM-580", manufacturer: "Waaree", pr: 82.1 },
+    { moduleId: "Module-07", modelId: "WRM-580", manufacturer: "Waaree", pr: 86.0 },
+    { moduleId: "Module-08", modelId: "WRM-580", manufacturer: "Waaree", pr: 79.0 },
+    { moduleId: "Module-09", modelId: "WRM-580", manufacturer: "Waaree", pr: 74.8 },
+    { moduleId: "Module-10", modelId: "WRM-580", manufacturer: "Waaree", pr: 83.0 },
+    { moduleId: "Module-11", modelId: "WRM-580", manufacturer: "Waaree", pr: 81.0 },
+    { moduleId: "Module-12", modelId: "WRM-580", manufacturer: "Waaree", pr: 78.5 },
+    { moduleId: "Module-13", modelId: "WRM-580", manufacturer: "Waaree", pr: 84.0 },
+    { moduleId: "Module-14", modelId: "WRM-580", manufacturer: "Waaree", pr: 80.0 },
+    { moduleId: "Module-15", modelId: "WRM-580", manufacturer: "Waaree", pr: 79.0 },
   ];
+  const avgPr = modules.reduce((s, m) => s + m.pr, 0) / modules.length;
+  return modules
+    .map((m) => ({
+      ...m,
+      delta: Math.round((m.pr - avgPr) * 10) / 10,
+    }))
+    .sort((a, b) => b.pr - a.pr)
+    .map((m, i) => ({
+      ...m,
+      rank: i + 1,
+      status: (m.delta > 3 ? "outperforming" : m.delta < -3 ? "underperforming" : "normal") as FleetBenchmark["status"],
+    }));
 }
 
 // ─── Compliance Risk Scoring ───────────────────────────────
@@ -728,8 +666,8 @@ export function getProvenanceCorrelations(): ProvenanceCorrelations {
     ],
     warrantyClaimCandidates: [
       {
-        passportId: "DPP-WRM-600-007",
-        modelId: "WRM-600",
+        passportId: "DPP-WRM-580-009",
+        modelId: "WRM-580",
         currentDegradation: 1.1,
         warrantyThreshold: 0.4,
         batchId: "LOT-2026-Q1-SRT-003",
@@ -737,8 +675,8 @@ export function getProvenanceCorrelations(): ProvenanceCorrelations {
         estimatedClaimValueEur: 1420,
       },
       {
-        passportId: "DPP-ASM-540-005",
-        modelId: "ASM-540",
+        passportId: "DPP-WRM-580-003",
+        modelId: "WRM-580",
         currentDegradation: 0.72,
         warrantyThreshold: 0.4,
         batchId: "BATCH-MND-2026-02",
@@ -779,16 +717,16 @@ export function getWarrantyIntelligence(): WarrantyIntelligence {
   return {
     claimReady: [
       {
-        passportId: "DPP-WRM-600-007",
-        modelId: "WRM-600",
+        passportId: "DPP-WRM-580-009",
+        modelId: "WRM-580",
         degradationRate: 1.1,
         warrantyThreshold: 0.4,
         evidenceScore: 92,
         estimatedClaimValueEur: 1420,
       },
       {
-        passportId: "DPP-ASM-540-005",
-        modelId: "ASM-540",
+        passportId: "DPP-WRM-580-003",
+        modelId: "WRM-580",
         degradationRate: 0.72,
         warrantyThreshold: 0.4,
         evidenceScore: 78,
@@ -797,20 +735,20 @@ export function getWarrantyIntelligence(): WarrantyIntelligence {
     ],
     atRisk: [
       {
-        passportId: "DPP-VSMDH-450-006",
-        modelId: "VSMDH-450",
+        passportId: "DPP-WRM-580-012",
+        modelId: "WRM-580",
         yearsToThreshold: 2.1,
         currentTrajectory: 0.48,
       },
       {
-        passportId: "DPP-WRM-600-005",
-        modelId: "WRM-600",
+        passportId: "DPP-WRM-580-005",
+        modelId: "WRM-580",
         yearsToThreshold: 3.4,
         currentTrajectory: 0.44,
       },
       {
-        passportId: "DPP-ASM-540-003",
-        modelId: "ASM-540",
+        passportId: "DPP-WRM-580-011",
+        modelId: "WRM-580",
         yearsToThreshold: 4.8,
         currentTrajectory: 0.42,
       },

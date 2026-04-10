@@ -100,7 +100,7 @@ const sparklineData = (() => {
 const KPI_CARDS = [
   {
     label: "Fleet PR",
-    value: "81.4%",
+    value: `${(middayScada.avg_pr * 100).toFixed(1)}%`,
     sub: "Performance Ratio",
     color: "#F59E0B",
   },
@@ -260,7 +260,7 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-[#737373]">Ambient Temp</p>
                 <p className="font-mono text-sm font-bold text-[#0D0D0D]">
-                  {middayWeather.humidity_pct > 0 ? (18 + middayWeather.ghi_wm2 * 0.012).toFixed(1) : "18.2"} <span className="text-[10px] text-[#737373] font-normal">°C</span>
+                  {middayWeather.ambient_temp_c.toFixed(1)} <span className="text-[10px] text-[#737373] font-normal">°C</span>
                 </p>
               </div>
             </div>

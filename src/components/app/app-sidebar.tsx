@@ -6,6 +6,16 @@ import { cn } from "@/lib/utils";
 import { SIDEBAR_SECTIONS } from "@/lib/navigation";
 import { PanelLeftClose, PanelLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getFleetScadaSummary } from "@/lib/mock/ai-analytics-timeseries";
+import { getAnomalyStream } from "@/lib/mock/ai-analytics";
+
+// Compute fleet metrics once at module scope (deterministic, no SSR mismatch)
+const _fleetScada = getFleetScadaSummary();
+const _daytimePts = _fleetScada.filter((p) => p.avg_pr > 0);
+const _fleetPR = _daytimePts.length > 0
+  ? Math.round((_daytimePts.reduce((s, p) => s + p.avg_pr, 0) / _daytimePts.length) * 1000) / 10
+  : 81.4;
+const _activeAlerts = getAnomalyStream().filter((a) => !a.resolved).length;
 
 interface AppSidebarProps {
   collapsed: boolean;
@@ -104,7 +114,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                 Fleet PR
               </span>
               <span className="font-mono text-[0.6875rem] font-semibold text-foreground">
-                81.4%
+                {_fleetPR}%
               </span>
             </div>
             <div className="flex items-center justify-between">
@@ -122,7 +132,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                 Alerts
               </span>
               <span className="font-mono text-[0.6875rem] font-semibold text-[#F59E0B]">
-                2 active
+                {_activeAlerts} active
               </span>
             </div>
             <Link

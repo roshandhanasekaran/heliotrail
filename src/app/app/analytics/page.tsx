@@ -41,6 +41,47 @@ export default async function AnalyticsPage() {
     ? Math.round(circ.reduce((s, c) => s + (c.recycled_content_percent ?? 0), 0) / circ.length)
     : 0;
 
+  // Recovery capabilities — derived from actual DB boolean columns
+  const recoveryTypes = [
+    { key: "recovery_aluminium", label: "Aluminium" },
+    { key: "recovery_glass", label: "Glass" },
+    { key: "recovery_silicon", label: "Silicon" },
+    { key: "recovery_copper", label: "Copper" },
+    { key: "recovery_silver", label: "Silver" },
+  ] as const;
+  const activeRecoveries = recoveryTypes.filter((rt) =>
+    circ.some((c) => (c as Record<string, unknown>)[rt.key] === true)
+  );
+
+  // WEEE compliance — validate collection_scheme has meaningful content
+  const weeeCompliant = circ.filter((c) => {
+    const scheme = c.collection_scheme;
+    if (!scheme || typeof scheme !== "string") return false;
+    const trimmed = scheme.trim().toLowerCase();
+    return trimmed.length > 0 && trimmed !== "n/a" && trimmed !== "tbd" && trimmed !== "none" && trimmed !== "-";
+  }).length;
+
+  // Carbon footprint — group by model for cleaner display
+  const carbonByModel = (() => {
+    const grouped = new Map<string, { model: string; carbon: number; methodology: string; count: number }>();
+    for (const p of all) {
+      if (!p.carbon_footprint_kg_co2e) continue;
+      const existing = grouped.get(p.model_id);
+      if (existing) {
+        existing.count++;
+      } else {
+        grouped.set(p.model_id, {
+          model: p.model_id,
+          carbon: p.carbon_footprint_kg_co2e,
+          methodology: p.carbon_footprint_methodology ?? "Not specified",
+          count: 1,
+        });
+      }
+    }
+    return Array.from(grouped.values()).sort((a, b) => b.carbon - a.carbon);
+  })();
+  const passportsMissingCarbon = all.filter((p) => !p.carbon_footprint_kg_co2e).length;
+
   // Regulatory readiness checklist
   const checks = [
     { label: "Product Identification (Annex III)", ok: all.length > 0, weight: 12 },
@@ -332,73 +373,80 @@ export default async function AnalyticsPage() {
             />
             <CircularityMetric
               label="WEEE Compliant"
-              value={`${circ.filter((c) => c.collection_scheme).length}`}
+              value={`${weeeCompliant}`}
               target="EU WEEE required"
-              ok={circ.filter((c) => c.collection_scheme).length > 0}
+              ok={weeeCompliant > 0}
             />
           </div>
 
-          {/* Recovery materials */}
+          {/* Recovery materials — derived from passport_circularity boolean columns */}
           <div className="mt-4 border-t border-dashed border-[#D9D9D9] pt-3">
             <p className="text-xs font-semibold uppercase tracking-wider text-[#737373]">
               Recovery Capabilities
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {["Aluminium", "Glass", "Silicon", "Copper", "Silver"].map(
-                (mat) => (
+              {activeRecoveries.length > 0 ? (
+                activeRecoveries.map((rt) => (
                   <span
-                    key={mat}
+                    key={rt.key}
                     className="inline-flex items-center gap-1 bg-[#E8FAE9] px-2 py-0.5 text-xs font-medium text-[#22C55E]"
                   >
                     <Recycle className="h-3 w-3" />
-                    {mat}
+                    {rt.label}
                   </span>
-                )
+                ))
+              ) : (
+                <span className="text-xs text-[#A3A3A3]">
+                  No recovery data available
+                </span>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Carbon footprint analysis */}
+      {/* Carbon footprint analysis — grouped by model */}
       <div className="clean-card p-5">
         <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
           <Leaf className="h-4 w-4 text-[#22C55E]" />
           Carbon Footprint Analysis
         </h2>
         <p className="mt-0.5 text-xs text-[#737373]">
-          Per ISO 14067:2018 cradle-to-gate methodology
+          Per cradle-to-gate methodology — {carbonByModel.reduce((s, m) => s + m.count, 0)} passports with carbon data across {carbonByModel.length} model lines
         </p>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          {all
-            .filter((p) => p.carbon_footprint_kg_co2e)
-            .map((p) => (
-              <div key={p.id} className="dashed-card p-3">
-                <p className="text-xs font-medium text-[#737373]">
-                  {p.model_id}
-                </p>
-                <p className="mt-1 text-xl font-bold text-[#0D0D0D]">
-                  {p.carbon_footprint_kg_co2e}
-                  <span className="ml-1 text-xs font-normal text-[#737373]">
-                    kg CO₂e
-                  </span>
-                </p>
-                <p className="text-[0.625rem] text-[#A3A3A3]">
-                  {p.carbon_footprint_methodology}
-                </p>
-              </div>
-            ))}
-          {all.filter((p) => !p.carbon_footprint_kg_co2e).length > 0 && (
-            <div className="dashed-card flex flex-col items-center justify-center p-3 text-center">
-              <AlertTriangle className="h-5 w-5 text-[#F59E0B]" />
-              <p className="mt-1 text-xs text-[#737373]">
-                {all.filter((p) => !p.carbon_footprint_kg_co2e).length} passports
-                missing carbon data
-              </p>
-            </div>
-          )}
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-[#D9D9D9]">
+                <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Model</th>
+                <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Passports</th>
+                <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Carbon Footprint</th>
+                <th className="py-2 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Methodology</th>
+              </tr>
+            </thead>
+            <tbody>
+              {carbonByModel.map((row) => (
+                <tr key={row.model} className="border-b border-dashed border-[#F2F2F2]">
+                  <td className="py-2.5 pr-4 font-medium text-[#0D0D0D]">{row.model}</td>
+                  <td className="py-2.5 pr-4 text-right font-mono text-[#737373]">{row.count}</td>
+                  <td className="py-2.5 pr-4 text-right">
+                    <span className="font-mono font-bold text-[#0D0D0D]">{row.carbon}</span>
+                    <span className="ml-1 text-xs text-[#737373]">kg CO₂e</span>
+                  </td>
+                  <td className="py-2.5 text-xs text-[#A3A3A3]">{row.methodology}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+
+        {passportsMissingCarbon > 0 && (
+          <div className="mt-3 flex items-center gap-2 text-xs text-[#F59E0B]">
+            <AlertTriangle className="h-3.5 w-3.5" />
+            {passportsMissingCarbon} passport{passportsMissingCarbon > 1 ? "s" : ""} missing carbon data
+          </div>
+        )}
       </div>
     </div>
   );

@@ -128,7 +128,7 @@ export function DegradationDetail({
         // Evidence score: higher if degradation exceeds threshold more
         const evidenceScore = degradationDelta > 0
           ? Math.min(95, Math.round(60 + degradationDelta * 150))
-          : Math.round(30 + Math.random() * 20);
+          : Math.round(30 + ((idx * 17 + 7) % 20));
 
         // Estimated claim value: degradation_delta * rated_power * 0.5 EUR/Wp
         const claimValue = degradationDelta > 0

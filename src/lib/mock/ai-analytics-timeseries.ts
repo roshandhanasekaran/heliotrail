@@ -32,6 +32,7 @@ export interface WeatherDataPoint {
   timestamp: string;
   ghi_wm2: number;
   dni_wm2: number;
+  ambient_temp_c: number;
   humidity_pct: number;
   wind_speed_ms: number;
   dust_index: number;
@@ -456,6 +457,7 @@ function generateWeather(days: number): WeatherSlice {
       timestamp: ts.toISOString(),
       ghi_wm2: ghi,
       dni_wm2: dni,
+      ambient_temp_c: round(clamp(ambientTemp, 8, 35), 1),
       humidity_pct: humidity,
       wind_speed_ms: windSpeed,
       dust_index: round(clamp(dustAccum, 0, 10), 2),
