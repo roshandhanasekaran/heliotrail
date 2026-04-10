@@ -22,14 +22,14 @@ export function getFleetHealthScore(): FleetHealthScore {
     {
       label: "Performance Ratio",
       score: 81,
-      weight: 0.3,
+      weight: 0.4,
       status: "warning" as const,
       color: "#F59E0B",
     },
     {
       label: "Availability",
       score: 97,
-      weight: 0.25,
+      weight: 0.3,
       status: "good" as const,
       color: "#22C55E",
     },
@@ -39,13 +39,6 @@ export function getFleetHealthScore(): FleetHealthScore {
       weight: 0.2,
       status: "good" as const,
       color: "#22C55E",
-    },
-    {
-      label: "Revenue Impact",
-      score: 74,
-      weight: 0.15,
-      status: "warning" as const,
-      color: "#F59E0B",
     },
     {
       label: "Compliance",
@@ -60,7 +53,7 @@ export function getFleetHealthScore(): FleetHealthScore {
     breakdown.reduce((sum, b) => sum + b.score * b.weight, 0),
   );
 
-  return { overall, weeklyDelta: -1.2, breakdown };
+  return { overall, weeklyDelta: -0.8, breakdown };
 }
 
 // ─── Fleet Health History ──────────────────────────────────
