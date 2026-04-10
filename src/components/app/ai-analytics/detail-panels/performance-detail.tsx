@@ -1,24 +1,233 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowUpDown } from "lucide-react";
+import { useState, useMemo } from "react";
+import { ArrowUpDown, Sun, Cloud, CloudSun } from "lucide-react";
+import {
+  AreaChart as RechartsAreaChart,
+  Area,
+  BarChart as RechartsBarChart,
+  Bar,
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Brush,
+  Cell,
+  Legend,
+} from "recharts";
 import { AreaChart } from "@/components/app/ai-analytics/shared/area-chart";
 import { DualLineChart } from "@/components/app/ai-analytics/shared/dual-line-chart";
 import { BarChart } from "@/components/app/ai-analytics/shared/bar-chart";
+import { ModuleLink } from "@/components/app/ai-analytics/shared/module-link";
 import {
   getFleetBenchmarking,
   getPerformanceForecast,
   type FleetBenchmark,
 } from "@/lib/mock/ai-analytics";
+import {
+  getModuleProfiles,
+  getScadaData,
+  getWeatherData,
+  getFinancialData,
+  getFleetScadaSummary,
+  getFleetFinancialSummary,
+} from "@/lib/mock/ai-analytics-timeseries";
+import type { ModuleProfile } from "@/lib/mock/ai-analytics-timeseries";
+
+/* ─── Props ─── */
+
+interface PerformanceDetailProps {
+  persona?: "manufacturer" | "operator";
+  timeRange?: "7d" | "30d" | "90d" | "1y";
+  modelFilter?: string;
+  onModuleClick?: (moduleId: string) => void;
+}
+
+const TIME_RANGE_DAYS: Record<string, number> = {
+  "7d": 7,
+  "30d": 30,
+  "90d": 90,
+  "1y": 365,
+};
+
+const CHART_TOOLTIP_STYLE = {
+  background: "#fff",
+  border: "1px dashed #D9D9D9",
+  borderRadius: 0,
+  fontSize: 11,
+  fontFamily: "JetBrains Mono, monospace",
+  padding: "8px 12px",
+};
+
+const PERSONALITY_COLORS: Record<string, string> = {
+  high_performer: "#22C55E",
+  hotspot: "#EF4444",
+  batch_defect: "#EF4444",
+  connector_fault: "#F59E0B",
+  normal: "#737373",
+};
 
 const benchmarks = getFleetBenchmarking();
 const forecast = getPerformanceForecast();
 
 type SortKey = "rank" | "pr";
 
-export function PerformanceDetail() {
+export function PerformanceDetail({
+  persona = "manufacturer",
+  timeRange = "30d",
+  modelFilter = "all",
+  onModuleClick = () => {},
+}: PerformanceDetailProps) {
   const [sortKey, setSortKey] = useState<SortKey>("rank");
   const [sortAsc, setSortAsc] = useState(true);
+
+  const days = TIME_RANGE_DAYS[timeRange] ?? 30;
+
+  /* ─── Time-series data ─── */
+  const fleetScada = useMemo(() => getFleetScadaSummary(days), [days]);
+  const fleetFinancial = useMemo(() => getFleetFinancialSummary(days), [days]);
+  const weatherData = useMemo(() => getWeatherData(days), [days]);
+  const moduleProfiles = useMemo(() => getModuleProfiles(), []);
+
+  /* ─── Forecast chart data (daily aggregation for Recharts AreaChart) ─── */
+  const forecastChartData = useMemo(() => {
+    // Aggregate 15-min SCADA data to daily
+    const intervalsPerDay = 96;
+    const dailyData: { date: string; avgPR: number; totalPower: number; avgIrradiance: number }[] = [];
+    const totalDays = Math.floor(fleetScada.length / intervalsPerDay);
+
+    for (let d = 0; d < totalDays; d++) {
+      const start = d * intervalsPerDay;
+      const end = start + intervalsPerDay;
+      const daySlice = fleetScada.slice(start, end);
+
+      let prSum = 0;
+      let prCount = 0;
+      let totalPower = 0;
+      let irrSum = 0;
+      let irrCount = 0;
+
+      for (const pt of daySlice) {
+        totalPower += pt.total_power_kw * 0.25; // kWh per 15-min interval
+        if (pt.avg_pr > 0) {
+          prSum += pt.avg_pr;
+          prCount++;
+        }
+        if (pt.avg_irradiance > 0) {
+          irrSum += pt.avg_irradiance;
+          irrCount++;
+        }
+      }
+
+      const ts = new Date(daySlice[0]!.timestamp);
+      dailyData.push({
+        date: `${ts.getMonth() + 1}/${ts.getDate()}`,
+        avgPR: prCount > 0 ? Math.round((prSum / prCount) * 1000) / 10 : 0,
+        totalPower: Math.round(totalPower * 100) / 100,
+        avgIrradiance: irrCount > 0 ? Math.round(irrSum / irrCount) : 0,
+      });
+    }
+    return dailyData;
+  }, [fleetScada]);
+
+  /* ─── Daily energy yield data ─── */
+  const energyYieldData = useMemo(() => {
+    // Expected yield: use average of actual yield * 1.05 as a simple proxy
+    const avgYield = fleetFinancial.reduce((s, d) => s + d.energy_yield_kwh, 0) / fleetFinancial.length;
+    const expectedYield = avgYield * 1.05;
+
+    // Correlate weather data to add cloud indication
+    const hoursPerDay = 24;
+    return fleetFinancial.map((fp, i) => {
+      // Get mid-day weather for cloud indicator
+      const weatherIdx = i * hoursPerDay + 12; // noon
+      const wp = weatherData[weatherIdx];
+      const cloudCover = wp?.cloud_cover_pct ?? 30;
+
+      return {
+        date: fp.date.slice(5), // MM-DD
+        actual: Math.round(fp.energy_yield_kwh * 100) / 100,
+        expected: Math.round(expectedYield * 100) / 100,
+        weather: cloudCover < 25 ? "sun" : cloudCover < 60 ? "partial" : "cloud",
+      };
+    });
+  }, [fleetFinancial, weatherData]);
+
+  /* ─── PR vs Irradiance scatter data ─── */
+  const scatterData = useMemo(() => {
+    return moduleProfiles.map((profile, idx) => {
+      const scada = getScadaData(idx, days);
+      // Compute average PR and irradiance (daytime only)
+      let prSum = 0;
+      let prCount = 0;
+      let irrSum = 0;
+      let irrCount = 0;
+
+      for (const pt of scada) {
+        if (pt.performance_ratio > 0 && pt.irradiance_poa_wm2 > 50) {
+          prSum += pt.performance_ratio;
+          prCount++;
+          irrSum += pt.irradiance_poa_wm2;
+          irrCount++;
+        }
+      }
+
+      return {
+        moduleId: profile.id,
+        personality: profile.personality,
+        avgPR: prCount > 0 ? Math.round((prSum / prCount) * 1000) / 10 : 0,
+        avgIrradiance: irrCount > 0 ? Math.round(irrSum / irrCount) : 0,
+      };
+    });
+  }, [moduleProfiles, days]);
+
+  /* ─── Model vs Datasheet data (manufacturer persona) ─── */
+  const modelDatasheetData = useMemo(() => {
+    if (persona !== "manufacturer") return [];
+    const modelMap: Record<string, { prSum: number; count: number }> = {};
+
+    moduleProfiles.forEach((profile, idx) => {
+      const scada = getScadaData(idx, days);
+      let prSum = 0;
+      let prCount = 0;
+
+      for (const pt of scada) {
+        if (pt.performance_ratio > 0) {
+          prSum += pt.performance_ratio;
+          prCount++;
+        }
+      }
+
+      const avgPR = prCount > 0 ? (prSum / prCount) * 100 : 0;
+      const model = profile.model;
+      if (!modelMap[model]) modelMap[model] = { prSum: 0, count: 0 };
+      modelMap[model].prSum += avgPR;
+      modelMap[model].count += 1;
+    });
+
+    return Object.entries(modelMap).map(([model, data]) => ({
+      model,
+      actualPR: Math.round((data.prSum / data.count) * 10) / 10,
+      datasheetPR: 82,
+      gap: Math.round(((data.prSum / data.count) - 82) * 10) / 10,
+    }));
+  }, [persona, moduleProfiles, days]);
+
+  /* ─── Revenue per module (operator persona) ─── */
+  const moduleRevenues = useMemo(() => {
+    if (persona !== "operator") return new Map<string, number>();
+    const revMap = new Map<string, number>();
+    moduleProfiles.forEach((profile, idx) => {
+      const fin = getFinancialData(idx, days);
+      const totalRev = fin.reduce((s, d) => s + d.revenue_eur, 0);
+      const dailyAvg = totalRev / fin.length;
+      revMap.set(profile.id, Math.round(dailyAvg * 100) / 100);
+    });
+    return revMap;
+  }, [persona, moduleProfiles, days]);
 
   const sorted = [...benchmarks].sort((a, b) => {
     const mul = sortAsc ? 1 : -1;
@@ -49,7 +258,7 @@ export function PerformanceDetail() {
           Performance Intelligence
         </h1>
         <p className="text-xs text-[#737373] mt-1">
-          Fleet-wide performance ratio analysis with 30-day forecasting.
+          Fleet-wide performance ratio analysis with {days}-day forecasting.
         </p>
       </div>
 
@@ -81,6 +290,63 @@ export function PerformanceDetail() {
         </div>
       </div>
 
+      {/* UPGRADED: Fleet PR Trend (Recharts AreaChart with Brush) */}
+      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          Fleet PR Trend ({days} days) -- Brushable Zoom
+        </p>
+        <ResponsiveContainer width="100%" height={260}>
+          <RechartsAreaChart data={forecastChartData} margin={{ left: 0, right: 8, top: 8, bottom: 24 }}>
+            <defs>
+              <linearGradient id="prAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#22C55E" stopOpacity={0.2} />
+                <stop offset="100%" stopColor="#22C55E" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={{ stroke: "#D9D9D9" }}
+              tickLine={false}
+            />
+            <YAxis
+              domain={[70, 90]}
+              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={false}
+              tickLine={false}
+              width={40}
+              tickFormatter={(v) => `${v}%`}
+            />
+            <Tooltip
+              contentStyle={CHART_TOOLTIP_STYLE}
+              formatter={(value, name) => {
+                if (name === "avgPR") return [`${value}%`, "Avg PR"];
+                if (name === "totalPower") return [`${value} kWh`, "Total Power"];
+                if (name === "avgIrradiance") return [`${value} W/m\u00B2`, "Avg Irradiance"];
+                return [String(value), String(name)];
+              }}
+              labelFormatter={(label) => `Date: ${label}`}
+            />
+            <Area
+              type="monotone"
+              dataKey="avgPR"
+              stroke="#22C55E"
+              strokeWidth={2}
+              fill="url(#prAreaGrad)"
+              dot={{ r: 2, fill: "#22C55E" }}
+            />
+            <Brush
+              dataKey="date"
+              height={20}
+              stroke="#D9D9D9"
+              fill="#FAFAFA"
+              travellerWidth={8}
+            />
+          </RechartsAreaChart>
+        </ResponsiveContainer>
+      </div>
+
       {/* PR Trend Description */}
       <div className="border border-dashed border-[#D9D9D9] bg-[#F2F2F2] p-4">
         <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
@@ -89,6 +355,156 @@ export function PerformanceDetail() {
         <p className="text-xs text-[#0D0D0D] leading-relaxed">
           {forecast.seasonalOutlook}
         </p>
+      </div>
+
+      {/* NEW: Daily Energy Yield Stacked Bars */}
+      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          Daily Energy Yield: Actual vs Expected
+        </p>
+        <ResponsiveContainer width="100%" height={280}>
+          <RechartsBarChart data={energyYieldData} margin={{ left: 0, right: 8, top: 8, bottom: 24 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 8, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={{ stroke: "#D9D9D9" }}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={false}
+              tickLine={false}
+              width={45}
+              tickFormatter={(v) => `${v} kWh`}
+            />
+            <Tooltip
+              contentStyle={CHART_TOOLTIP_STYLE}
+              formatter={(value, name) => {
+                if (name === "actual") return [`${value} kWh`, "Actual Yield"];
+                if (name === "expected") return [`${value} kWh`, "Expected Yield"];
+                return [String(value), String(name)];
+              }}
+              labelFormatter={(label) => {
+                const match = energyYieldData.find((d) => d.date === String(label));
+                const icon = match?.weather === "sun" ? "\u2600\uFE0F" : match?.weather === "cloud" ? "\u2601\uFE0F" : "\u26C5";
+                return `${label} ${icon}`;
+              }}
+            />
+            <Legend
+              verticalAlign="top"
+              align="right"
+              iconType="square"
+              wrapperStyle={{ fontSize: 10, fontFamily: "JetBrains Mono, monospace" }}
+            />
+            <Bar dataKey="expected" fill="#D9D9D9" name="expected" stackId="yield" />
+            <Bar dataKey="actual" fill="#22C55E" name="actual" stackId="yield_actual" />
+          </RechartsBarChart>
+        </ResponsiveContainer>
+        {/* Weather legend */}
+        <div className="flex items-center gap-4 mt-2 ml-2">
+          <span className="text-[9px] text-[#737373] flex items-center gap-1">
+            <Sun className="h-3 w-3 text-[#F59E0B]" /> Clear
+          </span>
+          <span className="text-[9px] text-[#737373] flex items-center gap-1">
+            <CloudSun className="h-3 w-3 text-[#737373]" /> Partial
+          </span>
+          <span className="text-[9px] text-[#737373] flex items-center gap-1">
+            <Cloud className="h-3 w-3 text-[#A3A3A3]" /> Cloudy
+          </span>
+        </div>
+      </div>
+
+      {/* NEW: PR vs Irradiance Scatter Plot */}
+      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
+          PR vs Irradiance by Module Personality
+        </p>
+        <p className="text-[9px] text-[#A3A3A3] mb-3">
+          Each dot is a module. Color indicates personality type. Reveals low-light performance drops.
+        </p>
+        <ResponsiveContainer width="100%" height={280}>
+          <ScatterChart margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <XAxis
+              type="number"
+              dataKey="avgIrradiance"
+              name="Avg Irradiance"
+              unit=" W/m\u00B2"
+              tick={{ fontSize: 9, fill: "#737373" }}
+              axisLine={{ stroke: "#D9D9D9" }}
+              tickLine={false}
+              label={{
+                value: "Avg Irradiance (W/m\u00B2)",
+                position: "insideBottom",
+                offset: -2,
+                fontSize: 9,
+                fill: "#A3A3A3",
+              }}
+            />
+            <YAxis
+              type="number"
+              dataKey="avgPR"
+              name="Avg PR"
+              unit="%"
+              tick={{ fontSize: 9, fill: "#737373" }}
+              axisLine={false}
+              tickLine={false}
+              width={45}
+              domain={[70, 90]}
+              label={{
+                value: "Avg PR (%)",
+                angle: -90,
+                position: "insideLeft",
+                offset: 10,
+                fontSize: 9,
+                fill: "#A3A3A3",
+              }}
+            />
+            <Tooltip
+              contentStyle={CHART_TOOLTIP_STYLE}
+              content={({ active, payload }) => {
+                if (!active || !payload?.length) return null;
+                const data = payload[0]?.payload as { moduleId: string; personality: string; avgPR: number; avgIrradiance: number };
+                return (
+                  <div style={CHART_TOOLTIP_STYLE}>
+                    <p className="font-mono text-[10px] font-bold">{data.moduleId}</p>
+                    <p className="text-[9px] text-[#737373]">{data.personality.replace("_", " ")}</p>
+                    <p className="text-[9px]">PR: {data.avgPR}%</p>
+                    <p className="text-[9px]">Irradiance: {data.avgIrradiance} W/m&sup2;</p>
+                  </div>
+                );
+              }}
+            />
+            <Scatter name="Modules" data={scatterData}>
+              {scatterData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={PERSONALITY_COLORS[entry.personality] ?? "#737373"}
+                  r={6}
+                />
+              ))}
+            </Scatter>
+          </ScatterChart>
+        </ResponsiveContainer>
+        {/* Legend */}
+        <div className="flex items-center gap-4 mt-2 flex-wrap">
+          {[
+            { label: "High Performer", color: "#22C55E" },
+            { label: "Hotspot", color: "#EF4444" },
+            { label: "Batch Defect", color: "#EF4444" },
+            { label: "Connector Fault", color: "#F59E0B" },
+            { label: "Normal", color: "#737373" },
+          ].map((item) => (
+            <span key={item.label} className="flex items-center gap-1 text-[9px] text-[#737373]">
+              <span
+                className="inline-block w-2 h-2 rounded-full"
+                style={{ backgroundColor: item.color }}
+              />
+              {item.label}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* 25-Year Degradation Trajectory */}
@@ -128,6 +544,49 @@ export function PerformanceDetail() {
         />
       </div>
 
+      {/* PERSONA (Manufacturer): Model vs Datasheet */}
+      {persona === "manufacturer" && modelDatasheetData.length > 0 && (
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
+            Model vs Datasheet PR
+          </p>
+          <p className="text-[9px] text-[#A3A3A3] mb-3">
+            Actual average PR per model vs 82% datasheet target. Gap indicates field performance delta.
+          </p>
+          <ResponsiveContainer width="100%" height={160}>
+            <RechartsBarChart data={modelDatasheetData} layout="vertical" margin={{ left: 60, right: 24, top: 8, bottom: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" horizontal={false} />
+              <XAxis
+                type="number"
+                domain={[70, 90]}
+                tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+                axisLine={{ stroke: "#D9D9D9" }}
+                tickLine={false}
+                tickFormatter={(v) => `${v}%`}
+              />
+              <YAxis
+                type="category"
+                dataKey="model"
+                tick={{ fontSize: 10, fill: "#737373" }}
+                axisLine={false}
+                tickLine={false}
+                width={55}
+              />
+              <Tooltip
+                contentStyle={CHART_TOOLTIP_STYLE}
+                formatter={(value, name) => {
+                  if (name === "actualPR") return [`${value}%`, "Actual PR"];
+                  if (name === "datasheetPR") return [`${value}%`, "Datasheet"];
+                  return [String(value), String(name)];
+                }}
+              />
+              <Bar dataKey="datasheetPR" fill="#D9D9D9" name="datasheetPR" barSize={16} />
+              <Bar dataKey="actualPR" fill="#22C55E" name="actualPR" barSize={16} />
+            </RechartsBarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
       {/* Full Fleet Benchmarking Table */}
       <div>
         <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
@@ -166,6 +625,11 @@ export function PerformanceDetail() {
                 <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
                   Status
                 </th>
+                {persona === "operator" && (
+                  <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                    Revenue/Day
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -177,8 +641,8 @@ export function PerformanceDetail() {
                   <td className="px-3 py-2 font-mono text-[#0D0D0D]">
                     {m.rank}
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
-                    {m.moduleId}
+                  <td className="px-3 py-2">
+                    <ModuleLink moduleId={m.moduleId} onClick={onModuleClick} />
                   </td>
                   <td className="px-3 py-2 text-[#0D0D0D]">{m.modelId}</td>
                   <td className="px-3 py-2 text-[#737373]">
@@ -204,6 +668,13 @@ export function PerformanceDetail() {
                   <td className="px-3 py-2">
                     <StatusBadge status={m.status} />
                   </td>
+                  {persona === "operator" && (
+                    <td className="px-3 py-2 font-mono font-semibold text-[#0D0D0D]">
+                      {moduleRevenues.get(m.moduleId) != null
+                        ? `EUR ${moduleRevenues.get(m.moduleId)!.toFixed(2)}`
+                        : "--"}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
