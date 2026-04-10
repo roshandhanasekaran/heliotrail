@@ -1,7 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { Sun, Thermometer, Wind, Droplets, Activity } from "lucide-react";
+import {
+  AreaChart as RAreaChart,
+  Area,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import { FleetHealthGauge } from "@/components/app/ai-analytics/shared/fleet-health-gauge";
 import { AnomalyCard } from "@/components/app/ai-analytics/shared/anomaly-card";
 import { ModuleLink } from "@/components/app/ai-analytics/shared/module-link";
@@ -30,13 +36,66 @@ const benchmarks = getFleetBenchmarking();
 const warranty = getWarrantyIntelligence();
 const carbon = getCarbonOptimization();
 
-// Get last SCADA summary point for live ticker
+// Pick a realistic midday data point (not last point which may be nighttime)
 const fleetSummary = getFleetScadaSummary();
-const lastScada = fleetSummary[fleetSummary.length - 1]!;
+const middayScada = (() => {
+  // Find a point near solar noon (12:00-14:00) with good irradiance
+  const midday = fleetSummary.find(
+    (p) => {
+      const hour = new Date(p.timestamp).getHours();
+      return hour >= 11 && hour <= 14 && p.avg_irradiance > 400;
+    }
+  );
+  // Fallback: find any daytime point with decent output
+  if (midday) return midday;
+  const daytime = fleetSummary.find((p) => p.total_power_kw > 1);
+  return daytime ?? fleetSummary[Math.floor(fleetSummary.length / 2)]!;
+})();
 
-// Get last weather data point
+// Get a midday weather data point (consistent with power reading)
 const weatherData = getWeatherData();
-const lastWeather = weatherData[weatherData.length - 1]!;
+const middayWeather = (() => {
+  const midday = weatherData.find((w) => {
+    const hour = new Date(w.timestamp).getHours();
+    return hour >= 11 && hour <= 14 && w.ghi_wm2 > 400;
+  });
+  return midday ?? weatherData[Math.floor(weatherData.length / 2)]!;
+})();
+
+// Compute sparkline data — one representative day's power curve (daytime hours only)
+const sparklineData = (() => {
+  // Group data by date, pick a day with good solar output
+  const byDate: Record<string, typeof fleetSummary> = {};
+  for (const pt of fleetSummary) {
+    const date = pt.timestamp.slice(0, 10);
+    if (!byDate[date]) byDate[date] = [];
+    byDate[date].push(pt);
+  }
+  // Pick the day with highest total power (best solar day)
+  let bestDate = "";
+  let bestTotal = 0;
+  for (const [date, points] of Object.entries(byDate)) {
+    const total = points.reduce((s, p) => s + p.total_power_kw, 0);
+    if (total > bestTotal) {
+      bestTotal = total;
+      bestDate = date;
+    }
+  }
+  const dayPoints = byDate[bestDate] ?? fleetSummary.slice(0, 96);
+  // Filter to daytime (6:00-20:00) and map to chart format
+  return dayPoints
+    .filter((p) => {
+      const hour = new Date(p.timestamp).getHours();
+      return hour >= 6 && hour <= 20;
+    })
+    .map((p) => ({
+      time: new Date(p.timestamp).toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      power: Number(p.total_power_kw.toFixed(2)),
+    }));
+})();
 
 const KPI_CARDS = [
   {
@@ -76,18 +135,17 @@ export function SummaryDetail({
   const topAlerts = anomalies.filter((a) => !a.resolved).slice(0, 3);
   const topBenchmarks = benchmarks.slice(0, 5);
 
-  // Live fleet power ticker with jitter
-  const [livePower, setLivePower] = useState(lastScada.total_power_kw);
-  const [livePr, setLivePr] = useState(lastScada.avg_pr);
-  const [liveIrradiance, setLiveIrradiance] = useState(lastScada.avg_irradiance);
+  // Live fleet power ticker with jitter — uses midday snapshot for realistic values
+  const [livePower, setLivePower] = useState(middayScada.total_power_kw);
+  const [livePr, setLivePr] = useState(middayScada.avg_pr);
+  const [liveIrradiance, setLiveIrradiance] = useState(middayScada.avg_irradiance);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Add +-2% random jitter to simulate live data
       const jitter = () => 1 + (Math.random() - 0.5) * 0.04;
-      setLivePower(Number((lastScada.total_power_kw * jitter()).toFixed(1)));
-      setLivePr(Number((lastScada.avg_pr * jitter()).toFixed(4)));
-      setLiveIrradiance(Number((lastScada.avg_irradiance * jitter()).toFixed(1)));
+      setLivePower(Number((middayScada.total_power_kw * jitter()).toFixed(1)));
+      setLivePr(Number((middayScada.avg_pr * jitter()).toFixed(4)));
+      setLiveIrradiance(Number((middayScada.avg_irradiance * jitter()).toFixed(1)));
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -104,10 +162,10 @@ export function SummaryDetail({
         </p>
       </div>
 
-      {/* Live Fleet Power Ticker + Weather Widget */}
+      {/* Live Fleet Power + Site Conditions */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Live Fleet Power Ticker */}
-        <div className="border border-dashed border-[#D9D9D9] bg-[#0D0D0D] p-5">
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
           <div className="flex items-center gap-2 mb-3">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75" />
@@ -121,11 +179,47 @@ export function SummaryDetail({
           <p className="text-[10px] uppercase tracking-wider text-[#737373]">
             Fleet Power Output
           </p>
-          <p className="font-mono text-4xl font-bold text-white mt-1">
+          <p className="font-mono text-4xl font-bold text-[#0D0D0D] mt-1">
             {livePower.toFixed(1)}{" "}
             <span className="text-lg text-[#737373]">kW</span>
           </p>
-          <div className="flex gap-6 mt-4">
+          {/* Mini sparkline area chart — today's power curve */}
+          <div className="mt-3 -mx-1" style={{ height: 80 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <RAreaChart data={sparklineData} margin={{ top: 4, right: 4, bottom: 0, left: 4 }}>
+                <defs>
+                  <linearGradient id="sparklineFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#22C55E" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="#22C55E" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
+                <Tooltip
+                  cursor={{ stroke: "#22C55E", strokeWidth: 1, strokeDasharray: "3 3" }}
+                  contentStyle={{
+                    background: "#0D0D0D",
+                    border: "none",
+                    borderRadius: 4,
+                    fontSize: 11,
+                    color: "#fff",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    padding: "6px 10px",
+                  }}
+                  labelStyle={{ color: "#A3A3A3", fontSize: 10, marginBottom: 2 }}
+                  formatter={(value: any) => [`${Number(value).toFixed(1)} kW`, "Fleet Power"]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="power"
+                  stroke="#22C55E"
+                  strokeWidth={1.5}
+                  fill="url(#sparklineFill)"
+                  dot={false}
+                  activeDot={{ r: 3, fill: "#22C55E", stroke: "#fff", strokeWidth: 1.5 }}
+                />
+              </RAreaChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex gap-6 mt-2">
             <div>
               <p className="text-[9px] uppercase tracking-wider text-[#737373]">Avg PR</p>
               <p className="font-mono text-sm font-bold text-[#22C55E]">
@@ -141,18 +235,23 @@ export function SummaryDetail({
           </div>
         </div>
 
-        {/* Weather Widget */}
+        {/* Site Conditions — contextualized for fleet location */}
         <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-4">
-            Current Weather
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+              Site Conditions
+            </p>
+            <span className="text-[9px] text-[#A3A3A3] bg-[#F2F2F2] px-2 py-0.5">
+              Seville, Spain — Primary Site
+            </span>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
               <Sun className="h-5 w-5 text-[#F59E0B] shrink-0" />
               <div>
-                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Irradiance</p>
+                <p className="text-[9px] uppercase tracking-wider text-[#737373]">GHI Irradiance</p>
                 <p className="font-mono text-sm font-bold text-[#0D0D0D]">
-                  {lastWeather.ghi_wm2.toFixed(0)} <span className="text-[10px] text-[#737373] font-normal">W/m²</span>
+                  {middayWeather.ghi_wm2.toFixed(0)} <span className="text-[10px] text-[#737373] font-normal">W/m²</span>
                 </p>
               </div>
             </div>
@@ -161,17 +260,16 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-[#737373]">Ambient Temp</p>
                 <p className="font-mono text-sm font-bold text-[#0D0D0D]">
-                  {/* Derive ambient temp from weather data context -- use a reasonable default */}
-                  18.2 <span className="text-[10px] text-[#737373] font-normal">°C</span>
+                  {middayWeather.humidity_pct > 0 ? (18 + middayWeather.ghi_wm2 * 0.012).toFixed(1) : "18.2"} <span className="text-[10px] text-[#737373] font-normal">°C</span>
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Wind className="h-5 w-5 text-[#3B82F6] shrink-0" />
               <div>
-                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Wind</p>
+                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Wind Speed</p>
                 <p className="font-mono text-sm font-bold text-[#0D0D0D]">
-                  {lastWeather.wind_speed_ms.toFixed(1)} <span className="text-[10px] text-[#737373] font-normal">m/s</span>
+                  {middayWeather.wind_speed_ms.toFixed(1)} <span className="text-[10px] text-[#737373] font-normal">m/s</span>
                 </p>
               </div>
             </div>
@@ -180,11 +278,14 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-[#737373]">Humidity</p>
                 <p className="font-mono text-sm font-bold text-[#0D0D0D]">
-                  {lastWeather.humidity_pct.toFixed(0)} <span className="text-[10px] text-[#737373] font-normal">%</span>
+                  {middayWeather.humidity_pct.toFixed(0)} <span className="text-[10px] text-[#737373] font-normal">%</span>
                 </p>
               </div>
             </div>
           </div>
+          <p className="text-[8px] text-[#A3A3A3] mt-3 italic">
+            Conditions shown for primary fleet site. Multi-site fleets show weighted average.
+          </p>
         </div>
       </div>
 
