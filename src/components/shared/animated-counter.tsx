@@ -21,15 +21,16 @@ export function AnimatedCounter({
 }: AnimatedCounterProps) {
   const [display, setDisplay] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const hasAnimated = useRef(false);
+  const prevValue = useRef(0);
 
   useEffect(() => {
-    if (hasAnimated.current) return;
-    hasAnimated.current = true;
+    const from = prevValue.current;
+    const to = value;
+    prevValue.current = to;
+
+    if (from === to) return;
 
     const start = performance.now();
-    const from = 0;
-    const to = value;
 
     function tick(now: number) {
       const elapsed = now - start;

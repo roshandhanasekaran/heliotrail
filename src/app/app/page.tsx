@@ -2,44 +2,36 @@ import { createClient } from "@/lib/supabase/server";
 import { PASSPORT_STATUS_LABELS } from "@/lib/constants";
 import Link from "next/link";
 import {
-  FileStack,
   CheckCircle2,
   Clock,
   FileEdit,
   ArrowRight,
   Plus,
-  ShieldCheck,
-  Leaf,
-  Layers,
-  FolderOpen,
-  TrendingUp,
-  TrendingDown,
   AlertTriangle,
 } from "lucide-react";
 import { DonutChart } from "@/components/app/dashboard/donut-chart";
 import { CarbonChart } from "@/components/app/dashboard/carbon-chart";
 import { MaterialChart } from "@/components/app/dashboard/material-chart";
-import { ComplianceGauge } from "@/components/app/dashboard/compliance-gauge";
-import { FleetPRWidget } from "@/components/app/dashboard/fleet-pr-widget";
-import { AlertsWidget } from "@/components/app/dashboard/alerts-widget";
 import { DashboardKpis } from "./dashboard-kpis";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const [{ data: passports }, { data: certificates }, { data: materials }, { data: documents }, { count: supplyChainCount }] =
+  const [{ data: passports }, { data: certificates }, { data: materials }, { data: documents }, { count: supplyChainCount }, { data: circularity }] =
     await Promise.all([
       supabase.from("passports").select("*"),
       supabase.from("passport_certificates").select("*"),
       supabase.from("passport_materials").select("*"),
       supabase.from("passport_documents").select("*"),
       supabase.from("passport_supply_chain_actors").select("*", { count: "exact", head: true }),
+      supabase.from("passport_circularity").select("recyclability_rate_percent"),
     ]);
 
   const all = passports ?? [];
   const certs = certificates ?? [];
   const mats = materials ?? [];
   const docs = documents ?? [];
+  const circ = circularity ?? [];
   const hasSupplyChain = (supplyChainCount ?? 0) > 0;
 
   const published = all.filter((p) => p.status === "published");
@@ -60,8 +52,9 @@ export default async function DashboardPage() {
   const carbonData = all
     .filter((p) => p.carbon_footprint_kg_co2e)
     .map((p) => ({
-      model: (p.model_id as string).replace("WRM-", "").replace("HT-", "").substring(0, 12),
+      model: p.model_id as string,
       co2: p.carbon_footprint_kg_co2e as number,
+      technology: (p.module_technology as string) ?? "other",
     }));
   const avgCarbon =
     carbonData.length > 0
@@ -116,7 +109,25 @@ export default async function DashboardPage() {
   const evidencePercent =
     all.length > 0 ? Math.round((passportsWithDocs / all.length) * 100) : 0;
 
-  // KPI data to pass to client component
+  // Certs expiring in 30 days
+  const now = new Date();
+  const in30Days = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const certsExpiringIn30Days = certs.filter((c) => {
+    if (!c.expiry_date || c.status !== "valid") return false;
+    const exp = new Date(c.expiry_date);
+    return exp >= now && exp <= in30Days;
+  }).length;
+
+  // Average recyclability
+  const recycRates = circ
+    .map((c) => c.recyclability_rate_percent)
+    .filter((r): r is number => r != null);
+  const avgRecyclability =
+    recycRates.length > 0
+      ? Math.round(recycRates.reduce((s, r) => s + r, 0) / recycRates.length)
+      : 0;
+
+  // KPI data to pass to client component (matches KpiComputeInput)
   const kpiData = {
     total: all.length,
     published: published.length,
@@ -126,6 +137,12 @@ export default async function DashboardPage() {
     evidencePercent,
     crmCount: mats.filter((m) => m.is_critical_raw_material).length,
     socCount: mats.filter((m) => m.is_substance_of_concern).length,
+    validCerts,
+    pendingCerts,
+    expiredCerts,
+    totalCerts: certs.length,
+    certsExpiringIn30Days,
+    avgRecyclability,
   };
 
   return (
@@ -147,40 +164,19 @@ export default async function DashboardPage() {
       {/* KPI Cards (client component for animations) */}
       <DashboardKpis data={kpiData} />
 
-      {/* Passport Status — cert breakdown in 2-col with ESPR readiness context */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="clean-card hover-card p-5">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
-            Passport Status
-          </h2>
-          <p className="text-xs text-[#737373]">
-            Distribution across portfolio
-          </p>
-          <div className="mt-2">
-            <DonutChart
-              data={donutData}
-              centerLabel="passports"
-            />
-          </div>
-        </div>
-
-        <div className="clean-card hover-card p-5">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
-            Certificate Breakdown
-          </h2>
-          <p className="text-xs text-[#737373]">
-            {certs.length} certificates across {all.length} passports
-          </p>
-          <div className="mt-4">
-            <ComplianceGauge
-              score={complianceScore}
-              size={160}
-              validCerts={validCerts}
-              pendingCerts={pendingCerts}
-              expiredCerts={expiredCerts}
-              totalCerts={certs.length}
-            />
-          </div>
+      {/* Passport Status */}
+      <div className="clean-card hover-card p-5">
+        <h2 className="text-sm font-bold text-[#0D0D0D]">
+          Passport Status
+        </h2>
+        <p className="text-xs text-[#737373]">
+          Distribution across portfolio
+        </p>
+        <div className="mt-2">
+          <DonutChart
+            data={donutData}
+            centerLabel="passports"
+          />
         </div>
       </div>
 
@@ -201,36 +197,28 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      {/* Materials + Fleet Intelligence */}
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="clean-card hover-card p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-sm font-bold text-[#0D0D0D]">
-                Material Composition
-              </h2>
-              <p className="text-xs text-[#737373]">
-                Fleet aggregate · {mats.length} materials
-              </p>
-            </div>
-            <div className="flex gap-2">
-              {kpiData.crmCount > 0 && (
-                <span className="inline-flex items-center gap-1 border border-dashed border-[#F59E0B] bg-[#FEF3C7] px-1.5 py-0.5 text-[0.625rem]">
-                  <AlertTriangle className="h-2.5 w-2.5 text-[#F59E0B]" />
-                  {kpiData.crmCount} CRM
-                </span>
-              )}
-            </div>
+      {/* Material Composition */}
+      <div className="clean-card hover-card p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-sm font-bold text-[#0D0D0D]">
+              Material Composition
+            </h2>
+            <p className="text-xs text-[#737373]">
+              Fleet aggregate · {mats.length} materials
+            </p>
           </div>
-          <div className="mt-4">
-            <MaterialChart segments={materialSegments} />
+          <div className="flex gap-2">
+            {kpiData.crmCount > 0 && (
+              <span className="inline-flex items-center gap-1 border border-dashed border-[#F59E0B] bg-[#FEF3C7] px-1.5 py-0.5 text-[0.625rem]">
+                <AlertTriangle className="h-2.5 w-2.5 text-[#F59E0B]" />
+                {kpiData.crmCount} CRM
+              </span>
+            )}
           </div>
         </div>
-        <div className="clean-card hover-card p-5">
-          <FleetPRWidget />
-        </div>
-        <div className="clean-card hover-card p-5">
-          <AlertsWidget />
+        <div className="mt-4">
+          <MaterialChart segments={materialSegments} />
         </div>
       </div>
 

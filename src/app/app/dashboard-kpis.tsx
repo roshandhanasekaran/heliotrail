@@ -1,33 +1,19 @@
 "use client";
 
-import {
-  FileStack,
-  TrendingUp,
-  ShieldCheck,
-  Leaf,
-  Layers,
-  FolderOpen,
-  Gauge,
-  AlertTriangle,
-  Clock,
-} from "lucide-react";
+import { FileStack, ShieldCheck, Clock, Settings2 } from "lucide-react";
 import { AnimatedCounter } from "@/components/shared/animated-counter";
 import { Sparkline } from "@/components/shared/sparkline";
+import {
+  KPI_REGISTRY,
+  type KpiComputeInput,
+} from "@/lib/kpi-registry";
+import { useDashboardPreferences } from "@/hooks/use-dashboard-preferences";
+import { KpiPicker } from "@/components/app/dashboard/kpi-picker";
+import { useState } from "react";
 
-interface KpiData {
-  total: number;
-  published: number;
-  complianceScore: number;
-  avgCarbon: number;
-  materialsCount: number;
-  evidencePercent: number;
-  crmCount: number;
-  socCount: number;
-}
-
-export function DashboardKpis({ data }: { data: KpiData }) {
-  const publishedRate =
-    data.total > 0 ? Math.round((data.published / data.total) * 100) : 0;
+export function DashboardKpis({ data }: { data: KpiComputeInput }) {
+  const { preferences } = useDashboardPreferences();
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const heroKpis = [
     {
@@ -35,7 +21,7 @@ export function DashboardKpis({ data }: { data: KpiData }) {
       label: "Total Passports",
       value: data.total,
       suffix: "",
-      sub: `${data.published} published · ${data.total - data.published} in progress`,
+      sub: `${data.published} published \u00b7 ${data.total - data.published} in progress`,
       trend: "+2 this quarter",
       trendUp: true,
       accentColor: "#22C55E",
@@ -56,68 +42,23 @@ export function DashboardKpis({ data }: { data: KpiData }) {
     },
   ];
 
-  const secondaryKpis = [
-    {
-      icon: TrendingUp,
-      label: "Published Rate",
-      value: publishedRate,
-      suffix: "%",
-      trend: "+12% QoQ",
-      trendUp: true,
-      accentColor: "#22C55E",
-      sparkData: [40, 42, 48, 50, 55, 58, 63],
-    },
-    {
-      icon: Leaf,
-      label: "Avg Carbon",
-      value: data.avgCarbon,
-      suffix: "",
-      trend: "-3% vs batch",
-      trendUp: false,
-      accentColor: "#22C55E",
-      sparkData: [440, 430, 425, 420, 415, 412, 410],
-    },
-    {
-      icon: Layers,
-      label: "Materials",
-      value: data.materialsCount,
-      suffix: "",
-      trend: `${data.crmCount} CRM`,
-      trendUp: true,
-      accentColor: "#F59E0B",
-      sparkData: [20, 25, 30, 33, 36, 40, 42],
-    },
-    {
-      icon: FolderOpen,
-      label: "Evidence",
-      value: data.evidencePercent,
-      suffix: "%",
-      trend: "+8% this mo.",
-      trendUp: true,
-      accentColor: "#3B82F6",
-      sparkData: [60, 65, 70, 75, 78, 82, 87],
-    },
-    {
-      icon: Gauge,
-      label: "Fleet PR",
-      value: 81,
-      suffix: "%",
-      trend: "Stable",
-      trendUp: true,
-      accentColor: "#22C55E",
-      sparkData: [83, 82, 80, 82, 82, 81],
-    },
-    {
-      icon: AlertTriangle,
-      label: "Active Alerts",
-      value: 3,
-      suffix: "",
-      trend: "2 new",
-      trendUp: false,
-      accentColor: "#F59E0B",
-      sparkData: [1, 0, 2, 1, 3, 3],
-    },
-  ];
+  // Build secondary KPIs dynamically from registry + user preferences
+  const secondaryKpis = preferences.enabledKpiIds
+    .map((id) => KPI_REGISTRY.find((k) => k.id === id))
+    .filter((m): m is NonNullable<typeof m> => m != null)
+    .map((metric) => {
+      const trend = metric.computeTrend(data);
+      return {
+        icon: metric.icon,
+        label: metric.label,
+        value: metric.computeValue(data),
+        suffix: metric.suffix,
+        trend: trend.text,
+        trendUp: trend.up,
+        accentColor: metric.accentColor,
+        sparkData: metric.sparkSeed,
+      };
+    });
 
   return (
     <div className="space-y-3">
@@ -126,9 +67,18 @@ export function DashboardKpis({ data }: { data: KpiData }) {
         <h2 className="text-sm font-bold text-[#0D0D0D]">
           Portfolio Intelligence
         </h2>
-        <div className="flex items-center gap-1.5 text-[#A3A3A3]">
-          <Clock className="h-3 w-3" />
-          <span className="text-[0.625rem]">Updated 5 min ago</span>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setPickerOpen(true)}
+            className="flex items-center gap-1 text-[#A3A3A3] transition-colors hover:text-[#0D0D0D]"
+            title="Configure KPIs"
+          >
+            <Settings2 className="h-3.5 w-3.5" />
+          </button>
+          <div className="flex items-center gap-1.5 text-[#A3A3A3]">
+            <Clock className="h-3 w-3" />
+            <span className="text-[0.625rem]">Updated 5 min ago</span>
+          </div>
         </div>
       </div>
 
@@ -160,8 +110,10 @@ export function DashboardKpis({ data }: { data: KpiData }) {
                     {kpi.label}
                   </p>
                   <span
-                    className={`text-[0.625rem] font-medium ${
-                      kpi.trendUp ? "text-[#22C55E]" : "text-[#EF4444]"
+                    className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-semibold ${
+                      kpi.trendUp
+                        ? "bg-green-50/80 text-[#16a34a]"
+                        : "bg-red-50/80 text-[#dc2626]"
                     }`}
                   >
                     {kpi.trendUp ? "\u2191" : "\u2193"} {kpi.trend}
@@ -182,48 +134,58 @@ export function DashboardKpis({ data }: { data: KpiData }) {
                 className="font-mono text-[2.5rem] font-bold leading-none tabular-nums text-[#0D0D0D]"
               />
             </div>
-            <p className="mt-1.5 text-[0.6875rem] text-[#A3A3A3]">
-              {kpi.sub}
-            </p>
+            <p className="mt-1.5 text-[0.6875rem] text-[#A3A3A3]">{kpi.sub}</p>
           </div>
         ))}
       </div>
 
       {/* Secondary KPI strip */}
-      <div className="clean-card overflow-hidden">
-        <div className="grid grid-cols-2 divide-x divide-[#D9D9D9] sm:grid-cols-3 lg:grid-cols-6">
-          {secondaryKpis.map((kpi, i) => (
-            <div
-              key={kpi.label}
-              className={`group cursor-default px-4 py-3.5 transition-colors hover:bg-[#FAFAFA] ${
-                i >= 2 ? "border-t border-[#D9D9D9] sm:border-t-0" : ""
-              } ${i >= 3 ? "lg:border-t-0" : ""}`}
-            >
-              <div className="flex items-center justify-between">
-                <kpi.icon className="h-3.5 w-3.5 text-[#A3A3A3]" />
-                <Sparkline data={kpi.sparkData} color={kpi.accentColor} />
-              </div>
-              <div className="mt-2">
-                <AnimatedCounter
-                  value={kpi.value}
-                  suffix={kpi.suffix}
-                  className="font-mono text-xl font-bold leading-none tabular-nums text-[#0D0D0D]"
-                />
-              </div>
-              <p className="mt-1 text-[0.625rem] font-medium text-[#737373]">
-                {kpi.label}
-              </p>
-              <span
-                className={`text-[0.625rem] ${
-                  kpi.trendUp ? "text-[#22C55E]" : "text-[#F59E0B]"
+      {secondaryKpis.length > 0 && (
+        <div className="clean-card overflow-hidden">
+          <div
+            className="grid grid-cols-2 divide-x divide-[#D9D9D9] sm:grid-cols-3"
+            style={{
+              gridTemplateColumns: undefined,
+            }}
+          >
+            {secondaryKpis.map((kpi, i) => (
+              <div
+                key={kpi.label}
+                className={`group cursor-default px-4 py-3.5 transition-colors hover:bg-[#FAFAFA] ${
+                  i >= 2 ? "border-t border-[#D9D9D9] sm:border-t-0" : ""
                 }`}
               >
-                {kpi.trendUp ? "\u2191" : "\u2193"} {kpi.trend}
-              </span>
-            </div>
-          ))}
+                <div className="flex items-center justify-between">
+                  <kpi.icon className="h-3.5 w-3.5 text-[#A3A3A3]" />
+                  <Sparkline data={kpi.sparkData} color={kpi.accentColor} />
+                </div>
+                <div className="mt-2">
+                  <AnimatedCounter
+                    value={kpi.value}
+                    suffix={kpi.suffix}
+                    className="font-mono text-xl font-bold leading-none tabular-nums text-[#0D0D0D]"
+                  />
+                </div>
+                <p className="mt-1 text-[0.625rem] font-medium text-[#737373]">
+                  {kpi.label}
+                </p>
+                <span
+                  className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-semibold ${
+                    kpi.trendUp
+                      ? "bg-green-50/80 text-[#16a34a]"
+                      : "bg-amber-50/80 text-[#d97706]"
+                  }`}
+                >
+                  {kpi.trendUp ? "\u2191" : "\u2193"} {kpi.trend}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* KPI Picker Sheet */}
+      <KpiPicker open={pickerOpen} onOpenChange={setPickerOpen} />
     </div>
   );
 }
