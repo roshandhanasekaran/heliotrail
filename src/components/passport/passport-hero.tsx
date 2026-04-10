@@ -29,7 +29,7 @@ interface PassportHeroProps {
 const quickStats = (p: Passport) => [
   { label: "Rated Power", value: `${p.rated_power_stc_w ?? "\u2014"}`, unit: "W", icon: ZapIcon },
   { label: "Efficiency", value: `${p.module_efficiency_percent ?? "\u2014"}`, unit: "%", icon: GaugeIcon },
-  { label: "Carbon", value: `${p.carbon_footprint_kg_co2e ?? "\u2014"}`, unit: "kg", icon: LeafIcon },
+  { label: "Carbon", value: `${p.carbon_footprint_kg_co2e ?? "\u2014"}`, unit: "kg CO\u2082e", icon: LeafIcon },
   { label: "Lifetime", value: `${p.expected_lifetime_years ?? "\u2014"}`, unit: "yr", icon: CalendarIcon },
   { label: "Warranty", value: `${p.product_warranty_years ?? "\u2014"}`, unit: "yr", icon: ShieldCheckIcon },
   { label: "Cells", value: `${p.cell_count ?? "\u2014"}`, unit: "", icon: GridIcon },

@@ -64,7 +64,7 @@ export function ComplianceClient({ certs }: ComplianceClientProps) {
       {/* Summary bar */}
       <GlassCard>
         <div className="flex flex-wrap items-center justify-center gap-8 px-6 py-4">
-          {["valid", "pending", "expired"].map((status) => {
+          {["valid", "pending", "expired", "revoked"].map((status) => {
             const count = certs.filter((c) => c.status === status).length;
             const config = statusConfig[status];
             if (count === 0) return null;

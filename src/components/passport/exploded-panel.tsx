@@ -176,7 +176,7 @@ export function ExplodedPanel({
                   </text>
 
                   {/* Mass in kg */}
-                  {isExploded && layer.massG && (
+                  {isExploded && layer.massG != null && layer.massG > 0 && (
                     <text
                       x={x + w - 60}
                       y={y + layerH / 2 + 1}
@@ -257,7 +257,7 @@ export function ExplodedPanel({
                       {layers[activeLayer].massPercent}%
                     </span>
                   </div>
-                  {layers[activeLayer].massG && (
+                  {layers[activeLayer].massG != null && (
                     <div className="flex justify-between text-xs">
                       <span className="text-[#737373]">Mass</span>
                       <span className="font-mono text-[#0D0D0D]">
