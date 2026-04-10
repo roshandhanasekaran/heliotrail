@@ -40,10 +40,6 @@ type TabKey = "performance" | "thermal" | "iv-curves" | "supply-chain" | "warran
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "performance", label: "Performance" },
-  { key: "thermal", label: "Thermal" },
-  { key: "iv-curves", label: "IV Curves" },
-  { key: "supply-chain", label: "Supply Chain" },
-  { key: "warranty", label: "Warranty" },
 ];
 
 const CHART_TOOLTIP_STYLE = {
