@@ -10,6 +10,7 @@ import { SoilingDetail } from "@/components/app/ai-analytics/detail-panels/soili
 import { RevenueDetail } from "@/components/app/ai-analytics/detail-panels/revenue-detail";
 import { ComplianceDetail } from "@/components/app/ai-analytics/detail-panels/compliance-detail";
 import { FleetHealthDetail } from "@/components/app/ai-analytics/detail-panels/fleet-health-detail";
+import { ModuleFlyout } from "@/components/app/ai-analytics/module-flyout";
 import type { Persona, TimeRange } from "@/lib/ai-analytics-types";
 
 const DETAIL_PANELS: Record<string, React.ComponentType> = {
@@ -26,7 +27,7 @@ export default function AIAnalyticsPage() {
   const [persona, setPersona] = useState<Persona>("manufacturer");
   const [timeRange, setTimeRange] = useState<TimeRange>("30d");
   const [modelFilter, setModelFilter] = useState("all");
-  const [, setFlyoutModuleId] = useState<string | null>(null);
+  const [flyoutModuleId, setFlyoutModuleId] = useState<string | null>(null);
 
   const DetailPanel = activeSection ? DETAIL_PANELS[activeSection] : null;
 
@@ -61,6 +62,10 @@ export default function AIAnalyticsPage() {
           />
         </main>
       </div>
+      <ModuleFlyout
+        moduleId={flyoutModuleId}
+        onClose={() => setFlyoutModuleId(null)}
+      />
     </div>
   );
 }
