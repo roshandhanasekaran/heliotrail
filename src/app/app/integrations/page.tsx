@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Plug, Database, Factory, BarChart3, Shield, Wifi } from "lucide-react";
 
 const integrations = [
@@ -34,6 +37,13 @@ const integrations = [
 ];
 
 export default function IntegrationsPage() {
+  const [toastName, setToastName] = useState<string | null>(null);
+
+  function handleConfigure(name: string) {
+    setToastName(name);
+    setTimeout(() => setToastName(null), 3000);
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -42,6 +52,15 @@ export default function IntegrationsPage() {
           Connect external systems to automate passport data flows
         </p>
       </div>
+
+      {toastName && (
+        <div className="flex items-center gap-2 bg-[#E8FAE9] px-4 py-2 text-sm font-medium text-[#0D0D0D]">
+          <Plug className="h-4 w-4 text-[#22C55E]" />
+          <span>
+            {toastName} integration setup requested. Our team will reach out within 24 hours.
+          </span>
+        </div>
+      )}
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {integrations.map((integration) => (
@@ -63,7 +82,10 @@ export default function IntegrationsPage() {
               {integration.description}
             </p>
             {integration.status === "available" && (
-              <button className="cta-secondary mt-3 w-full justify-center text-xs">
+              <button
+                className="cta-secondary mt-3 w-full justify-center text-xs"
+                onClick={() => handleConfigure(integration.name)}
+              >
                 <span>Configure</span>
               </button>
             )}
