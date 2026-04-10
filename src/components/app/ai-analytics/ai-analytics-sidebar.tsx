@@ -55,6 +55,14 @@ const SECTIONS = [
 
 type SectionId = (typeof SECTIONS)[number]["id"];
 
+/* ─── Helpers ─── */
+
+function fmtEur(v: number): string {
+  if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
+  if (v >= 1_000) return `€${(v / 1_000).toFixed(1)}k`;
+  return `€${v.toFixed(0)}`;
+}
+
 /* ─── Load mock data at module level (static) ─── */
 
 const healthScore = getFleetHealthScore();
@@ -425,10 +433,10 @@ function SoilingContent({
         <p className="text-[9px] font-semibold text-[#0D0D0D]">Cleaning ROI</p>
         <div className="flex items-center justify-between">
           <span className="text-[9px] text-[#737373]">
-            Cost: €{maintenance.maintenanceROI.cleaningCostEur}
+            Cost: {fmtEur(maintenance.maintenanceROI.cleaningCostEur)}
           </span>
           <span className="text-[9px] text-[#737373]">
-            Saves: €{maintenance.maintenanceROI.annualSavingsEur}/yr
+            Saves: {fmtEur(maintenance.maintenanceROI.annualSavingsEur)}/yr
           </span>
         </div>
         <p className="font-mono text-[10px] font-bold text-[#22C55E]">
@@ -443,7 +451,7 @@ function SoilingContent({
             Inverter Clipping
           </span>
           <span className="font-mono text-[10px] font-bold text-[#1E40AF]">
-            €{clippingDriver.euroPerMonth.toFixed(1)}/mo
+            {fmtEur(clippingDriver.euroPerMonth)}/mo
           </span>
         </div>
       )}
@@ -471,7 +479,7 @@ function RevenueContent({
             Monthly Loss
           </p>
           <p className="font-mono text-lg font-bold text-[#EF4444]">
-            €{revenue.monthlyLoss}/mo
+            {fmtEur(revenue.monthlyLoss)}/mo
           </p>
         </div>
         <div className="text-right">
@@ -479,7 +487,7 @@ function RevenueContent({
             Annual
           </p>
           <p className="font-mono text-[11px] font-semibold text-[#0D0D0D]">
-            €{revenue.annualProjected}
+            {fmtEur(revenue.annualProjected)}
           </p>
         </div>
       </div>

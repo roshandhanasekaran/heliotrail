@@ -29,6 +29,12 @@ import {
 const maintenance = getMaintenancePredictions();
 const provenance = getProvenanceCorrelations();
 
+function fmtEur(v: number): string {
+  if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
+  if (v >= 1_000) return `€${(v / 1_000).toFixed(1)}k`;
+  return `€${v.toFixed(0)}`;
+}
+
 interface SoilingDetailProps {
   persona?: "manufacturer" | "operator";
   timeRange?: "7d" | "30d" | "90d" | "1y";
@@ -179,12 +185,12 @@ export function SoilingDetail({
               Cleaning Cost
             </p>
             <p className="font-mono text-xl font-bold text-[#0D0D0D] mt-1">
-              EUR {maintenance.maintenanceROI.cleaningCostEur}
+              {fmtEur(maintenance.maintenanceROI.cleaningCostEur)}
             </p>
             <p className="text-[10px] text-[#737373] mt-1">
               Annual savings:{" "}
               <span className="font-mono font-semibold text-[#22C55E]">
-                EUR {maintenance.maintenanceROI.annualSavingsEur.toLocaleString("en-US")}
+                {fmtEur(maintenance.maintenanceROI.annualSavingsEur)}
               </span>
             </p>
           </div>
@@ -200,7 +206,7 @@ export function SoilingDetail({
             <p className="text-[10px] text-[#737373] mt-1">
               Cost if delayed:{" "}
               <span className="font-mono font-semibold text-[#EF4444]">
-                EUR {maintenance.nextCleaning.costIfDelayed}/mo
+                {fmtEur(maintenance.nextCleaning.costIfDelayed)}/mo
               </span>
             </p>
           </div>
@@ -392,7 +398,7 @@ export function SoilingDetail({
                       {label}
                     </p>
                     <p className="font-mono text-lg font-bold text-[#EF4444] mt-1">
-                      EUR {cost}
+                      {fmtEur(cost)}
                     </p>
                     <p className="text-[9px] text-[#737373]">additional cost</p>
                   </div>
@@ -409,7 +415,7 @@ export function SoilingDetail({
                 />
                 <YAxis
                   tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
-                  tickFormatter={(v: number) => `€${v}`}
+                  tickFormatter={(v: number) => fmtEur(v)}
                 />
                 <Tooltip
                   contentStyle={{
@@ -420,7 +426,7 @@ export function SoilingDetail({
                     fontFamily: "JetBrains Mono, monospace",
                     color: "#F2F2F2",
                   }}
-                  formatter={(value) => [`EUR ${value}`, "Cost if Delayed"]}
+                  formatter={(value) => [fmtEur(Number(value)), "Cost if Delayed"]}
                   labelFormatter={(label) => `Delay: ${label} days`}
                 />
                 <defs>

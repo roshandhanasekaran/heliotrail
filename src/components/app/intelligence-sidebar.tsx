@@ -61,6 +61,12 @@ const DEADLINES = [
 
 /* ─── Helpers ─── */
 
+function fmtEur(v: number): string {
+  if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
+  if (v >= 1_000) return `€${(v / 1_000).toFixed(1)}k`;
+  return `€${v.toFixed(0)}`;
+}
+
 function daysColor(d: number): string {
   if (d < 30) return "text-[#DC2626]";
   if (d < 60) return "text-[#F59E0B]";
@@ -259,7 +265,7 @@ export function IntelligenceSidebar() {
                   Est. soiling at cleaning: {maintenance.nextCleaning.estimatedSoilingAtCleaning}%
                 </p>
                 <p className="text-[9px] text-[#F59E0B] font-semibold">
-                  €{maintenance.nextCleaning.costIfDelayed}/mo if delayed
+                  {fmtEur(maintenance.nextCleaning.costIfDelayed)}/mo if delayed
                 </p>
               </div>
             </div>
@@ -298,7 +304,7 @@ export function IntelligenceSidebar() {
               <div>
                 <p className="text-[10px] font-semibold text-[#0D0D0D]">Maintenance ROI</p>
                 <p className="text-[9px] text-[#737373]">
-                  €{maintenance.maintenanceROI.cleaningCostEur} cost → €{maintenance.maintenanceROI.annualSavingsEur}/yr saved
+                  {fmtEur(maintenance.maintenanceROI.cleaningCostEur)} cost → {fmtEur(maintenance.maintenanceROI.annualSavingsEur)}/yr saved
                 </p>
               </div>
               <div className="text-right">
@@ -320,19 +326,19 @@ export function IntelligenceSidebar() {
               <div>
                 <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">Monthly Loss</p>
                 <p className="font-mono text-sm font-bold text-[#EF4444]">
-                  €{revenue.monthlyLoss}
+                  {fmtEur(revenue.monthlyLoss)}
                 </p>
               </div>
               <div>
                 <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">Annual Proj.</p>
                 <p className="font-mono text-sm font-bold text-[#0D0D0D]">
-                  €{revenue.annualProjected}
+                  {fmtEur(revenue.annualProjected)}
                 </p>
               </div>
               <div>
                 <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">Potential</p>
                 <p className="font-mono text-sm font-bold text-[#22C55E]">
-                  +€{(revenue.optimizationPotential / 1000).toFixed(1)}k
+                  +{fmtEur(revenue.optimizationPotential)}
                 </p>
               </div>
             </div>

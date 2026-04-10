@@ -35,6 +35,12 @@ import {
 const revenue = getRevenueIntelligence();
 const carbon = getCarbonOptimization();
 
+function fmtEur(v: number): string {
+  if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
+  if (v >= 1_000) return `€${(v / 1_000).toFixed(1)}k`;
+  return `€${v.toFixed(0)}`;
+}
+
 const DIFFICULTY_STYLES: Record<string, { bg: string; text: string }> = {
   easy: { bg: "#DCFCE7", text: "#166534" },
   medium: { bg: "#FEF3C7", text: "#92400E" },
@@ -178,7 +184,7 @@ export function RevenueDetail({
               Monthly Loss
             </p>
             <p className="font-mono text-2xl font-bold text-[#EF4444] mt-1">
-              EUR {revenue.monthlyLoss}
+              {fmtEur(revenue.monthlyLoss)}
             </p>
             <p className="text-[10px] text-[#737373] mt-0.5">per month</p>
           </div>
@@ -187,7 +193,7 @@ export function RevenueDetail({
               Annual Projected
             </p>
             <p className="font-mono text-2xl font-bold text-[#0D0D0D] mt-1">
-              EUR {revenue.annualProjected}
+              {fmtEur(revenue.annualProjected)}
             </p>
             <p className="text-[10px] text-[#737373] mt-0.5">projected annual loss</p>
           </div>
@@ -196,7 +202,7 @@ export function RevenueDetail({
               Optimization Potential
             </p>
             <p className="font-mono text-2xl font-bold text-[#22C55E] mt-1">
-              EUR {revenue.optimizationPotential.toLocaleString("en-US")}
+              {fmtEur(revenue.optimizationPotential)}
             </p>
             <p className="text-[10px] text-[#737373] mt-0.5">
               recoverable per year
@@ -220,7 +226,7 @@ export function RevenueDetail({
               }))}
               size={160}
               strokeWidth={20}
-              centerValue={`€${revenue.monthlyLoss}`}
+              centerValue={fmtEur(revenue.monthlyLoss)}
               centerLabel="per month"
             />
           </div>
@@ -233,11 +239,7 @@ export function RevenueDetail({
                 Total Monthly Loss
               </span>
               <span className="font-mono text-sm font-bold text-[#EF4444]">
-                EUR{" "}
-                {revenue.lossDrivers
-                  .reduce((s, d) => s + d.euroPerMonth, 0)
-                  .toFixed(1)}
-                /mo
+                {fmtEur(revenue.lossDrivers.reduce((s, d) => s + d.euroPerMonth, 0))}/mo
               </span>
             </div>
           </div>

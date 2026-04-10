@@ -2,6 +2,12 @@
 
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
+function fmtEur(v: number): string {
+  if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
+  if (v >= 1_000) return `€${(v / 1_000).toFixed(1)}k`;
+  return `€${v.toFixed(0)}`;
+}
+
 export interface LossDriverBarProps {
   category: string;
   euroPerMonth: number;
@@ -23,7 +29,7 @@ export function LossDriverBar({
         <span className="text-[10px] font-medium text-[#737373]">{category}</span>
         <div className="flex items-center gap-1">
           <span className="font-mono text-[10px] font-semibold text-[#0D0D0D]">
-            €{euroPerMonth.toFixed(1)}
+            {fmtEur(euroPerMonth)}
           </span>
           {trend === "up" ? (
             <TrendingUp className="h-2.5 w-2.5 text-[#DC2626]" />

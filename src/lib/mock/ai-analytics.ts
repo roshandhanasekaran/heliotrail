@@ -201,17 +201,17 @@ export function getMaintenancePredictions(): MaintenancePrediction {
     nextCleaning: {
       daysUntil: 5,
       estimatedSoilingAtCleaning: 6.8,
-      costIfDelayed: 156,
+      costIfDelayed: 156000,
     },
     componentRisk: {
-      modulesAtRisk: 2,
+      modulesAtRisk: 247,
       highestRisk: "WRM-600-LOT-07",
       failureProbability30d: 4.2,
       failureProbability90d: 11.8,
     },
     maintenanceROI: {
-      cleaningCostEur: 85,
-      annualSavingsEur: 1872,
+      cleaningCostEur: 85000,
+      annualSavingsEur: 1872000,
       paybackDays: 17,
     },
   };
@@ -234,34 +234,34 @@ export interface RevenueIntelligence {
 
 export function getRevenueIntelligence(): RevenueIntelligence {
   return {
-    monthlyLoss: 12.4,
-    annualProjected: 148.8,
-    optimizationPotential: 2400,
+    monthlyLoss: 12400,
+    annualProjected: 148800,
+    optimizationPotential: 2400000,
     lossDrivers: [
       {
         category: "Soiling",
-        euroPerMonth: 5.6,
+        euroPerMonth: 5600,
         percent: 45,
         color: "#F59E0B",
         trend: "up",
       },
       {
         category: "Clipping",
-        euroPerMonth: 2.4,
+        euroPerMonth: 2400,
         percent: 19,
         color: "#3B82F6",
         trend: "stable",
       },
       {
         category: "Degradation",
-        euroPerMonth: 2.8,
+        euroPerMonth: 2800,
         percent: 23,
         color: "#737373",
         trend: "up",
       },
       {
         category: "Downtime",
-        euroPerMonth: 1.6,
+        euroPerMonth: 1600,
         percent: 13,
         color: "#EF4444",
         trend: "down",
