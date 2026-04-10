@@ -1,6 +1,8 @@
 "use client";
 
 import { LossDriverBar } from "@/components/app/ai-analytics/shared/loss-driver-bar";
+import { DonutChart } from "@/components/app/ai-analytics/shared/donut-chart";
+import { BarChart } from "@/components/app/ai-analytics/shared/bar-chart";
 import {
   getRevenueIntelligence,
   getCarbonOptimization,
@@ -73,21 +75,36 @@ export function RevenueDetail() {
         <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
           Loss Driver Breakdown
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 space-y-4">
-          {revenue.lossDrivers.map((driver) => (
-            <LossDriverBar key={driver.category} {...driver} />
-          ))}
-          <div className="border-t border-dashed border-[#D9D9D9] pt-3 flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#737373]">
-              Total Monthly Loss
-            </span>
-            <span className="font-mono text-sm font-bold text-[#EF4444]">
-              EUR{" "}
-              {revenue.lossDrivers
-                .reduce((s, d) => s + d.euroPerMonth, 0)
-                .toFixed(1)}
-              /mo
-            </span>
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 shrink-0">
+            <DonutChart
+              segments={revenue.lossDrivers.map((d) => ({
+                label: d.category,
+                value: d.percent,
+                color: d.color,
+              }))}
+              size={160}
+              strokeWidth={20}
+              centerValue={`€${revenue.monthlyLoss}`}
+              centerLabel="per month"
+            />
+          </div>
+          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 space-y-4">
+            {revenue.lossDrivers.map((driver) => (
+              <LossDriverBar key={driver.category} {...driver} />
+            ))}
+            <div className="border-t border-dashed border-[#D9D9D9] pt-3 flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#737373]">
+                Total Monthly Loss
+              </span>
+              <span className="font-mono text-sm font-bold text-[#EF4444]">
+                EUR{" "}
+                {revenue.lossDrivers
+                  .reduce((s, d) => s + d.euroPerMonth, 0)
+                  .toFixed(1)}
+                /mo
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -126,36 +143,20 @@ export function RevenueDetail() {
           </div>
 
           {/* Bar comparison */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <span className="w-20 text-[10px] text-[#737373]">Current</span>
-              <div className="flex-1 h-3 bg-[#F2F2F2]">
-                <div
-                  className="h-full bg-[#F59E0B] transition-all duration-500"
-                  style={{
-                    width: `${(carbon.currentAvgKgCO2e / maxCarbon) * 100}%`,
-                  }}
-                />
-              </div>
-              <span className="w-12 text-right font-mono text-[10px] font-semibold text-[#0D0D0D]">
-                {carbon.currentAvgKgCO2e}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="w-20 text-[10px] text-[#737373]">Benchmark</span>
-              <div className="flex-1 h-3 bg-[#F2F2F2]">
-                <div
-                  className="h-full bg-[#22C55E] transition-all duration-500"
-                  style={{
-                    width: `${(carbon.industryBenchmark / maxCarbon) * 100}%`,
-                  }}
-                />
-              </div>
-              <span className="w-12 text-right font-mono text-[10px] font-semibold text-[#737373]">
-                {carbon.industryBenchmark}
-              </span>
-            </div>
-          </div>
+          <BarChart
+            bars={[
+              { label: "Current", value: carbon.currentAvgKgCO2e, color: "#F59E0B" },
+              { label: "Benchmark", value: carbon.industryBenchmark, color: "#22C55E" },
+              {
+                label: "After Optimization",
+                value: Math.round(carbon.currentAvgKgCO2e * (1 - carbon.potentialReductionPercent / 100)),
+                color: "#86EFAC",
+              },
+            ]}
+            showValues={true}
+            valueSuffix=" kg"
+            barHeight={24}
+          />
 
           <p className="text-[10px] text-[#737373]">
             Potential reduction:{" "}
@@ -216,6 +217,23 @@ export function RevenueDetail() {
                 })}
               </tbody>
             </table>
+          </div>
+          <div className="mt-4 border border-dashed border-[#D9D9D9] bg-white p-5">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+              Impact Comparison
+            </p>
+            <BarChart
+              bars={[...carbon.suggestions]
+                .sort((a, b) => b.impactKgCO2e - a.impactKgCO2e)
+                .map((s) => ({
+                  label: s.action.slice(0, 30) + (s.action.length > 30 ? "..." : ""),
+                  value: s.impactKgCO2e,
+                  color: s.difficulty === "easy" ? "#22C55E" : s.difficulty === "medium" ? "#F59E0B" : "#EF4444",
+                }))}
+              showValues={true}
+              valueSuffix=" kg"
+              barHeight={22}
+            />
           </div>
         </div>
       </section>

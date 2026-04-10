@@ -2,6 +2,8 @@
 
 import { InsightCard } from "@/components/app/ai-analytics/shared/insight-card";
 import { AnomalyCard } from "@/components/app/ai-analytics/shared/anomaly-card";
+import { DonutChart } from "@/components/app/ai-analytics/shared/donut-chart";
+import { BarChart } from "@/components/app/ai-analytics/shared/bar-chart";
 import {
   getAIInsights,
   getAnomalyStream,
@@ -54,6 +56,39 @@ export function ComplianceDetail() {
         </div>
       </section>
 
+      {/* Anomaly Severity Summary */}
+      <div className="flex items-center gap-4 mb-2">
+        {["high", "medium", "low"].map((sev) => {
+          const count = anomalies.filter((a) => a.severity === sev).length;
+          const colors: Record<string, { bg: string; text: string }> = {
+            high: { bg: "#FEE2E2", text: "#B91C1C" },
+            medium: { bg: "#FEF3C7", text: "#92400E" },
+            low: { bg: "#F3F4F6", text: "#6B7280" },
+          };
+          const style = colors[sev]!;
+          return (
+            <div
+              key={sev}
+              className="flex items-center gap-1.5 px-2.5 py-1.5"
+              style={{ backgroundColor: style.bg }}
+            >
+              <span
+                className="font-mono text-sm font-bold"
+                style={{ color: style.text }}
+              >
+                {count}
+              </span>
+              <span
+                className="text-[9px] font-bold uppercase"
+                style={{ color: style.text }}
+              >
+                {sev}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
       {/* Full Anomaly Stream */}
       <section>
         <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
@@ -68,6 +103,64 @@ export function ComplianceDetail() {
               <AnomalyCard anomaly={anomaly} />
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Risk Level Distribution */}
+      <section>
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          Risk Level Distribution
+        </h2>
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 shrink-0">
+            <DonutChart
+              segments={[
+                {
+                  label: "High",
+                  value: complianceRisks.filter((r) => r.riskLevel === "high").length,
+                  color: "#EF4444",
+                },
+                {
+                  label: "Medium",
+                  value: complianceRisks.filter((r) => r.riskLevel === "medium").length,
+                  color: "#F59E0B",
+                },
+                {
+                  label: "Low",
+                  value: complianceRisks.filter((r) => r.riskLevel === "low").length,
+                  color: "#22C55E",
+                },
+              ]}
+              size={150}
+              strokeWidth={18}
+              centerValue={String(complianceRisks.length)}
+              centerLabel="passports"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+              Risk Score by Passport
+            </p>
+            <BarChart
+              bars={[...complianceRisks]
+                .sort((a, b) => b.riskScore - a.riskScore)
+                .map((r) => ({
+                  label: r.passportId.replace("DPP-", ""),
+                  value: r.riskScore,
+                  color:
+                    r.riskLevel === "high"
+                      ? "#EF4444"
+                      : r.riskLevel === "medium"
+                        ? "#F59E0B"
+                        : "#22C55E",
+                }))}
+              maxValue={100}
+              baselineValue={30}
+              baselineLabel="Medium threshold"
+              showValues={true}
+              barHeight={18}
+            />
+          </div>
         </div>
       </section>
 

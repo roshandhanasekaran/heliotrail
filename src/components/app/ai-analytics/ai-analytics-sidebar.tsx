@@ -109,7 +109,10 @@ export function AIAnalyticsSidebar({
           <div key={section.id} className="border-b border-[#E5E5E5]">
             {/* Section header */}
             <button
-              onClick={() => toggleSection(section.id)}
+              onClick={() => {
+                toggleSection(section.id);
+                onSelectSection(section.id);
+              }}
               className={cn(
                 "flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors",
                 isActive
@@ -165,7 +168,7 @@ function SectionContent({
 }) {
   switch (sectionId) {
     case "fleet-health":
-      return <FleetHealthContent />;
+      return <FleetHealthContent onSelectSection={onSelectSection} />;
     case "performance":
       return <PerformanceContent onSelectSection={onSelectSection} />;
     case "degradation":
@@ -181,7 +184,11 @@ function SectionContent({
 
 /* ─── A. Fleet Health ─── */
 
-function FleetHealthContent() {
+function FleetHealthContent({
+  onSelectSection,
+}: {
+  onSelectSection: (section: string) => void;
+}) {
   return (
     <div className="dashed-card p-3">
       <div className="flex justify-center">
@@ -212,6 +219,8 @@ function FleetHealthContent() {
           </div>
         ))}
       </div>
+
+      <ViewDetailsLink onClick={() => onSelectSection("fleet-health")} />
     </div>
   );
 }

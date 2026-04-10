@@ -1,13 +1,18 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { BarChart } from "@/components/app/ai-analytics/shared/bar-chart";
+import { DonutChart } from "@/components/app/ai-analytics/shared/donut-chart";
+import { DualLineChart } from "@/components/app/ai-analytics/shared/dual-line-chart";
 import {
   getProvenanceCorrelations,
   getWarrantyIntelligence,
+  getPerformanceForecast,
 } from "@/lib/mock/ai-analytics";
 
 const provenance = getProvenanceCorrelations();
 const warranty = getWarrantyIntelligence();
+const forecast = getPerformanceForecast();
 
 const RISK_STYLES: Record<string, { bg: string; text: string }> = {
   normal: { bg: "#DCFCE7", text: "#166534" },
@@ -39,6 +44,23 @@ export function DegradationDetail() {
         <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
           Section 1: Supplier to Degradation Correlation
         </h2>
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 mb-4">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+            Supplier Degradation Comparison
+          </p>
+          <BarChart
+            bars={provenance.supplierDegradation.map((s) => ({
+              label: s.materialName,
+              value: s.avgDegradationRate,
+              color: s.risk === "elevated" ? "#F59E0B" : s.risk === "critical" ? "#EF4444" : "#22C55E",
+            }))}
+            maxValue={0.8}
+            baselineValue={0.40}
+            baselineLabel="Fleet Avg (0.40%/yr)"
+            valueSuffix="%/yr"
+            barHeight={20}
+          />
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full border border-[#D9D9D9] text-xs">
             <thead>
@@ -123,42 +145,57 @@ export function DegradationDetail() {
         <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
           Section 2: Batch Anomalies
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {provenance.batchAnomalies.map((batch) => {
-            const style = SEVERITY_STYLES[batch.severity] ?? SEVERITY_STYLES.low;
-            return (
-              <div
-                key={batch.batchId}
-                className={cn(
-                  "border border-dashed p-4 space-y-2",
-                  style.border,
-                )}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-[#0D0D0D]">
-                    {batch.batchId}
-                  </span>
-                  <span
-                    className={cn(
-                      "px-1.5 py-0.5 text-[8px] font-bold uppercase",
-                      style.bg,
-                      style.text,
-                    )}
-                  >
-                    {batch.severity}
-                  </span>
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 shrink-0">
+            <DonutChart
+              segments={[
+                { label: "High", value: provenance.batchAnomalies.filter((b) => b.severity === "high").length, color: "#EF4444" },
+                { label: "Medium", value: provenance.batchAnomalies.filter((b) => b.severity === "medium").length, color: "#F59E0B" },
+                { label: "Low", value: provenance.batchAnomalies.filter((b) => b.severity === "low").length, color: "#737373" },
+              ]}
+              size={140}
+              strokeWidth={16}
+              centerValue={String(provenance.batchAnomalies.length)}
+              centerLabel="anomalies"
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 flex-1">
+            {provenance.batchAnomalies.map((batch) => {
+              const style = SEVERITY_STYLES[batch.severity] ?? SEVERITY_STYLES.low;
+              return (
+                <div
+                  key={batch.batchId}
+                  className={cn(
+                    "border border-dashed p-4 space-y-2",
+                    style.border,
+                  )}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-bold text-[#0D0D0D]">
+                      {batch.batchId}
+                    </span>
+                    <span
+                      className={cn(
+                        "px-1.5 py-0.5 text-[8px] font-bold uppercase",
+                        style.bg,
+                        style.text,
+                      )}
+                    >
+                      {batch.severity}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-[#737373]">{batch.company}</p>
+                  <p className="text-xs font-semibold text-[#0D0D0D]">
+                    {batch.modulesAffected} of {batch.modulesTotal} modules
+                    affected
+                  </p>
+                  <p className="text-[10px] text-[#737373] leading-relaxed">
+                    {batch.anomalyType}
+                  </p>
                 </div>
-                <p className="text-[10px] text-[#737373]">{batch.company}</p>
-                <p className="text-xs font-semibold text-[#0D0D0D]">
-                  {batch.modulesAffected} of {batch.modulesTotal} modules
-                  affected
-                </p>
-                <p className="text-[10px] text-[#737373] leading-relaxed">
-                  {batch.anomalyType}
-                </p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -365,6 +402,28 @@ export function DegradationDetail() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Section 6: 25-Year Degradation Projection */}
+      <section>
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          Section 6: 25-Year Degradation Projection
+        </h2>
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <DualLineChart
+            data={forecast.degradationTrajectory.map((d) => ({
+              x: d.year,
+              line1: d.actual,
+              line2: d.warranty,
+            }))}
+            line1Color="#22C55E"
+            line2Color="#F59E0B"
+            line1Label="Actual"
+            line2Label="Warranty Min"
+            yMin={80}
+            yMax={102}
+          />
         </div>
       </section>
     </div>

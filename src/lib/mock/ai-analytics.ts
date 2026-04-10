@@ -63,6 +63,26 @@ export function getFleetHealthScore(): FleetHealthScore {
   return { overall, weeklyDelta: -1.2, breakdown };
 }
 
+// ─── Fleet Health History ──────────────────────────────────
+
+export interface FleetHealthWeek {
+  week: string;
+  score: number;
+}
+
+export function getFleetHealthHistory(): FleetHealthWeek[] {
+  return [
+    { week: "W1", score: 91 },
+    { week: "W2", score: 90 },
+    { week: "W3", score: 89 },
+    { week: "W4", score: 90 },
+    { week: "W5", score: 89 },
+    { week: "W6", score: 89 },
+    { week: "W7", score: 88 },
+    { week: "W8", score: 88 },
+  ];
+}
+
 // ─── AI Insights Feed ───────────────────────────────────────
 
 export interface AIInsight {

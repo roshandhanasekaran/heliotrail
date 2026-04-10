@@ -1,5 +1,7 @@
 "use client";
 
+import { BarChart } from "@/components/app/ai-analytics/shared/bar-chart";
+import { AreaChart } from "@/components/app/ai-analytics/shared/area-chart";
 import { CountdownRing } from "@/components/app/ai-analytics/shared/countdown-ring";
 import {
   getMaintenancePredictions,
@@ -78,6 +80,25 @@ export function SoilingDetail() {
               </span>
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Cleaning ROI Comparison */}
+      <section>
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          Cleaning ROI Comparison
+        </h2>
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <BarChart
+            bars={[
+              { label: "Cleaning Cost", value: maintenance.maintenanceROI.cleaningCostEur, color: "#737373" },
+              { label: "Annual Savings", value: maintenance.maintenanceROI.annualSavingsEur, color: "#22C55E" },
+              { label: "Cost if Delayed", value: maintenance.nextCleaning.costIfDelayed * 12, color: "#EF4444" },
+            ]}
+            showValues={true}
+            valueSuffix=" EUR"
+            barHeight={24}
+          />
         </div>
       </section>
 
@@ -172,6 +193,28 @@ export function SoilingDetail() {
             </div>
           </div>
         </div>
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 mt-4">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+            Failure Probability Curve (90 Days)
+          </p>
+          <AreaChart
+            data={[
+              0,
+              1.2,
+              2.5,
+              maintenance.componentRisk.failureProbability30d,
+              6.5,
+              8.2,
+              maintenance.componentRisk.failureProbability90d,
+            ]}
+            height={160}
+            color="#EF4444"
+            xLabels={["Day 0", "", "Day 15", "Day 30", "", "Day 60", "Day 90"]}
+            yMin={0}
+            yMax={15}
+            showDots={true}
+          />
+        </div>
       </section>
 
       {/* Material Risk Factors */}
@@ -234,6 +277,21 @@ export function SoilingDetail() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 mt-4">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+            Risk Incidence by Material
+          </p>
+          <BarChart
+            bars={provenance.materialRiskFactors.map((r) => ({
+              label: r.material,
+              value: r.incidenceRate,
+              color: r.incidenceRate > 1.5 ? "#EF4444" : r.incidenceRate > 0 ? "#F59E0B" : "#22C55E",
+            }))}
+            showValues={true}
+            valueSuffix="%"
+            barHeight={20}
+          />
         </div>
       </section>
     </div>

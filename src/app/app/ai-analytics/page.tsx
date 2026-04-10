@@ -8,8 +8,10 @@ import { DegradationDetail } from "@/components/app/ai-analytics/detail-panels/d
 import { SoilingDetail } from "@/components/app/ai-analytics/detail-panels/soiling-detail";
 import { RevenueDetail } from "@/components/app/ai-analytics/detail-panels/revenue-detail";
 import { ComplianceDetail } from "@/components/app/ai-analytics/detail-panels/compliance-detail";
+import { FleetHealthDetail } from "@/components/app/ai-analytics/detail-panels/fleet-health-detail";
 
 const DETAIL_PANELS: Record<string, React.ComponentType> = {
+  "fleet-health": FleetHealthDetail,
   performance: PerformanceDetail,
   degradation: DegradationDetail,
   soiling: SoilingDetail,

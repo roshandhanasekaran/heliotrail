@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { ArrowUpDown } from "lucide-react";
-import { Sparkline } from "@/components/shared/sparkline";
+import { AreaChart } from "@/components/app/ai-analytics/shared/area-chart";
+import { DualLineChart } from "@/components/app/ai-analytics/shared/dual-line-chart";
+import { BarChart } from "@/components/app/ai-analytics/shared/bar-chart";
 import {
   getFleetBenchmarking,
   getPerformanceForecast,
@@ -23,6 +25,12 @@ export function PerformanceDetail() {
     if (sortKey === "rank") return (a.rank - b.rank) * mul;
     return (a.pr - b.pr) * mul;
   });
+
+  const statusCounts = {
+    outperforming: benchmarks.filter((b) => b.status === "outperforming").length,
+    normal: benchmarks.filter((b) => b.status === "normal").length,
+    underperforming: benchmarks.filter((b) => b.status === "underperforming").length,
+  };
 
   function handleSort(key: SortKey) {
     if (sortKey === key) {
@@ -62,18 +70,14 @@ export function PerformanceDetail() {
           <p className="text-[10px] uppercase tracking-wider text-[#737373] mb-2">
             30-Day Forecast
           </p>
-          <Sparkline
+          <AreaChart
             data={forecast.pr30dForecast}
-            width={320}
-            height={48}
+            height={160}
             color="#22C55E"
+            targetValue={forecast.prTarget}
+            xLabels={forecast.pr30dForecast.map((_, i) => i === 0 ? "Today" : i === forecast.pr30dForecast.length - 1 ? "Day 30" : "")}
+            showDots={true}
           />
-          <div className="flex items-center justify-between mt-1">
-            <span className="font-mono text-[10px] text-[#A3A3A3]">Today</span>
-            <span className="font-mono text-[10px] font-bold text-[#22C55E]">
-              {forecast.pr30dForecast[forecast.pr30dForecast.length - 1]}%
-            </span>
-          </div>
         </div>
       </div>
 
@@ -85,6 +89,43 @@ export function PerformanceDetail() {
         <p className="text-xs text-[#0D0D0D] leading-relaxed">
           {forecast.seasonalOutlook}
         </p>
+      </div>
+
+      {/* 25-Year Degradation Trajectory */}
+      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          25-Year Degradation Trajectory
+        </p>
+        <DualLineChart
+          data={forecast.degradationTrajectory.map((d) => ({
+            x: d.year,
+            line1: d.actual,
+            line2: d.warranty,
+          }))}
+          line1Color="#22C55E"
+          line2Color="#F59E0B"
+          line1Label="Actual"
+          line2Label="Warranty Min"
+          yMin={80}
+          yMax={102}
+        />
+      </div>
+
+      {/* Module Status Distribution */}
+      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          Module Status Distribution
+        </p>
+        <BarChart
+          bars={[
+            { label: "Outperforming", value: statusCounts.outperforming, color: "#22C55E" },
+            { label: "Normal", value: statusCounts.normal, color: "#737373" },
+            { label: "Underperforming", value: statusCounts.underperforming, color: "#EF4444" },
+          ]}
+          maxValue={benchmarks.length}
+          showValues={true}
+          barHeight={24}
+        />
       </div>
 
       {/* Full Fleet Benchmarking Table */}
