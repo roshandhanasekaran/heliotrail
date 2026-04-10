@@ -1,7 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { Sun, Thermometer, Wind, Droplets, Activity } from "lucide-react";
 import { FleetHealthGauge } from "@/components/app/ai-analytics/shared/fleet-health-gauge";
 import { AnomalyCard } from "@/components/app/ai-analytics/shared/anomaly-card";
+import { ModuleLink } from "@/components/app/ai-analytics/shared/module-link";
 import {
   getFleetHealthScore,
   getAnomalyStream,
@@ -9,12 +12,31 @@ import {
   getWarrantyIntelligence,
   getCarbonOptimization,
 } from "@/lib/mock/ai-analytics";
+import {
+  getFleetScadaSummary,
+  getWeatherData,
+} from "@/lib/mock/ai-analytics-timeseries";
+
+interface DetailPanelProps {
+  persona?: "manufacturer" | "operator";
+  timeRange?: "7d" | "30d" | "90d" | "1y";
+  modelFilter?: string;
+  onModuleClick?: (moduleId: string) => void;
+}
 
 const healthScore = getFleetHealthScore();
 const anomalies = getAnomalyStream();
 const benchmarks = getFleetBenchmarking();
 const warranty = getWarrantyIntelligence();
 const carbon = getCarbonOptimization();
+
+// Get last SCADA summary point for live ticker
+const fleetSummary = getFleetScadaSummary();
+const lastScada = fleetSummary[fleetSummary.length - 1]!;
+
+// Get last weather data point
+const weatherData = getWeatherData();
+const lastWeather = weatherData[weatherData.length - 1]!;
 
 const KPI_CARDS = [
   {
@@ -43,9 +65,32 @@ const KPI_CARDS = [
   },
 ];
 
-export function SummaryDetail() {
+const noop = () => {};
+
+export function SummaryDetail({
+  persona: _persona = "manufacturer",
+  timeRange: _timeRange = "30d",
+  modelFilter: _modelFilter = "all",
+  onModuleClick = noop,
+}: DetailPanelProps = {}) {
   const topAlerts = anomalies.filter((a) => !a.resolved).slice(0, 3);
   const topBenchmarks = benchmarks.slice(0, 5);
+
+  // Live fleet power ticker with jitter
+  const [livePower, setLivePower] = useState(lastScada.total_power_kw);
+  const [livePr, setLivePr] = useState(lastScada.avg_pr);
+  const [liveIrradiance, setLiveIrradiance] = useState(lastScada.avg_irradiance);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Add +-2% random jitter to simulate live data
+      const jitter = () => 1 + (Math.random() - 0.5) * 0.04;
+      setLivePower(Number((lastScada.total_power_kw * jitter()).toFixed(1)));
+      setLivePr(Number((lastScada.avg_pr * jitter()).toFixed(4)));
+      setLiveIrradiance(Number((lastScada.avg_irradiance * jitter()).toFixed(1)));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-8">
@@ -59,12 +104,96 @@ export function SummaryDetail() {
         </p>
       </div>
 
+      {/* Live Fleet Power Ticker + Weather Widget */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        {/* Live Fleet Power Ticker */}
+        <div className="border border-dashed border-[#D9D9D9] bg-[#0D0D0D] p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#22C55E] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#22C55E]" />
+            </span>
+            <span className="text-[10px] uppercase tracking-wider font-bold text-[#22C55E]">
+              Live
+            </span>
+            <Activity className="h-3 w-3 text-[#22C55E] ml-auto" />
+          </div>
+          <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+            Fleet Power Output
+          </p>
+          <p className="font-mono text-4xl font-bold text-white mt-1">
+            {livePower.toFixed(1)}{" "}
+            <span className="text-lg text-[#737373]">kW</span>
+          </p>
+          <div className="flex gap-6 mt-4">
+            <div>
+              <p className="text-[9px] uppercase tracking-wider text-[#737373]">Avg PR</p>
+              <p className="font-mono text-sm font-bold text-[#22C55E]">
+                {(livePr * 100).toFixed(1)}%
+              </p>
+            </div>
+            <div>
+              <p className="text-[9px] uppercase tracking-wider text-[#737373]">Irradiance</p>
+              <p className="font-mono text-sm font-bold text-[#F59E0B]">
+                {liveIrradiance.toFixed(0)} W/m²
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Weather Widget */}
+        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-4">
+            Current Weather
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center gap-3">
+              <Sun className="h-5 w-5 text-[#F59E0B] shrink-0" />
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Irradiance</p>
+                <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+                  {lastWeather.ghi_wm2.toFixed(0)} <span className="text-[10px] text-[#737373] font-normal">W/m²</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Thermometer className="h-5 w-5 text-[#EF4444] shrink-0" />
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Ambient Temp</p>
+                <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+                  {/* Derive ambient temp from weather data context -- use a reasonable default */}
+                  18.2 <span className="text-[10px] text-[#737373] font-normal">°C</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Wind className="h-5 w-5 text-[#3B82F6] shrink-0" />
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Wind</p>
+                <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+                  {lastWeather.wind_speed_ms.toFixed(1)} <span className="text-[10px] text-[#737373] font-normal">m/s</span>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Droplets className="h-5 w-5 text-[#06B6D4] shrink-0" />
+              <div>
+                <p className="text-[9px] uppercase tracking-wider text-[#737373]">Humidity</p>
+                <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+                  {lastWeather.humidity_pct.toFixed(0)} <span className="text-[10px] text-[#737373] font-normal">%</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {KPI_CARDS.map((kpi) => (
           <div
             key={kpi.label}
-            className="border border-dashed border-[#D9D9D9] bg-[#F2F2F2] p-4"
+            className="border border-dashed border-[#D9D9D9] bg-[#F2F2F2] p-4 cursor-pointer hover:bg-[#E5E5E5] transition-colors"
           >
             <p className="text-[10px] uppercase tracking-wider text-[#737373]">
               {kpi.label}
@@ -143,6 +272,16 @@ export function SummaryDetail() {
               className="border border-dashed border-[#D9D9D9] bg-white"
             >
               <AnomalyCard anomaly={anomaly} />
+              {anomaly.module && (
+                <div className="px-2.5 pb-2">
+                  <ModuleLink
+                    moduleId={anomaly.module}
+                    onClick={onModuleClick}
+                    className="text-[9px]"
+                  />
+                  <span className="text-[9px] text-[#737373] ml-1">&rarr;</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -183,8 +322,8 @@ export function SummaryDetail() {
                   <td className="px-3 py-2 font-mono text-[#0D0D0D]">
                     {m.rank}
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
-                    {m.moduleId}
+                  <td className="px-3 py-2">
+                    <ModuleLink moduleId={m.moduleId} onClick={onModuleClick} />
                   </td>
                   <td className="px-3 py-2 font-mono font-semibold text-[#0D0D0D]">
                     {m.pr}%
