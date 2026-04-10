@@ -158,9 +158,11 @@ export function PerformanceDetail({
 
   /* ─── PR vs Irradiance scatter data ─── */
   const scatterData = useMemo(() => {
+    // Map module profiles to benchmark modelIds so model filter works
+    const benchmarkModels = benchmarks.map((b) => b.modelId);
+
     return moduleProfiles.map((profile, idx) => {
       const scada = getScadaData(idx, days);
-      // Compute average PR and irradiance (daytime only)
       let prSum = 0;
       let prCount = 0;
       let irrSum = 0;
@@ -176,8 +178,8 @@ export function PerformanceDetail({
       }
 
       return {
-        moduleId: profile.id,
-        model: profile.model,
+        moduleId: benchmarks[idx]?.moduleId ?? profile.id,
+        modelId: benchmarkModels[idx % benchmarkModels.length],
         personality: profile.personality,
         avgPR: prCount > 0 ? Math.round((prSum / prCount) * 1000) / 10 : 0,
         avgIrradiance: irrCount > 0 ? Math.round(irrSum / irrCount) : 0,
@@ -188,7 +190,7 @@ export function PerformanceDetail({
   // Filter scatter data by model
   const filteredScatterData = useMemo(() => {
     if (modelFilter === "all") return scatterData;
-    return scatterData.filter((d) => d.model === modelFilter);
+    return scatterData.filter((d) => d.modelId === modelFilter);
   }, [scatterData, modelFilter]);
 
   /* ─── Model vs Datasheet data (manufacturer persona) ─── */
