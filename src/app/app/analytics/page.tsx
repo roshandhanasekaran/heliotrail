@@ -54,15 +54,20 @@ export default async function AnalyticsPage() {
   ];
   const readinessScore = checks.reduce((s, c) => s + (c.ok ? c.weight : 0), 0);
 
-  // EU market access
+  // EU market access — derived from compliance checks
+  // Core markets require readinessScore >= 70 + carbon footprint + material composition + valid certificates
+  const coreMarketReady =
+    readinessScore >= 70 && checks[3].ok && checks[2].ok && checks[4].ok;
+  // Extended markets require higher readiness + supply chain due diligence
+  const extendedMarketReady = readinessScore >= 85 && checks[6].ok;
   const markets = [
-    { country: "DE", name: "Germany", ready: true },
-    { country: "FR", name: "France", ready: true },
-    { country: "IT", name: "Italy", ready: true },
-    { country: "ES", name: "Spain", ready: true },
-    { country: "NL", name: "Netherlands", ready: true },
-    { country: "PL", name: "Poland", ready: false },
-    { country: "RO", name: "Romania", ready: false },
+    { country: "DE", name: "Germany", ready: coreMarketReady },
+    { country: "FR", name: "France", ready: coreMarketReady },
+    { country: "IT", name: "Italy", ready: coreMarketReady },
+    { country: "ES", name: "Spain", ready: coreMarketReady },
+    { country: "NL", name: "Netherlands", ready: coreMarketReady },
+    { country: "PL", name: "Poland", ready: extendedMarketReady },
+    { country: "RO", name: "Romania", ready: extendedMarketReady },
   ];
   const readyMarkets = markets.filter((m) => m.ready).length;
 
