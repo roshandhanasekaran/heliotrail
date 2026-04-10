@@ -43,15 +43,18 @@ function riskScoreColor(score: number): string {
 }
 
 // ESPR Compliance Requirements
-const ESPR_REQUIREMENTS = [
+const MANDATORY_REQUIREMENTS = [
+  { id: "dppid", label: "Digital product passport unique ID", status: "complete" as const },
   { id: "cf", label: "Carbon footprint declaration", status: "complete" as const },
   { id: "mc", label: "Material composition disclosure", status: "complete" as const },
-  { id: "rc", label: "Recycled content percentage", status: "complete" as const },
   { id: "svhc", label: "Substances of concern (SVHC)", status: "complete" as const },
-  { id: "rep", label: "Repairability score", status: "partial" as const },
+  { id: "rc", label: "Recycled content percentage", status: "complete" as const },
   { id: "dur", label: "Durability information", status: "partial" as const },
+];
+
+const VOLUNTARY_REQUIREMENTS = [
+  { id: "rep", label: "Repairability score", status: "partial" as const },
   { id: "scd", label: "Supply chain due diligence", status: "incomplete" as const },
-  { id: "dppid", label: "Digital product passport unique ID", status: "complete" as const },
 ];
 
 interface ComplianceDetailProps {
@@ -125,20 +128,30 @@ export function ComplianceDetail({
 
   // ESPR compliance stats
   const completionStats = useMemo(() => {
-    const complete = ESPR_REQUIREMENTS.filter((r) => r.status === "complete").length;
-    const partial = ESPR_REQUIREMENTS.filter((r) => r.status === "partial").length;
-    const incomplete = ESPR_REQUIREMENTS.filter((r) => r.status === "incomplete").length;
-    const total = ESPR_REQUIREMENTS.length;
+    const allReqs = [...MANDATORY_REQUIREMENTS, ...VOLUNTARY_REQUIREMENTS];
+    const complete = allReqs.filter((r) => r.status === "complete").length;
+    const partial = allReqs.filter((r) => r.status === "partial").length;
+    const incomplete = allReqs.filter((r) => r.status === "incomplete").length;
+    const total = allReqs.length;
     const pct = Math.round(((complete + partial * 0.5) / total) * 100);
-    return { complete, partial, incomplete, total, pct };
+    const mandatoryComplete = MANDATORY_REQUIREMENTS.filter((r) => r.status === "complete").length;
+    const mandatoryTotal = MANDATORY_REQUIREMENTS.length;
+    const voluntaryComplete = VOLUNTARY_REQUIREMENTS.filter((r) => r.status === "complete").length;
+    const voluntaryPartial = VOLUNTARY_REQUIREMENTS.filter((r) => r.status === "partial").length;
+    const voluntaryTotal = VOLUNTARY_REQUIREMENTS.length;
+    return {
+      complete, partial, incomplete, total, pct,
+      mandatoryComplete, mandatoryTotal,
+      voluntaryComplete, voluntaryPartial, voluntaryTotal,
+    };
   }, []);
 
   // Supply chain risk data for manufacturer persona
   const supplyChainRisk = [
-    { country: "China", riskLevel: "Medium", modules: 6, uflpa: "Pass" },
-    { country: "Germany", riskLevel: "Low", modules: 4, uflpa: "Pass" },
-    { country: "South Korea", riskLevel: "Low", modules: 3, uflpa: "Pass" },
-    { country: "Malaysia", riskLevel: "Low", modules: 2, uflpa: "Pass" },
+    { country: "China", riskLevel: "Medium", modules: 6 },
+    { country: "Germany", riskLevel: "Low", modules: 4 },
+    { country: "South Korea", riskLevel: "Low", modules: 3 },
+    { country: "Malaysia", riskLevel: "Low", modules: 2 },
   ];
 
   // ESG metrics for operator persona
@@ -380,20 +393,53 @@ export function ComplianceDetail({
             </div>
             <div className="flex items-center gap-4 mt-2">
               <span className="text-[9px] text-[#737373]">
-                <span className="font-mono font-semibold text-[#22C55E]">{completionStats.complete}</span> Complete
+                <span className="font-mono font-semibold text-[#22C55E]">{completionStats.mandatoryComplete}/{completionStats.mandatoryTotal}</span> mandatory
               </span>
               <span className="text-[9px] text-[#737373]">
-                <span className="font-mono font-semibold text-[#F59E0B]">{completionStats.partial}</span> Partial
-              </span>
-              <span className="text-[9px] text-[#737373]">
-                <span className="font-mono font-semibold text-[#EF4444]">{completionStats.incomplete}</span> Incomplete
+                <span className="font-mono font-semibold text-[#F59E0B]">{completionStats.voluntaryComplete + completionStats.voluntaryPartial}/{completionStats.voluntaryTotal}</span> voluntary
               </span>
             </div>
           </div>
 
           {/* Checklist */}
-          <div className="space-y-2">
-            {ESPR_REQUIREMENTS.map((req) => (
+          <div className="space-y-3">
+            <p className="text-[9px] font-bold uppercase tracking-wider text-[#737373]">Mandatory</p>
+            {MANDATORY_REQUIREMENTS.map((req) => (
+              <div
+                key={req.id}
+                className="flex items-center gap-2 py-1.5 border-b border-[#F2F2F2] last:border-0"
+              >
+                {req.status === "complete" ? (
+                  <CheckCircle2 className="h-4 w-4 text-[#22C55E] shrink-0" />
+                ) : req.status === "partial" ? (
+                  <AlertTriangle className="h-4 w-4 text-[#F59E0B] shrink-0" />
+                ) : (
+                  <XCircle className="h-4 w-4 text-[#EF4444] shrink-0" />
+                )}
+                <span className="text-xs text-[#0D0D0D] flex-1">{req.label}</span>
+                <span
+                  className="px-1.5 py-0.5 text-[8px] font-bold uppercase"
+                  style={{
+                    backgroundColor:
+                      req.status === "complete"
+                        ? "#DCFCE7"
+                        : req.status === "partial"
+                          ? "#FEF3C7"
+                          : "#FEE2E2",
+                    color:
+                      req.status === "complete"
+                        ? "#166534"
+                        : req.status === "partial"
+                          ? "#92400E"
+                          : "#B91C1C",
+                  }}
+                >
+                  {req.status}
+                </span>
+              </div>
+            ))}
+            <p className="text-[9px] font-bold uppercase tracking-wider text-[#737373] mt-4">Voluntary</p>
+            {VOLUNTARY_REQUIREMENTS.map((req) => (
               <div
                 key={req.id}
                 className="flex items-center gap-2 py-1.5 border-b border-[#F2F2F2] last:border-0"
@@ -442,7 +488,7 @@ export function ComplianceDetail({
               <table className="w-full border border-[#D9D9D9] text-xs">
                 <thead>
                   <tr className="bg-[#F2F2F2]">
-                    {["Country", "Risk Level", "# Modules", "UFLPA Status"].map((h) => (
+                    {["Country", "Risk Level", "# Modules"].map((h) => (
                       <th
                         key={h}
                         className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
@@ -482,23 +528,12 @@ export function ComplianceDetail({
                         <td className="px-3 py-2 font-mono text-[#0D0D0D]">
                           {row.modules}
                         </td>
-                        <td className="px-3 py-2">
-                          <span className="flex items-center gap-1">
-                            <CheckCircle2 className="h-3 w-3 text-[#22C55E]" />
-                            <span className="text-[10px] font-semibold text-[#22C55E]">
-                              {row.uflpa}
-                            </span>
-                          </span>
-                        </td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
             </div>
-            <p className="text-[10px] text-[#737373] mt-3">
-              All supply chain origins have passed UFLPA attestation verification.
-            </p>
           </div>
         </section>
       )}
