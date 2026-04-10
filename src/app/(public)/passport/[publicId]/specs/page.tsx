@@ -55,10 +55,13 @@ export default async function SpecsPage({ params }: Props) {
   };
 
   return (
-    <SpecsClient
-      electrical={electrical}
-      mechanical={mechanical}
-      gaugeData={gaugeData}
-    />
+    <div className="space-y-12">
+      <SpecsClient
+        electrical={electrical}
+        mechanical={mechanical}
+        gaugeData={gaugeData}
+      />
+
+    </div>
   );
 }
