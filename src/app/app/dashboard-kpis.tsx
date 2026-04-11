@@ -9,9 +9,22 @@ import {
 } from "@/lib/kpi-registry";
 import { useDashboardPreferences } from "@/hooks/use-dashboard-preferences";
 import { KpiPicker } from "@/components/app/dashboard/kpi-picker";
+import { StatusBar } from "@/components/app/dashboard/status-bar";
 import { useState } from "react";
 
-export function DashboardKpis({ data }: { data: KpiComputeInput }) {
+interface StatusData {
+  published: number;
+  underReview: number;
+  draft: number;
+}
+
+export function DashboardKpis({
+  data,
+  statusData,
+}: {
+  data: KpiComputeInput;
+  statusData: StatusData;
+}) {
   const { preferences } = useDashboardPreferences();
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -59,6 +72,12 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
         sparkData: metric.sparkSeed,
       };
     });
+
+  const statusSegments = [
+    { label: "Published", value: statusData.published, color: "#22C55E" },
+    { label: "Under Review", value: statusData.underReview, color: "#F59E0B" },
+    { label: "Draft", value: statusData.draft, color: "#D9D9D9" },
+  ];
 
   return (
     <div className="space-y-3">
@@ -138,6 +157,9 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
           </div>
         ))}
       </div>
+
+      {/* Compact passport status bar (replaces donut chart) */}
+      <StatusBar segments={statusSegments} />
 
       {/* Secondary KPI strip */}
       {secondaryKpis.length > 0 && (

@@ -12,6 +12,11 @@ import {
   BarChart3,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/page-header";
+import {
+  computeEsprChecks,
+  computeReadinessScore,
+  computeMarketAccess,
+} from "@/lib/espr-readiness";
 
 export default async function AnalyticsPage() {
   const supabase = await createClient();
@@ -83,35 +88,21 @@ export default async function AnalyticsPage() {
   })();
   const passportsMissingCarbon = all.filter((p) => !p.carbon_footprint_kg_co2e).length;
 
-  // Regulatory readiness checklist
-  const checks = [
-    { label: "Product Identification (Annex III)", ok: all.length > 0, weight: 12 },
-    { label: "Technical Specifications", ok: all.some((p) => p.rated_power_stc_w), weight: 12 },
-    { label: "Material Composition (BOM)", ok: mats.length > 0, weight: 15 },
-    { label: "Carbon Footprint (ISO 14067)", ok: all.some((p) => p.carbon_footprint_kg_co2e), weight: 15 },
-    { label: "Compliance Certificates", ok: validCerts > 0, weight: 12 },
-    { label: "Circularity & EoL Data", ok: circ.length > 0, weight: 12 },
-    { label: "Supply Chain Due Diligence", ok: false, weight: 10 },
-    { label: "Dynamic Performance Data", ok: false, weight: 12 },
-  ];
-  const readinessScore = checks.reduce((s, c) => s + (c.ok ? c.weight : 0), 0);
+  // Regulatory readiness checklist (shared computation)
+  const checks = computeEsprChecks({
+    passportCount: all.length,
+    hasRatedPower: all.some((p) => p.rated_power_stc_w),
+    materialsCount: mats.length,
+    hasCarbonFootprint: all.some((p) => p.carbon_footprint_kg_co2e),
+    validCertsCount: validCerts,
+    circularityCount: circ.length,
+    hasSupplyChain: false,
+    hasDynamicData: false,
+  });
+  const readinessScore = computeReadinessScore(checks);
 
-  // EU market access — derived from compliance checks
-  // Core markets require readinessScore >= 70 + carbon footprint + material composition + valid certificates
-  const coreMarketReady =
-    readinessScore >= 70 && checks[3].ok && checks[2].ok && checks[4].ok;
-  // Extended markets require higher readiness + supply chain due diligence
-  const extendedMarketReady = readinessScore >= 85 && checks[6].ok;
-  const markets = [
-    { country: "DE", name: "Germany", ready: coreMarketReady },
-    { country: "FR", name: "France", ready: coreMarketReady },
-    { country: "IT", name: "Italy", ready: coreMarketReady },
-    { country: "ES", name: "Spain", ready: coreMarketReady },
-    { country: "NL", name: "Netherlands", ready: coreMarketReady },
-    { country: "PL", name: "Poland", ready: extendedMarketReady },
-    { country: "RO", name: "Romania", ready: extendedMarketReady },
-  ];
-  const readyMarkets = markets.filter((m) => m.ready).length;
+  // EU market access
+  const { markets, readyCount: readyMarkets } = computeMarketAccess(checks, readinessScore);
 
   return (
     <div className="space-y-6">

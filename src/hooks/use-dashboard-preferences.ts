@@ -5,8 +5,16 @@ import { DEFAULT_ENABLED_IDS } from "@/lib/kpi-registry";
 
 const STORAGE_KEY = "heliotrail:dashboard-preferences";
 
+interface ExplorerPreferences {
+  xMetric: string;
+  yMetric: string;
+  chartType: "scatter" | "bar" | "line";
+  colorBy: "technology" | "status" | "none";
+}
+
 interface DashboardPreferences {
   enabledKpiIds: string[];
+  explorer?: ExplorerPreferences;
 }
 
 const DEFAULT_PREFERENCES: DashboardPreferences = {

@@ -5,10 +5,11 @@ import {
   Gem,
   FlaskConical,
   ShieldAlert,
-  Layers,
   Gauge,
   AlertTriangle,
   Recycle,
+  ShieldCheck,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 
@@ -29,6 +30,9 @@ export interface KpiComputeInput {
   certsExpiringIn30Days: number;
   avgRecyclability: number;
   quarterGrowth: number;
+  esprReadinessScore: number;
+  marketAccessCount: number;
+  marketAccessTotal: number;
 }
 
 export interface KpiMetricDefinition {
@@ -46,39 +50,23 @@ export interface KpiMetricDefinition {
 }
 
 export const KPI_REGISTRY: KpiMetricDefinition[] = [
-  // ── Passport ────────────────────────────────────────────────────────────────
+  // ── Compliance ──────────────────────────────────────────────────────────────
   {
-    id: "published_rate",
-    label: "Published Rate",
-    icon: TrendingUp,
-    category: "passport",
+    id: "espr_readiness",
+    label: "ESPR Readiness",
+    icon: ShieldCheck,
+    category: "compliance",
     suffix: "%",
     accentColor: "#22C55E",
-    description: "Percentage of passports in published status",
-    computeValue: (d) =>
-      d.total > 0 ? Math.round((d.published / d.total) * 100) : 0,
-    computeTrend: (d) => {
-      const rate = d.total > 0 ? (d.published / d.total) * 100 : 0;
-      return { text: rate >= 50 ? "+11% QoQ" : "Growing", up: true };
-    },
+    description: "Weighted EU ESPR regulatory readiness score (July 2026 deadline)",
+    computeValue: (d) => d.esprReadinessScore,
+    computeTrend: (d) => ({
+      text: d.esprReadinessScore >= 80 ? "On track" : "Action needed",
+      up: d.esprReadinessScore >= 80,
+    }),
     defaultEnabled: true,
-    sparkSeed: [74, 71, 76, 79, 77, 83, 90],
+    sparkSeed: [45, 52, 58, 62, 66, 70, 78],
   },
-  {
-    id: "evidence_coverage",
-    label: "Evidence",
-    icon: FolderOpen,
-    category: "passport",
-    suffix: "%",
-    accentColor: "#3B82F6",
-    description: "Passports with supporting documentation attached",
-    computeValue: (d) => d.evidencePercent,
-    computeTrend: () => ({ text: "+8% this mo.", up: true }),
-    defaultEnabled: true,
-    sparkSeed: [68, 64, 71, 75, 72, 79, 83],
-  },
-
-  // ── Compliance ──────────────────────────────────────────────────────────────
   {
     id: "expiring_certs_30d",
     label: "Expiring Certs",
@@ -96,6 +84,21 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
     sparkSeed: [2, 3, 1, 4, 2, 3],
   },
 
+  // ── Passport ────────────────────────────────────────────────────────────────
+  {
+    id: "evidence_coverage",
+    label: "Evidence",
+    icon: FolderOpen,
+    category: "passport",
+    suffix: "%",
+    accentColor: "#3B82F6",
+    description: "Passports with supporting documentation attached",
+    computeValue: (d) => d.evidencePercent,
+    computeTrend: () => ({ text: "+8% this mo.", up: true }),
+    defaultEnabled: true,
+    sparkSeed: [68, 64, 71, 75, 72, 79, 83],
+  },
+
   // ── Environmental ───────────────────────────────────────────────────────────
   {
     id: "avg_carbon",
@@ -111,6 +114,41 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
     sparkSeed: [447, 438, 452, 431, 424, 418, 412],
   },
   {
+    id: "recyclability_rate",
+    label: "Recyclability",
+    icon: Recycle,
+    category: "environmental",
+    suffix: "%",
+    accentColor: "#22C55E",
+    description: "Average recyclability rate across portfolio (EU target >85%)",
+    computeValue: (d) => d.avgRecyclability,
+    computeTrend: (d) => ({
+      text: d.avgRecyclability >= 85 ? "Above target" : d.avgRecyclability >= 80 ? "Near target" : "Below target",
+      up: d.avgRecyclability >= 80,
+    }),
+    defaultEnabled: true,
+    sparkSeed: [75, 78, 80, 82, 83, 85],
+  },
+
+  // ── Optional ────────────────────────────────────────────────────────────────
+  {
+    id: "published_rate",
+    label: "Published Rate",
+    icon: TrendingUp,
+    category: "passport",
+    suffix: "%",
+    accentColor: "#22C55E",
+    description: "Percentage of passports in published status",
+    computeValue: (d) =>
+      d.total > 0 ? Math.round((d.published / d.total) * 100) : 0,
+    computeTrend: (d) => {
+      const rate = d.total > 0 ? (d.published / d.total) * 100 : 0;
+      return { text: rate >= 50 ? "+11% QoQ" : "Growing", up: true };
+    },
+    defaultEnabled: false,
+    sparkSeed: [74, 71, 76, 79, 77, 83, 90],
+  },
+  {
     id: "crm_materials",
     label: "CRM Materials",
     icon: Gem,
@@ -123,7 +161,7 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
       text: `${d.crmCount} type${d.crmCount !== 1 ? "s" : ""} flagged`,
       up: d.crmCount === 0,
     }),
-    defaultEnabled: true,
+    defaultEnabled: false,
     sparkSeed: [2, 2, 2, 2, 2, 2, 2],
   },
   {
@@ -139,23 +177,24 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
       text: d.socCount > 0 ? `${d.socCount} tracked` : "None",
       up: d.socCount === 0,
     }),
-    defaultEnabled: true,
+    defaultEnabled: false,
     sparkSeed: [5, 4, 6, 5, 5, 4],
   },
-
-  // ── Optional / Operational (not default) ────────────────────────────────────
   {
-    id: "materials_count",
-    label: "Materials",
-    icon: Layers,
-    category: "environmental",
+    id: "market_access",
+    label: "Market Access",
+    icon: Globe,
+    category: "compliance",
     suffix: "",
-    accentColor: "#F59E0B",
-    description: "Total material entries across all passports",
-    computeValue: (d) => d.materialsCount,
-    computeTrend: (d) => ({ text: `${d.crmCount} CRM`, up: true }),
+    accentColor: "#3B82F6",
+    description: "EU markets where your portfolio is DPP-ready",
+    computeValue: (d) => d.marketAccessCount,
+    computeTrend: (d) => ({
+      text: `${d.marketAccessCount} of ${d.marketAccessTotal} markets`,
+      up: d.marketAccessCount >= 5,
+    }),
     defaultEnabled: false,
-    sparkSeed: [20, 25, 30, 33, 36, 40, 42],
+    sparkSeed: [3, 3, 4, 4, 5, 5, 5],
   },
   {
     id: "fleet_pr",
@@ -182,22 +221,6 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
     computeTrend: () => ({ text: "2 new", up: false }),
     defaultEnabled: false,
     sparkSeed: [1, 0, 2, 1, 3, 3],
-  },
-  {
-    id: "recyclability_rate",
-    label: "Recyclability",
-    icon: Recycle,
-    category: "environmental",
-    suffix: "%",
-    accentColor: "#22C55E",
-    description: "Average recyclability rate across portfolio",
-    computeValue: (d) => d.avgRecyclability,
-    computeTrend: (d) => ({
-      text: d.avgRecyclability >= 80 ? "On track" : "Below target",
-      up: d.avgRecyclability >= 80,
-    }),
-    defaultEnabled: false,
-    sparkSeed: [75, 78, 80, 82, 83, 85],
   },
 ];
 

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { PassportContextNav } from "@/components/app/passports/passport-context-nav";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { SubmitForApprovalButton } from "@/components/app/passports/submit-for-approval-button";
+import { ExportButton } from "@/components/shared/export-button";
 
 export default async function PassportWorkspaceLayout({
   children,
@@ -56,6 +57,10 @@ export default async function PassportWorkspaceLayout({
           </div>
 
           <div className="flex items-center gap-2">
+            <ExportButton
+              exportUrl={`/api/exports/passports/${id}`}
+              fileName={`${passport.model_id}_DPP_Report`}
+            />
             <Link
               href={`/passport/${passport.public_id}`}
               target="_blank"

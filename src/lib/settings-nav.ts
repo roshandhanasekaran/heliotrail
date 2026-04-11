@@ -1,7 +1,7 @@
 // src/lib/settings-nav.ts
 
 import {
-  User, Lock, Building2, Users, Shield, Scale, ScrollText, Key, Bell, AlertTriangle,
+  User, Lock, Building2, Users, Shield, Scale, ScrollText, Key, Bell, AlertTriangle, Palette,
   type LucideIcon,
 } from "lucide-react";
 import type { Role } from "@/lib/rbac";
@@ -32,6 +32,7 @@ export const SETTINGS_SECTIONS: SettingsNavSection[] = [
       { label: "General", href: "/app/settings/organization", icon: Building2, minRole: "viewer" },
       { label: "Team", href: "/app/settings/team", icon: Users, minRole: "admin" },
       { label: "Roles & Permissions", href: "/app/settings/roles", icon: Shield, minRole: "admin" },
+      { label: "Branding", href: "/app/settings/branding", icon: Palette, minRole: "admin" },
     ],
   },
   {

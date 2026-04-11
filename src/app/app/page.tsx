@@ -9,10 +9,16 @@ import {
   Plus,
   AlertTriangle,
 } from "lucide-react";
-import { DonutChart } from "@/components/app/dashboard/donut-chart";
 import { CarbonChart } from "@/components/app/dashboard/carbon-chart";
 import { MaterialChart } from "@/components/app/dashboard/material-chart";
+import { KpiExplorer } from "@/components/app/dashboard/kpi-explorer";
 import { DashboardKpis } from "./dashboard-kpis";
+import {
+  computeEsprChecks,
+  computeReadinessScore,
+  computeMarketAccess,
+} from "@/lib/espr-readiness";
+import type { PassportDataPoint } from "@/lib/kpi-explorer-registry";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -24,7 +30,7 @@ export default async function DashboardPage() {
       supabase.from("passport_materials").select("*"),
       supabase.from("passport_documents").select("*"),
       supabase.from("passport_supply_chain_actors").select("*", { count: "exact", head: true }),
-      supabase.from("passport_circularity").select("recyclability_rate_percent"),
+      supabase.from("passport_circularity").select("passport_id, recyclability_rate_percent"),
     ]);
 
   const all = passports ?? [];
@@ -97,13 +103,6 @@ export default async function DashboardPage() {
     }))
     .sort((a, b) => b.percent - a.percent);
 
-  // Donut data
-  const donutData = [
-    { name: "Published", value: published.length, color: "#22C55E" },
-    { name: "Under Review", value: pending.length, color: "#F59E0B" },
-    { name: "Draft", value: drafts.length, color: "#D9D9D9" },
-  ];
-
   // Evidence completeness
   const passportsWithDocs = new Set(docs.map((d) => d.passport_id)).size;
   const evidencePercent =
@@ -131,6 +130,21 @@ export default async function DashboardPage() {
   const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
   const quarterGrowth = all.filter((p) => new Date(p.created_at) >= quarterStart).length;
 
+  // ESPR readiness (shared computation)
+  const esprChecks = computeEsprChecks({
+    passportCount: all.length,
+    hasRatedPower: all.some((p) => p.rated_power_stc_w),
+    materialsCount: mats.length,
+    hasCarbonFootprint: carbonData.length > 0,
+    validCertsCount: validCerts,
+    circularityCount: circ.length,
+    hasSupplyChain,
+    hasDynamicData: all.length > 0,
+  });
+  const esprReadinessScore = computeReadinessScore(esprChecks);
+  const { readyCount: marketAccessCount, totalCount: marketAccessTotal } =
+    computeMarketAccess(esprChecks, esprReadinessScore);
+
   // KPI data to pass to client component (matches KpiComputeInput)
   const kpiData = {
     total: all.length,
@@ -149,7 +163,55 @@ export default async function DashboardPage() {
     certsExpiringIn30Days,
     avgRecyclability,
     quarterGrowth,
+    esprReadinessScore,
+    marketAccessCount,
+    marketAccessTotal,
   };
+
+  const statusData = {
+    published: published.length,
+    underReview: pending.length,
+    draft: drafts.length,
+  };
+
+  // Per-passport data points for the KPI Explorer
+  const certsByPassport = new Map<string, { total: number; valid: number }>();
+  for (const c of certs) {
+    const existing = certsByPassport.get(c.passport_id);
+    if (existing) {
+      existing.total++;
+      if (c.status === "valid") existing.valid++;
+    } else {
+      certsByPassport.set(c.passport_id, {
+        total: 1,
+        valid: c.status === "valid" ? 1 : 0,
+      });
+    }
+  }
+
+  const circByPassport = new Map<string, number>();
+  for (const c of circ) {
+    if (c.recyclability_rate_percent != null && c.passport_id) {
+      circByPassport.set(c.passport_id as string, c.recyclability_rate_percent);
+    }
+  }
+
+  const explorerData: PassportDataPoint[] = all.map((p) => {
+    const pc = certsByPassport.get(p.id);
+    return {
+      id: p.id,
+      modelId: p.model_id as string,
+      status: p.status,
+      technology: (p.module_technology as string) ?? "other",
+      carbonFootprint: p.carbon_footprint_kg_co2e,
+      ratedPower: p.rated_power_stc_w,
+      efficiency: p.module_efficiency_percent,
+      moduleMass: p.module_mass_kg,
+      recyclabilityRate: circByPassport.get(p.id) ?? null,
+      certCount: pc?.total ?? 0,
+      validCertPercent: pc ? Math.round((pc.valid / pc.total) * 100) : 0,
+    };
+  });
 
   return (
     <div className="space-y-6">
@@ -167,24 +229,11 @@ export default async function DashboardPage() {
         </Link>
       </div>
 
-      {/* KPI Cards (client component for animations) */}
-      <DashboardKpis data={kpiData} />
+      {/* KPI Cards + Status Bar (client component for animations) */}
+      <DashboardKpis data={kpiData} statusData={statusData} />
 
-      {/* Passport Status */}
-      <div className="clean-card hover-card p-5">
-        <h2 className="text-sm font-bold text-foreground">
-          Passport Status
-        </h2>
-        <p className="text-xs text-muted-foreground">
-          Distribution across portfolio
-        </p>
-        <div className="mt-2">
-          <DonutChart
-            data={donutData}
-            centerLabel="passports"
-          />
-        </div>
-      </div>
+      {/* KPI Explorer — S&P-style chart builder */}
+      <KpiExplorer data={explorerData} />
 
       {/* Carbon Footprint — full width */}
       <div className="clean-card hover-card p-5">
@@ -321,22 +370,13 @@ export default async function DashboardPage() {
               DPP Registry opens July 2026
             </p>
             <div className="mt-3 space-y-1.5">
-              {[
-                ["Product Identity", true],
-                ["Technical Specs", true],
-                ["Material Composition", mats.length > 0],
-                ["Carbon Footprint", carbonData.length > 0],
-                ["Compliance Certs", validCerts > 0],
-                ["Circularity Data", true],
-                ["Supply Chain", hasSupplyChain],
-                ["Dynamic Data", all.length > 0],
-              ].map(([label, ok]) => (
+              {esprChecks.map((check) => (
                 <div
-                  key={label as string}
+                  key={check.label}
                   className="flex items-center justify-between text-xs"
                 >
-                  <span className="text-muted-foreground">{label as string}</span>
-                  {ok ? (
+                  <span className="text-muted-foreground">{check.label}</span>
+                  {check.ok ? (
                     <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                   ) : (
                     <AlertTriangle className="h-3.5 w-3.5 text-[#F59E0B]" />
