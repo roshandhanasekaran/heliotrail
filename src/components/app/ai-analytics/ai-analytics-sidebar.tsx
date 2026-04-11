@@ -14,6 +14,7 @@ import {
   Heart,
   ArrowRight,
   AlertTriangle,
+  MapPin,
 } from "lucide-react";
 
 import { FleetHealthGauge } from "@/components/app/ai-analytics/shared/fleet-health-gauge";
@@ -35,11 +36,15 @@ import {
   getComplianceRiskScoring,
 } from "@/lib/mock/ai-analytics";
 
+import type { FleetOption } from "@/lib/ai-analytics-types";
+
 /* ─── Types ─── */
 
 interface AIAnalyticsSidebarProps {
   activeSection: string | null;
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
+  fleetOptions: FleetOption[];
 }
 
 /* ─── Section definitions ─── */
@@ -82,7 +87,11 @@ const complianceRisks = getComplianceRiskScoring();
 export function AIAnalyticsSidebar({
   activeSection,
   onSelectSection,
+  fleetId,
+  fleetOptions,
 }: AIAnalyticsSidebarProps) {
+  const selectedFleet = fleetId ? fleetOptions.find((f) => f.id === fleetId) : null;
+  const totalModules = fleetOptions.reduce((s, f) => s + f.moduleCount, 0);
   const [expanded, setExpanded] = useState<Set<string>>(
     new Set(["fleet-health"]),
   );
@@ -100,12 +109,20 @@ export function AIAnalyticsSidebar({
   }
 
   return (
-    <div className="w-80 shrink-0 border-r border-[#D9D9D9] bg-white overflow-y-auto h-full">
+    <div className="w-80 shrink-0 border-r border-border bg-card overflow-y-auto h-full">
       {/* Header */}
-      <div className="p-4 border-b border-[#D9D9D9]">
-        <h2 className="text-sm font-bold text-[#0D0D0D] uppercase tracking-wider">
+      <div className="p-4 border-b border-border">
+        <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">
           AI Analytics
         </h2>
+        <div className="mt-2 flex items-center gap-1.5">
+          <MapPin className="h-3 w-3 text-primary" />
+          <span className="text-[10px] font-semibold text-muted-foreground">
+            {selectedFleet
+              ? `${selectedFleet.name} — ${selectedFleet.moduleCount} modules`
+              : `All Fleets — ${totalModules} modules`}
+          </span>
+        </div>
       </div>
 
       {/* Accordion sections */}
@@ -114,7 +131,7 @@ export function AIAnalyticsSidebar({
         const isActive = activeSection === section.id;
 
         return (
-          <div key={section.id} className="border-b border-[#E5E5E5]">
+          <div key={section.id} className="border-b border-border">
             {/* Section header */}
             <button
               onClick={() => {
@@ -124,28 +141,28 @@ export function AIAnalyticsSidebar({
               className={cn(
                 "flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors",
                 isActive
-                  ? "bg-[#F0FDF4] border-l-2 border-l-[#22C55E]"
-                  : "hover:bg-[#FAFAFA]",
+                  ? "bg-[#F0FDF4] dark:bg-primary/10 border-l-2 border-l-primary"
+                  : "hover:bg-muted/50",
               )}
             >
               <section.icon
                 className={cn(
                   "h-3.5 w-3.5 shrink-0",
-                  isActive ? "text-[#22C55E]" : "text-[#737373]",
+                  isActive ? "text-primary" : "text-muted-foreground",
                 )}
               />
               <span
                 className={cn(
                   "flex-1 text-[11px] font-bold uppercase tracking-[0.08em]",
-                  isActive ? "text-[#0D0D0D]" : "text-[#737373]",
+                  isActive ? "text-foreground" : "text-muted-foreground",
                 )}
               >
                 {section.label}
               </span>
               {isExpanded ? (
-                <ChevronDown className="h-3 w-3 shrink-0 text-[#A3A3A3]" />
+                <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground/70" />
               ) : (
-                <ChevronRight className="h-3 w-3 shrink-0 text-[#A3A3A3]" />
+                <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground/70" />
               )}
             </button>
 
@@ -209,10 +226,10 @@ function FleetHealthContent({
       <div className="mt-3 space-y-1.5">
         {healthScore.breakdown.map((b) => (
           <div key={b.label} className="flex items-center gap-2">
-            <span className="w-[72px] text-[9px] text-[#737373] truncate">
+            <span className="w-[72px] text-[9px] text-muted-foreground truncate">
               {b.label}
             </span>
-            <div className="flex-1 h-1 bg-[#F2F2F2]">
+            <div className="flex-1 h-1 bg-muted">
               <div
                 className="h-full transition-all duration-500"
                 style={{
@@ -221,7 +238,7 @@ function FleetHealthContent({
                 }}
               />
             </div>
-            <span className="w-6 text-right font-mono text-[9px] font-semibold text-[#0D0D0D]">
+            <span className="w-6 text-right font-mono text-[9px] font-semibold text-foreground">
               {b.score}
             </span>
           </div>
@@ -249,12 +266,12 @@ function PerformanceContent({
       {/* Fleet PR */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">
             Fleet PR
           </p>
-          <p className="font-mono text-lg font-bold text-[#0D0D0D]">81.4%</p>
+          <p className="font-mono text-lg font-bold text-foreground">81.4%</p>
         </div>
-        <div className="flex items-center gap-1 text-[#22C55E]">
+        <div className="flex items-center gap-1 text-primary">
           <TrendingUp className="h-3 w-3" />
           <span className="font-mono text-[10px] font-semibold">+0.3%</span>
         </div>
@@ -262,20 +279,20 @@ function PerformanceContent({
 
       {/* Top 3 underperformers */}
       <div>
-        <p className="text-[9px] font-semibold uppercase tracking-wider text-[#A3A3A3] mb-1.5">
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground/70 mb-1.5">
           Top Underperformers
         </p>
         <div className="space-y-1.5">
           {underperformers.map((m) => (
             <div
               key={m.moduleId}
-              className="flex items-center justify-between bg-[#F2F2F2] px-2 py-1.5"
+              className="flex items-center justify-between bg-muted px-2 py-1.5"
             >
-              <span className="font-mono text-[9px] text-[#0D0D0D] truncate max-w-[120px]">
+              <span className="font-mono text-[9px] text-foreground truncate max-w-[120px]">
                 {m.moduleId}
               </span>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-[9px] font-semibold text-[#0D0D0D]">
+                <span className="font-mono text-[9px] font-semibold text-foreground">
                   {m.pr}%
                 </span>
                 <span className="font-mono text-[8px] font-bold text-[#DC2626]">
@@ -289,7 +306,7 @@ function PerformanceContent({
 
       {/* 30-day forecast sparkline */}
       <div>
-        <p className="text-[9px] font-semibold uppercase tracking-wider text-[#A3A3A3] mb-1">
+        <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground/70 mb-1">
           30-Day Forecast
         </p>
         <div className="flex items-center gap-2">
@@ -299,7 +316,7 @@ function PerformanceContent({
             height={24}
             color="#22C55E"
           />
-          <span className="font-mono text-[10px] font-bold text-[#22C55E]">
+          <span className="font-mono text-[10px] font-bold text-primary">
             {forecast.pr30dForecast[forecast.pr30dForecast.length - 1]}%
           </span>
         </div>
@@ -327,14 +344,14 @@ function DegradationContent({
       {/* Degradation rate badge */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">
             Degradation Rate
           </p>
-          <p className="font-mono text-lg font-bold text-[#0D0D0D]">
-            0.38<span className="text-xs text-[#737373]">%/yr</span>
+          <p className="font-mono text-lg font-bold text-foreground">
+            0.38<span className="text-xs text-muted-foreground">%/yr</span>
           </p>
         </div>
-        <span className="bg-[#DCFCE7] px-1.5 py-0.5 text-[8px] font-bold text-[#166534]">
+        <span className="bg-[var(--passport-green-muted)] px-1.5 py-0.5 text-[8px] font-bold text-foreground">
           Normal
         </span>
       </div>
@@ -343,17 +360,17 @@ function DegradationContent({
       <div className="flex items-center gap-3">
         <CountdownRing days={maintenance.nextCleaning.daysUntil} max={30} />
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold text-[#0D0D0D]">
+          <p className="text-[10px] font-semibold text-foreground">
             Next Cleaning
           </p>
-          <p className="text-[9px] text-[#737373]">
+          <p className="text-[9px] text-muted-foreground">
             {maintenance.nextCleaning.daysUntil} days remaining
           </p>
         </div>
       </div>
 
       {/* Warranty claim candidates */}
-      <div className="flex items-center justify-between bg-[#FEF3C7] px-2 py-1.5">
+      <div className="flex items-center justify-between bg-[var(--passport-amber-muted)] px-2 py-1.5">
         <div className="flex items-center gap-1.5">
           <AlertTriangle className="h-3 w-3 text-[#92400E]" />
           <span className="text-[10px] font-semibold text-[#92400E]">
@@ -370,11 +387,11 @@ function DegradationContent({
 
       {/* Top provenance alert */}
       {elevatedSupplier && (
-        <div className="bg-[#F2F2F2] px-2 py-1.5">
-          <p className="text-[9px] font-semibold text-[#0D0D0D]">
+        <div className="bg-muted px-2 py-1.5">
+          <p className="text-[9px] font-semibold text-foreground">
             Provenance Alert
           </p>
-          <p className="text-[9px] text-[#737373] mt-0.5">
+          <p className="text-[9px] text-muted-foreground mt-0.5">
             <span className="font-mono text-[#F59E0B]">
               {elevatedSupplier.supplierId}
             </span>
@@ -407,7 +424,7 @@ function SoilingContent({
       {/* Current soiling loss */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">
             Soiling Loss
           </p>
           <p className="font-mono text-lg font-bold text-[#F59E0B]">
@@ -419,7 +436,7 @@ function SoilingContent({
             {soilingDriver.trend === "up" ? (
               <TrendingUp className="h-3 w-3 text-[#DC2626]" />
             ) : (
-              <TrendingDown className="h-3 w-3 text-[#22C55E]" />
+              <TrendingDown className="h-3 w-3 text-primary" />
             )}
             <span className="font-mono text-[10px] font-semibold text-[#DC2626]">
               Rising
@@ -429,17 +446,17 @@ function SoilingContent({
       </div>
 
       {/* Cleaning ROI summary */}
-      <div className="bg-[#F2F2F2] px-2 py-2 space-y-1">
-        <p className="text-[9px] font-semibold text-[#0D0D0D]">Cleaning ROI</p>
+      <div className="bg-muted px-2 py-2 space-y-1">
+        <p className="text-[9px] font-semibold text-foreground">Cleaning ROI</p>
         <div className="flex items-center justify-between">
-          <span className="text-[9px] text-[#737373]">
+          <span className="text-[9px] text-muted-foreground">
             Cost: {fmtEur(maintenance.maintenanceROI.cleaningCostEur)}
           </span>
-          <span className="text-[9px] text-[#737373]">
+          <span className="text-[9px] text-muted-foreground">
             Saves: {fmtEur(maintenance.maintenanceROI.annualSavingsEur)}/yr
           </span>
         </div>
-        <p className="font-mono text-[10px] font-bold text-[#22C55E]">
+        <p className="font-mono text-[10px] font-bold text-primary">
           {maintenance.maintenanceROI.paybackDays}-day payback
         </p>
       </div>
@@ -475,7 +492,7 @@ function RevenueContent({
       {/* Monthly loss */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">
             Monthly Loss
           </p>
           <p className="font-mono text-lg font-bold text-[#EF4444]">
@@ -483,10 +500,10 @@ function RevenueContent({
           </p>
         </div>
         <div className="text-right">
-          <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">
             Annual
           </p>
-          <p className="font-mono text-[11px] font-semibold text-[#0D0D0D]">
+          <p className="font-mono text-[11px] font-semibold text-foreground">
             {fmtEur(revenue.annualProjected)}
           </p>
         </div>
@@ -500,27 +517,27 @@ function RevenueContent({
       </div>
 
       {/* Carbon vs benchmark */}
-      <div className="bg-[#F2F2F2] px-2 py-2 space-y-1">
-        <p className="text-[9px] font-semibold text-[#0D0D0D]">
+      <div className="bg-muted px-2 py-2 space-y-1">
+        <p className="text-[9px] font-semibold text-foreground">
           Carbon Footprint
         </p>
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+            <p className="font-mono text-sm font-bold text-foreground">
               {carbon.currentAvgKgCO2e}{" "}
-              <span className="text-[8px] font-normal text-[#737373]">
+              <span className="text-[8px] font-normal text-muted-foreground">
                 kg CO₂e
               </span>
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[8px] text-[#A3A3A3]">Benchmark</p>
-            <p className="font-mono text-[10px] font-semibold text-[#737373]">
+            <p className="text-[8px] text-muted-foreground/70">Benchmark</p>
+            <p className="font-mono text-[10px] font-semibold text-muted-foreground">
               {carbon.industryBenchmark} kg
             </p>
           </div>
         </div>
-        <div className="h-1.5 w-full bg-[#E5E5E5]">
+        <div className="h-1.5 w-full bg-border">
           <div
             className="h-full bg-[#F59E0B] transition-all duration-500"
             style={{
@@ -569,7 +586,7 @@ function ComplianceContent({
       {/* Unresolved anomalies count */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">
             Unresolved Anomalies
           </p>
           <p className="font-mono text-lg font-bold text-[#F59E0B]">
@@ -581,7 +598,7 @@ function ComplianceContent({
             "px-1.5 py-0.5 text-[8px] font-bold",
             unresolvedAnomalies.length > 2
               ? "bg-[#FEE2E2] text-[#B91C1C]"
-              : "bg-[#FEF3C7] text-[#92400E]",
+              : "bg-[var(--passport-amber-muted)] text-[#92400E]",
           )}
         >
           {unresolvedAnomalies.length > 2 ? "Needs Attention" : "Monitoring"}
@@ -590,7 +607,7 @@ function ComplianceContent({
 
       {/* Top insight (highest severity) */}
       {topInsight && (
-        <div className="bg-[#F2F2F2] px-2 py-2 space-y-1">
+        <div className="bg-muted px-2 py-2 space-y-1">
           <div className="flex items-center gap-1.5">
             <span
               className={cn(
@@ -598,17 +615,17 @@ function ComplianceContent({
                 topInsight.severity === "critical"
                   ? "bg-[#FEE2E2] text-[#B91C1C]"
                   : topInsight.severity === "warning"
-                    ? "bg-[#FEF3C7] text-[#92400E]"
+                    ? "bg-[var(--passport-amber-muted)] text-[#92400E]"
                     : "bg-[#EFF6FF] text-[#1E40AF]",
               )}
             >
               {topInsight.severity}
             </span>
-            <span className="font-mono text-[8px] text-[#A3A3A3]">
+            <span className="font-mono text-[8px] text-muted-foreground/70">
               {topInsight.confidence}% conf
             </span>
           </div>
-          <p className="text-[10px] font-semibold leading-tight text-[#0D0D0D]">
+          <p className="text-[10px] font-semibold leading-tight text-foreground">
             {topInsight.title}
           </p>
         </div>
@@ -625,7 +642,7 @@ function ComplianceContent({
           </div>
         )}
         {mediumRiskCount > 0 && (
-          <div className="flex items-center gap-1 bg-[#FEF3C7] px-2 py-1">
+          <div className="flex items-center gap-1 bg-[var(--passport-amber-muted)] px-2 py-1">
             <AlertTriangle className="h-2.5 w-2.5 text-[#92400E]" />
             <span className="text-[9px] font-bold text-[#92400E]">
               {mediumRiskCount} medium
@@ -645,7 +662,7 @@ function ViewDetailsLink({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-1 text-[10px] font-semibold text-[#22C55E] hover:text-[#0D0D0D] transition-colors"
+      className="flex items-center gap-1 text-[10px] font-semibold text-primary hover:text-foreground transition-colors"
     >
       View Details
       <ArrowRight className="h-2.5 w-2.5" />

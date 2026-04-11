@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { Persona, TimeRange } from "@/lib/ai-analytics-types";
+import { MapPin } from "lucide-react";
+import type { Persona, TimeRange, FleetOption } from "@/lib/ai-analytics-types";
 
 // ─── Constants ────────────────────────────────────────────────
 const PERSONA_OPTIONS: { value: Persona; label: string }[] = [
@@ -22,6 +23,9 @@ interface AnalyticsControlBarProps {
   onPersonaChange: (persona: Persona) => void;
   timeRange: TimeRange;
   onTimeRangeChange: (range: TimeRange) => void;
+  fleetId: string | null;
+  onFleetChange: (fleetId: string | null) => void;
+  fleetOptions: FleetOption[];
 }
 
 // ─── Component ────────────────────────────────────────────────
@@ -30,6 +34,9 @@ export function AnalyticsControlBar({
   onPersonaChange,
   timeRange,
   onTimeRangeChange,
+  fleetId,
+  onFleetChange,
+  fleetOptions,
 }: AnalyticsControlBarProps) {
   const [minutesAgo, setMinutesAgo] = useState(2);
 
@@ -42,13 +49,13 @@ export function AnalyticsControlBar({
   }, []);
 
   return (
-    <div className="flex items-center gap-4 border-b border-[#E5E5E5] bg-white px-5 py-3">
+    <div className="flex items-center gap-4 border-b border-border bg-card px-5 py-3">
       {/* ── Persona Toggle ──────────────────────────────── */}
       <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#737373]">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
           View
         </span>
-        <div className="flex rounded-full bg-[#F5F5F5] p-0.5">
+        <div className="flex rounded-full bg-muted p-0.5">
           {PERSONA_OPTIONS.map((opt) => (
             <button
               key={opt.value}
@@ -57,8 +64,8 @@ export function AnalyticsControlBar({
               className="rounded-full px-3 py-1 text-[11px] font-semibold transition-colors"
               style={{
                 backgroundColor:
-                  persona === opt.value ? "#0D0D0D" : "transparent",
-                color: persona === opt.value ? "#FFFFFF" : "#737373",
+                  persona === opt.value ? "var(--foreground)" : "transparent",
+                color: persona === opt.value ? "var(--card)" : "var(--muted-foreground)",
               }}
             >
               {opt.label}
@@ -68,11 +75,39 @@ export function AnalyticsControlBar({
       </div>
 
       {/* ── Divider ─────────────────────────────────────── */}
-      <div className="h-6 w-px bg-[#E5E5E5]" />
+      <div className="h-6 w-px bg-border" />
+
+      {/* ── Fleet Selector ─────────────────────────────── */}
+      <div className="flex items-center gap-2">
+        <MapPin className="h-3 w-3 text-muted-foreground" />
+        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          Fleet
+        </span>
+        <select
+          value={fleetId ?? ""}
+          onChange={(e) => onFleetChange(e.target.value || null)}
+          className="rounded px-2.5 py-1 text-[11px] font-semibold transition-colors bg-card text-foreground"
+          style={{
+            border: "1px solid var(--border)",
+            outline: "none",
+            maxWidth: "220px",
+          }}
+        >
+          <option value="">All Fleets ({fleetOptions.reduce((s, f) => s + f.moduleCount, 0)} modules)</option>
+          {fleetOptions.map((f) => (
+            <option key={f.id} value={f.id}>
+              {f.name} — {f.city}, {f.country} ({f.moduleCount})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* ── Divider ─────────────────────────────────────── */}
+      <div className="h-6 w-px bg-border" />
 
       {/* ── Time Range Selector ─────────────────────────── */}
       <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#737373]">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
           Period
         </span>
         <div className="flex gap-1">
@@ -84,12 +119,12 @@ export function AnalyticsControlBar({
               className="rounded px-2.5 py-1 text-[11px] font-semibold transition-colors"
               style={{
                 backgroundColor:
-                  timeRange === opt.value ? "#22C55E" : "#FFFFFF",
-                color: timeRange === opt.value ? "#FFFFFF" : "#737373",
+                  timeRange === opt.value ? "var(--primary)" : "var(--card)",
+                color: timeRange === opt.value ? "white" : "var(--muted-foreground)",
                 border:
                   timeRange === opt.value
-                    ? "1px solid #22C55E"
-                    : "1px solid #E5E5E5",
+                    ? "1px solid var(--primary)"
+                    : "1px solid var(--border)",
               }}
             >
               {opt.label}
@@ -101,10 +136,10 @@ export function AnalyticsControlBar({
       {/* ── Sync Indicator ──────────────────────────────── */}
       <div className="ml-auto flex items-center gap-1.5">
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#22C55E] opacity-75" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#22C55E]" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
         </span>
-        <span className="text-[10px] text-[#737373]">
+        <span className="text-[10px] text-muted-foreground">
           Last sync: {minutesAgo} min ago
         </span>
       </div>

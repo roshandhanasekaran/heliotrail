@@ -6,8 +6,18 @@
 export type Persona = "manufacturer" | "operator";
 export type TimeRange = "7d" | "30d" | "90d" | "1y";
 
+export interface FleetOption {
+  id: string;
+  name: string;
+  city: string;
+  country: string;
+  climate: string;
+  moduleCount: number;
+}
+
 export interface DetailPanelProps {
   persona: Persona;
   timeRange: TimeRange;
+  fleetId: string | null;
   onModuleClick: (moduleId: string) => void;
 }
