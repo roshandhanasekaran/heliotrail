@@ -1,3 +1,28 @@
+export type SiteType =
+  | "rooftop"
+  | "ground_mount"
+  | "carport"
+  | "floating"
+  | "facade"
+  | "agrivoltaic";
+
+export interface Fleet {
+  id: string;
+  name: string;
+  slug: string;
+  location_city: string;
+  location_country: string;
+  latitude: number;
+  longitude: number;
+  climate_zone: string;
+  site_type: SiteType;
+  commissioned_at: string | null;
+  owner_name: string | null;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export type PassportStatus =
   | "draft"
   | "under_review"
@@ -111,6 +136,8 @@ export interface Passport {
   facility_country: string | null;
   reach_status: string | null;
   rohs_status: string | null;
+
+  fleet_id: string | null;
 
   passport_version: number;
   created_at: string;
