@@ -32,8 +32,7 @@ import {
   Cell,
 } from "recharts";
 
-const revenue = getRevenueIntelligence();
-const carbon = getCarbonOptimization();
+// Moved inside component as useMemo
 
 function fmtEur(v: number): string {
   if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
@@ -42,7 +41,7 @@ function fmtEur(v: number): string {
 }
 
 const DIFFICULTY_STYLES: Record<string, { bg: string; text: string }> = {
-  easy: { bg: "#DCFCE7", text: "#166534" },
+  easy: { bg: "var(--passport-green-muted)", text: "var(--foreground)" },
   medium: { bg: "#FEF3C7", text: "#92400E" },
   hard: { bg: "#FEE2E2", text: "#B91C1C" },
 };
@@ -50,6 +49,7 @@ const DIFFICULTY_STYLES: Record<string, { bg: string; text: string }> = {
 interface RevenueDetailProps {
   persona?: "manufacturer" | "operator";
   timeRange?: "7d" | "30d" | "90d" | "1y";
+  fleetId?: string | null;
   modelFilter?: string;
   onModuleClick?: (moduleId: string) => void;
 }
@@ -57,9 +57,12 @@ interface RevenueDetailProps {
 export function RevenueDetail({
   persona = "manufacturer",
   timeRange = "30d",
+  fleetId = null,
   modelFilter = "all",
   onModuleClick = () => {},
 }: RevenueDetailProps) {
+  const revenue = useMemo(() => getRevenueIntelligence(fleetId), [fleetId]);
+  const carbon = useMemo(() => getCarbonOptimization(fleetId), [fleetId]);
   const maxCarbon = Math.max(carbon.currentAvgKgCO2e, carbon.industryBenchmark) * 1.15;
 
   // Revenue timeline data (stacked areas)
@@ -165,62 +168,62 @@ export function RevenueDetail({
     <div className="h-full overflow-y-auto p-6 space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-[#0D0D0D] uppercase tracking-wider">
+        <h1 className="text-lg font-bold text-foreground uppercase tracking-wider">
           Revenue & Carbon Intelligence
         </h1>
-        <p className="text-xs text-[#737373] mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Financial loss analysis and carbon footprint optimization opportunities.
         </p>
       </div>
 
       {/* Revenue Intelligence KPIs */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Revenue Intelligence
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               Monthly Loss
             </p>
             <p className="font-mono text-2xl font-bold text-[#EF4444] mt-1">
               {fmtEur(revenue.monthlyLoss)}
             </p>
-            <p className="text-[10px] text-[#737373] mt-0.5">per month</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">per month</p>
           </div>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               Annual Projected
             </p>
-            <p className="font-mono text-2xl font-bold text-[#0D0D0D] mt-1">
+            <p className="font-mono text-2xl font-bold text-foreground mt-1">
               {fmtEur(revenue.annualProjected)}
             </p>
-            <p className="text-[10px] text-[#737373] mt-0.5">projected annual loss</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">projected annual loss</p>
           </div>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               Optimization Potential
             </p>
-            <p className="font-mono text-2xl font-bold text-[#22C55E] mt-1">
+            <p className="font-mono text-2xl font-bold text-primary mt-1">
               {fmtEur(revenue.optimizationPotential)}
             </p>
-            <p className="text-[10px] text-[#737373] mt-0.5">
+            <p className="text-[10px] text-muted-foreground mt-0.5">
               recoverable per year
             </p>
           </div>
         </div>
-        <p className="text-[9px] text-[#A3A3A3] mt-3">
+        <p className="text-[9px] text-muted-foreground/70 mt-3">
           * Financial estimates assume €0.15/kWh average tariff. Actual values depend on operator&apos;s PPA and grid conditions.
         </p>
       </section>
 
       {/* Full Loss Driver Breakdown */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Loss Driver Breakdown
         </h2>
         <div className="flex flex-col lg:flex-row gap-6 items-start">
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 shrink-0">
+          <div className="border border-dashed border-border bg-card p-5 shrink-0">
             <DonutChart
               segments={revenue.lossDrivers.map((d) => ({
                 label: d.category,
@@ -233,12 +236,12 @@ export function RevenueDetail({
               centerLabel="per month"
             />
           </div>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 space-y-4">
+          <div className="border border-dashed border-border bg-card p-5 space-y-4">
             {revenue.lossDrivers.map((driver) => (
               <LossDriverBar key={driver.category} {...driver} />
             ))}
-            <div className="border-t border-dashed border-[#D9D9D9] pt-3 flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#737373]">
+            <div className="border-t border-dashed border-border pt-3 flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Total Monthly Loss
               </span>
               <span className="font-mono text-sm font-bold text-[#EF4444]">
@@ -251,11 +254,11 @@ export function RevenueDetail({
 
       {/* NEW: Revenue Timeline (Stacked Areas) */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Revenue Breakdown Timeline ({timeRange})
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] text-muted-foreground mb-3">
             Stacked revenue components: energy sales, carbon credits, and feed-in tariff premiums.
           </p>
           <ResponsiveContainer width="100%" height={240}>
@@ -274,25 +277,25 @@ export function RevenueDetail({
                   <stop offset="100%" stopColor="#F59E0B" stopOpacity={0.1} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: string) => v.slice(5)}
                 interval="preserveStartEnd"
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: number) => `€${v.toFixed(0)}`}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0D0D0D",
+                  backgroundColor: "var(--foreground)",
                   border: "none",
                   borderRadius: 0,
                   fontSize: 11,
                   fontFamily: "JetBrains Mono, monospace",
-                  color: "#F2F2F2",
+                  color: "var(--muted)",
                 }}
                 formatter={(value, name) => {
                   const labels: Record<string, string> = {
@@ -335,16 +338,16 @@ export function RevenueDetail({
           </ResponsiveContainer>
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 bg-[#22C55E]" />
-              <span className="text-[9px] text-[#737373]">Energy Revenue</span>
+              <div className="h-2.5 w-2.5 bg-primary" />
+              <span className="text-[9px] text-muted-foreground">Energy Revenue</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="h-2.5 w-2.5 bg-[#3B82F6]" />
-              <span className="text-[9px] text-[#737373]">Carbon Credits</span>
+              <span className="text-[9px] text-muted-foreground">Carbon Credits</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="h-2.5 w-2.5 bg-[#F59E0B]" />
-              <span className="text-[9px] text-[#737373]">Tariff Premium</span>
+              <span className="text-[9px] text-muted-foreground">Tariff Premium</span>
             </div>
           </div>
         </div>
@@ -352,52 +355,52 @@ export function RevenueDetail({
 
       {/* NEW: Spot Price Overlay */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Generation vs. Spot Price (Representative Day)
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] text-muted-foreground mb-3">
             Hourly energy generation (bars) overlaid with spot price (line). Reveals whether generation aligns with high-price hours.
           </p>
           <ResponsiveContainer width="100%" height={240}>
             <ComposedChart data={spotPriceData} margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
               <XAxis
                 dataKey="hour"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 interval={2}
               />
               <YAxis
                 yAxisId="energy"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: number) => `${v.toFixed(1)}`}
                 label={{
                   value: "kWh",
                   position: "insideTopLeft",
                   offset: -5,
-                  style: { fontSize: 8, fill: "#A3A3A3" },
+                  style: { fontSize: 8, fill: "var(--muted-foreground)" },
                 }}
               />
               <YAxis
                 yAxisId="price"
                 orientation="right"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: number) => `€${v.toFixed(0)}`}
                 label={{
                   value: "EUR/MWh",
                   position: "insideTopRight",
                   offset: -5,
-                  style: { fontSize: 8, fill: "#A3A3A3" },
+                  style: { fontSize: 8, fill: "var(--muted-foreground)" },
                 }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0D0D0D",
+                  backgroundColor: "var(--foreground)",
                   border: "none",
                   borderRadius: 0,
                   fontSize: 11,
                   fontFamily: "JetBrains Mono, monospace",
-                  color: "#F2F2F2",
+                  color: "var(--muted)",
                 }}
                 formatter={(value, name) => {
                   if (name === "energy_kwh") return [`${Number(value).toFixed(2)} kWh`, "Energy Generated"];
@@ -424,12 +427,12 @@ export function RevenueDetail({
           </ResponsiveContainer>
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1.5">
-              <div className="h-2.5 w-2.5 bg-[#22C55E] opacity-60" />
-              <span className="text-[9px] text-[#737373]">Energy Generated (kWh)</span>
+              <div className="h-2.5 w-2.5 bg-primary opacity-60" />
+              <span className="text-[9px] text-muted-foreground">Energy Generated (kWh)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="h-0.5 w-4 bg-[#F59E0B]" />
-              <span className="text-[9px] text-[#737373]">Spot Price (EUR/MWh)</span>
+              <span className="text-[9px] text-muted-foreground">Spot Price (EUR/MWh)</span>
             </div>
           </div>
         </div>
@@ -437,11 +440,11 @@ export function RevenueDetail({
 
       {/* NEW: Carbon Intensity Comparison */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Carbon Intensity Comparison (gCO2e/kWh)
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] text-muted-foreground mb-3">
             Per-module embodied carbon intensity vs. industry benchmarks by technology.
           </p>
           <ResponsiveContainer width="100%" height={260}>
@@ -450,27 +453,27 @@ export function RevenueDetail({
               layout="vertical"
               margin={{ top: 10, right: 40, bottom: 10, left: 30 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" horizontal={false} />
               <XAxis
                 type="number"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: number) => `${v}`}
                 domain={[0, 30]}
               />
               <YAxis
                 dataKey="module"
                 type="category"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 width={30}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0D0D0D",
+                  backgroundColor: "var(--foreground)",
                   border: "none",
                   borderRadius: 0,
                   fontSize: 11,
                   fontFamily: "JetBrains Mono, monospace",
-                  color: "#F2F2F2",
+                  color: "var(--muted)",
                 }}
                 formatter={(value, name) => {
                   if (name === "intensity") return [`${value} gCO2e/kWh`, "Module Intensity"];
@@ -498,19 +501,19 @@ export function RevenueDetail({
       {/* PERSONA: Manufacturer - Carbon Footprint by Model Line */}
       {persona === "manufacturer" && carbonByModel.length > 0 && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Carbon Footprint by Model Line
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <div className="border border-dashed border-border bg-card p-5">
             <div className="overflow-x-auto">
-              <table className="w-full border border-[#D9D9D9] text-xs">
+              <table className="w-full border border-border text-xs">
                 <thead>
-                  <tr className="bg-[#F2F2F2]">
+                  <tr className="bg-muted">
                     {["Model", "Modules", "Total CO2e Avoided (kg)", "Avg per Module (kg)"].map(
                       (h) => (
                         <th
                           key={h}
-                          className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                          className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                         >
                           {h}
                         </th>
@@ -522,18 +525,18 @@ export function RevenueDetail({
                   {carbonByModel.map((row, i) => (
                     <tr
                       key={row.model}
-                      className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                      className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                     >
-                      <td className="px-3 py-2 font-mono font-semibold text-[#0D0D0D]">
+                      <td className="px-3 py-2 font-mono font-semibold text-foreground">
                         {row.model}
                       </td>
-                      <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                      <td className="px-3 py-2 font-mono text-foreground">
                         {row.modules}
                       </td>
-                      <td className="px-3 py-2 font-mono font-semibold text-[#22C55E]">
+                      <td className="px-3 py-2 font-mono font-semibold text-primary">
                         {row.total_co2e_kg.toLocaleString("en-US")}
                       </td>
-                      <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                      <td className="px-3 py-2 font-mono text-foreground">
                         {row.avg_per_module.toLocaleString("en-US")}
                       </td>
                     </tr>
@@ -548,11 +551,11 @@ export function RevenueDetail({
       {/* PERSONA: Operator - Revenue Optimization */}
       {persona === "operator" && hourlyRevenue.length > 0 && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Revenue Optimization by Hour
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] text-[#737373] mb-3">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] text-muted-foreground mb-3">
               Highest revenue potential hours for scheduling maintenance outside peak generation.
             </p>
             <div className="grid gap-3 sm:grid-cols-3 mb-4">
@@ -562,22 +565,22 @@ export function RevenueDetail({
                 return top3.map((h) => (
                   <div
                     key={h.hour}
-                    className="border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-3"
+                    className="border border-dashed border-border bg-muted/50 p-3"
                   >
-                    <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                       Peak: {h.hour}
                     </p>
-                    <p className="font-mono text-lg font-bold text-[#22C55E] mt-1">
+                    <p className="font-mono text-lg font-bold text-primary mt-1">
                       EUR {h.revenue.toFixed(3)}
                     </p>
-                    <p className="text-[9px] text-[#737373]">
+                    <p className="text-[9px] text-muted-foreground">
                       Spot: EUR {h.spot_price}/MWh
                     </p>
                   </div>
                 ));
               })()}
             </div>
-            <p className="text-[10px] text-[#737373]">
+            <p className="text-[10px] text-muted-foreground">
               <span className="font-semibold text-[#F59E0B]">Recommendation:</span> Schedule
               maintenance before 07:00 or after 19:00 to minimize revenue impact. Avoid 10:00-15:00
               for maximum generation capture.
@@ -588,31 +591,31 @@ export function RevenueDetail({
 
       {/* Carbon Optimization */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Carbon Optimization
         </h2>
 
         {/* Current vs Benchmark comparison */}
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 space-y-4">
+        <div className="border border-dashed border-border bg-card p-5 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Current Average
               </p>
-              <p className="font-mono text-2xl font-bold text-[#0D0D0D] mt-1">
+              <p className="font-mono text-2xl font-bold text-foreground mt-1">
                 {carbon.currentAvgKgCO2e}{" "}
-                <span className="text-xs font-normal text-[#737373]">
+                <span className="text-xs font-normal text-muted-foreground">
                   kg CO2e
                 </span>
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Industry Benchmark
               </p>
-              <p className="font-mono text-2xl font-bold text-[#22C55E] mt-1">
+              <p className="font-mono text-2xl font-bold text-primary mt-1">
                 {carbon.industryBenchmark}{" "}
-                <span className="text-xs font-normal text-[#737373]">
+                <span className="text-xs font-normal text-muted-foreground">
                   kg CO2e
                 </span>
               </p>
@@ -635,9 +638,9 @@ export function RevenueDetail({
             barHeight={24}
           />
 
-          <p className="text-[10px] text-[#737373]">
+          <p className="text-[10px] text-muted-foreground">
             Potential reduction:{" "}
-            <span className="font-mono font-semibold text-[#22C55E]">
+            <span className="font-mono font-semibold text-primary">
               {carbon.potentialReductionPercent}%
             </span>{" "}
             ({Math.round(carbon.currentAvgKgCO2e * carbon.potentialReductionPercent / 100)} kg CO2e)
@@ -646,17 +649,17 @@ export function RevenueDetail({
 
         {/* Suggestions Table */}
         <div className="mt-4">
-          <h3 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h3 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Optimization Suggestions
           </h3>
           <div className="overflow-x-auto">
-            <table className="w-full border border-[#D9D9D9] text-xs">
+            <table className="w-full border border-border text-xs">
               <thead>
-                <tr className="bg-[#F2F2F2]">
+                <tr className="bg-muted">
                   {["Action", "Impact (kg CO2e)", "Difficulty"].map((h) => (
                     <th
                       key={h}
-                      className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                      className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                     >
                       {h}
                     </th>
@@ -670,12 +673,12 @@ export function RevenueDetail({
                   return (
                     <tr
                       key={row.action}
-                      className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                      className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                     >
-                      <td className="px-3 py-2 text-[#0D0D0D] max-w-[400px]">
+                      <td className="px-3 py-2 text-foreground max-w-[400px]">
                         {row.action}
                       </td>
-                      <td className="px-3 py-2 font-mono font-semibold text-[#22C55E]">
+                      <td className="px-3 py-2 font-mono font-semibold text-primary">
                         -{row.impactKgCO2e}
                       </td>
                       <td className="px-3 py-2">
@@ -695,8 +698,8 @@ export function RevenueDetail({
               </tbody>
             </table>
           </div>
-          <div className="mt-4 border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <div className="mt-4 border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
               Impact Comparison
             </p>
             <BarChart

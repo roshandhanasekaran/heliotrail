@@ -36,6 +36,7 @@ import type { ModuleProfile, AnomalyAlert } from "@/lib/mock/ai-analytics-timese
 interface DegradationDetailProps {
   persona?: "manufacturer" | "operator";
   timeRange?: "7d" | "30d" | "90d" | "1y";
+  fleetId?: string | null;
   modelFilter?: string;
   onModuleClick?: (moduleId: string) => void;
 }
@@ -48,27 +49,25 @@ const TIME_RANGE_DAYS: Record<string, number> = {
 };
 
 const CHART_TOOLTIP_STYLE = {
-  background: "#fff",
-  border: "1px dashed #D9D9D9",
+  background: "var(--card)",
+  border: "1px dashed var(--border)",
   borderRadius: 0,
   fontSize: 11,
   fontFamily: "JetBrains Mono, monospace",
   padding: "8px 12px",
 };
 
-const provenance = getProvenanceCorrelations();
-const warranty = getWarrantyIntelligence();
-const forecast = getPerformanceForecast();
+// Moved inside component as useMemo
 
 const RISK_STYLES: Record<string, { bg: string; text: string }> = {
-  normal: { bg: "#DCFCE7", text: "#166534" },
+  normal: { bg: "var(--passport-green-muted)", text: "var(--foreground)" },
   elevated: { bg: "#FEF3C7", text: "#92400E" },
   critical: { bg: "#FEE2E2", text: "#B91C1C" },
 };
 
 const SEVERITY_STYLES: Record<string, { bg: string; text: string; border: string }> = {
-  low: { bg: "bg-[#F3F4F6]", text: "text-[#6B7280]", border: "border-[#E5E7EB]" },
-  medium: { bg: "bg-[#FEF3C7]", text: "text-[#92400E]", border: "border-[#FDE68A]" },
+  low: { bg: "bg-muted", text: "text-muted-foreground", border: "border-[#E5E7EB]" },
+  medium: { bg: "bg-[var(--passport-amber-muted)]", text: "text-[#92400E]", border: "border-[#FDE68A]" },
   high: { bg: "bg-[#FEE2E2]", text: "text-[#B91C1C]", border: "border-[#FECACA]" },
 };
 
@@ -81,9 +80,14 @@ const SEVERITY_CIRCLE: Record<string, string> = {
 export function DegradationDetail({
   persona = "manufacturer",
   timeRange = "30d",
+  fleetId = null,
   modelFilter = "all",
   onModuleClick = () => {},
 }: DegradationDetailProps) {
+  const provenance = useMemo(() => getProvenanceCorrelations(fleetId), [fleetId]);
+  const warranty = useMemo(() => getWarrantyIntelligence(fleetId), [fleetId]);
+  const forecast = useMemo(() => getPerformanceForecast(fleetId), [fleetId]);
+
   const days = TIME_RANGE_DAYS[timeRange] ?? 30;
   const moduleProfiles = useMemo(() => getModuleProfiles(), []);
   const anomalyAlerts = useMemo(() => getAnomalyAlerts(), []);
@@ -197,21 +201,21 @@ export function DegradationDetail({
     <div className="h-full overflow-y-auto p-6 space-y-10">
       {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-[#0D0D0D] uppercase tracking-wider">
+        <h1 className="text-lg font-bold text-foreground uppercase tracking-wider">
           Degradation & Warranty Intelligence
         </h1>
-        <p className="text-xs text-[#737373] mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Provenance-to-performance correlations. The data that makes warranty claims defensible.
         </p>
       </div>
 
       {/* Section 1: Supplier -> Degradation Correlation */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Section 1: Supplier to Degradation Correlation
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 mb-4">
-          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5 mb-4">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Supplier Degradation Comparison
           </p>
           <BarChart
@@ -228,14 +232,14 @@ export function DegradationDetail({
           />
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full border border-[#D9D9D9] text-xs">
+          <table className="w-full border border-border text-xs">
             <thead>
-              <tr className="bg-[#F2F2F2]">
+              <tr className="bg-muted">
                 {["Supplier ID", "Material", "Avg Degradation", "Module Count", "vs Fleet Avg", "Risk"].map(
                   (h) => (
                     <th
                       key={h}
-                      className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                      className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                     >
                       {h}
                     </th>
@@ -257,20 +261,20 @@ export function DegradationDetail({
                           ? "bg-[#FEF2F2]"
                           : "bg-[#FFFBEB]"
                         : i % 2 === 1
-                          ? "bg-[#FAFAFA]"
-                          : "bg-white",
+                          ? "bg-muted/50"
+                          : "bg-card",
                     )}
                   >
-                    <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                    <td className="px-3 py-2 font-mono text-foreground">
                       {row.supplierId}
                     </td>
-                    <td className="px-3 py-2 text-[#0D0D0D]">
+                    <td className="px-3 py-2 text-foreground">
                       {row.materialName}
                     </td>
-                    <td className="px-3 py-2 font-mono font-semibold text-[#0D0D0D]">
+                    <td className="px-3 py-2 font-mono font-semibold text-foreground">
                       {row.avgDegradationRate}%/yr
                     </td>
-                    <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                    <td className="px-3 py-2 font-mono text-foreground">
                       {row.moduleCount}
                     </td>
                     <td
@@ -281,7 +285,7 @@ export function DegradationDetail({
                             ? "#EF4444"
                             : row.comparedToFleetAvg < 0
                               ? "#22C55E"
-                              : "#737373",
+                              : "var(--muted-foreground)",
                       }}
                     >
                       {row.comparedToFleetAvg > 0 ? "+" : ""}
@@ -308,16 +312,16 @@ export function DegradationDetail({
 
       {/* Section 2: Batch Anomalies */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Section 2: Batch Anomalies
         </h2>
         <div className="flex flex-col lg:flex-row gap-6 items-start">
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 shrink-0">
+          <div className="border border-dashed border-border bg-card p-5 shrink-0">
             <DonutChart
               segments={[
                 { label: "High", value: provenance.batchAnomalies.filter((b) => b.severity === "high").length, color: "#EF4444" },
                 { label: "Medium", value: provenance.batchAnomalies.filter((b) => b.severity === "medium").length, color: "#F59E0B" },
-                { label: "Low", value: provenance.batchAnomalies.filter((b) => b.severity === "low").length, color: "#737373" },
+                { label: "Low", value: provenance.batchAnomalies.filter((b) => b.severity === "low").length, color: "var(--muted-foreground)" },
               ]}
               size={140}
               strokeWidth={16}
@@ -337,7 +341,7 @@ export function DegradationDetail({
                   )}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#0D0D0D]">
+                    <span className="font-mono text-xs font-bold text-foreground">
                       {batch.batchId}
                     </span>
                     <span
@@ -350,12 +354,12 @@ export function DegradationDetail({
                       {batch.severity}
                     </span>
                   </div>
-                  <p className="text-[10px] text-[#737373]">{batch.company}</p>
-                  <p className="text-xs font-semibold text-[#0D0D0D]">
+                  <p className="text-[10px] text-muted-foreground">{batch.company}</p>
+                  <p className="text-xs font-semibold text-foreground">
                     {batch.modulesAffected} of {batch.modulesTotal} modules
                     affected
                   </p>
-                  <p className="text-[10px] text-[#737373] leading-relaxed">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
                     {batch.anomalyType}
                   </p>
                 </div>
@@ -367,13 +371,13 @@ export function DegradationDetail({
 
       {/* NEW: Batch Anomaly Timeline */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Anomaly Detection Timeline
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <div className="border border-dashed border-border bg-card p-5">
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-[#D9D9D9]" />
+            <div className="absolute left-4 top-0 bottom-0 w-px bg-border" />
 
             <div className="space-y-4">
               {anomalyAlerts
@@ -387,14 +391,14 @@ export function DegradationDetail({
                       {/* Severity dot on timeline */}
                       <div
                         className="absolute left-2.5 top-3 w-3 h-3 rounded-full border-2 border-white"
-                        style={{ backgroundColor: SEVERITY_CIRCLE[alert.severity] ?? "#737373" }}
+                        style={{ backgroundColor: SEVERITY_CIRCLE[alert.severity] ?? "var(--muted-foreground)" }}
                       />
 
                       <div className={cn(
                         "border border-dashed p-3 space-y-1",
                         alert.severity === "high" ? "border-[#FECACA] bg-[#FEF2F2]" :
                         alert.severity === "medium" ? "border-[#FDE68A] bg-[#FFFBEB]" :
-                        "border-[#E5E7EB] bg-[#FAFAFA]",
+                        "border-[#E5E7EB] bg-muted/50",
                       )}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -402,36 +406,36 @@ export function DegradationDetail({
                               className="h-3 w-3"
                               style={{ color: SEVERITY_CIRCLE[alert.severity] }}
                             />
-                            <span className="font-mono text-[10px] font-bold text-[#0D0D0D]">
+                            <span className="font-mono text-[10px] font-bold text-foreground">
                               {alert.id}
                             </span>
                             <span
                               className="px-1.5 py-0.5 text-[7px] font-bold uppercase"
                               style={{
-                                backgroundColor: alert.severity === "high" ? "#FEE2E2" : alert.severity === "medium" ? "#FEF3C7" : "#F3F4F6",
-                                color: alert.severity === "high" ? "#B91C1C" : alert.severity === "medium" ? "#92400E" : "#6B7280",
+                                backgroundColor: alert.severity === "high" ? "#FEE2E2" : alert.severity === "medium" ? "#FEF3C7" : "var(--muted)",
+                                color: alert.severity === "high" ? "#B91C1C" : alert.severity === "medium" ? "#92400E" : "var(--muted-foreground)",
                               }}
                             >
                               {alert.severity}
                             </span>
                           </div>
-                          <div className="flex items-center gap-1 text-[9px] text-[#A3A3A3]">
+                          <div className="flex items-center gap-1 text-[9px] text-muted-foreground/70">
                             <Clock className="h-2.5 w-2.5" />
                             {dateStr}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
                           <ModuleLink moduleId={alert.module_id} onClick={onModuleClick} />
-                          <span className="text-[9px] text-[#A3A3A3]">|</span>
-                          <span className="text-[9px] text-[#737373]">
+                          <span className="text-[9px] text-muted-foreground/70">|</span>
+                          <span className="text-[9px] text-muted-foreground">
                             Pattern: {alert.pattern}
                           </span>
-                          <span className="text-[9px] text-[#A3A3A3]">|</span>
-                          <span className="font-mono text-[9px] text-[#737373]">
+                          <span className="text-[9px] text-muted-foreground/70">|</span>
+                          <span className="font-mono text-[9px] text-muted-foreground">
                             {alert.confidence_pct}% confidence
                           </span>
                         </div>
-                        <p className="text-[10px] text-[#737373] leading-relaxed">
+                        <p className="text-[10px] text-muted-foreground leading-relaxed">
                           {alert.description}
                         </p>
                       </div>
@@ -445,13 +449,13 @@ export function DegradationDetail({
 
       {/* Section 3: Warranty Claim Candidates (existing table) */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Section 3: Warranty Claim Candidates
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full border border-[#D9D9D9] text-xs">
+          <table className="w-full border border-border text-xs">
             <thead>
-              <tr className="bg-[#F2F2F2]">
+              <tr className="bg-muted">
                 {[
                   "Passport ID",
                   "Model",
@@ -462,7 +466,7 @@ export function DegradationDetail({
                 ].map((h) => (
                   <th
                     key={h}
-                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                   >
                     {h}
                   </th>
@@ -473,23 +477,23 @@ export function DegradationDetail({
               {warranty.claimReady.map((row, i) => (
                 <tr
                   key={row.passportId}
-                  className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                  className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                 >
                   <td className="px-3 py-2">
                     <ModuleLink moduleId={row.passportId} onClick={onModuleClick} />
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono text-foreground">
                     {row.modelId}
                   </td>
                   <td className="px-3 py-2 font-mono font-semibold text-[#EF4444]">
                     {row.degradationRate}%/yr
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#737373]">
+                  <td className="px-3 py-2 font-mono text-muted-foreground">
                     {row.warrantyThreshold}%/yr
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-2">
-                      <div className="h-1.5 flex-1 bg-[#F2F2F2] max-w-[80px]">
+                      <div className="h-1.5 flex-1 bg-muted max-w-[80px]">
                         <div
                           className="h-full transition-all duration-500"
                           style={{
@@ -503,12 +507,12 @@ export function DegradationDetail({
                           }}
                         />
                       </div>
-                      <span className="font-mono text-[10px] font-semibold text-[#0D0D0D]">
+                      <span className="font-mono text-[10px] font-semibold text-foreground">
                         {row.evidenceScore}%
                       </span>
                     </div>
                   </td>
-                  <td className="px-3 py-2 font-mono font-bold text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono font-bold text-foreground">
                     EUR {row.estimatedClaimValueEur.toLocaleString("en-US")}
                   </td>
                 </tr>
@@ -519,11 +523,11 @@ export function DegradationDetail({
         <div className="mt-3">
           <button
             disabled
-            className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider bg-[#F2F2F2] text-[#A3A3A3] border border-dashed border-[#D9D9D9] cursor-not-allowed"
+            className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground/70 border border-dashed border-border cursor-not-allowed"
           >
             Generate Claim Package
           </button>
-          <span className="ml-2 text-[9px] text-[#A3A3A3]">
+          <span className="ml-2 text-[9px] text-muted-foreground/70">
             Coming soon - automated warranty claim documentation
           </span>
         </div>
@@ -532,33 +536,33 @@ export function DegradationDetail({
       {/* NEW: Warranty Claim Builder */}
       {warrantyClaimModules.length > 0 && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Warranty Claim Builder
           </h2>
-          <p className="text-[9px] text-[#A3A3A3] mb-4">
+          <p className="text-[9px] text-muted-foreground/70 mb-4">
             Modules with warranty evidence score above 70%. Evidence is based on degradation rate exceeding the 0.40%/yr warranty threshold.
           </p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {warrantyClaimModules.map((module) => (
               <div
                 key={module.moduleId}
-                className="border border-dashed border-[#D9D9D9] bg-white p-4 space-y-3"
+                className="border border-dashed border-border bg-card p-4 space-y-3"
               >
                 {/* Module ID */}
                 <div className="flex items-center justify-between">
                   <ModuleLink moduleId={module.moduleId} onClick={onModuleClick} />
-                  <span className="text-[8px] font-mono text-[#A3A3A3]">{module.model}</span>
+                  <span className="text-[8px] font-mono text-muted-foreground/70">{module.model}</span>
                 </div>
 
                 {/* Degradation vs threshold */}
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] text-[#737373]">Degradation</span>
+                  <span className="text-[9px] text-muted-foreground">Degradation</span>
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-xs font-bold text-[#EF4444]">
                       {module.degradationRate.toFixed(2)}%/yr
                     </span>
-                    <span className="text-[8px] text-[#A3A3A3]">vs</span>
-                    <span className="font-mono text-xs text-[#737373]">
+                    <span className="text-[8px] text-muted-foreground/70">vs</span>
+                    <span className="font-mono text-xs text-muted-foreground">
                       {module.warrantyThreshold.toFixed(2)}%/yr
                     </span>
                   </div>
@@ -567,12 +571,12 @@ export function DegradationDetail({
                 {/* Evidence score progress bar */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] text-[#737373]">Evidence Score</span>
-                    <span className="font-mono text-[10px] font-semibold text-[#0D0D0D]">
+                    <span className="text-[9px] text-muted-foreground">Evidence Score</span>
+                    <span className="font-mono text-[10px] font-semibold text-foreground">
                       {module.evidenceScore}%
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-[#F2F2F2]">
+                  <div className="h-2 w-full bg-muted">
                     <div
                       className="h-full transition-all duration-500"
                       style={{
@@ -590,8 +594,8 @@ export function DegradationDetail({
 
                 {/* Claim value */}
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] text-[#737373]">Est. Claim Value</span>
-                  <span className="font-mono text-xs font-bold text-[#0D0D0D]">
+                  <span className="text-[9px] text-muted-foreground">Est. Claim Value</span>
+                  <span className="font-mono text-xs font-bold text-foreground">
                     EUR {module.claimValue.toFixed(2)}
                   </span>
                 </div>
@@ -599,7 +603,7 @@ export function DegradationDetail({
                 {/* Prepare Claim button */}
                 <button
                   disabled
-                  className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider bg-[#F2F2F2] text-[#A3A3A3] border border-dashed border-[#D9D9D9] cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-1.5 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider bg-muted text-muted-foreground/70 border border-dashed border-border cursor-not-allowed"
                 >
                   <FileText className="h-3 w-3" />
                   Prepare Claim
@@ -612,13 +616,13 @@ export function DegradationDetail({
 
       {/* Section 4: At-Risk Modules */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Section 4: At-Risk Modules
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full border border-[#D9D9D9] text-xs">
+          <table className="w-full border border-border text-xs">
             <thead>
-              <tr className="bg-[#F2F2F2]">
+              <tr className="bg-muted">
                 {[
                   "Passport ID",
                   "Model",
@@ -627,7 +631,7 @@ export function DegradationDetail({
                 ].map((h) => (
                   <th
                     key={h}
-                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                   >
                     {h}
                   </th>
@@ -638,12 +642,12 @@ export function DegradationDetail({
               {warranty.atRisk.map((row, i) => (
                 <tr
                   key={row.passportId}
-                  className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                  className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                 >
                   <td className="px-3 py-2">
                     <ModuleLink moduleId={row.passportId} onClick={onModuleClick} />
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono text-foreground">
                     {row.modelId}
                   </td>
                   <td className="px-3 py-2 font-mono font-semibold">
@@ -660,7 +664,7 @@ export function DegradationDetail({
                       {row.yearsToThreshold} yrs
                     </span>
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#737373]">
+                  <td className="px-3 py-2 font-mono text-muted-foreground">
                     {row.currentTrajectory}%/yr
                   </td>
                 </tr>
@@ -672,29 +676,29 @@ export function DegradationDetail({
 
       {/* Section 5: Batch Defect Patterns */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Section 5: Batch Defect Patterns
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {warranty.batchDefectPatterns.map((pattern) => (
             <div
               key={pattern.batchId}
-              className="border border-dashed border-[#D9D9D9] bg-white p-4 space-y-2"
+              className="border border-dashed border-border bg-card p-4 space-y-2"
             >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold text-[#0D0D0D]">
+                <span className="font-mono text-xs font-bold text-foreground">
                   {pattern.batchId}
                 </span>
               </div>
-              <p className="text-xs font-semibold text-[#0D0D0D]">
+              <p className="text-xs font-semibold text-foreground">
                 {pattern.defectType}
               </p>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-[#737373]">
+                <span className="text-[10px] text-muted-foreground">
                   {pattern.affectedCount} of {pattern.totalInBatch} affected
                 </span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] text-[#737373]">Confidence:</span>
+                  <span className="text-[10px] text-muted-foreground">Confidence:</span>
                   <span
                     className="font-mono text-xs font-bold"
                     style={{
@@ -703,7 +707,7 @@ export function DegradationDetail({
                           ? "#22C55E"
                           : pattern.confidence >= 70
                             ? "#F59E0B"
-                            : "#737373",
+                            : "var(--muted-foreground)",
                     }}
                   >
                     {pattern.confidence}%
@@ -711,7 +715,7 @@ export function DegradationDetail({
                 </div>
               </div>
               {/* Confidence progress bar */}
-              <div className="h-1.5 w-full bg-[#F2F2F2]">
+              <div className="h-1.5 w-full bg-muted">
                 <div
                   className="h-full transition-all duration-500"
                   style={{
@@ -721,7 +725,7 @@ export function DegradationDetail({
                         ? "#22C55E"
                         : pattern.confidence >= 70
                           ? "#F59E0B"
-                          : "#A3A3A3",
+                          : "var(--muted-foreground)",
                   }}
                 />
               </div>
@@ -732,23 +736,23 @@ export function DegradationDetail({
 
       {/* Section 6: 25-Year Degradation Projection (UPGRADED with Recharts + Brush) */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Section 6: 25-Year Degradation Projection
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <div className="border border-dashed border-border bg-card p-5">
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={projectionData} margin={{ left: 0, right: 16, top: 8, bottom: 24 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
               <XAxis
                 dataKey="year"
-                tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
-                axisLine={{ stroke: "#D9D9D9" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
+                axisLine={{ stroke: "var(--border)" }}
                 tickLine={false}
                 tickFormatter={(v) => `Yr ${v}`}
               />
               <YAxis
                 domain={[80, 102]}
-                tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 axisLine={false}
                 tickLine={false}
                 width={40}
@@ -763,7 +767,7 @@ export function DegradationDetail({
                 }}
                 labelFormatter={(label) => `Year ${label}`}
               />
-              <ReferenceLine y={83.2} stroke="#A3A3A3" strokeDasharray="4 3" strokeWidth={1} />
+              <ReferenceLine y={83.2} stroke="var(--muted-foreground)" strokeDasharray="4 3" strokeWidth={1} />
               <Line
                 type="monotone"
                 dataKey="actual"
@@ -784,18 +788,18 @@ export function DegradationDetail({
               <Brush
                 dataKey="year"
                 height={20}
-                stroke="#D9D9D9"
-                fill="#FAFAFA"
+                stroke="var(--border)"
+                fill="var(--accent)"
                 travellerWidth={8}
               />
             </LineChart>
           </ResponsiveContainer>
           {/* Legend */}
           <div className="flex items-center gap-4 mt-2">
-            <span className="flex items-center gap-1.5 text-[9px] text-[#737373]">
-              <span className="inline-block w-4 h-0.5 bg-[#22C55E]" /> Actual
+            <span className="flex items-center gap-1.5 text-[9px] text-muted-foreground">
+              <span className="inline-block w-4 h-0.5 bg-primary" /> Actual
             </span>
-            <span className="flex items-center gap-1.5 text-[9px] text-[#737373]">
+            <span className="flex items-center gap-1.5 text-[9px] text-muted-foreground">
               <span className="inline-block w-4 h-0.5 bg-[#F59E0B] border-t border-dashed" /> Warranty Min
             </span>
           </div>
@@ -805,11 +809,11 @@ export function DegradationDetail({
       {/* PERSONA (Manufacturer): Supplier Degradation Comparison - Enhanced */}
       {persona === "manufacturer" && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Manufacturer Insight: Supplier Degradation Deep Dive
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[9px] text-[#A3A3A3] mb-3">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[9px] text-muted-foreground/70 mb-3">
               Detailed supplier degradation comparison with risk-level visibility. Critical and elevated suppliers highlighted.
             </p>
             <BarChart
@@ -827,10 +831,10 @@ export function DegradationDetail({
               barHeight={24}
             />
             <div className="mt-3 flex items-center gap-3">
-              <span className="flex items-center gap-1 text-[9px] text-[#737373]">
+              <span className="flex items-center gap-1 text-[9px] text-muted-foreground">
                 <span className="inline-block w-2 h-2" style={{ backgroundColor: "#EF4444" }} /> Critical
               </span>
-              <span className="flex items-center gap-1 text-[9px] text-[#737373]">
+              <span className="flex items-center gap-1 text-[9px] text-muted-foreground">
                 <span className="inline-block w-2 h-2" style={{ backgroundColor: "#F59E0B" }} /> Elevated
               </span>
             </div>
@@ -841,20 +845,20 @@ export function DegradationDetail({
       {/* PERSONA (Operator): Remaining Useful Life */}
       {persona === "operator" && remainingLifeModules.length > 0 && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Operator Insight: Remaining Useful Life
           </h2>
-          <p className="text-[9px] text-[#A3A3A3] mb-4">
+          <p className="text-[9px] text-muted-foreground/70 mb-4">
             At-risk modules with estimated years remaining at current degradation rate before warranty threshold breach.
           </p>
           <div className="overflow-x-auto">
-            <table className="w-full border border-[#D9D9D9] text-xs">
+            <table className="w-full border border-border text-xs">
               <thead>
-                <tr className="bg-[#F2F2F2]">
+                <tr className="bg-muted">
                   {["Module ID", "Model", "Type", "Degradation Rate", "Est. Years Remaining"].map((h) => (
                     <th
                       key={h}
-                      className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                      className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                     >
                       {h}
                     </th>
@@ -865,13 +869,13 @@ export function DegradationDetail({
                 {remainingLifeModules.map((m, i) => (
                   <tr
                     key={m.moduleId}
-                    className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                    className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                   >
                     <td className="px-3 py-2">
                       <ModuleLink moduleId={m.moduleId} onClick={onModuleClick} />
                     </td>
-                    <td className="px-3 py-2 font-mono text-[#0D0D0D]">{m.model}</td>
-                    <td className="px-3 py-2 text-[#737373] capitalize">
+                    <td className="px-3 py-2 font-mono text-foreground">{m.model}</td>
+                    <td className="px-3 py-2 text-muted-foreground capitalize">
                       {m.personality.replace("_", " ")}
                     </td>
                     <td className="px-3 py-2 font-mono font-semibold text-[#EF4444]">
@@ -893,7 +897,7 @@ export function DegradationDetail({
                           {m.yearsRemaining.toFixed(1)} yrs
                         </span>
                         {/* Visual indicator bar */}
-                        <div className="h-1.5 flex-1 bg-[#F2F2F2] max-w-[60px]">
+                        <div className="h-1.5 flex-1 bg-muted max-w-[60px]">
                           <div
                             className="h-full transition-all duration-500"
                             style={{

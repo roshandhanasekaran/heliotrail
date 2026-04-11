@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useId } from "react";
+import { useState, useEffect, useId, useMemo } from "react";
 import { Sun, Thermometer, Wind, Droplets, Activity } from "lucide-react";
 import {
   AreaChart as RAreaChart,
@@ -34,99 +34,49 @@ interface DetailPanelProps {
   onModuleClick?: (moduleId: string) => void;
 }
 
-const healthScore = getFleetHealthScore();
-const anomalies = getAnomalyStream();
-const benchmarks = getFleetBenchmarking();
-const warranty = getWarrantyIntelligence();
-const carbon = getCarbonOptimization();
-
-// Pick a realistic midday data point (not last point which may be nighttime)
+// Time-series data (not fleet-dependent for now)
 const fleetSummary = getFleetScadaSummary();
-const middayScada = (() => {
-  // Find a point near solar noon (12:00-14:00) with good irradiance
-  const midday = fleetSummary.find(
-    (p) => {
-      const hour = new Date(p.timestamp).getHours();
-      return hour >= 11 && hour <= 14 && p.avg_irradiance > 400;
-    }
-  );
-  // Fallback: find any daytime point with decent output
+const weatherData = getWeatherData();
+
+function findMiddayScada() {
+  const midday = fleetSummary.find((p) => {
+    const hour = new Date(p.timestamp).getHours();
+    return hour >= 11 && hour <= 14 && p.avg_irradiance > 400;
+  });
   if (midday) return midday;
   const daytime = fleetSummary.find((p) => p.total_power_kw > 1);
   return daytime ?? fleetSummary[Math.floor(fleetSummary.length / 2)]!;
-})();
+}
+const middayScada = findMiddayScada();
 
-// Get a midday weather data point (consistent with power reading)
-const weatherData = getWeatherData();
-const middayWeather = (() => {
+function findMiddayWeather() {
   const midday = weatherData.find((w) => {
     const hour = new Date(w.timestamp).getHours();
     return hour >= 11 && hour <= 14 && w.ghi_wm2 > 400;
   });
   return midday ?? weatherData[Math.floor(weatherData.length / 2)]!;
-})();
+}
+const middayWeather = findMiddayWeather();
 
-// Compute sparkline data — one representative day's power curve (daytime hours only)
-const sparklineData = (() => {
-  // Group data by date, pick a day with good solar output
+function computeSparkline() {
   const byDate: Record<string, typeof fleetSummary> = {};
   for (const pt of fleetSummary) {
     const date = pt.timestamp.slice(0, 10);
     if (!byDate[date]) byDate[date] = [];
     byDate[date].push(pt);
   }
-  // Pick the day with highest total power (best solar day)
   let bestDate = "";
   let bestTotal = 0;
   for (const [date, points] of Object.entries(byDate)) {
     const total = points.reduce((s, p) => s + p.total_power_kw, 0);
-    if (total > bestTotal) {
-      bestTotal = total;
-      bestDate = date;
-    }
+    if (total > bestTotal) { bestTotal = total; bestDate = date; }
   }
   const dayPoints = byDate[bestDate] ?? fleetSummary.slice(0, 96);
-  // Filter to daytime (6:00-20:00) and map to chart format
   return dayPoints
-    .filter((p) => {
-      const hour = new Date(p.timestamp).getHours();
-      return hour >= 6 && hour <= 20;
-    })
-    .map((p) => ({
-      time: new Date(p.timestamp).toLocaleTimeString("en-GB", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      power: Number(p.total_power_kw.toFixed(2)),
-    }));
-})();
-
-const KPI_CARDS = [
-  {
-    label: "Fleet PR",
-    value: `${(middayScada.avg_pr * 100).toFixed(1)}%`,
-    sub: "Performance Ratio",
-    color: "#F59E0B",
-  },
-  {
-    label: "Active Alerts",
-    value: String(anomalies.filter((a) => !a.resolved).length),
-    sub: "Unresolved anomalies",
-    color: "#EF4444",
-  },
-  {
-    label: "Warranty Claims Ready",
-    value: String(warranty.claimReady.length),
-    sub: `EUR ${warranty.claimReady.reduce((s, c) => s + c.estimatedClaimValueEur, 0).toLocaleString("en-US")}`,
-    color: "#F59E0B",
-  },
-  {
-    label: "Carbon Avg",
-    value: `${carbon.currentAvgKgCO2e}`,
-    sub: `kg CO2e (benchmark ${carbon.industryBenchmark})`,
-    color: carbon.currentAvgKgCO2e > carbon.industryBenchmark ? "#F59E0B" : "#22C55E",
-  },
-];
+    .filter((p) => { const hour = new Date(p.timestamp).getHours(); return hour >= 6 && hour <= 20; })
+    .map((p) => ({ time: new Date(p.timestamp).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }), power: Number(p.total_power_kw.toFixed(2)) }));
+}
+const sparklineData = computeSparkline();
 
 const noop = () => {};
 
@@ -142,6 +92,20 @@ export function SummaryDetail({
   const siteLabel = selectedFleet
     ? `${selectedFleet.city}, ${selectedFleet.country} — ${selectedFleet.name}`
     : "All Sites — Aggregated View";
+
+  // Fleet-reactive mock data
+  const healthScore = useMemo(() => getFleetHealthScore(fleetId), [fleetId]);
+  const anomalies = useMemo(() => getAnomalyStream(fleetId), [fleetId]);
+  const benchmarks = useMemo(() => getFleetBenchmarking(fleetId), [fleetId]);
+  const warranty = useMemo(() => getWarrantyIntelligence(fleetId), [fleetId]);
+  const carbon = useMemo(() => getCarbonOptimization(fleetId), [fleetId]);
+
+  const KPI_CARDS = useMemo(() => [
+    { label: "Fleet PR", value: `${(middayScada.avg_pr * 100).toFixed(1)}%`, sub: "Performance Ratio", color: "#F59E0B" },
+    { label: "Active Alerts", value: String(anomalies.filter((a) => !a.resolved).length), sub: "Unresolved anomalies", color: "#EF4444" },
+    { label: "Warranty Claims Ready", value: String(warranty.claimReady.length), sub: `EUR ${warranty.claimReady.reduce((s, c) => s + c.estimatedClaimValueEur, 0).toLocaleString("en-US")}`, color: "#F59E0B" },
+    { label: "Carbon Avg", value: `${carbon.currentAvgKgCO2e}`, sub: `kg CO2e (benchmark ${carbon.industryBenchmark})`, color: carbon.currentAvgKgCO2e > carbon.industryBenchmark ? "#F59E0B" : "#22C55E" },
+  ], [anomalies, warranty, carbon]);
   const topAlerts = anomalies.filter((a) => !a.resolved).slice(0, 3);
   const topBenchmarks = benchmarks.slice(0, 5);
 

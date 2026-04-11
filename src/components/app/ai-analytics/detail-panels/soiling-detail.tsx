@@ -26,8 +26,7 @@ import {
   ReferenceLine,
 } from "recharts";
 
-const maintenance = getMaintenancePredictions();
-const provenance = getProvenanceCorrelations();
+// Moved inside component as useMemo
 
 function fmtEur(v: number): string {
   if (v >= 1_000_000) return `€${(v / 1_000_000).toFixed(1)}m`;
@@ -38,6 +37,7 @@ function fmtEur(v: number): string {
 interface SoilingDetailProps {
   persona?: "manufacturer" | "operator";
   timeRange?: "7d" | "30d" | "90d" | "1y";
+  fleetId?: string | null;
   modelFilter?: string;
   onModuleClick?: (moduleId: string) => void;
 }
@@ -45,9 +45,12 @@ interface SoilingDetailProps {
 export function SoilingDetail({
   persona = "manufacturer",
   timeRange = "30d",
+  fleetId = null,
   modelFilter = "all",
   onModuleClick = () => {},
 }: SoilingDetailProps) {
+  const maintenance = useMemo(() => getMaintenancePredictions(fleetId), [fleetId]);
+  const provenance = useMemo(() => getProvenanceCorrelations(fleetId), [fleetId]);
   // Soiling accumulation chart data
   const soilingData = useMemo(() => {
     const days = timeRange === "7d" ? 7 : timeRange === "90d" ? 90 : timeRange === "1y" ? 365 : 30;
@@ -146,31 +149,31 @@ export function SoilingDetail({
     <div className="h-full overflow-y-auto p-6 space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-[#0D0D0D] uppercase tracking-wider">
+        <h1 className="text-lg font-bold text-foreground uppercase tracking-wider">
           Soiling & Environmental
         </h1>
-        <p className="text-xs text-[#737373] mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Cleaning schedules, component risk, and material-driven environmental factors.
         </p>
       </div>
 
       {/* Cleaning Schedule Summary */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Cleaning Schedule
         </h2>
         <div className="grid gap-4 sm:grid-cols-3">
           {/* Next Cleaning */}
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 flex items-center gap-4">
+          <div className="border border-dashed border-border bg-card p-5 flex items-center gap-4">
             <CountdownRing days={maintenance.nextCleaning.daysUntil} max={30} />
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Next Cleaning
               </p>
-              <p className="font-mono text-xl font-bold text-[#0D0D0D]">
+              <p className="font-mono text-xl font-bold text-foreground">
                 {maintenance.nextCleaning.daysUntil} days
               </p>
-              <p className="text-[10px] text-[#737373]">
+              <p className="text-[10px] text-muted-foreground">
                 Est. soiling at cleaning:{" "}
                 <span className="font-mono font-semibold text-[#F59E0B]">
                   {maintenance.nextCleaning.estimatedSoilingAtCleaning}%
@@ -180,30 +183,30 @@ export function SoilingDetail({
           </div>
 
           {/* Cleaning Cost */}
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               Cleaning Cost
             </p>
-            <p className="font-mono text-xl font-bold text-[#0D0D0D] mt-1">
+            <p className="font-mono text-xl font-bold text-foreground mt-1">
               {fmtEur(maintenance.maintenanceROI.cleaningCostEur)}
             </p>
-            <p className="text-[10px] text-[#737373] mt-1">
+            <p className="text-[10px] text-muted-foreground mt-1">
               Annual savings:{" "}
-              <span className="font-mono font-semibold text-[#22C55E]">
+              <span className="font-mono font-semibold text-primary">
                 {fmtEur(maintenance.maintenanceROI.annualSavingsEur)}
               </span>
             </p>
           </div>
 
           {/* Cleaning ROI */}
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               ROI Payback
             </p>
-            <p className="font-mono text-xl font-bold text-[#22C55E] mt-1">
+            <p className="font-mono text-xl font-bold text-primary mt-1">
               {maintenance.maintenanceROI.paybackDays} days
             </p>
-            <p className="text-[10px] text-[#737373] mt-1">
+            <p className="text-[10px] text-muted-foreground mt-1">
               Cost if delayed:{" "}
               <span className="font-mono font-semibold text-[#EF4444]">
                 {fmtEur(maintenance.nextCleaning.costIfDelayed)}/mo
@@ -215,13 +218,13 @@ export function SoilingDetail({
 
       {/* Cleaning ROI Comparison */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Cleaning ROI Comparison
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <div className="border border-dashed border-border bg-card p-5">
           <BarChart
             bars={[
-              { label: "Cleaning Cost", value: maintenance.maintenanceROI.cleaningCostEur, color: "#737373" },
+              { label: "Cleaning Cost", value: maintenance.maintenanceROI.cleaningCostEur, color: "var(--muted-foreground)" },
               { label: "Annual Savings", value: maintenance.maintenanceROI.annualSavingsEur, color: "#22C55E" },
               { label: "Cost if Delayed", value: maintenance.nextCleaning.costIfDelayed * 12, color: "#EF4444" },
             ]}
@@ -234,11 +237,11 @@ export function SoilingDetail({
 
       {/* NEW: Soiling Accumulation Chart */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Soiling Accumulation ({timeRange})
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] text-muted-foreground mb-3">
             Dust-driven soiling loss over time. Vertical lines mark cleaning events where soiling resets.
           </p>
           <ResponsiveContainer width="100%" height={220}>
@@ -249,26 +252,26 @@ export function SoilingDetail({
                   <stop offset="100%" stopColor="#EF4444" stopOpacity={0.05} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: string) => v.slice(5)}
                 interval="preserveStartEnd"
               />
               <YAxis
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: number) => `${v}%`}
                 domain={[0, "auto"]}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0D0D0D",
+                  backgroundColor: "var(--foreground)",
                   border: "none",
                   borderRadius: 0,
                   fontSize: 11,
                   fontFamily: "JetBrains Mono, monospace",
-                  color: "#F2F2F2",
+                  color: "var(--muted)",
                 }}
                 formatter={(value) => [`${value}%`, "Soiling Loss"]}
                 labelFormatter={(label) => `Date: ${label}`}
@@ -303,33 +306,33 @@ export function SoilingDetail({
 
       {/* NEW: Temperature Derating Chart */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Temperature Derating (Typical Day)
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] text-muted-foreground mb-3">
             Module temperature effect on efficiency. Morning cool = high efficiency, afternoon hot = derating.
           </p>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={deratingData} margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
               <XAxis
                 dataKey="hour"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
               />
               <YAxis
                 domain={[0.85, 1.0]}
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: number) => v.toFixed(2)}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0D0D0D",
+                  backgroundColor: "var(--foreground)",
                   border: "none",
                   borderRadius: 0,
                   fontSize: 11,
                   fontFamily: "JetBrains Mono, monospace",
-                  color: "#F2F2F2",
+                  color: "var(--muted)",
                 }}
                 formatter={(value, name) => [
                   name === "efficiency"
@@ -360,11 +363,11 @@ export function SoilingDetail({
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-1.5">
               <div className="h-0.5 w-4 bg-[#EF4444]" />
-              <span className="text-[9px] text-[#737373]">Efficiency Factor</span>
+              <span className="text-[9px] text-muted-foreground">Efficiency Factor</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="h-0.5 w-4 bg-[#3B82F6]" style={{ borderTop: "1.5px dashed #3B82F6", height: 0 }} />
-              <span className="text-[9px] text-[#737373]">Ambient Temp (scaled)</span>
+              <span className="text-[9px] text-muted-foreground">Ambient Temp (scaled)</span>
             </div>
           </div>
         </div>
@@ -373,11 +376,11 @@ export function SoilingDetail({
       {/* PERSONA: Operator - Cleaning ROI Optimizer */}
       {persona === "operator" && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Cleaning ROI Optimizer
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] text-[#737373] mb-3">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] text-muted-foreground mb-3">
               Soiling cost projection if cleaning is delayed. Each day of delay increases energy loss costs.
             </p>
             <div className="grid gap-3 sm:grid-cols-3 mb-4">
@@ -392,39 +395,39 @@ export function SoilingDetail({
                 return (
                   <div
                     key={delay}
-                    className="border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-3"
+                    className="border border-dashed border-border bg-muted/50 p-3"
                   >
-                    <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                       {label}
                     </p>
                     <p className="font-mono text-lg font-bold text-[#EF4444] mt-1">
                       {fmtEur(cost)}
                     </p>
-                    <p className="text-[9px] text-[#737373]">additional cost</p>
+                    <p className="text-[9px] text-muted-foreground">additional cost</p>
                   </div>
                 );
               })}
             </div>
             <ResponsiveContainer width="100%" height={160}>
               <RAreaChart data={cleaningProjection} margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
                 <XAxis
                   dataKey="days"
-                  tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                  tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                   tickFormatter={(v: number) => `${v}d`}
                 />
                 <YAxis
-                  tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                  tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                   tickFormatter={(v: number) => fmtEur(v)}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#0D0D0D",
+                    backgroundColor: "var(--foreground)",
                     border: "none",
                     borderRadius: 0,
                     fontSize: 11,
                     fontFamily: "JetBrains Mono, monospace",
-                    color: "#F2F2F2",
+                    color: "var(--muted)",
                   }}
                   formatter={(value) => [fmtEur(Number(value)), "Cost if Delayed"]}
                   labelFormatter={(label) => `Delay: ${label} days`}
@@ -451,18 +454,18 @@ export function SoilingDetail({
       {/* PERSONA: Manufacturer - Material Durability */}
       {persona === "manufacturer" && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Material Durability Assessment
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <div className="border border-dashed border-border bg-card p-5">
             <div className="overflow-x-auto">
-              <table className="w-full border border-[#D9D9D9] text-xs">
+              <table className="w-full border border-border text-xs">
                 <thead>
-                  <tr className="bg-[#F2F2F2]">
+                  <tr className="bg-muted">
                     {["Component", "Durability Score", "Status"].map((h) => (
                       <th
                         key={h}
-                        className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                        className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                       >
                         {h}
                       </th>
@@ -473,14 +476,14 @@ export function SoilingDetail({
                   {durabilityData.map((row, i) => (
                     <tr
                       key={row.component}
-                      className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                      className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                     >
-                      <td className="px-3 py-2 text-[#0D0D0D] font-semibold">
+                      <td className="px-3 py-2 text-foreground font-semibold">
                         {row.component}
                       </td>
                       <td className="px-3 py-2">
                         <div className="flex items-center gap-2">
-                          <div className="h-2 flex-1 bg-[#F2F2F2]">
+                          <div className="h-2 flex-1 bg-muted">
                             <div
                               className="h-full transition-all duration-500"
                               style={{
@@ -515,13 +518,13 @@ export function SoilingDetail({
                           style={{
                             backgroundColor:
                               row.status === "Excellent"
-                                ? "#DCFCE7"
+                                ? "var(--passport-green-muted)"
                                 : row.status === "Good"
                                   ? "#FEF3C7"
                                   : "#FEE2E2",
                             color:
                               row.status === "Excellent"
-                                ? "#166534"
+                                ? "var(--foreground)"
                                 : row.status === "Good"
                                   ? "#92400E"
                                   : "#B91C1C",
@@ -541,13 +544,13 @@ export function SoilingDetail({
 
       {/* Component Risk Assessment */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Component Risk Assessment
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 space-y-3">
+          <div className="border border-dashed border-border bg-card p-5 space-y-3">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Modules at Risk
               </p>
               <p className="font-mono text-2xl font-bold text-[#F59E0B] mt-1">
@@ -555,20 +558,20 @@ export function SoilingDetail({
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Highest Risk Module
               </p>
-              <p className="font-mono text-sm font-bold text-[#0D0D0D] mt-0.5">
+              <p className="font-mono text-sm font-bold text-foreground mt-0.5">
                 {maintenance.componentRisk.highestRisk}
               </p>
             </div>
           </div>
 
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 space-y-3">
+          <div className="border border-dashed border-border bg-card p-5 space-y-3">
             {/* 30-day failure probability */}
             <div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Failure Probability (30d)
                 </p>
                 <span
@@ -583,7 +586,7 @@ export function SoilingDetail({
                   {maintenance.componentRisk.failureProbability30d}%
                 </span>
               </div>
-              <div className="h-2 w-full bg-[#F2F2F2] mt-1">
+              <div className="h-2 w-full bg-muted mt-1">
                 <div
                   className="h-full transition-all duration-500"
                   style={{
@@ -600,7 +603,7 @@ export function SoilingDetail({
             {/* 90-day failure probability */}
             <div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Failure Probability (90d)
                 </p>
                 <span
@@ -615,7 +618,7 @@ export function SoilingDetail({
                   {maintenance.componentRisk.failureProbability90d}%
                 </span>
               </div>
-              <div className="h-2 w-full bg-[#F2F2F2] mt-1">
+              <div className="h-2 w-full bg-muted mt-1">
                 <div
                   className="h-full transition-all duration-500"
                   style={{
@@ -630,8 +633,8 @@ export function SoilingDetail({
             </div>
           </div>
         </div>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 mt-4">
-          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5 mt-4">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Failure Probability Curve (90 Days)
           </p>
           <AreaChart
@@ -656,13 +659,13 @@ export function SoilingDetail({
 
       {/* Material Risk Factors */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Material Risk Factors
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full border border-[#D9D9D9] text-xs">
+          <table className="w-full border border-border text-xs">
             <thead>
-              <tr className="bg-[#F2F2F2]">
+              <tr className="bg-muted">
                 {[
                   "Material",
                   "Origin",
@@ -672,7 +675,7 @@ export function SoilingDetail({
                 ].map((h) => (
                   <th
                     key={h}
-                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                   >
                     {h}
                   </th>
@@ -683,15 +686,15 @@ export function SoilingDetail({
               {provenance.materialRiskFactors.map((row, i) => (
                 <tr
                   key={`${row.material}-${row.riskType}`}
-                  className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                  className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                 >
-                  <td className="px-3 py-2 text-[#0D0D0D] font-semibold">
+                  <td className="px-3 py-2 text-foreground font-semibold">
                     {row.material}
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono text-foreground">
                     {row.originCountry}
                   </td>
-                  <td className="px-3 py-2 text-[#737373]">{row.riskType}</td>
+                  <td className="px-3 py-2 text-muted-foreground">{row.riskType}</td>
                   <td className="px-3 py-2">
                     <span
                       className="font-mono font-semibold"
@@ -707,7 +710,7 @@ export function SoilingDetail({
                       {row.incidenceRate}%
                     </span>
                   </td>
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono text-foreground">
                     {row.affectedModules}
                   </td>
                 </tr>
@@ -715,8 +718,8 @@ export function SoilingDetail({
             </tbody>
           </table>
         </div>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5 mt-4">
-          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5 mt-4">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Risk Incidence by Material
           </p>
           <BarChart

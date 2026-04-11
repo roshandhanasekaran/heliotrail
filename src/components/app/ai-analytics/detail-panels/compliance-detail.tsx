@@ -26,12 +26,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const insights = getAIInsights();
-const anomalies = getAnomalyStream();
-const complianceRisks = getComplianceRiskScoring();
+// Moved inside component as useMemo
 
 const RISK_LEVEL_STYLES: Record<string, { bg: string; text: string }> = {
-  low: { bg: "#DCFCE7", text: "#166534" },
+  low: { bg: "var(--passport-green-muted)", text: "var(--foreground)" },
   medium: { bg: "#FEF3C7", text: "#92400E" },
   high: { bg: "#FEE2E2", text: "#B91C1C" },
 };
@@ -60,6 +58,7 @@ const VOLUNTARY_REQUIREMENTS: { id: string; label: string; status: "complete" | 
 interface ComplianceDetailProps {
   persona?: "manufacturer" | "operator";
   timeRange?: "7d" | "30d" | "90d" | "1y";
+  fleetId?: string | null;
   modelFilter?: string;
   onModuleClick?: (moduleId: string) => void;
 }
@@ -67,9 +66,13 @@ interface ComplianceDetailProps {
 export function ComplianceDetail({
   persona = "manufacturer",
   timeRange = "30d",
+  fleetId = null,
   modelFilter = "all",
   onModuleClick = () => {},
 }: ComplianceDetailProps) {
+  const insights = useMemo(() => getAIInsights(fleetId), [fleetId]);
+  const anomalies = useMemo(() => getAnomalyStream(fleetId), [fleetId]);
+  const complianceRisks = useMemo(() => getComplianceRiskScoring(fleetId), [fleetId]);
   // Expandable insight cards
   const [expandedInsights, setExpandedInsights] = useState<Set<string>>(new Set());
 
@@ -171,30 +174,30 @@ export function ComplianceDetail({
   }, [persona]);
 
   // Risk trend line colors
-  const RISK_COLORS = ["#EF4444", "#F59E0B", "#3B82F6", "#22C55E", "#737373"];
+  const RISK_COLORS = ["#EF4444", "#F59E0B", "#3B82F6", "#22C55E", "var(--muted-foreground)"];
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-[#0D0D0D] uppercase tracking-wider">
+        <h1 className="text-lg font-bold text-foreground uppercase tracking-wider">
           Compliance & Risk
         </h1>
-        <p className="text-xs text-[#737373] mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           AI-generated insights, anomaly detection feed, and compliance risk scoring.
         </p>
       </div>
 
       {/* Full AI Insights Feed — UPGRADED: Expandable */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           AI Insights Feed ({insights.length})
         </h2>
         <div className="space-y-2">
           {insights.map((insight) => (
             <div
               key={insight.id}
-              className="border border-dashed border-[#D9D9D9] bg-white"
+              className="border border-dashed border-border bg-card"
             >
               <div
                 className="flex items-start justify-between cursor-pointer"
@@ -205,7 +208,7 @@ export function ComplianceDetail({
                 </div>
                 <button
                   type="button"
-                  className="p-2.5 text-[#737373] hover:text-[#0D0D0D] transition-colors shrink-0"
+                  className="p-2.5 text-muted-foreground hover:text-foreground transition-colors shrink-0"
                   aria-label={expandedInsights.has(insight.id) ? "Collapse" : "Expand"}
                 >
                   {expandedInsights.has(insight.id) ? (
@@ -216,15 +219,15 @@ export function ComplianceDetail({
                 </button>
               </div>
               {expandedInsights.has(insight.id) && (
-                <div className="px-2.5 pb-2.5 border-t border-dashed border-[#D9D9D9] pt-2">
-                  <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
+                <div className="px-2.5 pb-2.5 border-t border-dashed border-border pt-2">
+                  <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
                     Evidence Details
                   </p>
-                  <p className="text-[10px] text-[#737373] leading-relaxed">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
                     Confidence: {insight.confidence}% | Category: {insight.category} |
                     Severity: {insight.severity}
                   </p>
-                  <p className="text-[10px] text-[#737373] leading-relaxed mt-1">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed mt-1">
                     {insight.detail}
                   </p>
                 </div>
@@ -241,7 +244,7 @@ export function ComplianceDetail({
           const colors: Record<string, { bg: string; text: string }> = {
             high: { bg: "#FEE2E2", text: "#B91C1C" },
             medium: { bg: "#FEF3C7", text: "#92400E" },
-            low: { bg: "#F3F4F6", text: "#6B7280" },
+            low: { bg: "var(--muted)", text: "var(--muted-foreground)" },
           };
           const style = colors[sev]!;
           return (
@@ -269,19 +272,19 @@ export function ComplianceDetail({
 
       {/* Full Anomaly Stream — UPGRADED: ModuleLink for clickable module IDs */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Anomaly Stream ({anomalies.length})
         </h2>
         <div className="space-y-2">
           {anomalies.map((anomaly) => (
             <div
               key={anomaly.id}
-              className="border border-dashed border-[#D9D9D9] bg-white"
+              className="border border-dashed border-border bg-card"
             >
               <AnomalyCard anomaly={anomaly} />
               {anomaly.module && (
                 <div className="px-2.5 pb-2 -mt-1">
-                  <span className="text-[9px] text-[#737373] mr-1">Module:</span>
+                  <span className="text-[9px] text-muted-foreground mr-1">Module:</span>
                   <ModuleLink
                     moduleId={anomaly.module}
                     onClick={onModuleClick}
@@ -295,34 +298,34 @@ export function ComplianceDetail({
 
       {/* NEW: Risk Score Trend Chart */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Risk Score Trend ({timeRange})
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] text-[#737373] mb-3">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] text-muted-foreground mb-3">
             Risk score evolution for the top 5 highest-risk passports over the selected period.
           </p>
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={riskTrendData.data} margin={{ top: 10, right: 20, bottom: 20, left: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
                 tickFormatter={(v: string) => v.slice(5)}
                 interval="preserveStartEnd"
               />
               <YAxis
                 domain={[0, 100]}
-                tick={{ fontSize: 9, fill: "#A3A3A3", fontFamily: "JetBrains Mono, monospace" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#0D0D0D",
+                  backgroundColor: "var(--foreground)",
                   border: "none",
                   borderRadius: 0,
                   fontSize: 11,
                   fontFamily: "JetBrains Mono, monospace",
-                  color: "#F2F2F2",
+                  color: "var(--muted)",
                 }}
                 labelFormatter={(label) => `Date: ${label}`}
               />
@@ -346,7 +349,7 @@ export function ComplianceDetail({
                   className="h-2 w-2"
                   style={{ backgroundColor: RISK_COLORS[idx % RISK_COLORS.length] }}
                 />
-                <span className="text-[9px] font-mono text-[#737373]">
+                <span className="text-[9px] font-mono text-muted-foreground">
                   {risk.passportId.replace("DPP-", "")}
                 </span>
               </div>
@@ -357,23 +360,23 @@ export function ComplianceDetail({
 
       {/* NEW: ESPR Compliance Checklist */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           EU ESPR Compliance Checklist
         </h2>
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+        <div className="border border-dashed border-border bg-card p-5">
           {/* Progress Bar */}
           <div className="mb-4">
             <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
                 Overall Compliance
               </span>
-              <span className="font-mono text-sm font-bold text-[#0D0D0D]">
+              <span className="font-mono text-sm font-bold text-foreground">
                 {completionStats.pct}%
               </span>
             </div>
-            <div className="h-3 w-full bg-[#F2F2F2] flex">
+            <div className="h-3 w-full bg-muted flex">
               <div
-                className="h-full bg-[#22C55E] transition-all duration-500"
+                className="h-full bg-primary transition-all duration-500"
                 style={{
                   width: `${(completionStats.complete / completionStats.total) * 100}%`,
                 }}
@@ -392,10 +395,10 @@ export function ComplianceDetail({
               />
             </div>
             <div className="flex items-center gap-4 mt-2">
-              <span className="text-[9px] text-[#737373]">
-                <span className="font-mono font-semibold text-[#22C55E]">{completionStats.mandatoryComplete}/{completionStats.mandatoryTotal}</span> mandatory
+              <span className="text-[9px] text-muted-foreground">
+                <span className="font-mono font-semibold text-primary">{completionStats.mandatoryComplete}/{completionStats.mandatoryTotal}</span> mandatory
               </span>
-              <span className="text-[9px] text-[#737373]">
+              <span className="text-[9px] text-muted-foreground">
                 <span className="font-mono font-semibold text-[#F59E0B]">{completionStats.voluntaryComplete + completionStats.voluntaryPartial}/{completionStats.voluntaryTotal}</span> voluntary
               </span>
             </div>
@@ -403,32 +406,32 @@ export function ComplianceDetail({
 
           {/* Checklist */}
           <div className="space-y-3">
-            <p className="text-[9px] font-bold uppercase tracking-wider text-[#737373]">Mandatory</p>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Mandatory</p>
             {MANDATORY_REQUIREMENTS.map((req) => (
               <div
                 key={req.id}
-                className="flex items-center gap-2 py-1.5 border-b border-[#F2F2F2] last:border-0"
+                className="flex items-center gap-2 py-1.5 border-b border-muted last:border-0"
               >
                 {req.status === "complete" ? (
-                  <CheckCircle2 className="h-4 w-4 text-[#22C55E] shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                 ) : req.status === "partial" ? (
                   <AlertTriangle className="h-4 w-4 text-[#F59E0B] shrink-0" />
                 ) : (
                   <XCircle className="h-4 w-4 text-[#EF4444] shrink-0" />
                 )}
-                <span className="text-xs text-[#0D0D0D] flex-1">{req.label}</span>
+                <span className="text-xs text-foreground flex-1">{req.label}</span>
                 <span
                   className="px-1.5 py-0.5 text-[8px] font-bold uppercase"
                   style={{
                     backgroundColor:
                       req.status === "complete"
-                        ? "#DCFCE7"
+                        ? "var(--passport-green-muted)"
                         : req.status === "partial"
                           ? "#FEF3C7"
                           : "#FEE2E2",
                     color:
                       req.status === "complete"
-                        ? "#166534"
+                        ? "var(--foreground)"
                         : req.status === "partial"
                           ? "#92400E"
                           : "#B91C1C",
@@ -438,32 +441,32 @@ export function ComplianceDetail({
                 </span>
               </div>
             ))}
-            <p className="text-[9px] font-bold uppercase tracking-wider text-[#737373] mt-4">Voluntary</p>
+            <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground mt-4">Voluntary</p>
             {VOLUNTARY_REQUIREMENTS.map((req) => (
               <div
                 key={req.id}
-                className="flex items-center gap-2 py-1.5 border-b border-[#F2F2F2] last:border-0"
+                className="flex items-center gap-2 py-1.5 border-b border-muted last:border-0"
               >
                 {req.status === "complete" ? (
-                  <CheckCircle2 className="h-4 w-4 text-[#22C55E] shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                 ) : req.status === "partial" ? (
                   <AlertTriangle className="h-4 w-4 text-[#F59E0B] shrink-0" />
                 ) : (
                   <XCircle className="h-4 w-4 text-[#EF4444] shrink-0" />
                 )}
-                <span className="text-xs text-[#0D0D0D] flex-1">{req.label}</span>
+                <span className="text-xs text-foreground flex-1">{req.label}</span>
                 <span
                   className="px-1.5 py-0.5 text-[8px] font-bold uppercase"
                   style={{
                     backgroundColor:
                       req.status === "complete"
-                        ? "#DCFCE7"
+                        ? "var(--passport-green-muted)"
                         : req.status === "partial"
                           ? "#FEF3C7"
                           : "#FEE2E2",
                     color:
                       req.status === "complete"
-                        ? "#166534"
+                        ? "var(--foreground)"
                         : req.status === "partial"
                           ? "#92400E"
                           : "#B91C1C",
@@ -480,18 +483,18 @@ export function ComplianceDetail({
       {/* PERSONA: Manufacturer - Supply Chain Risk */}
       {persona === "manufacturer" && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             Supply Chain Risk Assessment
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
+          <div className="border border-dashed border-border bg-card p-5">
             <div className="overflow-x-auto">
-              <table className="w-full border border-[#D9D9D9] text-xs">
+              <table className="w-full border border-border text-xs">
                 <thead>
-                  <tr className="bg-[#F2F2F2]">
+                  <tr className="bg-muted">
                     {["Country", "Risk Level", "# Modules"].map((h) => (
                       <th
                         key={h}
-                        className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                        className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                       >
                         {h}
                       </th>
@@ -502,16 +505,16 @@ export function ComplianceDetail({
                   {supplyChainRisk.map((row, i) => {
                     const riskStyle =
                       row.riskLevel === "Low"
-                        ? { bg: "#DCFCE7", text: "#166534" }
+                        ? { bg: "var(--passport-green-muted)", text: "var(--foreground)" }
                         : row.riskLevel === "Medium"
                           ? { bg: "#FEF3C7", text: "#92400E" }
                           : { bg: "#FEE2E2", text: "#B91C1C" };
                     return (
                       <tr
                         key={row.country}
-                        className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                        className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                       >
-                        <td className="px-3 py-2 font-semibold text-[#0D0D0D]">
+                        <td className="px-3 py-2 font-semibold text-foreground">
                           {row.country}
                         </td>
                         <td className="px-3 py-2">
@@ -525,7 +528,7 @@ export function ComplianceDetail({
                             {row.riskLevel}
                           </span>
                         </td>
-                        <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                        <td className="px-3 py-2 font-mono text-foreground">
                           {row.modules}
                         </td>
                       </tr>
@@ -541,55 +544,55 @@ export function ComplianceDetail({
       {/* PERSONA: Operator - ESG Reporting Readiness */}
       {persona === "operator" && esgMetrics && (
         <section>
-          <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+          <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
             ESG Reporting Readiness
           </h2>
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-            <p className="text-[10px] text-[#737373] mb-4">
+          <div className="border border-dashed border-border bg-card p-5">
+            <p className="text-[10px] text-muted-foreground mb-4">
               Carbon metrics formatted for ESG report disclosure (30-day period).
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-4">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <div className="border border-dashed border-border bg-muted/50 p-4">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Total CO2 Avoided
                 </p>
-                <p className="font-mono text-xl font-bold text-[#22C55E] mt-1">
+                <p className="font-mono text-xl font-bold text-primary mt-1">
                   {esgMetrics.totalCarbonAvoided.toLocaleString("en-US")} kg
                 </p>
-                <p className="text-[9px] text-[#737373] mt-0.5">
+                <p className="text-[9px] text-muted-foreground mt-0.5">
                   = {(esgMetrics.totalCarbonAvoided / 1000).toFixed(2)} tonnes CO2e
                 </p>
               </div>
-              <div className="border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-4">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <div className="border border-dashed border-border bg-muted/50 p-4">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Grid Emission Factor
                 </p>
-                <p className="font-mono text-xl font-bold text-[#0D0D0D] mt-1">
+                <p className="font-mono text-xl font-bold text-foreground mt-1">
                   {esgMetrics.gridEmissionFactor} kg/kWh
                 </p>
-                <p className="text-[9px] text-[#737373] mt-0.5">
+                <p className="text-[9px] text-muted-foreground mt-0.5">
                   EU average (2025 reference)
                 </p>
               </div>
-              <div className="border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-4">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <div className="border border-dashed border-border bg-muted/50 p-4">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Scope 2 Savings
                 </p>
-                <p className="font-mono text-xl font-bold text-[#22C55E] mt-1">
+                <p className="font-mono text-xl font-bold text-primary mt-1">
                   {esgMetrics.scope2Savings.toLocaleString("en-US")} kg
                 </p>
-                <p className="text-[9px] text-[#737373] mt-0.5">
+                <p className="text-[9px] text-muted-foreground mt-0.5">
                   from {esgMetrics.totalEnergy.toLocaleString("en-US")} kWh clean energy
                 </p>
               </div>
-              <div className="border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-4">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <div className="border border-dashed border-border bg-muted/50 p-4">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Carbon Credit Potential
                 </p>
                 <p className="font-mono text-xl font-bold text-[#3B82F6] mt-1">
                   EUR {(esgMetrics.totalCarbonAvoided * 0.05).toFixed(2)}
                 </p>
-                <p className="text-[9px] text-[#737373] mt-0.5">
+                <p className="text-[9px] text-muted-foreground mt-0.5">
                   at EUR 0.05/kg CO2e (voluntary market)
                 </p>
               </div>
@@ -600,11 +603,11 @@ export function ComplianceDetail({
 
       {/* Risk Level Distribution */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Risk Level Distribution
         </h2>
         <div className="flex flex-col lg:flex-row gap-6 items-start">
-          <div className="border border-dashed border-[#D9D9D9] bg-white p-5 shrink-0">
+          <div className="border border-dashed border-border bg-card p-5 shrink-0">
             <DonutChart
               segments={[
                 {
@@ -630,7 +633,7 @@ export function ComplianceDetail({
             />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
               Risk Score by Passport
             </p>
             <BarChart
@@ -658,13 +661,13 @@ export function ComplianceDetail({
 
       {/* Compliance Risk Table */}
       <section>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Compliance Risk Scoring ({complianceRisks.length} passports)
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full border border-[#D9D9D9] text-xs">
+          <table className="w-full border border-border text-xs">
             <thead>
-              <tr className="bg-[#F2F2F2]">
+              <tr className="bg-muted">
                 {[
                   "Passport ID",
                   "Model",
@@ -674,7 +677,7 @@ export function ComplianceDetail({
                 ].map((h) => (
                   <th
                     key={h}
-                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                    className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
                   >
                     {h}
                   </th>
@@ -688,12 +691,12 @@ export function ComplianceDetail({
                 return (
                   <tr
                     key={row.passportId}
-                    className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                    className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                   >
-                    <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                    <td className="px-3 py-2 font-mono text-foreground">
                       {row.passportId}
                     </td>
-                    <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                    <td className="px-3 py-2 font-mono text-foreground">
                       {row.modelId}
                     </td>
                     <td className="px-3 py-2">
@@ -720,9 +723,9 @@ export function ComplianceDetail({
                         {row.factors.map((factor, fi) => (
                           <li
                             key={fi}
-                            className="text-[10px] text-[#737373] leading-snug"
+                            className="text-[10px] text-muted-foreground leading-snug"
                           >
-                            <span className="text-[#A3A3A3] mr-1">-</span>
+                            <span className="text-muted-foreground/70 mr-1">-</span>
                             {factor}
                           </li>
                         ))}

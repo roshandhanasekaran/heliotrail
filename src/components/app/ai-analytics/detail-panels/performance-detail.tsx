@@ -42,6 +42,7 @@ import type { ModuleProfile } from "@/lib/mock/ai-analytics-timeseries";
 interface PerformanceDetailProps {
   persona?: "manufacturer" | "operator";
   timeRange?: "7d" | "30d" | "90d" | "1y";
+  fleetId?: string | null;
   modelFilter?: string;
   onModuleClick?: (moduleId: string) => void;
 }
@@ -54,8 +55,8 @@ const TIME_RANGE_DAYS: Record<string, number> = {
 };
 
 const CHART_TOOLTIP_STYLE = {
-  background: "#fff",
-  border: "1px dashed #D9D9D9",
+  background: "var(--card)",
+  border: "1px dashed var(--border)",
   borderRadius: 0,
   fontSize: 11,
   fontFamily: "JetBrains Mono, monospace",
@@ -67,20 +68,20 @@ const PERSONALITY_COLORS: Record<string, string> = {
   hotspot: "#EF4444",
   batch_defect: "#EF4444",
   connector_fault: "#F59E0B",
-  normal: "#737373",
+  normal: "var(--muted-foreground)",
 };
-
-const benchmarks = getFleetBenchmarking();
-const forecast = getPerformanceForecast();
 
 type SortKey = "rank" | "pr";
 
 export function PerformanceDetail({
   persona = "manufacturer",
   timeRange = "30d",
+  fleetId = null,
   modelFilter = "all",
   onModuleClick = () => {},
 }: PerformanceDetailProps) {
+  const benchmarks = useMemo(() => getFleetBenchmarking(fleetId), [fleetId]);
+  const forecast = useMemo(() => getPerformanceForecast(fleetId), [fleetId]);
   const [sortKey, setSortKey] = useState<SortKey>("rank");
   const [sortAsc, setSortAsc] = useState(true);
 
@@ -276,29 +277,29 @@ export function PerformanceDetail({
     <div className="h-full overflow-y-auto p-6 space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-lg font-bold text-[#0D0D0D] uppercase tracking-wider">
+        <h1 className="text-lg font-bold text-foreground uppercase tracking-wider">
           Performance Intelligence
         </h1>
-        <p className="text-xs text-[#737373] mt-1">
+        <p className="text-xs text-muted-foreground mt-1">
           Fleet-wide performance ratio analysis with {days}-day forecasting.
         </p>
       </div>
 
       {/* Fleet PR Hero + Sparkline */}
-      <div className="border border-dashed border-[#D9D9D9] bg-white p-6 flex items-center gap-8 flex-wrap">
+      <div className="border border-dashed border-border bg-card p-6 flex items-center gap-8 flex-wrap">
         <div>
-          <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Fleet PR (Current)
           </p>
-          <p className="font-mono text-4xl font-bold text-[#0D0D0D] mt-1">
-            {fleetAvgPR}<span className="text-lg text-[#737373]">%</span>
+          <p className="font-mono text-4xl font-bold text-foreground mt-1">
+            {fleetAvgPR}<span className="text-lg text-muted-foreground">%</span>
           </p>
-          <p className="text-[10px] text-[#737373] mt-1">
+          <p className="text-[10px] text-muted-foreground mt-1">
             Target: {forecast.prTarget}%
           </p>
         </div>
         <div className="flex-1 min-w-[200px]">
-          <p className="text-[10px] uppercase tracking-wider text-[#737373] mb-2">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-2">
             30-Day Forecast
           </p>
           <AreaChart
@@ -313,8 +314,8 @@ export function PerformanceDetail({
       </div>
 
       {/* UPGRADED: Fleet PR Trend (Recharts AreaChart with Brush) */}
-      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <div className="border border-dashed border-border bg-card p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Fleet PR Trend ({days} days) -- Brushable Zoom
         </p>
         <ResponsiveContainer width="100%" height={260}>
@@ -325,16 +326,16 @@ export function PerformanceDetail({
                 <stop offset="100%" stopColor="#22C55E" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
-              axisLine={{ stroke: "#D9D9D9" }}
+              tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
             />
             <YAxis
               domain={[70, 90]}
-              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
               axisLine={false}
               tickLine={false}
               width={40}
@@ -361,8 +362,8 @@ export function PerformanceDetail({
             <Brush
               dataKey="date"
               height={20}
-              stroke="#D9D9D9"
-              fill="#FAFAFA"
+              stroke="var(--border)"
+              fill="var(--accent)"
               travellerWidth={8}
             />
           </RechartsAreaChart>
@@ -370,31 +371,31 @@ export function PerformanceDetail({
       </div>
 
       {/* PR Trend Description */}
-      <div className="border border-dashed border-[#D9D9D9] bg-[#F2F2F2] p-4">
-        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
+      <div className="border border-dashed border-border bg-muted p-4">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
           Seasonal Outlook
         </p>
-        <p className="text-xs text-[#0D0D0D] leading-relaxed">
+        <p className="text-xs text-foreground leading-relaxed">
           {forecast.seasonalOutlook}
         </p>
       </div>
 
       {/* NEW: Daily Energy Yield Stacked Bars */}
-      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <div className="border border-dashed border-border bg-card p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Daily Energy Yield: Actual vs Expected
         </p>
         <ResponsiveContainer width="100%" height={280}>
           <RechartsBarChart data={energyYieldData} margin={{ left: 0, right: 8, top: 8, bottom: 24 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 8, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
-              axisLine={{ stroke: "#D9D9D9" }}
+              tick={{ fontSize: 8, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
               axisLine={false}
               tickLine={false}
               width={45}
@@ -419,41 +420,41 @@ export function PerformanceDetail({
               iconType="square"
               wrapperStyle={{ fontSize: 10, fontFamily: "JetBrains Mono, monospace" }}
             />
-            <Bar dataKey="expected" fill="#D9D9D9" name="expected" stackId="yield" />
+            <Bar dataKey="expected" fill="var(--border)" name="expected" stackId="yield" />
             <Bar dataKey="actual" fill="#22C55E" name="actual" stackId="yield_actual" />
           </RechartsBarChart>
         </ResponsiveContainer>
         {/* Weather legend */}
         <div className="flex items-center gap-4 mt-2 ml-2">
-          <span className="text-[9px] text-[#737373] flex items-center gap-1">
+          <span className="text-[9px] text-muted-foreground flex items-center gap-1">
             <Sun className="h-3 w-3 text-[#F59E0B]" /> Clear
           </span>
-          <span className="text-[9px] text-[#737373] flex items-center gap-1">
-            <CloudSun className="h-3 w-3 text-[#737373]" /> Partial
+          <span className="text-[9px] text-muted-foreground flex items-center gap-1">
+            <CloudSun className="h-3 w-3 text-muted-foreground" /> Partial
           </span>
-          <span className="text-[9px] text-[#737373] flex items-center gap-1">
-            <Cloud className="h-3 w-3 text-[#A3A3A3]" /> Cloudy
+          <span className="text-[9px] text-muted-foreground flex items-center gap-1">
+            <Cloud className="h-3 w-3 text-muted-foreground/70" /> Cloudy
           </span>
         </div>
       </div>
 
       {/* PR vs Irradiance Scatter Plot */}
-      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
+      <div className="border border-dashed border-border bg-card p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
           PR vs Irradiance by Module Personality
         </p>
-        <p className="text-[9px] text-[#A3A3A3] mb-3">
+        <p className="text-[9px] text-muted-foreground/70 mb-3">
           Each dot is a module. Color indicates personality type. Reveals low-light performance drops.
         </p>
         <ResponsiveContainer width="100%" height={320}>
           <ScatterChart margin={{ left: 10, right: 24, top: 16, bottom: 28 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
             <XAxis
               type="number"
               dataKey="avgIrradiance"
               name="Avg Irradiance"
-              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
-              axisLine={{ stroke: "#D9D9D9" }}
+              tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
+              axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
               domain={["dataMin - 30", "dataMax + 30"]}
               tickFormatter={(v: number) => `${v} W/m\u00B2`}
@@ -462,14 +463,14 @@ export function PerformanceDetail({
                 position: "insideBottom",
                 offset: -12,
                 fontSize: 9,
-                fill: "#A3A3A3",
+                fill: "var(--muted-foreground)",
               }}
             />
             <YAxis
               type="number"
               dataKey="avgPR"
               name="Avg PR"
-              tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
+              tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
               axisLine={false}
               tickLine={false}
               width={50}
@@ -481,7 +482,7 @@ export function PerformanceDetail({
                 position: "insideLeft",
                 offset: 4,
                 fontSize: 9,
-                fill: "#A3A3A3",
+                fill: "var(--muted-foreground)",
               }}
             />
             <Tooltip
@@ -492,7 +493,7 @@ export function PerformanceDetail({
                 return (
                   <div style={CHART_TOOLTIP_STYLE}>
                     <p className="font-mono text-[10px] font-bold">{data.moduleId}</p>
-                    <p className="text-[9px] text-[#737373] capitalize">{data.personality.replace(/_/g, " ")}</p>
+                    <p className="text-[9px] text-muted-foreground capitalize">{data.personality.replace(/_/g, " ")}</p>
                     <p className="text-[9px]">PR: {data.avgPR}%</p>
                     <p className="text-[9px]">Irradiance: {data.avgIrradiance} W/m{"\u00B2"}</p>
                   </div>
@@ -503,7 +504,7 @@ export function PerformanceDetail({
               {filteredScatterData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={PERSONALITY_COLORS[entry.personality] ?? "#737373"}
+                  fill={PERSONALITY_COLORS[entry.personality] ?? "var(--muted-foreground)"}
                   r={7}
                   opacity={0.85}
                 />
@@ -518,9 +519,9 @@ export function PerformanceDetail({
             { label: "Hotspot", color: "#EF4444" },
             { label: "Batch Defect", color: "#EF4444" },
             { label: "Connector Fault", color: "#F59E0B" },
-            { label: "Normal", color: "#737373" },
+            { label: "Normal", color: "var(--muted-foreground)" },
           ].map((item) => (
-            <span key={item.label} className="flex items-center gap-1 text-[9px] text-[#737373]">
+            <span key={item.label} className="flex items-center gap-1 text-[9px] text-muted-foreground">
               <span
                 className="inline-block w-2 h-2 rounded-full"
                 style={{ backgroundColor: item.color }}
@@ -532,8 +533,8 @@ export function PerformanceDetail({
       </div>
 
       {/* 25-Year Degradation Trajectory */}
-      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <div className="border border-dashed border-border bg-card p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           25-Year Degradation Trajectory
         </p>
         <DualLineChart
@@ -552,14 +553,14 @@ export function PerformanceDetail({
       </div>
 
       {/* Module Status Distribution */}
-      <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-        <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <div className="border border-dashed border-border bg-card p-5">
+        <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Module Status Distribution
         </p>
         <BarChart
           bars={[
             { label: "Outperforming", value: statusCounts.outperforming, color: "#22C55E" },
-            { label: "Normal", value: statusCounts.normal, color: "#737373" },
+            { label: "Normal", value: statusCounts.normal, color: "var(--muted-foreground)" },
             { label: "Underperforming", value: statusCounts.underperforming, color: "#EF4444" },
           ]}
           maxValue={filteredBenchmarks.length}
@@ -570,28 +571,28 @@ export function PerformanceDetail({
 
       {/* PERSONA (Manufacturer): Model vs Datasheet */}
       {persona === "manufacturer" && modelDatasheetData.length > 0 && (
-        <div className="border border-dashed border-[#D9D9D9] bg-white p-5">
-          <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-1">
+        <div className="border border-dashed border-border bg-card p-5">
+          <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-1">
             Model vs Datasheet PR
           </p>
-          <p className="text-[9px] text-[#A3A3A3] mb-3">
+          <p className="text-[9px] text-muted-foreground/70 mb-3">
             Actual average PR per model vs 82% datasheet target. Gap indicates field performance delta.
           </p>
           <ResponsiveContainer width="100%" height={160}>
             <RechartsBarChart data={modelDatasheetData} layout="vertical" margin={{ left: 60, right: 24, top: 8, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" horizontal={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" horizontal={false} />
               <XAxis
                 type="number"
                 domain={[70, 90]}
-                tick={{ fontSize: 9, fill: "#737373", fontFamily: "JetBrains Mono, monospace" }}
-                axisLine={{ stroke: "#D9D9D9" }}
+                tick={{ fontSize: 9, fill: "var(--muted-foreground)", fontFamily: "JetBrains Mono, monospace" }}
+                axisLine={{ stroke: "var(--border)" }}
                 tickLine={false}
                 tickFormatter={(v) => `${v}%`}
               />
               <YAxis
                 type="category"
                 dataKey="model"
-                tick={{ fontSize: 10, fill: "#737373" }}
+                tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
                 axisLine={false}
                 tickLine={false}
                 width={55}
@@ -604,7 +605,7 @@ export function PerformanceDetail({
                   return [String(value), String(name)];
                 }}
               />
-              <Bar dataKey="datasheetPR" fill="#D9D9D9" name="datasheetPR" barSize={16} />
+              <Bar dataKey="datasheetPR" fill="var(--border)" name="datasheetPR" barSize={16} />
               <Bar dataKey="actualPR" fill="#22C55E" name="actualPR" barSize={16} />
             </RechartsBarChart>
           </ResponsiveContainer>
@@ -613,13 +614,13 @@ export function PerformanceDetail({
 
       {/* Full Fleet Benchmarking Table */}
       <div>
-        <h2 className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+        <h2 className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
           Fleet Benchmarking ({filteredBenchmarks.length} modules)
         </h2>
         <div className="overflow-x-auto">
-          <table className="w-full border border-[#D9D9D9] text-xs">
+          <table className="w-full border border-border text-xs">
             <thead>
-              <tr className="bg-[#F2F2F2]">
+              <tr className="bg-muted">
                 <SortableHeader
                   label="Rank"
                   sortKey="rank"
@@ -627,13 +628,13 @@ export function PerformanceDetail({
                   sortAsc={sortAsc}
                   onSort={handleSort}
                 />
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
                   Module ID
                 </th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
                   Model
                 </th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
                   Manufacturer
                 </th>
                 <SortableHeader
@@ -643,14 +644,14 @@ export function PerformanceDetail({
                   sortAsc={sortAsc}
                   onSort={handleSort}
                 />
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
                   Delta
                 </th>
-                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
                   Status
                 </th>
                 {persona === "operator" && (
-                  <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+                  <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
                     Revenue/Day
                   </th>
                 )}
@@ -660,19 +661,19 @@ export function PerformanceDetail({
               {sorted.map((m, i) => (
                 <tr
                   key={m.moduleId}
-                  className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+                  className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
                 >
-                  <td className="px-3 py-2 font-mono text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono text-foreground">
                     {m.rank}
                   </td>
                   <td className="px-3 py-2">
                     <ModuleLink moduleId={m.moduleId} onClick={onModuleClick} />
                   </td>
-                  <td className="px-3 py-2 text-[#0D0D0D]">{m.modelId}</td>
-                  <td className="px-3 py-2 text-[#737373]">
+                  <td className="px-3 py-2 text-foreground">{m.modelId}</td>
+                  <td className="px-3 py-2 text-muted-foreground">
                     {m.manufacturer}
                   </td>
-                  <td className="px-3 py-2 font-mono font-semibold text-[#0D0D0D]">
+                  <td className="px-3 py-2 font-mono font-semibold text-foreground">
                     {m.pr}%
                   </td>
                   <td
@@ -683,7 +684,7 @@ export function PerformanceDetail({
                           ? "#22C55E"
                           : m.delta < 0
                             ? "#EF4444"
-                            : "#737373",
+                            : "var(--muted-foreground)",
                     }}
                   >
                     {m.delta > 0 ? "+" : ""}
@@ -693,7 +694,7 @@ export function PerformanceDetail({
                     <StatusBadge status={m.status} />
                   </td>
                   {persona === "operator" && (
-                    <td className="px-3 py-2 font-mono font-semibold text-[#0D0D0D]">
+                    <td className="px-3 py-2 font-mono font-semibold text-foreground">
                       {moduleRevenues.get(m.moduleId) != null
                         ? `EUR ${moduleRevenues.get(m.moduleId)!.toFixed(2)}`
                         : "--"}
@@ -729,14 +730,14 @@ function SortableHeader({
     <th className="text-left px-3 py-2">
       <button
         onClick={() => onSort(sortKey)}
-        className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-[#737373] hover:text-[#0D0D0D] transition-colors"
+        className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-muted-foreground hover:text-foreground transition-colors"
       >
         {label}
         <ArrowUpDown
-          className={`h-2.5 w-2.5 ${isActive ? "text-[#22C55E]" : "text-[#A3A3A3]"}`}
+          className={`h-2.5 w-2.5 ${isActive ? "text-primary" : "text-muted-foreground/70"}`}
         />
         {isActive && (
-          <span className="text-[8px] text-[#A3A3A3]">
+          <span className="text-[8px] text-muted-foreground/70">
             {sortAsc ? "asc" : "desc"}
           </span>
         )}
@@ -754,8 +755,8 @@ function StatusBadge({
     FleetBenchmark["status"],
     { bg: string; text: string }
   > = {
-    outperforming: { bg: "#DCFCE7", text: "#166534" },
-    normal: { bg: "#F3F4F6", text: "#6B7280" },
+    outperforming: { bg: "var(--passport-green-muted)", text: "var(--foreground)" },
+    normal: { bg: "var(--muted)", text: "var(--muted-foreground)" },
     underperforming: { bg: "#FEE2E2", text: "#B91C1C" },
   };
   const s = styles[status];

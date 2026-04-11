@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import {
   ChevronDown,
@@ -68,20 +68,6 @@ function fmtEur(v: number): string {
   return `€${v.toFixed(0)}`;
 }
 
-/* ─── Load mock data at module level (static) ─── */
-
-const healthScore = getFleetHealthScore();
-const benchmarks = getFleetBenchmarking();
-const forecast = getPerformanceForecast();
-const warranty = getWarrantyIntelligence();
-const provenance = getProvenanceCorrelations();
-const maintenance = getMaintenancePredictions();
-const revenue = getRevenueIntelligence();
-const carbon = getCarbonOptimization();
-const anomalies = getAnomalyStream();
-const insights = getAIInsights();
-const complianceRisks = getComplianceRiskScoring();
-
 /* ─── Main component ─── */
 
 export function AIAnalyticsSidebar({
@@ -92,6 +78,7 @@ export function AIAnalyticsSidebar({
 }: AIAnalyticsSidebarProps) {
   const selectedFleet = fleetId ? fleetOptions.find((f) => f.id === fleetId) : null;
   const totalModules = fleetOptions.reduce((s, f) => s + f.moduleCount, 0);
+
   const [expanded, setExpanded] = useState<Set<string>>(
     new Set(["fleet-health"]),
   );
@@ -172,6 +159,7 @@ export function AIAnalyticsSidebar({
                 <SectionContent
                   sectionId={section.id}
                   onSelectSection={onSelectSection}
+                  fleetId={fleetId}
                 />
               </div>
             )}
@@ -187,23 +175,25 @@ export function AIAnalyticsSidebar({
 function SectionContent({
   sectionId,
   onSelectSection,
+  fleetId,
 }: {
   sectionId: SectionId;
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
   switch (sectionId) {
     case "fleet-health":
-      return <FleetHealthContent onSelectSection={onSelectSection} />;
+      return <FleetHealthContent onSelectSection={onSelectSection} fleetId={fleetId} />;
     case "performance":
-      return <PerformanceContent onSelectSection={onSelectSection} />;
+      return <PerformanceContent onSelectSection={onSelectSection} fleetId={fleetId} />;
     case "degradation":
-      return <DegradationContent onSelectSection={onSelectSection} />;
+      return <DegradationContent onSelectSection={onSelectSection} fleetId={fleetId} />;
     case "soiling":
-      return <SoilingContent onSelectSection={onSelectSection} />;
+      return <SoilingContent onSelectSection={onSelectSection} fleetId={fleetId} />;
     case "revenue":
-      return <RevenueContent onSelectSection={onSelectSection} />;
+      return <RevenueContent onSelectSection={onSelectSection} fleetId={fleetId} />;
     case "compliance":
-      return <ComplianceContent onSelectSection={onSelectSection} />;
+      return <ComplianceContent onSelectSection={onSelectSection} fleetId={fleetId} />;
   }
 }
 
@@ -211,9 +201,12 @@ function SectionContent({
 
 function FleetHealthContent({
   onSelectSection,
+  fleetId,
 }: {
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
+  const healthScore = useMemo(() => getFleetHealthScore(fleetId), [fleetId]);
   return (
     <div className="dashed-card p-3">
       <div className="flex justify-center">
@@ -254,9 +247,13 @@ function FleetHealthContent({
 
 function PerformanceContent({
   onSelectSection,
+  fleetId,
 }: {
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
+  const forecast = useMemo(() => getPerformanceForecast(fleetId), [fleetId]);
+  const benchmarks = useMemo(() => getFleetBenchmarking(fleetId), [fleetId]);
   const underperformers = benchmarks
     .filter((b) => b.status === "underperforming")
     .slice(0, 3);
@@ -331,9 +328,15 @@ function PerformanceContent({
 
 function DegradationContent({
   onSelectSection,
+  fleetId,
 }: {
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
+  const warranty = useMemo(() => getWarrantyIntelligence(fleetId), [fleetId]);
+  const provenance = useMemo(() => getProvenanceCorrelations(fleetId), [fleetId]);
+  const maintenance = useMemo(() => getMaintenancePredictions(fleetId), [fleetId]);
+  const forecast = useMemo(() => getPerformanceForecast(fleetId), [fleetId]);
   const claimReadyCount = warranty.claimReady.length;
   const elevatedSupplier = provenance.supplierDegradation.find(
     (s) => s.risk === "elevated",
@@ -409,9 +412,13 @@ function DegradationContent({
 
 function SoilingContent({
   onSelectSection,
+  fleetId,
 }: {
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
+  const maintenance = useMemo(() => getMaintenancePredictions(fleetId), [fleetId]);
+  const revenue = useMemo(() => getRevenueIntelligence(fleetId), [fleetId]);
   const soilingDriver = revenue.lossDrivers.find(
     (d) => d.category === "Soiling",
   );
@@ -482,9 +489,13 @@ function SoilingContent({
 
 function RevenueContent({
   onSelectSection,
+  fleetId,
 }: {
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
+  const revenue = useMemo(() => getRevenueIntelligence(fleetId), [fleetId]);
+  const carbon = useMemo(() => getCarbonOptimization(fleetId), [fleetId]);
   const topDrivers = revenue.lossDrivers.slice(0, 2);
 
   return (
@@ -556,9 +567,14 @@ function RevenueContent({
 
 function ComplianceContent({
   onSelectSection,
+  fleetId,
 }: {
   onSelectSection: (section: string) => void;
+  fleetId: string | null;
 }) {
+  const anomalies = useMemo(() => getAnomalyStream(fleetId), [fleetId]);
+  const insights = useMemo(() => getAIInsights(fleetId), [fleetId]);
+  const complianceRisks = useMemo(() => getComplianceRiskScoring(fleetId), [fleetId]);
   const unresolvedAnomalies = anomalies.filter((a) => !a.resolved);
   const topInsight = insights.reduce<(typeof insights)[number] | null>(
     (best, ins) => {

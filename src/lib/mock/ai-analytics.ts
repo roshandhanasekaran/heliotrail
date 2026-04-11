@@ -1,7 +1,40 @@
 /**
  * AI/ML Analytics data for the Intelligence Sidebar.
  * Simulates fleet-wide analysis from aggregated dynamic data.
+ *
+ * All exported functions accept an optional `fleetId` parameter.
+ * When provided, a deterministic hash produces fleet-specific
+ * variations so the UI visibly changes when the user toggles fleets.
  */
+
+// ─── Fleet hash helper ─────────────────────────────────────
+// Produces a deterministic number in [0,1) from a fleet slug.
+function fleetHash(fleetId: string | null | undefined): number {
+  if (!fleetId) return 0.5; // "All Fleets" baseline
+  let h = 5381;
+  for (let i = 0; i < fleetId.length; i++) {
+    h = ((h << 5) + h + fleetId.charCodeAt(i)) | 0;
+  }
+  return ((h & 0x7fffffff) % 1000) / 1000; // 0..0.999
+}
+
+// Scale a value by ±30% deterministically based on fleet
+function fv(base: number, fleetId: string | null | undefined, offset = 0): number {
+  const h = fleetHash(fleetId);
+  const seed = Math.floor(h * 1000 + offset * 137) % 600; // 0..599
+  const factor = 0.7 + seed / 1000; // 0.7 .. 1.3
+  return Math.round(base * factor * 100) / 100;
+}
+
+// Integer variant
+function fvi(base: number, fleetId: string | null | undefined, offset = 0): number {
+  return Math.round(fv(base, fleetId, offset));
+}
+
+// Clamp to 0-100 range (for scores/percentages)
+function fvs(base: number, fleetId: string | null | undefined, offset = 0): number {
+  return Math.min(100, Math.max(0, fvi(base, fleetId, offset)));
+}
 
 // ─── Fleet Health Composite Score ───────────────────────────
 
@@ -17,43 +50,49 @@ export interface FleetHealthScore {
   }[];
 }
 
-export function getFleetHealthScore(): FleetHealthScore {
+export function getFleetHealthScore(fleetId?: string | null): FleetHealthScore {
+  const pr = fvs(81, fleetId, 1);
+  const avail = fvs(97, fleetId, 2);
+  const degrad = fvs(92, fleetId, 3);
+  const compl = fvs(95, fleetId, 4);
+
   const breakdown = [
     {
       label: "Performance Ratio",
-      score: 81,
+      score: pr,
       weight: 0.4,
-      status: "warning" as const,
-      color: "#F59E0B",
+      status: (pr < 75 ? "critical" : pr < 85 ? "warning" : "good") as "good" | "warning" | "critical",
+      color: pr < 75 ? "#EF4444" : pr < 85 ? "#F59E0B" : "#22C55E",
     },
     {
       label: "Availability",
-      score: 97,
+      score: avail,
       weight: 0.3,
-      status: "good" as const,
-      color: "#22C55E",
+      status: (avail < 90 ? "warning" : "good") as "good" | "warning" | "critical",
+      color: avail < 90 ? "#F59E0B" : "#22C55E",
     },
     {
       label: "Degradation",
-      score: 92,
+      score: degrad,
       weight: 0.2,
-      status: "good" as const,
-      color: "#22C55E",
+      status: (degrad < 85 ? "warning" : "good") as "good" | "warning" | "critical",
+      color: degrad < 85 ? "#F59E0B" : "#22C55E",
     },
     {
       label: "Compliance",
-      score: 95,
+      score: compl,
       weight: 0.1,
-      status: "good" as const,
-      color: "#22C55E",
+      status: (compl < 90 ? "warning" : "good") as "good" | "warning" | "critical",
+      color: compl < 90 ? "#F59E0B" : "#22C55E",
     },
   ];
 
   const overall = Math.round(
     breakdown.reduce((sum, b) => sum + b.score * b.weight, 0),
   );
+  const delta = fv(-0.8, fleetId, 5);
 
-  return { overall, weeklyDelta: -0.8, breakdown };
+  return { overall, weeklyDelta: Math.round(delta * 10) / 10, breakdown };
 }
 
 // ─── Fleet Health History ──────────────────────────────────
@@ -63,17 +102,9 @@ export interface FleetHealthWeek {
   score: number;
 }
 
-export function getFleetHealthHistory(): FleetHealthWeek[] {
-  return [
-    { week: "W1", score: 91 },
-    { week: "W2", score: 90 },
-    { week: "W3", score: 89 },
-    { week: "W4", score: 90 },
-    { week: "W5", score: 89 },
-    { week: "W6", score: 89 },
-    { week: "W7", score: 88 },
-    { week: "W8", score: 89 },
-  ];
+export function getFleetHealthHistory(fleetId?: string | null): FleetHealthWeek[] {
+  const base = [91, 90, 89, 90, 89, 89, 88, 89];
+  return base.map((s, i) => ({ week: `W${i + 1}`, score: fvs(s, fleetId, i + 10) }));
 }
 
 // ─── AI Insights Feed ───────────────────────────────────────
@@ -100,7 +131,7 @@ const CATEGORY_LABELS: Record<AIInsight["category"], string> = {
 
 export { CATEGORY_LABELS };
 
-export function getAIInsights(): AIInsight[] {
+export function getAIInsights(fleetId?: string | null): AIInsight[] {
   return [
     {
       id: "ins-001",
@@ -196,7 +227,7 @@ export interface MaintenancePrediction {
   };
 }
 
-export function getMaintenancePredictions(): MaintenancePrediction {
+export function getMaintenancePredictions(fleetId?: string | null): MaintenancePrediction {
   return {
     nextCleaning: {
       daysUntil: 5,
@@ -232,40 +263,21 @@ export interface RevenueIntelligence {
   }[];
 }
 
-export function getRevenueIntelligence(): RevenueIntelligence {
+export function getRevenueIntelligence(fleetId?: string | null): RevenueIntelligence {
+  const soil = fvi(10, fleetId, 20);
+  const clip = fvi(4, fleetId, 21);
+  const deg = fvi(5, fleetId, 22);
+  const down = fvi(3, fleetId, 23);
+  const total = soil + clip + deg + down;
   return {
-    monthlyLoss: 22,
-    annualProjected: 264,
-    optimizationPotential: 200,
+    monthlyLoss: total,
+    annualProjected: total * 12,
+    optimizationPotential: fvi(200, fleetId, 24),
     lossDrivers: [
-      {
-        category: "Soiling",
-        euroPerMonth: 10,
-        percent: 45,
-        color: "#F59E0B",
-        trend: "up",
-      },
-      {
-        category: "Clipping",
-        euroPerMonth: 4,
-        percent: 19,
-        color: "#3B82F6",
-        trend: "stable",
-      },
-      {
-        category: "Degradation",
-        euroPerMonth: 5,
-        percent: 23,
-        color: "#737373",
-        trend: "up",
-      },
-      {
-        category: "Downtime",
-        euroPerMonth: 3,
-        percent: 13,
-        color: "#EF4444",
-        trend: "down",
-      },
+      { category: "Soiling", euroPerMonth: soil, percent: Math.round(soil / total * 100), color: "#F59E0B", trend: "up" as const },
+      { category: "Clipping", euroPerMonth: clip, percent: Math.round(clip / total * 100), color: "#3B82F6", trend: "stable" as const },
+      { category: "Degradation", euroPerMonth: deg, percent: Math.round(deg / total * 100), color: "#737373", trend: "up" as const },
+      { category: "Downtime", euroPerMonth: down, percent: Math.round(down / total * 100), color: "#EF4444", trend: "down" as const },
     ],
   };
 }
@@ -279,7 +291,7 @@ export interface PerformanceForecast {
   seasonalOutlook: string;
 }
 
-export function getPerformanceForecast(): PerformanceForecast {
+export function getPerformanceForecast(fleetId?: string | null): PerformanceForecast {
   return {
     pr30dForecast: [81.4, 81.6, 81.9, 82.2, 82.5, 82.8, 83.1, 83.4],
     prTarget: 85,
@@ -310,7 +322,7 @@ export interface MLAnomaly {
   module?: string;
 }
 
-export function getAnomalyStream(): MLAnomaly[] {
+export function getAnomalyStream(fleetId?: string | null): MLAnomaly[] {
   return [
     {
       id: "ML-001",
@@ -369,24 +381,24 @@ export interface FleetBenchmark {
   status: "outperforming" | "normal" | "underperforming";
 }
 
-export function getFleetBenchmarking(): FleetBenchmark[] {
+export function getFleetBenchmarking(fleetId?: string | null): FleetBenchmark[] {
   // PR values aligned with MODULE_CONFIGS prBase in ai-analytics-timeseries.ts
   const modules: Omit<FleetBenchmark, "rank" | "delta" | "status">[] = [
-    { moduleId: "Module-01", modelId: "WRM-580", manufacturer: "Waaree", pr: 85.2 },
-    { moduleId: "Module-02", modelId: "WRM-580", manufacturer: "Waaree", pr: 81.0 },
-    { moduleId: "Module-03", modelId: "WRM-580", manufacturer: "Waaree", pr: 76.2 },
-    { moduleId: "Module-04", modelId: "WRM-580", manufacturer: "Waaree", pr: 84.1 },
-    { moduleId: "Module-05", modelId: "WRM-580", manufacturer: "Waaree", pr: 80.0 },
-    { moduleId: "Module-06", modelId: "WRM-580", manufacturer: "Waaree", pr: 82.1 },
-    { moduleId: "Module-07", modelId: "WRM-580", manufacturer: "Waaree", pr: 86.0 },
-    { moduleId: "Module-08", modelId: "WRM-580", manufacturer: "Waaree", pr: 79.0 },
-    { moduleId: "Module-09", modelId: "WRM-580", manufacturer: "Waaree", pr: 74.8 },
-    { moduleId: "Module-10", modelId: "WRM-580", manufacturer: "Waaree", pr: 83.0 },
-    { moduleId: "Module-11", modelId: "WRM-580", manufacturer: "Waaree", pr: 81.0 },
-    { moduleId: "Module-12", modelId: "WRM-580", manufacturer: "Waaree", pr: 78.5 },
-    { moduleId: "Module-13", modelId: "WRM-580", manufacturer: "Waaree", pr: 84.0 },
-    { moduleId: "Module-14", modelId: "WRM-580", manufacturer: "Waaree", pr: 80.0 },
-    { moduleId: "Module-15", modelId: "WRM-580", manufacturer: "Waaree", pr: 79.0 },
+    { moduleId: "Module-01", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(85.2, fleetId, 30) },
+    { moduleId: "Module-02", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(81.0, fleetId, 31) },
+    { moduleId: "Module-03", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(76.2, fleetId, 32) },
+    { moduleId: "Module-04", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(84.1, fleetId, 33) },
+    { moduleId: "Module-05", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(80.0, fleetId, 34) },
+    { moduleId: "Module-06", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(82.1, fleetId, 35) },
+    { moduleId: "Module-07", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(86.0, fleetId, 36) },
+    { moduleId: "Module-08", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(79.0, fleetId, 37) },
+    { moduleId: "Module-09", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(74.8, fleetId, 38) },
+    { moduleId: "Module-10", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(83.0, fleetId, 39) },
+    { moduleId: "Module-11", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(81.0, fleetId, 40) },
+    { moduleId: "Module-12", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(78.5, fleetId, 41) },
+    { moduleId: "Module-13", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(84.0, fleetId, 42) },
+    { moduleId: "Module-14", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(80.0, fleetId, 43) },
+    { moduleId: "Module-15", modelId: "WRM-580", manufacturer: "Waaree", pr: fv(79.0, fleetId, 44) },
   ];
   const avgPr = modules.reduce((s, m) => s + m.pr, 0) / modules.length;
   return modules
@@ -412,7 +424,7 @@ export interface ComplianceRisk {
   factors: string[];
 }
 
-export function getComplianceRiskScoring(): ComplianceRisk[] {
+export function getComplianceRiskScoring(fleetId?: string | null): ComplianceRisk[] {
   return [
     {
       passportId: "DPP-WRM-600-001",
@@ -496,7 +508,7 @@ export interface CarbonOptimization {
   }[];
 }
 
-export function getCarbonOptimization(): CarbonOptimization {
+export function getCarbonOptimization(fleetId?: string | null): CarbonOptimization {
   return {
     currentAvgKgCO2e: 815,
     industryBenchmark: 750,
@@ -563,7 +575,7 @@ export interface ProvenanceCorrelations {
   }[];
 }
 
-export function getProvenanceCorrelations(): ProvenanceCorrelations {
+export function getProvenanceCorrelations(fleetId?: string | null): ProvenanceCorrelations {
   return {
     supplierDegradation: [
       {
@@ -713,7 +725,7 @@ export interface WarrantyIntelligence {
   }[];
 }
 
-export function getWarrantyIntelligence(): WarrantyIntelligence {
+export function getWarrantyIntelligence(fleetId?: string | null): WarrantyIntelligence {
   return {
     claimReady: [
       {
