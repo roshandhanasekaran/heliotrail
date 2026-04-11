@@ -9,9 +9,9 @@ export default function SettingsLayout({
   return (
     <div className="space-y-0">
       {/* Settings header */}
-      <div className="-m-4 mb-0 border-b border-[#D9D9D9] bg-[#FAFAFA] p-4 lg:-m-6 lg:mb-0 lg:p-6">
-        <h1 className="text-xl font-bold text-[#0D0D0D]">Settings</h1>
-        <p className="mt-0.5 text-sm text-[#737373]">
+      <div className="-m-4 mb-0 border-b border-border bg-muted/50 p-4 lg:-m-6 lg:mb-0 lg:p-6">
+        <h1 className="text-xl font-bold text-foreground">Settings</h1>
+        <p className="mt-0.5 text-sm text-muted-foreground">
           Manage your account, organization, and workspace configuration
         </p>
       </div>

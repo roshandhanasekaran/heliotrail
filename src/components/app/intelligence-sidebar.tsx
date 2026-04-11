@@ -70,7 +70,7 @@ function fmtEur(v: number): string {
 function daysColor(d: number): string {
   if (d < 30) return "text-[#DC2626]";
   if (d < 60) return "text-[#F59E0B]";
-  return "text-[#22C55E]";
+  return "text-primary";
 }
 
 /* ─── Main component ─── */
@@ -97,21 +97,21 @@ export function IntelligenceSidebar() {
   /* ── Collapsed strip ── */
   if (!expanded) {
     return (
-      <aside className="hidden xl:flex w-10 shrink-0 flex-col items-center border-l border-[#D9D9D9] bg-[#FAFAFA] py-3">
+      <aside className="hidden xl:flex w-10 shrink-0 flex-col items-center border-l border-border bg-muted/50 py-3">
         <button
           onClick={() => setExpanded(true)}
-          className="flex h-8 w-8 items-center justify-center text-[#737373] transition-colors hover:text-[#0D0D0D]"
+          className="flex h-8 w-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
           aria-label="Expand intelligence panel"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
         <div className="mt-3 space-y-3 flex flex-col items-center">
-          <Brain className="h-4 w-4 text-[#22C55E]" />
+          <Brain className="h-4 w-4 text-primary" />
           {/* Mini health indicator */}
           <div
             className="h-6 w-1.5"
             style={{
-              background: `linear-gradient(to top, #22C55E ${healthScore.overall}%, #F2F2F2 ${healthScore.overall}%)`,
+              background: `linear-gradient(to top, var(--primary) ${healthScore.overall}%, var(--muted) ${healthScore.overall}%)`,
             }}
           />
           {/* Unresolved count */}
@@ -127,23 +127,23 @@ export function IntelligenceSidebar() {
 
   /* ── Expanded panel ── */
   return (
-    <aside className="hidden xl:flex w-[300px] shrink-0 flex-col border-l border-[#D9D9D9] bg-[#FAFAFA] transition-all duration-200 overflow-y-auto">
+    <aside className="hidden xl:flex w-[300px] shrink-0 flex-col border-l border-border bg-muted/50 transition-all duration-200 overflow-y-auto">
       {/* Header */}
-      <div className="flex h-14 items-center justify-between border-b border-[#D9D9D9] px-4">
+      <div className="flex h-14 items-center justify-between border-b border-border px-4">
         <div className="flex items-center gap-2">
           <div className="relative">
-            <Brain className="h-4 w-4 text-[#22C55E]" />
-            <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 bg-[#22C55E] animate-pulse" />
+            <Brain className="h-4 w-4 text-primary" />
+            <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 bg-primary animate-pulse" />
           </div>
-          <span className="text-sm font-bold text-[#0D0D0D]">
+          <span className="text-sm font-bold text-foreground">
             AI Intelligence
           </span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-[9px] text-[#A3A3A3]">Live</span>
+          <span className="text-[9px] text-muted-foreground/70">Live</span>
           <button
             onClick={() => setExpanded(false)}
-            className="flex h-7 w-7 items-center justify-center text-[#737373] transition-colors hover:text-[#0D0D0D]"
+            className="flex h-7 w-7 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
             aria-label="Collapse intelligence panel"
           >
             <ChevronRight className="h-4 w-4" />
@@ -163,10 +163,10 @@ export function IntelligenceSidebar() {
             <div className="mt-3 space-y-1.5">
               {healthScore.breakdown.map((b) => (
                 <div key={b.label} className="flex items-center gap-2">
-                  <span className="w-[72px] text-[9px] text-[#737373] truncate">
+                  <span className="w-[72px] text-[9px] text-muted-foreground truncate">
                     {b.label}
                   </span>
-                  <div className="flex-1 h-1 bg-[#F2F2F2]">
+                  <div className="flex-1 h-1 bg-muted">
                     <div
                       className="h-full transition-all duration-500"
                       style={{
@@ -175,7 +175,7 @@ export function IntelligenceSidebar() {
                       }}
                     />
                   </div>
-                  <span className="w-6 text-right font-mono text-[9px] font-semibold text-[#0D0D0D]">
+                  <span className="w-6 text-right font-mono text-[9px] font-semibold text-foreground">
                     {b.score}
                   </span>
                 </div>
@@ -192,8 +192,8 @@ export function IntelligenceSidebar() {
               className={cn(
                 "flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] transition-colors",
                 activeTab === "insights"
-                  ? "bg-[#0D0D0D] text-white"
-                  : "text-[#A3A3A3] hover:text-[#737373]",
+                  ? "bg-foreground text-background"
+                  : "text-muted-foreground/70 hover:text-muted-foreground",
               )}
             >
               <Sparkles className="h-2.5 w-2.5" />
@@ -204,8 +204,8 @@ export function IntelligenceSidebar() {
               className={cn(
                 "flex items-center gap-1 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] transition-colors",
                 activeTab === "anomalies"
-                  ? "bg-[#0D0D0D] text-white"
-                  : "text-[#A3A3A3] hover:text-[#737373]",
+                  ? "bg-foreground text-background"
+                  : "text-muted-foreground/70 hover:text-muted-foreground",
               )}
             >
               <Zap className="h-2.5 w-2.5" />
@@ -219,14 +219,14 @@ export function IntelligenceSidebar() {
           </div>
 
           {activeTab === "insights" ? (
-            <div className="dashed-card divide-y divide-dashed divide-[#D9D9D9]">
+            <div className="dashed-card divide-y divide-dashed divide-border">
               {insights.slice(0, insightLimit).map((insight) => (
                 <InsightCard key={insight.id} insight={insight} />
               ))}
               {insightLimit < insights.length && (
                 <button
                   onClick={() => setInsightLimit(insights.length)}
-                  className="flex w-full items-center justify-center gap-1 py-2 text-[10px] font-medium text-[#737373] hover:text-[#0D0D0D] transition-colors"
+                  className="flex w-full items-center justify-center gap-1 py-2 text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Show {insights.length - insightLimit} more
                   <ArrowRight className="h-2.5 w-2.5" />
@@ -235,14 +235,14 @@ export function IntelligenceSidebar() {
               {insightLimit >= insights.length && insights.length > 3 && (
                 <button
                   onClick={() => setInsightLimit(3)}
-                  className="flex w-full items-center justify-center gap-1 py-2 text-[10px] font-medium text-[#737373] hover:text-[#0D0D0D] transition-colors"
+                  className="flex w-full items-center justify-center gap-1 py-2 text-[10px] font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   Show less
                 </button>
               )}
             </div>
           ) : (
-            <div className="dashed-card divide-y divide-dashed divide-[#D9D9D9]">
+            <div className="dashed-card divide-y divide-dashed divide-border">
               {anomalies.map((anomaly) => (
                 <AnomalyCard key={anomaly.id} anomaly={anomaly} />
               ))}
@@ -258,10 +258,10 @@ export function IntelligenceSidebar() {
             <div className="flex items-center gap-3">
               <CountdownRing days={maintenance.nextCleaning.daysUntil} max={30} />
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold text-[#0D0D0D]">
+                <p className="text-[11px] font-semibold text-foreground">
                   Next Cleaning
                 </p>
-                <p className="text-[9px] text-[#737373]">
+                <p className="text-[9px] text-muted-foreground">
                   Est. soiling at cleaning: {maintenance.nextCleaning.estimatedSoilingAtCleaning}%
                 </p>
                 <p className="text-[9px] text-[#F59E0B] font-semibold">
@@ -270,26 +270,26 @@ export function IntelligenceSidebar() {
               </div>
             </div>
 
-            <div className="h-px bg-dashed bg-[#E5E5E5]" style={{ backgroundImage: "repeating-linear-gradient(to right, #D9D9D9 0, #D9D9D9 4px, transparent 4px, transparent 8px)" }} />
+            <div className="h-px bg-dashed bg-border" style={{ backgroundImage: "repeating-linear-gradient(to right, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px)" }} />
 
             {/* Component risk */}
             <div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold text-[#0D0D0D]">Component Risk</p>
+                <p className="text-[10px] font-semibold text-foreground">Component Risk</p>
                 <span className="flex items-center gap-1 text-[9px] font-semibold text-[#F59E0B]">
                   <AlertTriangle className="h-2.5 w-2.5" />
                   {maintenance.componentRisk.modulesAtRisk} modules
                 </span>
               </div>
               <div className="mt-1 grid grid-cols-2 gap-2">
-                <div className="bg-[#FAFAFA] p-1.5">
-                  <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">30-day</p>
-                  <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+                <div className="bg-muted/50 p-1.5">
+                  <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">30-day</p>
+                  <p className="font-mono text-sm font-bold text-foreground">
                     {maintenance.componentRisk.failureProbability30d}%
                   </p>
                 </div>
-                <div className="bg-[#FAFAFA] p-1.5">
-                  <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">90-day</p>
+                <div className="bg-muted/50 p-1.5">
+                  <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">90-day</p>
                   <p className="font-mono text-sm font-bold text-[#F59E0B]">
                     {maintenance.componentRisk.failureProbability90d}%
                   </p>
@@ -297,21 +297,21 @@ export function IntelligenceSidebar() {
               </div>
             </div>
 
-            <div className="h-px" style={{ backgroundImage: "repeating-linear-gradient(to right, #D9D9D9 0, #D9D9D9 4px, transparent 4px, transparent 8px)" }} />
+            <div className="h-px" style={{ backgroundImage: "repeating-linear-gradient(to right, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px)" }} />
 
             {/* Maintenance ROI */}
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-semibold text-[#0D0D0D]">Maintenance ROI</p>
-                <p className="text-[9px] text-[#737373]">
+                <p className="text-[10px] font-semibold text-foreground">Maintenance ROI</p>
+                <p className="text-[9px] text-muted-foreground">
                   {fmtEur(maintenance.maintenanceROI.cleaningCostEur)} cost → {fmtEur(maintenance.maintenanceROI.annualSavingsEur)}/yr saved
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-mono text-xs font-bold text-[#22C55E]">
+                <p className="font-mono text-xs font-bold text-primary">
                   {maintenance.maintenanceROI.paybackDays}d
                 </p>
-                <p className="text-[8px] text-[#A3A3A3]">payback</p>
+                <p className="text-[8px] text-muted-foreground/70">payback</p>
               </div>
             </div>
           </div>
@@ -324,20 +324,20 @@ export function IntelligenceSidebar() {
             {/* Top stats */}
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">Monthly Loss</p>
+                <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">Monthly Loss</p>
                 <p className="font-mono text-sm font-bold text-[#EF4444]">
                   {fmtEur(revenue.monthlyLoss)}
                 </p>
               </div>
               <div>
-                <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">Annual Proj.</p>
-                <p className="font-mono text-sm font-bold text-[#0D0D0D]">
+                <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">Annual Proj.</p>
+                <p className="font-mono text-sm font-bold text-foreground">
                   {fmtEur(revenue.annualProjected)}
                 </p>
               </div>
               <div>
-                <p className="text-[8px] uppercase tracking-wider text-[#A3A3A3]">Potential</p>
-                <p className="font-mono text-sm font-bold text-[#22C55E]">
+                <p className="text-[8px] uppercase tracking-wider text-muted-foreground/70">Potential</p>
+                <p className="font-mono text-sm font-bold text-primary">
                   +{fmtEur(revenue.optimizationPotential)}
                 </p>
               </div>
@@ -349,7 +349,7 @@ export function IntelligenceSidebar() {
                 <LossDriverBar key={d.category} {...d} />
               ))}
             </div>
-            <p className="text-[7px] text-[#A3A3A3] mt-1.5 leading-tight">
+            <p className="text-[7px] text-muted-foreground/70 mt-1.5 leading-tight">
               * Assumes €0.15/kWh tariff
             </p>
           </div>
@@ -362,10 +362,10 @@ export function IntelligenceSidebar() {
             {/* PR 30d forecast sparkline */}
             <div>
               <div className="flex items-center justify-between">
-                <p className="text-[10px] font-semibold text-[#0D0D0D]">
+                <p className="text-[10px] font-semibold text-foreground">
                   30-Day PR Forecast
                 </p>
-                <span className="font-mono text-[10px] font-bold text-[#22C55E]">
+                <span className="font-mono text-[10px] font-bold text-primary">
                   →{forecast.pr30dForecast[forecast.pr30dForecast.length - 1]}%
                 </span>
               </div>
@@ -377,8 +377,8 @@ export function IntelligenceSidebar() {
                   color="#22C55E"
                 />
                 <div className="text-right">
-                  <p className="text-[8px] text-[#A3A3A3]">Target</p>
-                  <p className="font-mono text-[10px] font-semibold text-[#737373]">
+                  <p className="text-[8px] text-muted-foreground/70">Target</p>
+                  <p className="font-mono text-[10px] font-semibold text-muted-foreground">
                     {forecast.prTarget}%
                   </p>
                 </div>
@@ -387,7 +387,7 @@ export function IntelligenceSidebar() {
 
             {/* Degradation mini trajectory */}
             <div>
-              <p className="text-[10px] font-semibold text-[#0D0D0D]">
+              <p className="text-[10px] font-semibold text-foreground">
                 Degradation vs Warranty
               </p>
               <div className="mt-1 grid grid-cols-6 gap-0.5">
@@ -404,14 +404,14 @@ export function IntelligenceSidebar() {
                             gap > 5 ? "#22C55E" : gap > 2 ? "#F59E0B" : "#EF4444",
                         }}
                       />
-                      <span className="mt-0.5 text-[7px] text-[#A3A3A3]">
+                      <span className="mt-0.5 text-[7px] text-muted-foreground/70">
                         Y{d.year}
                       </span>
                     </div>
                   );
                 })}
               </div>
-              <p className="mt-1 text-[8px] text-[#737373]">
+              <p className="mt-1 text-[8px] text-muted-foreground">
                 Buffer above warranty minimum
               </p>
             </div>
@@ -434,7 +434,7 @@ export function IntelligenceSidebar() {
               <Link
                 key={action.href}
                 href={action.href}
-                className="flex flex-col items-center gap-1.5 border border-dashed border-[#D9D9D9] bg-white px-2 py-3 text-[#737373] transition-all duration-150 hover:border-[#22C55E] hover:bg-[#E8FAE9] hover:text-[#0D0D0D]"
+                className="flex flex-col items-center gap-1.5 border border-dashed border-border bg-card px-2 py-3 text-muted-foreground transition-all duration-150 hover:border-primary hover:bg-[var(--passport-green-muted)] hover:text-foreground"
               >
                 <action.icon className="h-4 w-4" />
                 <span className="text-[0.625rem] font-medium leading-none">
@@ -448,17 +448,17 @@ export function IntelligenceSidebar() {
         {/* ── 7. Upcoming Deadlines ── */}
         <section>
           <SectionHeader icon={Calendar}>Deadlines</SectionHeader>
-          <div className="dashed-card divide-y divide-dashed divide-[#D9D9D9]">
+          <div className="dashed-card divide-y divide-dashed divide-border">
             {DEADLINES.map((d, i) => (
               <div
                 key={i}
                 className="flex items-center justify-between px-2.5 py-2"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="text-[0.6875rem] leading-snug text-[#0D0D0D]">
+                  <p className="text-[0.6875rem] leading-snug text-foreground">
                     {d.label}
                   </p>
-                  <div className="mt-0.5 flex items-center gap-1 text-[0.5625rem] text-[#A3A3A3]">
+                  <div className="mt-0.5 flex items-center gap-1 text-[0.5625rem] text-muted-foreground/70">
                     <Calendar className="h-2.5 w-2.5" />
                     {d.date}
                   </div>
@@ -490,7 +490,7 @@ function SectionHeader({
   icon?: React.ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="mb-1.5 flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-[#A3A3A3]">
+    <div className="mb-1.5 flex items-center gap-1.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-muted-foreground/70">
       {Icon && <Icon className="h-3 w-3" />}
       {children}
     </div>

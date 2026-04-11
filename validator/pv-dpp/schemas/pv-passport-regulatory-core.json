@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://heliotrail.io/schemas/pv-passport/v1/regulatory-core",
+  "title": "PV Digital Product Passport — Regulatory Core Profile",
+  "description": "Minimum required fields for ESPR Art. 8 compliance. Layer 1 fields only.",
+  "type": "object",
+  "required": [
+    "pvPassportId",
+    "moduleIdentifier",
+    "modelId",
+    "manufacturer",
+    "manufacturingFacility",
+    "moduleTechnology",
+    "ratedPowerSTC_W",
+    "moduleEfficiency_percent",
+    "passportStatus"
+  ],
+  "properties": {
+    "pvPassportId": {
+      "type": "string",
+      "pattern": "^PVP-[0-9]{7,}$"
+    },
+    "moduleIdentifier": { "type": "string" },
+    "serialNumber": { "type": "string" },
+    "batchId": { "type": "string" },
+    "modelId": { "type": "string" },
+    "gtin": { "type": "string", "pattern": "^[0-9]{8,14}$" },
+    "dataCarrierType": {
+      "type": "string",
+      "enum": ["qr_gs1_digital_link", "data_matrix", "rfid", "nfc"]
+    },
+    "passportVersion": { "type": "string" },
+    "passportStatus": {
+      "type": "string",
+      "enum": ["draft", "under_review", "approved", "published", "superseded", "archived", "decommissioned"]
+    },
+    "manufacturer": {
+      "type": "object",
+      "required": ["name", "operatorIdentifier"],
+      "properties": {
+        "name": { "type": "string" },
+        "operatorIdentifier": { "type": "string" },
+        "address": { "type": "object" },
+        "contactUrl": { "type": "string", "format": "uri" }
+      }
+    },
+    "manufacturingFacility": {
+      "type": "object",
+      "required": ["facilityIdentifier", "name", "location"],
+      "properties": {
+        "facilityIdentifier": { "type": "string" },
+        "name": { "type": "string" },
+        "location": {
+          "type": "object",
+          "required": ["country"],
+          "properties": {
+            "country": { "type": "string", "minLength": 2, "maxLength": 2 }
+          }
+        }
+      }
+    },
+    "manufacturingDate": { "type": "string", "format": "date-time" },
+    "moduleCategory": {
+      "type": "string",
+      "enum": ["crystalline_silicon", "thin_film", "multi_junction", "perovskite", "organic"]
+    },
+    "moduleTechnology": {
+      "type": "string",
+      "enum": ["perc", "topcon", "hjt", "cigs", "cdte", "perovskite", "shj", "ibc"]
+    },
+    "ratedPowerSTC_W": { "type": "number", "minimum": 50, "maximum": 800 },
+    "moduleEfficiency_percent": { "type": "number", "minimum": 5, "maximum": 30 },
+    "voc_V": { "type": "number", "minimum": 0 },
+    "isc_A": { "type": "number", "minimum": 0 },
+    "vmp_V": { "type": "number", "minimum": 0 },
+    "imp_A": { "type": "number", "minimum": 0 },
+    "maxSystemVoltage_V": { "type": "number" },
+    "moduleDimensions_mm": { "type": "object" },
+    "moduleMass_kg": { "type": "number", "minimum": 5, "maximum": 50 },
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "declarationOfConformity": { "type": "object" },
+        "certificates": { "type": "array" },
+        "userManual": { "type": "object" },
+        "safetyInstructions": { "type": "object" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

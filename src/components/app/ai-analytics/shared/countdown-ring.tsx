@@ -14,7 +14,7 @@ export function CountdownRing({ days, max }: CountdownRingProps) {
 
   return (
     <svg width="36" height="36" viewBox="0 0 36 36" className="shrink-0">
-      <circle cx="18" cy="18" r={r} fill="none" stroke="#F2F2F2" strokeWidth="2.5" />
+      <circle cx="18" cy="18" r={r} fill="none" stroke="var(--muted)" strokeWidth="2.5" />
       <circle
         cx="18"
         cy="18"

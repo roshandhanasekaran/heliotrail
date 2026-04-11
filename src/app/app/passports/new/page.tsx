@@ -915,7 +915,7 @@ function StepIdentity({
         <button
           type="button"
           onClick={() => handleModelSelect("WRM-700-TOPCON-BiN-03")}
-          className="w-full border-2 border-dashed border-primary bg-[var(--passport-green-muted)] px-4 py-3 text-left transition-colors hover:bg-[#d4f5d8]"
+          className="w-full border-2 border-dashed border-primary bg-[var(--passport-green-muted)] px-4 py-3 text-left transition-colors hover:bg-primary/20"
         >
           <p className="text-xs font-bold text-primary">Quick Fill: WRM-700-TOPCON-BiN-03</p>
           <p className="text-[10px] text-muted-foreground">Auto-populate all steps with real Waaree 700W TOPCon module data</p>

@@ -55,44 +55,44 @@ export function PassportHero({ passport }: PassportHeroProps) {
   }, [passport.public_id]);
 
   return (
-    <div className="border-b border-[#D9D9D9] bg-white">
+    <div className="border-b border-border bg-background">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Top row: badges + passport ID */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-2 bg-[#22C55E] px-3 py-1.5">
-              <span className="inline-flex h-2 w-2 rounded-full bg-white" />
-              <span className="text-xs font-semibold text-[#0D0D0D] tracking-wide">
+            <div className="flex items-center gap-2 bg-primary px-3 py-1.5">
+              <span className="inline-flex h-2 w-2 rounded-full bg-background" />
+              <span className="text-xs font-semibold text-foreground tracking-wide">
                 Active Passport
               </span>
             </div>
-            <span className="border border-[#D9D9D9] px-3 py-1 text-xs font-medium text-[#737373]">
+            <span className="border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
               {MODULE_TECHNOLOGY_LABELS[passport.module_technology] ??
                 passport.module_technology}
             </span>
-            <span className="flex items-center gap-1 border border-[#D9D9D9] px-3 py-1 text-xs font-medium text-[#0D0D0D]">
+            <span className="flex items-center gap-1 border border-border px-3 py-1 text-xs font-medium text-foreground">
               <ShieldCheckIcon className="h-3 w-3" />
               {VERIFICATION_STATUS_LABELS[passport.verification_status]}
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-3">
-            <div className="flex items-center gap-2 border border-[#D9D9D9] px-3 py-1.5">
-              <span className="font-mono text-xs text-[#737373]">
+            <div className="flex items-center gap-2 border border-border px-3 py-1.5">
+              <span className="font-mono text-xs text-muted-foreground">
                 {passport.pv_passport_id}
               </span>
               <button
-                className="p-0.5 hover:text-[#22C55E] transition-colors"
+                className="p-0.5 hover:text-primary transition-colors"
                 onClick={() =>
                   navigator.clipboard.writeText(passport.pv_passport_id)
                 }
               >
-                <CopyIcon className="h-3 w-3 text-[#737373]" />
+                <CopyIcon className="h-3 w-3 text-muted-foreground" />
               </button>
             </div>
             {passport.status === "published" && (
               <button
                 onClick={() => setSubmitOpen(true)}
-                className="flex items-center gap-2 bg-[#22C55E] px-3.5 py-1.5 text-xs font-semibold text-[#0D0D0D] hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
+                className="flex items-center gap-2 bg-primary px-3.5 py-1.5 text-xs font-semibold text-foreground hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
               >
                 <SendIcon className="h-3 w-3" />
                 Submit to CIRPASS 2
@@ -105,44 +105,44 @@ export function PassportHero({ passport }: PassportHeroProps) {
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
           {/* Left: Title & Details */}
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl font-bold tracking-tight text-[#0D0D0D] sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {passport.model_id}
             </h1>
-            <p className="mt-2 text-lg text-[#737373]">
-              <span className="font-semibold text-[#0D0D0D]">
+            <p className="mt-2 text-lg text-muted-foreground">
+              <span className="font-semibold text-foreground">
                 {formatWatts(passport.rated_power_stc_w)}
               </span>
               {" \u00b7 "}
               {passport.manufacturer_name}
             </p>
-            <div className="mt-3 flex flex-col gap-1 text-sm text-[#737373]">
+            <div className="mt-3 flex flex-col gap-1 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
-                <FactoryIcon className="h-3.5 w-3.5 text-[#737373]" />
+                <FactoryIcon className="h-3.5 w-3.5 text-muted-foreground" />
                 {passport.facility_name ?? "\u2014"}
               </span>
               <span className="flex items-center gap-1.5">
-                <ClockIcon className="h-3.5 w-3.5 text-[#737373]" />
+                <ClockIcon className="h-3.5 w-3.5 text-muted-foreground" />
                 Manufactured {formatDate(passport.manufacturing_date)}
               </span>
             </div>
 
             {/* Verified badge + QR — below text on lg */}
             <div className="mt-6 flex items-center gap-4">
-              <div className="border border-[#D9D9D9] px-4 py-3 flex items-center gap-3">
-                <ShieldCheckIcon className="h-7 w-7 text-[#22C55E]" />
+              <div className="border border-border px-4 py-3 flex items-center gap-3">
+                <ShieldCheckIcon className="h-7 w-7 text-primary" />
                 <div>
-                  <span className="block text-[10px] font-semibold text-[#0D0D0D] uppercase tracking-wider">
+                  <span className="block text-[10px] font-semibold text-foreground uppercase tracking-wider">
                     Verified DPP
                   </span>
-                  <span className="block font-mono text-[10px] text-[#A3A3A3]">
+                  <span className="block font-mono text-[10px] text-muted-foreground/70">
                     {passport.pv_passport_id}
                   </span>
                 </div>
               </div>
               {qrDataUrl && (
                 <div className="flex flex-col items-center gap-1">
-                  <img src={qrDataUrl} alt="DPP QR Code" width={72} height={72} className="border border-[#D9D9D9]" />
-                  <span className="text-[8px] font-medium text-[#A3A3A3] uppercase tracking-wider">Scan for DPP</span>
+                  <img src={qrDataUrl} alt="DPP QR Code" width={72} height={72} className="border border-border" />
+                  <span className="text-[8px] font-medium text-muted-foreground/70 uppercase tracking-wider">Scan for DPP</span>
                 </div>
               )}
             </div>
@@ -170,20 +170,20 @@ export function PassportHero({ passport }: PassportHeroProps) {
             return (
               <div
                 key={stat.label}
-                className="border border-dashed border-[#D9D9D9] px-3.5 py-3 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
+                className="border border-dashed border-border px-3.5 py-3 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
               >
                 <div className="flex items-center gap-1.5">
-                  <Icon className="h-3 w-3 text-[#737373]" />
-                  <p className="text-[10px] font-semibold text-[#737373] uppercase tracking-wider">
+                  <Icon className="h-3 w-3 text-muted-foreground" />
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                     {stat.label}
                   </p>
                 </div>
                 <div className="mt-1 flex items-baseline gap-0.5">
-                  <span className="text-xl font-bold tabular-nums tracking-tight text-[#0D0D0D]">
+                  <span className="text-xl font-bold tabular-nums tracking-tight text-foreground">
                     {stat.value}
                   </span>
                   {stat.unit && (
-                    <span className="text-[10px] font-medium text-[#737373] uppercase">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase">
                       {stat.unit}
                     </span>
                   )}

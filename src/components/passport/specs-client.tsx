@@ -53,7 +53,7 @@ export function SpecsClient({
               label="Efficiency"
               unit="%"
               size={160}
-              color="#0D0D0D"
+              color="var(--foreground)"
               showTicks
             />
           </div>

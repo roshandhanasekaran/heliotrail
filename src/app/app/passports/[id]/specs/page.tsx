@@ -58,7 +58,7 @@ export default async function SpecsPage({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-bold text-[#0D0D0D]">Specifications</h2>
+      <h2 className="text-lg font-bold text-foreground">Specifications</h2>
 
       {groups.map((group) => (
         <div key={group.title} className="passport-table">
@@ -68,7 +68,7 @@ export default async function SpecsPage({
           {group.rows.map(([label, value]) => (
             <div key={label} className="passport-table-row">
               <span className="table-label">{label}</span>
-              <span className={`table-value ${value !== "—" ? "" : "text-[#A3A3A3]"}`}>
+              <span className={`table-value ${value !== "—" ? "" : "text-muted-foreground/70"}`}>
                 {value}
               </span>
             </div>

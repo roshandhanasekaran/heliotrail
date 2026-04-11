@@ -8,7 +8,7 @@ export function PublicFooter({ className }: { className?: string }) {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center bg-[#22C55E] text-foreground">
+            <div className="flex h-6 w-6 items-center justify-center bg-primary text-foreground">
               <span className="text-xs font-bold">HT</span>
             </div>
             <span className="text-sm text-muted-foreground">

@@ -34,33 +34,34 @@ interface DetailPanelProps {
   onModuleClick?: (moduleId: string) => void;
 }
 
-// Time-series data (not fleet-dependent for now)
-const fleetSummary = getFleetScadaSummary();
-const weatherData = getWeatherData();
+// ─── Base time-series data (generated once — expensive, fleet-independent shape) ─
+const _fleetSummary = getFleetScadaSummary();
+const _weatherData = getWeatherData();
 
-function findMiddayScada() {
-  const midday = fleetSummary.find((p) => {
+// Find best midday SCADA snapshot
+function findMiddayScada(summary: typeof _fleetSummary) {
+  const midday = summary.find((p) => {
     const hour = new Date(p.timestamp).getHours();
     return hour >= 11 && hour <= 14 && p.avg_irradiance > 400;
   });
   if (midday) return midday;
-  const daytime = fleetSummary.find((p) => p.total_power_kw > 1);
-  return daytime ?? fleetSummary[Math.floor(fleetSummary.length / 2)]!;
+  const daytime = summary.find((p) => p.total_power_kw > 1);
+  return daytime ?? summary[Math.floor(summary.length / 2)]!;
 }
-const middayScada = findMiddayScada();
 
-function findMiddayWeather() {
-  const midday = weatherData.find((w) => {
+// Find best midday weather snapshot
+function findMiddayWeather(weather: typeof _weatherData) {
+  const midday = weather.find((w) => {
     const hour = new Date(w.timestamp).getHours();
     return hour >= 11 && hour <= 14 && w.ghi_wm2 > 400;
   });
-  return midday ?? weatherData[Math.floor(weatherData.length / 2)]!;
+  return midday ?? weather[Math.floor(weather.length / 2)]!;
 }
-const middayWeather = findMiddayWeather();
 
-function computeSparkline() {
-  const byDate: Record<string, typeof fleetSummary> = {};
-  for (const pt of fleetSummary) {
+// Compute best-day sparkline from fleet summary
+function computeSparkline(summary: typeof _fleetSummary) {
+  const byDate: Record<string, typeof summary> = {};
+  for (const pt of summary) {
     const date = pt.timestamp.slice(0, 10);
     if (!byDate[date]) byDate[date] = [];
     byDate[date].push(pt);
@@ -71,18 +72,47 @@ function computeSparkline() {
     const total = points.reduce((s, p) => s + p.total_power_kw, 0);
     if (total > bestTotal) { bestTotal = total; bestDate = date; }
   }
-  const dayPoints = byDate[bestDate] ?? fleetSummary.slice(0, 96);
+  const dayPoints = byDate[bestDate] ?? summary.slice(0, 96);
   return dayPoints
     .filter((p) => { const hour = new Date(p.timestamp).getHours(); return hour >= 6 && hour <= 20; })
     .map((p) => ({ time: new Date(p.timestamp).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }), power: Number(p.total_power_kw.toFixed(2)) }));
 }
-const sparklineData = computeSparkline();
+
+// Pre-compute base values (fleet-agnostic)
+const _middayScada = findMiddayScada(_fleetSummary);
+const _middayWeather = findMiddayWeather(_weatherData);
+const _sparklineData = computeSparkline(_fleetSummary);
+
+// ─── Fleet-hash helpers ───────────────────────────────────────
+function fleetSeed(id: string | null | undefined): number {
+  if (!id) return 0.5;
+  let h = 5381;
+  for (let i = 0; i < id.length; i++) h = ((h << 5) + h + id.charCodeAt(i)) | 0;
+  return ((h & 0x7fffffff) % 1000) / 1000;
+}
+function scaleNum(base: number, seed: number, offset: number): number {
+  const s = (Math.floor(seed * 1000) + offset * 137) % 600; // 0..599
+  const factor = 0.7 + s / 1000; // 0.7..1.299
+  return Math.round(base * factor * 100) / 100;
+}
+// Blend fleet + time-range into a single seed so each combination produces distinct values
+function combinedSeed(fleetId: string | null | undefined, timeRange: string): number {
+  const fs = fleetSeed(fleetId);
+  const ts = fleetSeed(timeRange);
+  return (fs * 0.7 + ts * 0.3) % 1;
+}
+// Smaller ±10% scale for health-adjacent numbers (scores stay plausible)
+function scaleScore(base: number, seed: number, offset: number): number {
+  const s = (Math.floor(seed * 1000) + offset * 137) % 200; // 0..199
+  const factor = 0.9 + s / 1000; // 0.9..1.099
+  return Math.min(100, Math.max(0, Math.round(base * factor)));
+}
 
 const noop = () => {};
 
 export function SummaryDetail({
   persona: _persona = "manufacturer",
-  timeRange: _timeRange = "30d",
+  timeRange = "30d",
   fleetId = null,
   fleetOptions = [],
   modelFilter: _modelFilter = "all",
@@ -93,36 +123,72 @@ export function SummaryDetail({
     ? `${selectedFleet.city}, ${selectedFleet.country} — ${selectedFleet.name}`
     : "All Sites — Aggregated View";
 
-  // Fleet-reactive mock data
-  const healthScore = useMemo(() => getFleetHealthScore(fleetId), [fleetId]);
+  // Fleet + time-range reactive analytics data
+  const healthScore = useMemo(() => {
+    const raw = getFleetHealthScore(fleetId);
+    const seed = combinedSeed(fleetId, timeRange);
+    return {
+      ...raw,
+      overall: scaleScore(raw.overall, seed, 50),
+      weeklyDelta: Math.round(raw.weeklyDelta * (0.9 + (seed * 200 % 200) / 1000)),
+      breakdown: raw.breakdown.map((b, i) => ({
+        ...b,
+        score: scaleScore(b.score, seed, 51 + i),
+      })),
+    };
+  }, [fleetId, timeRange]);
   const anomalies = useMemo(() => getAnomalyStream(fleetId), [fleetId]);
   const benchmarks = useMemo(() => getFleetBenchmarking(fleetId), [fleetId]);
   const warranty = useMemo(() => getWarrantyIntelligence(fleetId), [fleetId]);
   const carbon = useMemo(() => getCarbonOptimization(fleetId), [fleetId]);
 
+  // Fleet + time-range reactive SCADA / weather values
+  const baseScada = useMemo(() => {
+    const seed = combinedSeed(fleetId, timeRange);
+    return {
+      power: scaleNum(_middayScada.total_power_kw, seed, 5),
+      pr: scaleNum(_middayScada.avg_pr, seed, 6),
+      irradiance: scaleNum(_middayScada.avg_irradiance, seed, 7),
+    };
+  }, [fleetId, timeRange]);
+
+  const weatherValues = useMemo(() => {
+    const seed = combinedSeed(fleetId, timeRange);
+    return {
+      ghi: Math.round(scaleNum(_middayWeather.ghi_wm2, seed, 1)),
+      temp: Math.round(scaleNum(_middayWeather.ambient_temp_c, seed, 2) * 10) / 10,
+      wind: Math.round(scaleNum(_middayWeather.wind_speed_ms, seed, 3) * 10) / 10,
+      humidity: Math.min(99, Math.max(10, Math.round(scaleNum(_middayWeather.humidity_pct, seed, 4)))),
+    };
+  }, [fleetId, timeRange]);
+
   const KPI_CARDS = useMemo(() => [
-    { label: "Fleet PR", value: `${(middayScada.avg_pr * 100).toFixed(1)}%`, sub: "Performance Ratio", color: "#F59E0B" },
+    { label: "Fleet PR", value: `${(baseScada.pr * 100).toFixed(1)}%`, sub: "Performance Ratio", color: "#F59E0B" },
     { label: "Active Alerts", value: String(anomalies.filter((a) => !a.resolved).length), sub: "Unresolved anomalies", color: "#EF4444" },
     { label: "Warranty Claims Ready", value: String(warranty.claimReady.length), sub: `EUR ${warranty.claimReady.reduce((s, c) => s + c.estimatedClaimValueEur, 0).toLocaleString("en-US")}`, color: "#F59E0B" },
     { label: "Carbon Avg", value: `${carbon.currentAvgKgCO2e}`, sub: `kg CO2e (benchmark ${carbon.industryBenchmark})`, color: carbon.currentAvgKgCO2e > carbon.industryBenchmark ? "#F59E0B" : "#22C55E" },
-  ], [anomalies, warranty, carbon]);
+  ], [baseScada.pr, anomalies, warranty, carbon]);
+
   const topAlerts = anomalies.filter((a) => !a.resolved).slice(0, 3);
   const topBenchmarks = benchmarks.slice(0, 5);
 
-  // Live fleet power ticker with jitter — uses midday snapshot for realistic values
-  const [livePower, setLivePower] = useState(middayScada.total_power_kw);
-  const [livePr, setLivePr] = useState(middayScada.avg_pr);
-  const [liveIrradiance, setLiveIrradiance] = useState(middayScada.avg_irradiance);
+  // Live fleet power ticker — resets when fleet changes, then applies jitter
+  const [livePower, setLivePower] = useState(baseScada.power);
+  const [livePr, setLivePr] = useState(baseScada.pr);
+  const [liveIrradiance, setLiveIrradiance] = useState(baseScada.irradiance);
 
   useEffect(() => {
+    setLivePower(baseScada.power);
+    setLivePr(baseScada.pr);
+    setLiveIrradiance(baseScada.irradiance);
     const interval = setInterval(() => {
       const jitter = () => 1 + (Math.random() - 0.5) * 0.04;
-      setLivePower(Number((middayScada.total_power_kw * jitter()).toFixed(1)));
-      setLivePr(Number((middayScada.avg_pr * jitter()).toFixed(4)));
-      setLiveIrradiance(Number((middayScada.avg_irradiance * jitter()).toFixed(1)));
+      setLivePower(Number((baseScada.power * jitter()).toFixed(1)));
+      setLivePr(Number((baseScada.pr * jitter()).toFixed(4)));
+      setLiveIrradiance(Number((baseScada.irradiance * jitter()).toFixed(1)));
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [baseScada]);
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-8">
@@ -160,7 +226,7 @@ export function SummaryDetail({
           {/* Mini sparkline area chart — today's power curve */}
           <div className="mt-3 -mx-1" style={{ height: 80 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <RAreaChart data={sparklineData} margin={{ top: 4, right: 4, bottom: 0, left: 4 }}>
+              <RAreaChart data={_sparklineData} margin={{ top: 4, right: 4, bottom: 0, left: 4 }}>
                 <defs>
                   <linearGradient id="sparklineFill" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#22C55E" stopOpacity={0.25} />
@@ -209,7 +275,7 @@ export function SummaryDetail({
           </div>
         </div>
 
-        {/* Site Conditions — contextualized for fleet location */}
+        {/* Site Conditions — fleet-reactive */}
         <div className="border border-dashed border-border bg-card p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
@@ -225,7 +291,7 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-muted-foreground">GHI Irradiance</p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  {middayWeather.ghi_wm2.toFixed(0)} <span className="text-[10px] text-muted-foreground font-normal">W/m²</span>
+                  {weatherValues.ghi} <span className="text-[10px] text-muted-foreground font-normal">W/m²</span>
                 </p>
               </div>
             </div>
@@ -234,7 +300,7 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Ambient Temp</p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  {middayWeather.ambient_temp_c.toFixed(1)} <span className="text-[10px] text-muted-foreground font-normal">°C</span>
+                  {weatherValues.temp.toFixed(1)} <span className="text-[10px] text-muted-foreground font-normal">°C</span>
                 </p>
               </div>
             </div>
@@ -243,7 +309,7 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Wind Speed</p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  {middayWeather.wind_speed_ms.toFixed(1)} <span className="text-[10px] text-muted-foreground font-normal">m/s</span>
+                  {weatherValues.wind.toFixed(1)} <span className="text-[10px] text-muted-foreground font-normal">m/s</span>
                 </p>
               </div>
             </div>
@@ -252,7 +318,7 @@ export function SummaryDetail({
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Humidity</p>
                 <p className="font-mono text-sm font-bold text-foreground">
-                  {middayWeather.humidity_pct.toFixed(0)} <span className="text-[10px] text-muted-foreground font-normal">%</span>
+                  {weatherValues.humidity} <span className="text-[10px] text-muted-foreground font-normal">%</span>
                 </p>
               </div>
             </div>

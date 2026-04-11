@@ -26,21 +26,21 @@ export function LossDriverBar({
   return (
     <div className="space-y-0.5">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-medium text-[#737373]">{category}</span>
+        <span className="text-[10px] font-medium text-muted-foreground">{category}</span>
         <div className="flex items-center gap-1">
-          <span className="font-mono text-[10px] font-semibold text-[#0D0D0D]">
+          <span className="font-mono text-[10px] font-semibold text-foreground">
             {fmtEur(euroPerMonth)}
           </span>
           {trend === "up" ? (
             <TrendingUp className="h-2.5 w-2.5 text-[#DC2626]" />
           ) : trend === "down" ? (
-            <TrendingDown className="h-2.5 w-2.5 text-[#22C55E]" />
+            <TrendingDown className="h-2.5 w-2.5 text-primary" />
           ) : (
-            <Minus className="h-2.5 w-2.5 text-[#A3A3A3]" />
+            <Minus className="h-2.5 w-2.5 text-muted-foreground/70" />
           )}
         </div>
       </div>
-      <div className="h-1.5 w-full bg-[#F2F2F2]">
+      <div className="h-1.5 w-full bg-muted">
         <div
           className="h-full transition-all duration-500"
           style={{ width: `${percent}%`, backgroundColor: color }}

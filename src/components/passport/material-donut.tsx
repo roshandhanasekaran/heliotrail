@@ -82,7 +82,7 @@ export function MaterialDonut({
             cy={center}
             r={radius}
             fill="none"
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeWidth={strokeWidth}
           />
 
@@ -137,14 +137,14 @@ export function MaterialDonut({
                 transition={{ duration: 0.15 }}
                 className="flex flex-col items-center text-center px-4"
               >
-                <span className="text-3xl font-bold tabular-nums text-[#0D0D0D]">
+                <span className="text-3xl font-bold tabular-nums text-foreground">
                   {active.massPercent}%
                 </span>
-                <span className="text-xs font-medium text-[#737373] mt-0.5 max-w-[120px] truncate">
+                <span className="text-xs font-medium text-muted-foreground mt-0.5 max-w-[120px] truncate">
                   {active.name}
                 </span>
                 {active.massG != null && (
-                  <span className="text-[10px] text-[#737373] font-mono mt-0.5">
+                  <span className="text-[10px] text-muted-foreground font-mono mt-0.5">
                     {active.massG >= 1000
                       ? `${(active.massG / 1000).toFixed(1)} kg`
                       : `${active.massG} g`}
@@ -160,12 +160,12 @@ export function MaterialDonut({
                 transition={{ duration: 0.15 }}
                 className="flex flex-col items-center"
               >
-                <span className="text-2xl font-bold text-[#0D0D0D] tabular-nums">
+                <span className="text-2xl font-bold text-foreground tabular-nums">
                   {totalMass >= 1000
                     ? `${(totalMass / 1000).toFixed(1)}`
                     : totalMass}
                 </span>
-                <span className="text-[10px] font-medium text-[#737373] uppercase tracking-wider">
+                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
                   {totalMass >= 1000 ? "kg total" : "g total"}
                 </span>
               </motion.div>
@@ -185,8 +185,8 @@ export function MaterialDonut({
             className={cn(
               "flex items-center justify-between px-3 py-2 transition-all duration-200 cursor-pointer",
               activeIndex === i
-                ? "bg-[#F2F2F2] border border-[#D9D9D9]"
-                : "hover:bg-[#F2F2F2]"
+                ? "bg-muted border border-border"
+                : "hover:bg-muted"
             )}
             onMouseEnter={() => setActiveIndex(i)}
             onMouseLeave={() => setActiveIndex(null)}
@@ -196,27 +196,27 @@ export function MaterialDonut({
                 className="h-2.5 w-2.5 rounded-full shrink-0"
                 style={{ backgroundColor: seg.color }}
               />
-              <span className="text-sm text-[#0D0D0D]">{seg.name}</span>
+              <span className="text-sm text-foreground">{seg.name}</span>
               {seg.isCritical && (
-                <span className="bg-[#FEF3C7] border border-[#D9D9D9] px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#0D0D0D]">
+                <span className="bg-[var(--passport-amber-muted)] border border-border px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-foreground">
                   CRM
                 </span>
               )}
               {seg.isSoC && (
-                <span className="bg-[#FEE2E2] border border-[#D9D9D9] px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-[#0D0D0D]">
+                <span className="bg-[#FEE2E2] border border-border px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-foreground">
                   SoC
                 </span>
               )}
             </div>
             <div className="flex items-center gap-3">
               {seg.massG != null && (
-                <span className="text-xs text-[#737373] font-mono">
+                <span className="text-xs text-muted-foreground font-mono">
                   {seg.massG >= 1000
                     ? `${(seg.massG / 1000).toFixed(1)}kg`
                     : `${seg.massG}g`}
                 </span>
               )}
-              <span className="font-mono text-sm font-bold tabular-nums text-[#0D0D0D]">
+              <span className="font-mono text-sm font-bold tabular-nums text-foreground">
                 {seg.massPercent}%
               </span>
             </div>

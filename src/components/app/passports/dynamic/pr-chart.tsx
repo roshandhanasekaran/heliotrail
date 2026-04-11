@@ -31,16 +31,16 @@ export function PRChart({ data }: PRChartProps) {
             <stop offset="100%" stopColor="#22C55E" stopOpacity={0.05} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
         <XAxis
           dataKey="month"
-          tick={{ fontSize: 10, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+          axisLine={{ stroke: "var(--border)" }}
           tickLine={false}
         />
         <YAxis
           domain={[70, 90]}
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={40}

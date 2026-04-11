@@ -1,0 +1,215 @@
+{
+  "pvPassportId": "PVP-0000001",
+  "moduleIdentifier": "MOD-123456789",
+  "serialNumber": "SN-2026-001-00042",
+  "batchId": "LOT-2026-Q1-001",
+  "modelId": "WM-550N-TOPCON",
+  "gtin": "08901234567890",
+  "dataCarrierType": "qr_gs1_digital_link",
+  "passportVersion": "v1",
+  "passportStatus": "published",
+  "manufacturer": {
+    "name": "Waaree Energies Ltd.",
+    "operatorIdentifier": "EO-WAAREE-001",
+    "address": {
+      "country": "IN",
+      "city": "Surat",
+      "state": "Gujarat"
+    },
+    "contactUrl": "https://waaree.com"
+  },
+  "importer": {
+    "name": "Waaree EU GmbH",
+    "operatorIdentifier": "EO-WAAREE-EU-001"
+  },
+  "manufacturingFacility": {
+    "facilityIdentifier": "FAC-IND-SURAT-001",
+    "name": "Waaree Surat Manufacturing Unit",
+    "location": {
+      "country": "IN",
+      "region": "Gujarat"
+    }
+  },
+  "manufacturingDate": "2026-01-12T00:00:00Z",
+  "moduleCategory": "crystalline_silicon",
+  "moduleTechnology": "topcon",
+  "ratedPowerSTC_W": 550,
+  "moduleEfficiency_percent": 21.3,
+  "voc_V": 49.8,
+  "isc_A": 13.82,
+  "vmp_V": 41.8,
+  "imp_A": 13.16,
+  "maxSystemVoltage_V": 1500,
+  "moduleDimensions_mm": {
+    "length": 2278,
+    "width": 1134,
+    "depth": 30
+  },
+  "moduleMass_kg": 28.5,
+  "tempCoeff_Pmax": -0.30,
+  "tempCoeff_Voc": -0.25,
+  "tempCoeff_Isc": 0.05,
+  "noct_C": 43,
+  "compliance": {
+    "declarationOfConformity": {
+      "uri": "https://vault.heliotrail.io/docs/doc-001.pdf",
+      "hashAlg": "sha256",
+      "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "certificates": [
+      {
+        "standard": "IEC 61215",
+        "issuer": "TUV Rheinland",
+        "validUntil": "2029-01-12"
+      },
+      {
+        "standard": "IEC 61730",
+        "issuer": "TUV Rheinland",
+        "validUntil": "2029-01-12"
+      },
+      {
+        "standard": "UL 61730",
+        "issuer": "UL Solutions",
+        "validUntil": "2029-06-30"
+      },
+      {
+        "standard": "BIS IS 14286",
+        "issuer": "BIS India",
+        "validUntil": "2028-12-31"
+      }
+    ]
+  },
+  "carbonFootprint": {
+    "declaredValue_kgCO2e": 425,
+    "functionalUnit_gCO2eq_per_kWh": 18.2,
+    "boundary": "cradle_to_gate",
+    "methodology": "JRC_harmonized_2025",
+    "verificationRef": "EPD-WAAREE-550-2026"
+  },
+  "materialComposition": {
+    "moduleMaterials": [
+      {
+        "materialName": "tempered glass",
+        "componentType": "front_cover",
+        "mass_g": 17800,
+        "massPercent": 62.5,
+        "isCriticalRawMaterial": false,
+        "recyclabilityHint": "fully_recyclable"
+      },
+      {
+        "materialName": "aluminium",
+        "componentType": "frame",
+        "mass_g": 2700,
+        "massPercent": 9.5,
+        "isCriticalRawMaterial": false,
+        "recyclabilityHint": "fully_recyclable"
+      },
+      {
+        "materialName": "crystalline silicon",
+        "componentType": "solar_cell",
+        "mass_g": 900,
+        "massPercent": 3.2,
+        "casNumber": "7440-21-3",
+        "isCriticalRawMaterial": true,
+        "recyclabilityHint": "recoverable"
+      },
+      {
+        "materialName": "silver",
+        "componentType": "cell_metallization",
+        "mass_g": 15,
+        "massPercent": 0.05,
+        "casNumber": "7440-22-4",
+        "isCriticalRawMaterial": true,
+        "recyclabilityHint": "recoverable"
+      },
+      {
+        "materialName": "copper",
+        "componentType": "interconnects",
+        "mass_g": 180,
+        "massPercent": 0.6,
+        "casNumber": "7440-50-8",
+        "isCriticalRawMaterial": false,
+        "recyclabilityHint": "recoverable"
+      },
+      {
+        "materialName": "EVA",
+        "componentType": "encapsulant",
+        "mass_g": 2700,
+        "massPercent": 9.5,
+        "casNumber": "24937-78-8",
+        "isCriticalRawMaterial": false,
+        "recyclabilityHint": "not_recyclable"
+      },
+      {
+        "materialName": "backsheet (polymer)",
+        "componentType": "rear_cover",
+        "mass_g": 900,
+        "massPercent": 3.2,
+        "isCriticalRawMaterial": false,
+        "recyclabilityHint": "limited"
+      }
+    ],
+    "substancesOfConcern": [
+      {
+        "name": "lead (Pb)",
+        "casNumber": "7439-92-1",
+        "concentration_w_w_percent": 0.002,
+        "regulatoryBasis": "RoHS"
+      }
+    ],
+    "reachStatus": "compliant",
+    "rohsStatus": "compliant_with_exemption"
+  },
+  "warranty": {
+    "productWarranty_years": 25,
+    "performanceWarranty": "87.4% at year 30",
+    "linearDegradation_percent_per_year": 0.4,
+    "expectedLifetime_years": 30,
+    "testStandards": ["IEC 61215", "IEC 61730", "UL 61730", "BIS IS 14286"]
+  },
+  "supplyChain": {
+    "supplierTiers": [
+      {
+        "tier": 1,
+        "stage": "module_assembly",
+        "actor": "Waaree Energies Ltd.",
+        "facility": "Surat Manufacturing Unit",
+        "country": "IN",
+        "uflpaCompliant": true,
+        "certifications": ["IEC 61215", "ISO 9001", "ISO 14001"],
+        "auditDate": "2025-11-15"
+      },
+      {
+        "tier": 2,
+        "stage": "cell_manufacturing",
+        "actor": "Waaree Cell Division",
+        "facility": "Chikhli Cell Plant",
+        "country": "IN",
+        "uflpaCompliant": true
+      },
+      {
+        "tier": 4,
+        "stage": "polysilicon",
+        "actor": "Compliant Polysilicon Source",
+        "facility": "Non-Xinjiang Facility",
+        "country": "OM",
+        "uflpaCompliant": true
+      }
+    ],
+    "uflpaCompliance": {
+      "status": "compliant"
+    },
+    "ssiCertification": {
+      "status": "not_certified"
+    }
+  },
+  "endOfLife": {
+    "status": "in_use",
+    "dismantlingInstructions": "1. Remove junction box cover. 2. Disconnect cables. 3. Remove frame screws (4mm hex). 4. Separate glass from EVA/cell assembly using thermal or mechanical process.",
+    "collectionScheme": "PV Cycle Europe",
+    "recyclerPartner": "Veolia Environmental Services",
+    "hazardousWarnings": [
+      "Lead in solder joints — handle per local hazardous waste regulations"
+    ]
+  }
+}

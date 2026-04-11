@@ -37,14 +37,14 @@ export function IrradianceScatter({ data }: IrradianceScatterProps) {
   return (
     <ResponsiveContainer width="100%" height={280}>
       <ScatterChart margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
         <XAxis
           type="number"
           dataKey="irradiance"
           name="Irradiance"
           unit=" W/m²"
-          tick={{ fontSize: 10, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+          axisLine={{ stroke: "var(--border)" }}
           tickLine={false}
           domain={[0, 1200]}
           label={{
@@ -52,7 +52,7 @@ export function IrradianceScatter({ data }: IrradianceScatterProps) {
             position: "insideBottom",
             offset: -2,
             fontSize: 10,
-            fill: "#A3A3A3",
+            fill: "var(--muted-foreground)",
           }}
         />
         <YAxis
@@ -60,7 +60,7 @@ export function IrradianceScatter({ data }: IrradianceScatterProps) {
           dataKey="power"
           name="Power"
           unit=" W"
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={50}
@@ -71,7 +71,7 @@ export function IrradianceScatter({ data }: IrradianceScatterProps) {
             position: "insideLeft",
             offset: 10,
             fontSize: 10,
-            fill: "#A3A3A3",
+            fill: "var(--muted-foreground)",
           }}
         />
         <Tooltip

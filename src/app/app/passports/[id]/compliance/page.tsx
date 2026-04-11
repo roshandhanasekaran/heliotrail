@@ -34,7 +34,7 @@ export default async function CompliancePage({
   };
 
   const statusColor = {
-    valid: "text-[#22C55E]",
+    valid: "text-primary",
     expired: "text-red-500",
     revoked: "text-red-500",
     pending: "text-[#F59E0B]",
@@ -43,10 +43,10 @@ export default async function CompliancePage({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-[#0D0D0D]">Compliance</h2>
+        <h2 className="text-lg font-bold text-foreground">Compliance</h2>
         <div className="flex items-center gap-2 text-sm">
-          <ShieldCheck className="h-4 w-4 text-[#22C55E]" />
-          <span className="text-[#737373]">
+          <ShieldCheck className="h-4 w-4 text-primary" />
+          <span className="text-muted-foreground">
             {validCount}/{certs.length} certificates valid
           </span>
         </div>
@@ -54,11 +54,11 @@ export default async function CompliancePage({
 
       {certs.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-12 text-center">
-          <ShieldCheck className="h-8 w-8 text-[#D9D9D9]" />
-          <p className="mt-3 text-sm font-medium text-[#737373]">
+          <ShieldCheck className="h-8 w-8 text-border" />
+          <p className="mt-3 text-sm font-medium text-muted-foreground">
             No certificates recorded
           </p>
-          <p className="mt-1 text-xs text-[#A3A3A3]">
+          <p className="mt-1 text-xs text-muted-foreground/70">
             Upload compliance certificates for this passport.
           </p>
         </div>
@@ -66,16 +66,16 @@ export default async function CompliancePage({
         <div className="grid gap-3 sm:grid-cols-2">
           {certs.map((cert) => {
             const Icon = statusIcon[cert.status as keyof typeof statusIcon] ?? Clock;
-            const color = statusColor[cert.status as keyof typeof statusColor] ?? "text-[#737373]";
+            const color = statusColor[cert.status as keyof typeof statusColor] ?? "text-muted-foreground";
 
             return (
               <div key={cert.id} className="clean-card p-4">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-bold text-[#0D0D0D]">
+                    <p className="text-sm font-bold text-foreground">
                       {cert.standard_name}
                     </p>
-                    <p className="mt-0.5 text-xs text-[#737373]">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {cert.issuer}
                     </p>
                   </div>
@@ -94,7 +94,7 @@ export default async function CompliancePage({
                     </span>
                   </div>
                 </div>
-                <div className="mt-3 flex items-center gap-4 text-xs text-[#737373]">
+                <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
                   {cert.issued_date && (
                     <span>Issued: {formatDate(cert.issued_date)}</span>
                   )}
@@ -103,12 +103,12 @@ export default async function CompliancePage({
                   )}
                 </div>
                 {cert.certificate_number && (
-                  <p className="mt-1 font-mono text-xs text-[#A3A3A3]">
+                  <p className="mt-1 font-mono text-xs text-muted-foreground/70">
                     #{cert.certificate_number}
                   </p>
                 )}
                 {cert.scope_notes && (
-                  <p className="mt-1 text-xs text-[#737373]">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {cert.scope_notes}
                   </p>
                 )}
@@ -119,13 +119,13 @@ export default async function CompliancePage({
                         href={cert.document_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[#22C55E] hover:underline"
+                        className="inline-flex items-center gap-1 text-primary hover:underline"
                       >
                         <ExternalLink className="h-3 w-3" /> View Document
                       </a>
                     )}
                     {cert.document_hash && (
-                      <span className="inline-flex items-center gap-1 text-[#737373]">
+                      <span className="inline-flex items-center gap-1 text-muted-foreground">
                         <Fingerprint className="h-3 w-3" />
                         <span className="font-mono">
                           {cert.hash_algorithm ?? "SHA-256"}:{" "}

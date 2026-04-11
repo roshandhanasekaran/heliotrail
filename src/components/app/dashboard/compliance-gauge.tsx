@@ -39,7 +39,7 @@ export function ComplianceGauge({
             cy={size / 2}
             r={r}
             fill="none"
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeWidth={8}
           />
           <circle
@@ -59,9 +59,9 @@ export function ComplianceGauge({
           <AnimatedCounter
             value={score}
             suffix="%"
-            className="text-3xl font-bold tabular-nums text-[#0D0D0D]"
+            className="text-3xl font-bold tabular-nums text-foreground"
           />
-          <span className="text-[0.625rem] text-[#737373]">compliance</span>
+          <span className="text-[0.625rem] text-muted-foreground">compliance</span>
         </div>
       </div>
 
@@ -88,15 +88,15 @@ export function ComplianceGauge({
         <div className="flex justify-between text-[0.625rem]">
           <span className="flex items-center gap-1">
             <span className="h-1.5 w-1.5 bg-[#22C55E]" />
-            <span className="text-[#737373]">{validCerts} valid</span>
+            <span className="text-muted-foreground">{validCerts} valid</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="h-1.5 w-1.5 bg-[#F59E0B]" />
-            <span className="text-[#737373]">{pendingCerts} pending</span>
+            <span className="text-muted-foreground">{pendingCerts} pending</span>
           </span>
           <span className="flex items-center gap-1">
             <span className="h-1.5 w-1.5 bg-[#EF4444]" />
-            <span className="text-[#737373]">{expiredCerts} expired</span>
+            <span className="text-muted-foreground">{expiredCerts} expired</span>
           </span>
         </div>
       </div>

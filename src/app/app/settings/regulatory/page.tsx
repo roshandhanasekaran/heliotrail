@@ -5,13 +5,7 @@ import { redirect } from "next/navigation";
 import { Leaf, ShieldCheck, Scale, FileCheck } from "lucide-react";
 import { regulatoryConfig, currentUser } from "@/lib/mock/settings";
 import { canDo } from "@/lib/rbac";
-
-const labelClass =
-  "text-xs font-semibold uppercase tracking-wider text-[#737373]";
-const selectClass =
-  "w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]";
-const readonlyClass =
-  "w-full border border-[#D9D9D9] bg-[#F5F5F5] px-3 py-2 text-sm text-[#737373]";
+import { LABEL_CLASS, INPUT_CLASS, READONLY_CLASS } from "@/lib/styles";
 
 export default function RegulatoryPage() {
   const canEdit = canDo(currentUser.role, "regulatory.edit");
@@ -38,14 +32,16 @@ export default function RegulatoryPage() {
     setTimeout(() => setSaved(false), 2000);
   }
 
+  const selectClass = INPUT_CLASS;
+
   return (
     <div className="space-y-5">
       {/* Page heading */}
       <div>
-        <h2 className="text-lg font-bold text-[#0D0D0D]">
+        <h2 className="text-lg font-bold text-foreground">
           Regulatory Configuration
         </h2>
-        <p className="text-sm text-[#737373]">
+        <p className="text-sm text-muted-foreground">
           Configure compliance standards, methodology choices, and certification
           tracking.
         </p>
@@ -53,9 +49,9 @@ export default function RegulatoryPage() {
 
       {/* Card 1: Carbon & Environmental */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <Leaf className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <Leaf className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Carbon &amp; Environmental
           </h3>
         </div>
@@ -63,7 +59,7 @@ export default function RegulatoryPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {/* Carbon Footprint Methodology */}
             <div className="space-y-1.5">
-              <label className={labelClass}>Carbon Footprint Methodology</label>
+              <label className={LABEL_CLASS}>Carbon Footprint Methodology</label>
               {canEdit ? (
                 <select
                   value={carbonMethodology}
@@ -79,14 +75,14 @@ export default function RegulatoryPage() {
                 <input
                   readOnly
                   value={carbonMethodology}
-                  className={readonlyClass}
+                  className={READONLY_CLASS}
                 />
               )}
             </div>
 
             {/* WEEE Collection Scheme */}
             <div className="space-y-1.5">
-              <label className={labelClass}>WEEE Collection Scheme</label>
+              <label className={LABEL_CLASS}>WEEE Collection Scheme</label>
               {canEdit ? (
                 <select
                   value={weeeScheme}
@@ -99,7 +95,7 @@ export default function RegulatoryPage() {
                   <option>Manufacturer Take-Back</option>
                 </select>
               ) : (
-                <input readOnly value={weeeScheme} className={readonlyClass} />
+                <input readOnly value={weeeScheme} className={READONLY_CLASS} />
               )}
             </div>
           </div>
@@ -108,9 +104,9 @@ export default function RegulatoryPage() {
 
       {/* Card 2: Chemical Compliance */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <ShieldCheck className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <ShieldCheck className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Chemical Compliance
           </h3>
         </div>
@@ -118,7 +114,7 @@ export default function RegulatoryPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {/* REACH Status */}
             <div className="space-y-1.5">
-              <label className={labelClass}>REACH Status</label>
+              <label className={LABEL_CLASS}>REACH Status</label>
               {canEdit ? (
                 <select
                   value={reachStatus}
@@ -134,14 +130,14 @@ export default function RegulatoryPage() {
                 <input
                   readOnly
                   value={reachStatus}
-                  className={readonlyClass}
+                  className={READONLY_CLASS}
                 />
               )}
             </div>
 
             {/* RoHS Status */}
             <div className="space-y-1.5">
-              <label className={labelClass}>RoHS Status</label>
+              <label className={LABEL_CLASS}>RoHS Status</label>
               {canEdit ? (
                 <select
                   value={rohsStatus}
@@ -154,7 +150,7 @@ export default function RegulatoryPage() {
                   <option>Under Review</option>
                 </select>
               ) : (
-                <input readOnly value={rohsStatus} className={readonlyClass} />
+                <input readOnly value={rohsStatus} className={READONLY_CLASS} />
               )}
             </div>
           </div>
@@ -163,15 +159,15 @@ export default function RegulatoryPage() {
 
       {/* Card 3: Supply Chain Due Diligence */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <Scale className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <Scale className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Supply Chain Due Diligence
           </h3>
         </div>
         <div className="p-5">
           <div className="max-w-sm space-y-1.5">
-            <label className={labelClass}>UFLPA Attestation Mode</label>
+            <label className={LABEL_CLASS}>UFLPA Attestation Mode</label>
             {canEdit ? (
               <select
                 value={uflpaMode}
@@ -183,7 +179,7 @@ export default function RegulatoryPage() {
                 <option>Not applicable</option>
               </select>
             ) : (
-              <input readOnly value={uflpaMode} className={readonlyClass} />
+              <input readOnly value={uflpaMode} className={READONLY_CLASS} />
             )}
           </div>
         </div>
@@ -191,9 +187,9 @@ export default function RegulatoryPage() {
 
       {/* Card 4: Tracked Certification Standards */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <FileCheck className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <FileCheck className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Tracked Certification Standards
           </h3>
         </div>
@@ -202,7 +198,7 @@ export default function RegulatoryPage() {
             {regulatoryConfig.certificationStandards.map((standard) => (
               <span
                 key={standard}
-                className="rounded bg-[#F2F2F2] px-3 py-1 text-xs font-medium text-[#0D0D0D]"
+                className="rounded bg-muted px-3 py-1 text-xs font-medium text-foreground"
               >
                 {standard}
               </span>
@@ -218,7 +214,7 @@ export default function RegulatoryPage() {
             Save Changes
           </button>
           {saved && (
-            <span className="text-xs font-medium text-[#22C55E]">
+            <span className="text-xs font-medium text-primary">
               Regulatory config saved
             </span>
           )}

@@ -115,10 +115,10 @@ export default async function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#0D0D0D]">
+        <h1 className="text-2xl font-bold text-foreground">
           Portfolio Analytics
         </h1>
-        <p className="mt-1 text-sm text-[#737373]">
+        <p className="mt-1 text-sm text-muted-foreground">
           Regulatory intelligence, compliance health, and material analytics
         </p>
       </div>
@@ -129,26 +129,26 @@ export default async function AnalyticsPage() {
         <div className="clean-card p-5">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
-                <ShieldCheck className="h-4 w-4 text-[#22C55E]" />
+              <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+                <ShieldCheck className="h-4 w-4 text-primary" />
                 EU ESPR Regulatory Readiness
               </h2>
-              <p className="mt-0.5 text-xs text-[#737373]">
+              <p className="mt-0.5 text-xs text-muted-foreground">
                 DPP Registry opens July 2026 — compliance status
               </p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-bold text-[#22C55E]">
+              <p className="text-3xl font-bold text-primary">
                 {readinessScore}%
               </p>
-              <p className="text-[0.625rem] text-[#737373]">readiness score</p>
+              <p className="text-[0.625rem] text-muted-foreground">readiness score</p>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="mt-4 h-2 w-full bg-[#F2F2F2]">
+          <div className="mt-4 h-2 w-full bg-muted">
             <div
-              className="h-full bg-[#22C55E] transition-all duration-700"
+              className="h-full bg-primary transition-all duration-700"
               style={{ width: `${readinessScore}%` }}
             />
           </div>
@@ -159,15 +159,15 @@ export default async function AnalyticsPage() {
                 key={check.label}
                 className="flex items-center justify-between text-sm"
               >
-                <span className="flex items-center gap-2 text-[#737373]">
+                <span className="flex items-center gap-2 text-muted-foreground">
                   {check.ok ? (
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#22C55E]" />
+                    <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                   ) : (
                     <AlertTriangle className="h-3.5 w-3.5 text-[#F59E0B]" />
                   )}
                   {check.label}
                 </span>
-                <span className="font-mono text-xs text-[#A3A3A3]">
+                <span className="font-mono text-xs text-muted-foreground/70">
                   {check.weight}%
                 </span>
               </div>
@@ -177,11 +177,11 @@ export default async function AnalyticsPage() {
 
         {/* Market access */}
         <div className="clean-card p-5">
-          <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
+          <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
             <Globe className="h-4 w-4 text-[#3B82F6]" />
             EU Market Access
           </h2>
-          <p className="mt-0.5 text-xs text-[#737373]">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             {readyMarkets} of {markets.length} target markets DPP-ready
           </p>
 
@@ -191,18 +191,18 @@ export default async function AnalyticsPage() {
                 key={m.country}
                 className={`flex flex-col items-center gap-1 border p-3 ${
                   m.ready
-                    ? "border-[#22C55E]/20 bg-[#E8FAE9]"
-                    : "border-dashed border-[#D9D9D9] bg-[#FAFAFA]"
+                    ? "border-primary/20 bg-[var(--passport-green-muted)]"
+                    : "border-dashed border-border bg-muted/50"
                 }`}
               >
-                <span className="text-lg font-bold text-[#0D0D0D]">
+                <span className="text-lg font-bold text-foreground">
                   {m.country}
                 </span>
-                <span className="text-[0.625rem] text-[#737373]">
+                <span className="text-[0.625rem] text-muted-foreground">
                   {m.name}
                 </span>
                 {m.ready ? (
-                  <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
                 ) : (
                   <AlertTriangle className="h-4 w-4 text-[#F59E0B]" />
                 )}
@@ -210,7 +210,7 @@ export default async function AnalyticsPage() {
             ))}
           </div>
 
-          <div className="mt-4 border-t border-dashed border-[#D9D9D9] pt-3 text-xs text-[#737373]">
+          <div className="mt-4 border-t border-dashed border-border pt-3 text-xs text-muted-foreground">
             Compliance with EU ESPR and local DPP requirements. Supply chain
             and dynamic data needed for remaining markets.
           </div>
@@ -219,31 +219,31 @@ export default async function AnalyticsPage() {
 
       {/* Certificate health */}
       <div className="clean-card p-5">
-        <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
-          <Award className="h-4 w-4 text-[#22C55E]" />
+        <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+          <Award className="h-4 w-4 text-primary" />
           Certificate Health
         </h2>
-        <p className="mt-0.5 text-xs text-[#737373]">
+        <p className="mt-0.5 text-xs text-muted-foreground">
           {certs.length} certificates across {all.length} passports
         </p>
 
         <div className="mt-4 flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-[#E8FAE9] flex items-center justify-center">
-              <span className="text-sm font-bold text-[#22C55E]">{validCerts}</span>
+            <div className="h-8 w-8 bg-[var(--passport-green-muted)] flex items-center justify-center">
+              <span className="text-sm font-bold text-primary">{validCerts}</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-[#0D0D0D]">Valid</p>
-              <p className="text-[0.625rem] text-[#737373]">Compliant</p>
+              <p className="text-sm font-medium text-foreground">Valid</p>
+              <p className="text-[0.625rem] text-muted-foreground">Compliant</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 bg-[#FEF3C7] flex items-center justify-center">
+            <div className="h-8 w-8 bg-[var(--passport-amber-muted)] flex items-center justify-center">
               <span className="text-sm font-bold text-[#F59E0B]">{pendingCerts}</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-[#0D0D0D]">Pending</p>
-              <p className="text-[0.625rem] text-[#737373]">Under review</p>
+              <p className="text-sm font-medium text-foreground">Pending</p>
+              <p className="text-[0.625rem] text-muted-foreground">Under review</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -251,8 +251,8 @@ export default async function AnalyticsPage() {
               <span className="text-sm font-bold text-red-500">{expiredCerts}</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-[#0D0D0D]">Expired</p>
-              <p className="text-[0.625rem] text-[#737373]">Needs renewal</p>
+              <p className="text-sm font-medium text-foreground">Expired</p>
+              <p className="text-[0.625rem] text-muted-foreground">Needs renewal</p>
             </div>
           </div>
         </div>
@@ -260,7 +260,7 @@ export default async function AnalyticsPage() {
         {/* Certificate progress bar */}
         <div className="mt-4 flex h-3 w-full overflow-hidden">
           <div
-            className="bg-[#22C55E]"
+            className="bg-primary"
             style={{ width: `${(validCerts / certs.length) * 100}%` }}
           />
           <div
@@ -271,7 +271,7 @@ export default async function AnalyticsPage() {
             className="bg-[#EF4444]"
             style={{ width: `${(expiredCerts / certs.length) * 100}%` }}
           />
-          <div className="flex-1 bg-[#F2F2F2]" />
+          <div className="flex-1 bg-muted" />
         </div>
       </div>
 
@@ -279,11 +279,11 @@ export default async function AnalyticsPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Material intelligence */}
         <div className="clean-card p-5">
-          <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
+          <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
             <Layers className="h-4 w-4 text-[#3B82F6]" />
             Material Intelligence
           </h2>
-          <p className="mt-0.5 text-xs text-[#737373]">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             EU Critical Raw Materials Act 2024 compliance
           </p>
 
@@ -307,7 +307,7 @@ export default async function AnalyticsPage() {
                 ))
               ) : (
                 <div className="passport-table-row">
-                  <span className="table-label text-[#A3A3A3]">
+                  <span className="table-label text-muted-foreground/70">
                     No critical raw materials
                   </span>
                 </div>
@@ -333,7 +333,7 @@ export default async function AnalyticsPage() {
                 ))
               ) : (
                 <div className="passport-table-row">
-                  <span className="table-label text-[#A3A3A3]">
+                  <span className="table-label text-muted-foreground/70">
                     No substances of concern
                   </span>
                 </div>
@@ -344,11 +344,11 @@ export default async function AnalyticsPage() {
 
         {/* Circularity */}
         <div className="clean-card p-5">
-          <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
-            <Recycle className="h-4 w-4 text-[#22C55E]" />
+          <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+            <Recycle className="h-4 w-4 text-primary" />
             Circularity Intelligence
           </h2>
-          <p className="mt-0.5 text-xs text-[#737373]">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             Fleet-level circular economy metrics
           </p>
 
@@ -380,8 +380,8 @@ export default async function AnalyticsPage() {
           </div>
 
           {/* Recovery materials — derived from passport_circularity boolean columns */}
-          <div className="mt-4 border-t border-dashed border-[#D9D9D9] pt-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-[#737373]">
+          <div className="mt-4 border-t border-dashed border-border pt-3">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Recovery Capabilities
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -389,14 +389,14 @@ export default async function AnalyticsPage() {
                 activeRecoveries.map((rt) => (
                   <span
                     key={rt.key}
-                    className="inline-flex items-center gap-1 bg-[#E8FAE9] px-2 py-0.5 text-xs font-medium text-[#22C55E]"
+                    className="inline-flex items-center gap-1 bg-[var(--passport-green-muted)] px-2 py-0.5 text-xs font-medium text-primary"
                   >
                     <Recycle className="h-3 w-3" />
                     {rt.label}
                   </span>
                 ))
               ) : (
-                <span className="text-xs text-[#A3A3A3]">
+                <span className="text-xs text-muted-foreground/70">
                   No recovery data available
                 </span>
               )}
@@ -407,34 +407,34 @@ export default async function AnalyticsPage() {
 
       {/* Carbon footprint analysis — grouped by model */}
       <div className="clean-card p-5">
-        <h2 className="flex items-center gap-2 text-sm font-bold text-[#0D0D0D]">
-          <Leaf className="h-4 w-4 text-[#22C55E]" />
+        <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
+          <Leaf className="h-4 w-4 text-primary" />
           Carbon Footprint Analysis
         </h2>
-        <p className="mt-0.5 text-xs text-[#737373]">
+        <p className="mt-0.5 text-xs text-muted-foreground">
           Per cradle-to-gate methodology — {carbonByModel.reduce((s, m) => s + m.count, 0)} passports with carbon data across {carbonByModel.length} model lines
         </p>
 
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#D9D9D9]">
-                <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Model</th>
-                <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Passports</th>
-                <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Carbon Footprint</th>
-                <th className="py-2 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Methodology</th>
+              <tr className="border-b border-border">
+                <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Model</th>
+                <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Passports</th>
+                <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Carbon Footprint</th>
+                <th className="py-2 text-left text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Methodology</th>
               </tr>
             </thead>
             <tbody>
               {carbonByModel.map((row) => (
-                <tr key={row.model} className="border-b border-dashed border-[#F2F2F2]">
-                  <td className="py-2.5 pr-4 font-medium text-[#0D0D0D]">{row.model}</td>
-                  <td className="py-2.5 pr-4 text-right font-mono text-[#737373]">{row.count}</td>
+                <tr key={row.model} className="border-b border-dashed border-muted">
+                  <td className="py-2.5 pr-4 font-medium text-foreground">{row.model}</td>
+                  <td className="py-2.5 pr-4 text-right font-mono text-muted-foreground">{row.count}</td>
                   <td className="py-2.5 pr-4 text-right">
-                    <span className="font-mono font-bold text-[#0D0D0D]">{row.carbon}</span>
-                    <span className="ml-1 text-xs text-[#737373]">kg CO₂e</span>
+                    <span className="font-mono font-bold text-foreground">{row.carbon}</span>
+                    <span className="ml-1 text-xs text-muted-foreground">kg CO₂e</span>
                   </td>
-                  <td className="py-2.5 text-xs text-[#A3A3A3]">{row.methodology}</td>
+                  <td className="py-2.5 text-xs text-muted-foreground/70">{row.methodology}</td>
                 </tr>
               ))}
             </tbody>
@@ -464,16 +464,16 @@ function CircularityMetric({
   ok: boolean;
 }) {
   return (
-    <div className="border border-dashed border-[#D9D9D9] p-3">
-      <p className="text-xs text-[#737373]">{label}</p>
-      <p className="mt-1 text-xl font-bold text-[#0D0D0D]">{value}</p>
+    <div className="border border-dashed border-border p-3">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="mt-1 text-xl font-bold text-foreground">{value}</p>
       <div className="mt-1 flex items-center gap-1">
         {ok ? (
-          <CheckCircle2 className="h-3 w-3 text-[#22C55E]" />
+          <CheckCircle2 className="h-3 w-3 text-primary" />
         ) : (
           <AlertTriangle className="h-3 w-3 text-[#F59E0B]" />
         )}
-        <span className="text-[0.625rem] text-[#A3A3A3]">{target}</span>
+        <span className="text-[0.625rem] text-muted-foreground/70">{target}</span>
       </div>
     </div>
   );

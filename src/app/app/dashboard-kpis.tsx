@@ -22,10 +22,10 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
       value: data.total,
       suffix: "",
       sub: `${data.published} published \u00b7 ${data.total - data.published} in progress`,
-      trend: "+2 this quarter",
+      trend: data.quarterGrowth > 0 ? `+${data.quarterGrowth} this quarter` : "Stable",
       trendUp: true,
       accentColor: "#22C55E",
-      sparkData: [3, 4, 4, 5, 6, 7, 8],
+      sparkData: [71, 74, 78, 80, 84, 89, 94],
       isPrimary: true,
     },
     {
@@ -33,11 +33,11 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
       label: "Compliance Score",
       value: data.complianceScore,
       suffix: "%",
-      sub: "certificates valid across portfolio",
-      trend: "Stable",
-      trendUp: true,
-      accentColor: "#22C55E",
-      sparkData: [90, 91, 93, 94, 94, 95, 95],
+      sub: `${data.validCerts} of ${data.totalCerts} certificates valid`,
+      trend: data.pendingCerts > 0 ? `${data.pendingCerts} pending review` : "Stable",
+      trendUp: data.pendingCerts === 0,
+      accentColor: data.complianceScore >= 90 ? "#22C55E" : "#F59E0B",
+      sparkData: [92, 94, 91, 89, 91, 88, data.complianceScore],
       isPrimary: false,
     },
   ];
@@ -64,18 +64,18 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
     <div className="space-y-3">
       {/* Section header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold text-[#0D0D0D]">
+        <h2 className="text-sm font-bold text-foreground">
           Portfolio Intelligence
         </h2>
         <div className="flex items-center gap-3">
           <button
             onClick={() => setPickerOpen(true)}
-            className="flex items-center gap-1 text-[#A3A3A3] transition-colors hover:text-[#0D0D0D]"
+            className="flex items-center gap-1 text-muted-foreground/70 transition-colors hover:text-foreground"
             title="Configure KPIs"
           >
             <Settings2 className="h-3.5 w-3.5" />
           </button>
-          <div className="flex items-center gap-1.5 text-[#A3A3A3]">
+          <div className="flex items-center gap-1.5 text-muted-foreground/70">
             <Clock className="h-3 w-3" />
             <span className="text-[0.625rem]">Updated 5 min ago</span>
           </div>
@@ -91,7 +91,7 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
             style={{
               borderLeft: kpi.isPrimary
                 ? "2px solid #22C55E"
-                : "1px solid #D9D9D9",
+                : "1px solid var(--border)",
             }}
           >
             <div className="flex items-start justify-between">
@@ -106,7 +106,7 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
                   />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-[#737373]">
+                  <p className="text-xs font-medium text-muted-foreground">
                     {kpi.label}
                   </p>
                   <span
@@ -131,10 +131,10 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
               <AnimatedCounter
                 value={kpi.value}
                 suffix={kpi.suffix}
-                className="font-mono text-[2.5rem] font-bold leading-none tabular-nums text-[#0D0D0D]"
+                className="font-mono text-[2.5rem] font-bold leading-none tabular-nums text-foreground"
               />
             </div>
-            <p className="mt-1.5 text-[0.6875rem] text-[#A3A3A3]">{kpi.sub}</p>
+            <p className="mt-1.5 text-[0.6875rem] text-muted-foreground/70">{kpi.sub}</p>
           </div>
         ))}
       </div>
@@ -143,7 +143,7 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
       {secondaryKpis.length > 0 && (
         <div className="clean-card overflow-hidden">
           <div
-            className="grid grid-cols-2 divide-x divide-[#D9D9D9] sm:grid-cols-3"
+            className="grid grid-cols-2 divide-x divide-border sm:grid-cols-3"
             style={{
               gridTemplateColumns: undefined,
             }}
@@ -151,22 +151,22 @@ export function DashboardKpis({ data }: { data: KpiComputeInput }) {
             {secondaryKpis.map((kpi, i) => (
               <div
                 key={kpi.label}
-                className={`group cursor-default px-4 py-3.5 transition-colors hover:bg-[#FAFAFA] ${
-                  i >= 2 ? "border-t border-[#D9D9D9] sm:border-t-0" : ""
+                className={`group cursor-default px-4 py-3.5 transition-colors hover:bg-muted/50 ${
+                  i >= 2 ? "border-t border-border sm:border-t-0" : ""
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <kpi.icon className="h-3.5 w-3.5 text-[#A3A3A3]" />
+                  <kpi.icon className="h-3.5 w-3.5 text-muted-foreground/70" />
                   <Sparkline data={kpi.sparkData} color={kpi.accentColor} />
                 </div>
                 <div className="mt-2">
                   <AnimatedCounter
                     value={kpi.value}
                     suffix={kpi.suffix}
-                    className="font-mono text-xl font-bold leading-none tabular-nums text-[#0D0D0D]"
+                    className="font-mono text-xl font-bold leading-none tabular-nums text-foreground"
                   />
                 </div>
-                <p className="mt-1 text-[0.625rem] font-medium text-[#737373]">
+                <p className="mt-1 text-[0.625rem] font-medium text-muted-foreground">
                   {kpi.label}
                 </p>
                 <span

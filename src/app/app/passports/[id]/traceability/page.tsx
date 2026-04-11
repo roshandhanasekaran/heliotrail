@@ -81,19 +81,19 @@ export default async function TraceabilityPage({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-bold text-[#0D0D0D]">
+      <h2 className="text-lg font-bold text-foreground">
         Supply Chain Traceability
       </h2>
 
       {/* Supply chain flow */}
       <div className="clean-card p-5">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
           <Route className="h-3.5 w-3.5" />
           Value Chain — Raw Materials to Module
         </div>
 
         {scActors.length === 0 ? (
-          <p className="mt-4 text-sm text-[#A3A3A3]">
+          <p className="mt-4 text-sm text-muted-foreground/70">
             No supply chain data recorded yet.
           </p>
         ) : (
@@ -107,24 +107,24 @@ export default async function TraceabilityPage({
                   <div className="flex flex-col items-center">
                     <div
                       className={`flex h-10 w-10 shrink-0 items-center justify-center ${
-                        isVerified ? "bg-[#E8FAE9]" : "bg-[#FEF3C7]"
+                        isVerified ? "bg-[var(--passport-green-muted)]" : "bg-[var(--passport-amber-muted)]"
                       }`}
                     >
                       <Icon
                         className={`h-5 w-5 ${
-                          isVerified ? "text-[#22C55E]" : "text-[#F59E0B]"
+                          isVerified ? "text-primary" : "text-[#F59E0B]"
                         }`}
                       />
                     </div>
                     {i < scActors.length - 1 && (
-                      <div className="h-12 w-px bg-[#D9D9D9]" />
+                      <div className="h-12 w-px bg-border" />
                     )}
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 pb-6">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-[#0D0D0D]">
+                      <span className="text-sm font-bold text-foreground">
                         {actor.stage ?? actor.actor_role}
                       </span>
                       <span
@@ -135,22 +135,22 @@ export default async function TraceabilityPage({
                         {isVerified ? "Verified" : "Pending"}
                       </span>
                     </div>
-                    <p className="mt-0.5 text-sm text-[#0D0D0D]">
+                    <p className="mt-0.5 text-sm text-foreground">
                       {actor.actor_name}
                     </p>
                     {(actor.facility_location || actor.country) && (
-                      <p className="flex items-center gap-1 text-xs text-[#737373]">
+                      <p className="flex items-center gap-1 text-xs text-muted-foreground">
                         <MapPin className="h-3 w-3" />
                         {actor.facility_location ?? actor.country}
                         {actor.country && (
-                          <span className="ml-1 inline-flex items-center bg-[#F2F2F2] px-1 py-0.5 text-[0.625rem] font-bold">
+                          <span className="ml-1 inline-flex items-center bg-muted px-1 py-0.5 text-[0.625rem] font-bold">
                             {actor.country}
                           </span>
                         )}
                       </p>
                     )}
                     {actor.certifications && actor.certifications.length > 0 && (
-                      <p className="mt-1 text-xs text-[#A3A3A3]">
+                      <p className="mt-1 text-xs text-muted-foreground/70">
                         {actor.certifications.join(", ")}
                       </p>
                     )}
@@ -165,27 +165,27 @@ export default async function TraceabilityPage({
       {/* Manufacturer card */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="clean-card p-4">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             <Factory className="h-3.5 w-3.5" />
             Manufacturer
           </div>
-          <p className="mt-2 text-sm font-bold text-[#0D0D0D]">
+          <p className="mt-2 text-sm font-bold text-foreground">
             {p.manufacturer_name}
           </p>
           {p.manufacturer_address && (
-            <p className="mt-1 flex items-center gap-1 text-xs text-[#737373]">
+            <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
               <MapPin className="h-3 w-3" />
               {p.manufacturer_address}
             </p>
           )}
           {p.manufacturer_country && (
-            <p className="mt-1 flex items-center gap-1 text-xs text-[#737373]">
+            <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
               <Globe className="h-3 w-3" />
               {p.manufacturer_country}
             </p>
           )}
           {p.manufacturer_operator_id && (
-            <p className="mt-2 font-mono text-xs text-[#A3A3A3]">
+            <p className="mt-2 font-mono text-xs text-muted-foreground/70">
               Operator ID: {p.manufacturer_operator_id}
             </p>
           )}
@@ -193,21 +193,21 @@ export default async function TraceabilityPage({
 
         {p.facility_name && (
           <div className="clean-card p-4">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
               <Factory className="h-3.5 w-3.5" />
               Manufacturing Facility
             </div>
-            <p className="mt-2 text-sm font-bold text-[#0D0D0D]">
+            <p className="mt-2 text-sm font-bold text-foreground">
               {p.facility_name}
             </p>
             {p.facility_location && (
-              <p className="mt-1 flex items-center gap-1 text-xs text-[#737373]">
+              <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" />
                 {p.facility_location}
               </p>
             )}
             {p.facility_id && (
-              <p className="mt-2 font-mono text-xs text-[#A3A3A3]">
+              <p className="mt-2 font-mono text-xs text-muted-foreground/70">
                 Facility ID: {p.facility_id}
               </p>
             )}
@@ -217,16 +217,16 @@ export default async function TraceabilityPage({
 
       {/* Chain of Custody */}
       <div className="clean-card p-5">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
           <FileCheck className="h-3.5 w-3.5" />
           Chain of Custody
         </div>
-        <p className="mt-1 text-xs text-[#A3A3A3]">
+        <p className="mt-1 text-xs text-muted-foreground/70">
           Auditable transfer events from raw material to finished module.
         </p>
 
         {cocEvents.length === 0 ? (
-          <p className="mt-4 text-sm text-[#A3A3A3]">
+          <p className="mt-4 text-sm text-muted-foreground/70">
             No chain of custody events recorded yet.
           </p>
         ) : (
@@ -239,18 +239,18 @@ export default async function TraceabilityPage({
                     <ArrowRight className="h-4 w-4 text-[#3B82F6]" />
                   </div>
                   {i < cocEvents.length - 1 && (
-                    <div className="h-10 w-px bg-[#D9D9D9]" />
+                    <div className="h-10 w-px bg-border" />
                   )}
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 pb-4">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-[#0D0D0D]">
+                    <span className="text-sm font-bold text-foreground">
                       {event.event_type}
                     </span>
                     {event.event_timestamp && (
-                      <span className="text-[0.625rem] text-[#A3A3A3]">
+                      <span className="text-[0.625rem] text-muted-foreground/70">
                         {new Date(event.event_timestamp).toLocaleDateString("en-GB", {
                           day: "2-digit",
                           month: "short",
@@ -260,27 +260,27 @@ export default async function TraceabilityPage({
                     )}
                   </div>
                   {(event.from_actor || event.to_actor) && (
-                    <p className="mt-0.5 text-xs text-[#737373]">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {event.from_actor}
                       {event.from_actor && event.to_actor && (
-                        <span className="mx-1.5 text-[#D9D9D9]">→</span>
+                        <span className="mx-1.5 text-border">→</span>
                       )}
                       {event.to_actor}
                     </p>
                   )}
                   {event.location && (
-                    <p className="flex items-center gap-1 text-xs text-[#A3A3A3]">
+                    <p className="flex items-center gap-1 text-xs text-muted-foreground/70">
                       <MapPin className="h-3 w-3" />
                       {event.location}
                     </p>
                   )}
                   {event.evidence_hash && (
-                    <p className="mt-1 font-mono text-[0.625rem] text-[#A3A3A3]">
+                    <p className="mt-1 font-mono text-[0.625rem] text-muted-foreground/70">
                       Evidence: {event.evidence_hash.slice(0, 16)}...
                     </p>
                   )}
                   {event.notes && (
-                    <p className="mt-0.5 text-xs text-[#A3A3A3] italic">
+                    <p className="mt-0.5 text-xs text-muted-foreground/70 italic">
                       {event.notes}
                     </p>
                   )}
@@ -293,16 +293,16 @@ export default async function TraceabilityPage({
 
       {/* Substances of Concern (REACH Article 33) */}
       <div className="clean-card p-5">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
           <FlaskConical className="h-3.5 w-3.5" />
           Substances of Concern
         </div>
-        <p className="mt-1 text-xs text-[#A3A3A3]">
+        <p className="mt-1 text-xs text-muted-foreground/70">
           Per EU REACH Article 33 — SVHC above 0.1% w/w threshold.
         </p>
 
         {socEntries.length === 0 ? (
-          <div className="mt-4 flex items-center gap-2 text-sm text-[#22C55E]">
+          <div className="mt-4 flex items-center gap-2 text-sm text-primary">
             <ShieldCheck className="h-4 w-4" />
             No substances of concern identified above reporting threshold.
           </div>
@@ -310,40 +310,40 @@ export default async function TraceabilityPage({
           <div className="mt-4 overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#D9D9D9]">
-                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Substance</th>
-                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">CAS Number</th>
-                  <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Concentration</th>
-                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Location</th>
-                  <th className="py-2 text-left text-[0.625rem] font-bold uppercase tracking-wider text-[#737373]">Regulatory Basis</th>
+                <tr className="border-b border-border">
+                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Substance</th>
+                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">CAS Number</th>
+                  <th className="py-2 pr-4 text-right text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Concentration</th>
+                  <th className="py-2 pr-4 text-left text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Location</th>
+                  <th className="py-2 text-left text-[0.625rem] font-bold uppercase tracking-wider text-muted-foreground">Regulatory Basis</th>
                 </tr>
               </thead>
               <tbody>
                 {socEntries.map((soc) => {
                   const aboveThreshold = (soc.concentration_percent ?? 0) >= 0.1;
                   return (
-                    <tr key={soc.id} className="border-b border-dashed border-[#F2F2F2]">
+                    <tr key={soc.id} className="border-b border-dashed border-muted">
                       <td className="py-2.5 pr-4">
-                        <span className="flex items-center gap-1.5 font-medium text-[#0D0D0D]">
+                        <span className="flex items-center gap-1.5 font-medium text-foreground">
                           {aboveThreshold && <AlertTriangle className="h-3 w-3 text-[#F59E0B]" />}
                           {soc.substance_name}
                         </span>
                       </td>
-                      <td className="py-2.5 pr-4 font-mono text-xs text-[#737373]">
+                      <td className="py-2.5 pr-4 font-mono text-xs text-muted-foreground">
                         {soc.cas_number ?? "—"}
                       </td>
                       <td className="py-2.5 pr-4 text-right">
-                        <span className={`font-mono text-xs font-semibold ${aboveThreshold ? "text-[#F59E0B]" : "text-[#22C55E]"}`}>
+                        <span className={`font-mono text-xs font-semibold ${aboveThreshold ? "text-[#F59E0B]" : "text-primary"}`}>
                           {soc.concentration_percent != null ? `${soc.concentration_percent}%` : "—"}
                         </span>
                       </td>
-                      <td className="py-2.5 pr-4 text-xs text-[#737373]">
+                      <td className="py-2.5 pr-4 text-xs text-muted-foreground">
                         {soc.location_in_module ?? "—"}
                       </td>
-                      <td className="py-2.5 text-xs text-[#A3A3A3]">
+                      <td className="py-2.5 text-xs text-muted-foreground/70">
                         {soc.regulatory_basis ?? "—"}
                         {soc.exemption && (
-                          <span className="ml-1.5 bg-[#F2F2F2] px-1 py-0.5 text-[0.625rem] font-semibold">
+                          <span className="ml-1.5 bg-muted px-1 py-0.5 text-[0.625rem] font-semibold">
                             Exempt: {soc.exemption}
                           </span>
                         )}
@@ -359,11 +359,11 @@ export default async function TraceabilityPage({
 
       {/* Due diligence note */}
       <div className="dashed-card p-4">
-        <div className="flex items-center gap-2 text-xs font-semibold text-[#737373]">
-          <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+          <CheckCircle2 className="h-4 w-4 text-primary" />
           Due Diligence Status
         </div>
-        <p className="mt-2 text-sm text-[#737373]">
+        <p className="mt-2 text-sm text-muted-foreground">
           Supply chain due diligence conducted per EU Regulation 2024/1252.
           {allUflpaCompliant
             ? " All supply chain actors are UFLPA-compliant. No flagged entities in supply chain."

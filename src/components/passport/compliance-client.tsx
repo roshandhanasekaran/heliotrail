@@ -35,19 +35,19 @@ const statusConfig: Record<
   { badgeClass: string; icon: typeof CheckCircleIcon }
 > = {
   valid: {
-    badgeClass: "bg-[#E8FAE9] dark:bg-[#22C55E]/10 text-foreground",
+    badgeClass: "bg-[var(--passport-green-muted)] text-foreground",
     icon: CheckCircleIcon,
   },
   expired: {
-    badgeClass: "bg-[#FEE2E2] dark:bg-red-500/10 text-foreground",
+    badgeClass: "bg-red-100 dark:bg-red-500/10 text-foreground",
     icon: XCircleIcon,
   },
   revoked: {
-    badgeClass: "bg-[#FEE2E2] dark:bg-red-500/10 text-foreground",
+    badgeClass: "bg-red-100 dark:bg-red-500/10 text-foreground",
     icon: XCircleIcon,
   },
   pending: {
-    badgeClass: "bg-[#FEF3C7] dark:bg-amber-500/10 text-foreground",
+    badgeClass: "bg-[var(--passport-amber-muted)] text-foreground",
     icon: ClockIcon,
   },
 };

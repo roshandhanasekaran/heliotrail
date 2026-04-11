@@ -27,20 +27,20 @@ export default async function CompositionPage({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-bold text-[#0D0D0D]">
+      <h2 className="text-lg font-bold text-foreground">
         Material Composition
       </h2>
 
       {/* Summary badges */}
       <div className="flex flex-wrap gap-3">
-        <div className="inline-flex items-center gap-2 border border-dashed border-[#D9D9D9] px-3 py-1.5 text-sm">
-          <Layers className="h-3.5 w-3.5 text-[#737373]" />
-          <span className="text-[#737373]">{mats.length} materials</span>
+        <div className="inline-flex items-center gap-2 border border-dashed border-border px-3 py-1.5 text-sm">
+          <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-muted-foreground">{mats.length} materials</span>
         </div>
         {criticalCount > 0 && (
-          <div className="inline-flex items-center gap-2 border border-dashed border-[#F59E0B] bg-[#FEF3C7] px-3 py-1.5 text-sm">
+          <div className="inline-flex items-center gap-2 border border-dashed border-[#F59E0B] bg-[var(--passport-amber-muted)] px-3 py-1.5 text-sm">
             <AlertTriangle className="h-3.5 w-3.5 text-[#F59E0B]" />
-            <span className="text-[#0D0D0D]">
+            <span className="text-foreground">
               {criticalCount} critical raw material{criticalCount > 1 ? "s" : ""}
             </span>
           </div>
@@ -48,7 +48,7 @@ export default async function CompositionPage({
         {socCount > 0 && (
           <div className="inline-flex items-center gap-2 border border-dashed border-red-300 bg-red-50 px-3 py-1.5 text-sm">
             <AlertTriangle className="h-3.5 w-3.5 text-red-500" />
-            <span className="text-[#0D0D0D]">
+            <span className="text-foreground">
               {socCount} substance{socCount > 1 ? "s" : ""} of concern
             </span>
           </div>
@@ -58,11 +58,11 @@ export default async function CompositionPage({
       {/* Materials table */}
       {mats.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-12 text-center">
-          <Layers className="h-8 w-8 text-[#D9D9D9]" />
-          <p className="mt-3 text-sm font-medium text-[#737373]">
+          <Layers className="h-8 w-8 text-border" />
+          <p className="mt-3 text-sm font-medium text-muted-foreground">
             No materials recorded
           </p>
-          <p className="mt-1 text-xs text-[#A3A3A3]">
+          <p className="mt-1 text-xs text-muted-foreground/70">
             Add material composition data to this passport.
           </p>
         </div>
@@ -70,55 +70,55 @@ export default async function CompositionPage({
         <div className="clean-card overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#D9D9D9] bg-[#FAFAFA]">
-                <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
+              <tr className="border-b border-border bg-muted/50">
+                <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
                   Material
                 </th>
-                <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
+                <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
                   Component
                 </th>
-                <th className="px-4 py-2.5 text-right text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
+                <th className="px-4 py-2.5 text-right text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
                   Mass
                 </th>
-                <th className="px-4 py-2.5 text-right text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
+                <th className="px-4 py-2.5 text-right text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
                   %
                 </th>
-                <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] md:table-cell">
+                <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground md:table-cell">
                   CAS #
                 </th>
-                <th className="hidden px-4 py-2.5 text-center text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] sm:table-cell">
+                <th className="hidden px-4 py-2.5 text-center text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground sm:table-cell">
                   CRM
                 </th>
-                <th className="hidden px-4 py-2.5 text-center text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] sm:table-cell">
+                <th className="hidden px-4 py-2.5 text-center text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground sm:table-cell">
                   SoC
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D9D9]">
+            <tbody className="divide-y divide-border">
               {mats.map((m) => (
-                <tr key={m.id} className="hover:bg-[#FAFAFA]">
-                  <td className="px-4 py-2.5 text-sm font-medium text-[#0D0D0D]">
+                <tr key={m.id} className="hover:bg-muted/50">
+                  <td className="px-4 py-2.5 text-sm font-medium text-foreground">
                     {m.material_name}
                   </td>
-                  <td className="px-4 py-2.5 text-sm text-[#737373]">
+                  <td className="px-4 py-2.5 text-sm text-muted-foreground">
                     {m.component_type ?? "—"}
                   </td>
-                  <td className="px-4 py-2.5 text-right font-mono text-sm text-[#0D0D0D]">
+                  <td className="px-4 py-2.5 text-right font-mono text-sm text-foreground">
                     {m.mass_g ? `${m.mass_g.toLocaleString()} g` : "—"}
                   </td>
-                  <td className="px-4 py-2.5 text-right font-mono text-sm text-[#0D0D0D]">
+                  <td className="px-4 py-2.5 text-right font-mono text-sm text-foreground">
                     {m.mass_percent ? `${m.mass_percent.toFixed(2)}%` : "—"}
                   </td>
-                  <td className="hidden px-4 py-2.5 font-mono text-xs text-[#737373] md:table-cell">
+                  <td className="hidden px-4 py-2.5 font-mono text-xs text-muted-foreground md:table-cell">
                     {m.cas_number || "—"}
                   </td>
                   <td className="hidden px-4 py-2.5 text-center sm:table-cell">
                     {m.is_critical_raw_material ? (
-                      <span className="inline-flex h-5 w-5 items-center justify-center bg-[#FEF3C7] text-xs font-bold text-[#F59E0B]">
+                      <span className="inline-flex h-5 w-5 items-center justify-center bg-[var(--passport-amber-muted)] text-xs font-bold text-[#F59E0B]">
                         !
                       </span>
                     ) : (
-                      <span className="text-xs text-[#D9D9D9]">—</span>
+                      <span className="text-xs text-border">—</span>
                     )}
                   </td>
                   <td className="hidden px-4 py-2.5 text-center sm:table-cell">
@@ -127,7 +127,7 @@ export default async function CompositionPage({
                         !
                       </span>
                     ) : (
-                      <span className="text-xs text-[#D9D9D9]">—</span>
+                      <span className="text-xs text-border">—</span>
                     )}
                   </td>
                 </tr>

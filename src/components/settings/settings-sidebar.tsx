@@ -57,7 +57,7 @@ export function SettingsSidebar({ userRole }: SettingsSidebarProps) {
   return (
     <>
       {/* Mobile: horizontal scrollable tab strip */}
-      <nav className="lg:hidden -mx-4 border-b border-[#D9D9D9] bg-[#FAFAFA] px-4 sm:-mx-6 sm:px-6">
+      <nav className="lg:hidden -mx-4 border-b border-border bg-muted/50 px-4 sm:-mx-6 sm:px-6">
         <div className="flex gap-1 overflow-x-auto py-2 scrollbar-none">
           {allItems.map((item) => {
             const isActive = pathname === item.href;
@@ -69,8 +69,8 @@ export function SettingsSidebar({ userRole }: SettingsSidebarProps) {
                 className={cn(
                   "flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors",
                   isActive
-                    ? "nav-pill-active text-[#0D0D0D]"
-                    : "border border-transparent text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+                    ? "nav-pill-active text-foreground"
+                    : "border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 <item.icon className="h-3 w-3 shrink-0" />
@@ -93,7 +93,7 @@ export function SettingsSidebar({ userRole }: SettingsSidebarProps) {
 
             return (
               <div key={section.title}>
-                <p className="mb-1 px-3 text-[0.5625rem] font-bold uppercase tracking-[0.12em] text-[#A3A3A3]">
+                <p className="mb-1 px-3 text-[0.5625rem] font-bold uppercase tracking-[0.12em] text-muted-foreground/70">
                   {section.title}
                 </p>
                 <div className="space-y-0.5">
@@ -107,8 +107,8 @@ export function SettingsSidebar({ userRole }: SettingsSidebarProps) {
                         className={cn(
                           "flex items-center gap-2 px-3 py-1.5 text-sm transition-colors",
                           isActive
-                            ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-[#0D0D0D]"
-                            : "border-l-2 border-transparent text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+                            ? "border-l-2 border-primary bg-[var(--passport-green-muted)] font-medium text-foreground"
+                            : "border-l-2 border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
                         )}
                       >
                         <item.icon className="h-3.5 w-3.5 shrink-0" />

@@ -82,16 +82,16 @@ const monochromeSegmentColors = [
 ];
 
 const eolStatusLabels: Record<string, { bg: string; text: string }> = {
-  recyclable: { bg: "#E8FAE9", text: "#22C55E" },
-  reusable: { bg: "#E8FAE9", text: "#22C55E" },
-  landfill: { bg: "#F2F2F2", text: "#737373" },
-  incineration: { bg: "#F2F2F2", text: "#737373" },
+  recyclable: { bg: "var(--passport-green-muted)", text: "var(--primary)" },
+  reusable: { bg: "var(--passport-green-muted)", text: "var(--primary)" },
+  landfill: { bg: "var(--muted)", text: "var(--muted-foreground)" },
+  incineration: { bg: "var(--muted)", text: "var(--muted-foreground)" },
 };
 
 function AccessRestricted({ label }: { label: string }) {
   return (
     <GlassCard>
-      <div className="flex items-center gap-3 px-5 py-4 text-[#737373]">
+      <div className="flex items-center gap-3 px-5 py-4 text-muted-foreground">
         <LockIcon className="h-4 w-4 shrink-0" />
         <span className="text-xs font-medium">{label}</span>
       </div>
@@ -127,14 +127,14 @@ export function CircularityClient({
       {/* End of Life Status badge */}
       {circularity.endOfLifeStatus && (
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-[#737373]">End-of-Life Status:</span>
+          <span className="text-xs font-medium text-muted-foreground">End-of-Life Status:</span>
           <span
             className="px-3 py-1 text-xs font-bold uppercase tracking-wider"
             style={{
               backgroundColor:
-                eolStatusLabels[circularity.endOfLifeStatus]?.bg ?? "#F2F2F2",
+                eolStatusLabels[circularity.endOfLifeStatus]?.bg ?? "var(--muted)",
               color:
-                eolStatusLabels[circularity.endOfLifeStatus]?.text ?? "#737373",
+                eolStatusLabels[circularity.endOfLifeStatus]?.text ?? "var(--muted-foreground)",
             }}
           >
             {circularity.endOfLifeStatus}
@@ -156,17 +156,17 @@ export function CircularityClient({
                 color="#22C55E"
                 showTicks
               />
-              <div className="hidden sm:block w-px h-20 bg-[#D9D9D9]" />
+              <div className="hidden sm:block w-px h-20 bg-border" />
               <RadialGauge
                 value={circularity.recycledContent}
                 max={100}
                 label="Recycled Content"
                 unit="%"
                 size={130}
-                color="#0D0D0D"
+                color="var(--foreground)"
                 showTicks
               />
-              <div className="hidden sm:block w-px h-20 bg-[#D9D9D9]" />
+              <div className="hidden sm:block w-px h-20 bg-border" />
               <RadialGauge
                 value={circularity.renewableContent}
                 max={100}
@@ -178,14 +178,14 @@ export function CircularityClient({
               />
               {!isPublic && (
                 <>
-                  <div className="hidden sm:block w-px h-20 bg-[#D9D9D9]" />
+                  <div className="hidden sm:block w-px h-20 bg-border" />
                   <RadialGauge
                     value={circularity.dismantlingTime}
                     max={120}
                     label="Dismantling"
                     unit="min"
                     size={130}
-                    color="#737373"
+                    color="var(--muted-foreground)"
                     showTicks
                   />
                 </>
@@ -200,12 +200,12 @@ export function CircularityClient({
         <GlassCard>
           <div className="p-5">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                <LeafIcon className="h-4 w-4 text-[#0D0D0D]" />
+              <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                <LeafIcon className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0D]">Material Composition</h3>
-                <p className="text-[11px] text-[#737373]">Weight distribution by component</p>
+                <h3 className="text-sm font-semibold text-foreground">Material Composition</h3>
+                <p className="text-[11px] text-muted-foreground">Weight distribution by component</p>
               </div>
             </div>
             <MaterialDonut
@@ -229,12 +229,12 @@ export function CircularityClient({
           <GlassCard>
             <div className="p-5">
               <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                  <AlertTriangleIcon className="h-4 w-4 text-[#0D0D0D]" />
+                <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                  <AlertTriangleIcon className="h-4 w-4 text-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-[#0D0D0D]">Substances of Concern</h3>
-                  <p className="text-[11px] text-[#737373]">REACH / EU regulatory disclosures</p>
+                  <h3 className="text-sm font-semibold text-foreground">Substances of Concern</h3>
+                  <p className="text-[11px] text-muted-foreground">REACH / EU regulatory disclosures</p>
                 </div>
               </div>
 
@@ -246,20 +246,20 @@ export function CircularityClient({
                 {socMaterials.map((m) => (
                   <div key={m.id} className="passport-table-row !items-start !py-3">
                     <div>
-                      <span className="table-label font-medium text-[#0D0D0D]">{m.name}</span>
+                      <span className="table-label font-medium text-foreground">{m.name}</span>
                       {!isPublic && m.componentType && (
-                        <span className="ml-2 text-[10px] text-[#737373]">({m.componentType})</span>
+                        <span className="ml-2 text-[10px] text-muted-foreground">({m.componentType})</span>
                       )}
                     </div>
                     <div className="text-right space-y-0.5">
                       {!isPublic && m.casNumber && (
-                        <div className="text-[11px] text-[#0D0D0D] font-mono">CAS {m.casNumber}</div>
+                        <div className="text-[11px] text-foreground font-mono">CAS {m.casNumber}</div>
                       )}
                       {m.concentrationPercent != null && (
-                        <div className="text-[11px] text-[#0D0D0D]">{m.concentrationPercent}% concentration</div>
+                        <div className="text-[11px] text-foreground">{m.concentrationPercent}% concentration</div>
                       )}
                       {m.regulatoryBasis && (
-                        <div className="text-[10px] text-[#737373]">{m.regulatoryBasis}</div>
+                        <div className="text-[10px] text-muted-foreground">{m.regulatoryBasis}</div>
                       )}
                     </div>
                   </div>
@@ -275,12 +275,12 @@ export function CircularityClient({
         <GlassCard>
           <div className="p-5">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                <RecycleIcon className="h-4 w-4 text-[#0D0D0D]" />
+              <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                <RecycleIcon className="h-4 w-4 text-foreground" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#0D0D0D]">Material Recovery</h3>
-                <p className="text-[11px] text-[#737373]">Recoverable materials assessment</p>
+                <h3 className="text-sm font-semibold text-foreground">Material Recovery</h3>
+                <p className="text-[11px] text-muted-foreground">Recoverable materials assessment</p>
               </div>
             </div>
 
@@ -290,8 +290,8 @@ export function CircularityClient({
                   key={item.name}
                   className={
                     item.recoverable
-                      ? "border border-[#22C55E] bg-[#E8FAE9] p-3 text-center"
-                      : "border border-dashed border-[#D9D9D9] bg-[#FAFAFA] p-3 text-center"
+                      ? "border border-primary bg-[var(--passport-green-muted)] p-3 text-center"
+                      : "border border-dashed border-border bg-muted/50 p-3 text-center"
                   }
                 >
                   <div
@@ -300,15 +300,15 @@ export function CircularityClient({
                       backgroundColor: materialDotColors[item.name] ?? "#A3A3A3",
                     }}
                   />
-                  <p className="text-xs font-semibold text-[#0D0D0D]">{item.name}</p>
-                  <p className="mt-0.5 text-[10px] text-[#737373]">{item.method}</p>
+                  <p className="text-xs font-semibold text-foreground">{item.name}</p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">{item.method}</p>
                   {item.recoverable ? (
-                    <div className="mt-2 flex items-center justify-center gap-1 text-[#22C55E]">
+                    <div className="mt-2 flex items-center justify-center gap-1 text-primary">
                       <CheckCircleIcon className="h-3 w-3" />
                       <span className="text-[10px] font-bold uppercase tracking-wider">Yes</span>
                     </div>
                   ) : (
-                    <div className="mt-2 flex items-center justify-center gap-1 text-[#737373]">
+                    <div className="mt-2 flex items-center justify-center gap-1 text-muted-foreground">
                       <XCircleIcon className="h-3 w-3" />
                       <span className="text-[10px] font-bold uppercase tracking-wider">No</span>
                     </div>
@@ -318,7 +318,7 @@ export function CircularityClient({
             </div>
 
             {circularity.recoveryNotes && (
-              <p className="mt-3 text-[11px] text-[#737373] leading-relaxed">
+              <p className="mt-3 text-[11px] text-muted-foreground leading-relaxed">
                 {circularity.recoveryNotes}
               </p>
             )}
@@ -335,12 +335,12 @@ export function CircularityClient({
             <GlassCard>
               <div className="p-5">
                 <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                    <UserIcon className="h-4 w-4 text-[#0D0D0D]" />
+                  <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                    <UserIcon className="h-4 w-4 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-[#0D0D0D]">Certified Recycler</h3>
-                    <p className="text-[11px] text-[#737373]">Authorized end-of-life handler</p>
+                    <h3 className="text-sm font-semibold text-foreground">Certified Recycler</h3>
+                    <p className="text-[11px] text-muted-foreground">Authorized end-of-life handler</p>
                   </div>
                 </div>
                 <div className="passport-table">
@@ -376,16 +376,16 @@ export function CircularityClient({
             <GlassCard>
               <div className="p-5">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                    <AlertTriangleIcon className="h-4 w-4 text-[#0D0D0D]" />
+                  <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                    <AlertTriangleIcon className="h-4 w-4 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-[#0D0D0D]">Hazardous Substances</h3>
-                    <p className="text-[11px] text-[#737373]">Safety & handling warnings</p>
+                    <h3 className="text-sm font-semibold text-foreground">Hazardous Substances</h3>
+                    <p className="text-[11px] text-muted-foreground">Safety & handling warnings</p>
                   </div>
                 </div>
                 {circularity.hazardousNotes && (
-                  <p className="text-sm text-[#0D0D0D] leading-relaxed">
+                  <p className="text-sm text-foreground leading-relaxed">
                     {circularity.hazardousNotes}
                   </p>
                 )}
@@ -401,15 +401,15 @@ export function CircularityClient({
             <GlassCard>
               <div className="p-5">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                    <WrenchIcon className="h-4 w-4 text-[#0D0D0D]" />
+                  <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                    <WrenchIcon className="h-4 w-4 text-foreground" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-[#0D0D0D]">Dismantling Instructions</h3>
-                    <p className="text-[11px] text-[#737373]">End-of-life procedures</p>
+                    <h3 className="text-sm font-semibold text-foreground">Dismantling Instructions</h3>
+                    <p className="text-[11px] text-muted-foreground">End-of-life procedures</p>
                   </div>
                 </div>
-                <pre className="whitespace-pre-wrap font-mono text-sm text-[#0D0D0D] leading-relaxed">
+                <pre className="whitespace-pre-wrap font-mono text-sm text-foreground leading-relaxed">
                   {circularity.dismantlingInstructions}
                 </pre>
               </div>
@@ -421,15 +421,15 @@ export function CircularityClient({
           <GlassCard>
             <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
-                <div className="flex h-9 w-9 items-center justify-center bg-[#F2F2F2]">
-                  <InfoIcon className="h-4 w-4 text-[#0D0D0D]" />
+                <div className="flex h-9 w-9 items-center justify-center bg-muted">
+                  <InfoIcon className="h-4 w-4 text-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-[#0D0D0D]">Collection Scheme</h3>
-                  <p className="text-[11px] text-[#737373]">Recycling program details</p>
+                  <h3 className="text-sm font-semibold text-foreground">Collection Scheme</h3>
+                  <p className="text-[11px] text-muted-foreground">Recycling program details</p>
                 </div>
               </div>
-              <p className="text-sm text-[#0D0D0D] leading-relaxed">
+              <p className="text-sm text-foreground leading-relaxed">
                 {circularity.collectionScheme}
               </p>
             </div>

@@ -26,7 +26,7 @@ export function FleetHealthGauge({ score, delta, breakdown }: FleetHealthGaugePr
             cy="54"
             r={r}
             fill="none"
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeWidth="5"
           />
           {/* Score arc */}
@@ -73,7 +73,7 @@ export function FleetHealthGauge({ score, delta, breakdown }: FleetHealthGaugePr
             y="50"
             textAnchor="middle"
             dominantBaseline="central"
-            className="fill-[#0D0D0D]"
+            className="fill-foreground"
             fontSize="22"
             fontWeight="700"
             fontFamily="JetBrains Mono, monospace"
@@ -84,7 +84,7 @@ export function FleetHealthGauge({ score, delta, breakdown }: FleetHealthGaugePr
             x="54"
             y="67"
             textAnchor="middle"
-            className="fill-[#A3A3A3]"
+            className="fill-muted-foreground/70"
             fontSize="8"
             fontFamily="DM Sans, sans-serif"
           >
@@ -96,7 +96,7 @@ export function FleetHealthGauge({ score, delta, breakdown }: FleetHealthGaugePr
           className={cn(
             "absolute -right-1 top-0 flex items-center gap-0.5 px-1.5 py-0.5 text-[9px] font-bold",
             delta >= 0
-              ? "bg-[#DCFCE7] text-[#166534]"
+              ? "bg-[var(--passport-green-muted)] text-foreground"
               : "bg-[#FEE2E2] text-[#B91C1C]",
           )}
         >

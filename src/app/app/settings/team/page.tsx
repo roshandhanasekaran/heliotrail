@@ -12,11 +12,7 @@ import {
 } from "@/lib/mock/settings";
 import { ROLE_LABELS, ROLE_COLORS, canDo, type Role } from "@/lib/rbac";
 import { formatDate } from "@/lib/utils";
-
-const inputClass =
-  "w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]";
-const labelClass =
-  "text-xs font-semibold uppercase tracking-wider text-[#737373]";
+import { LABEL_CLASS, INPUT_CLASS } from "@/lib/styles";
 
 export default function TeamPage() {
   const [showInvite, setShowInvite] = useState(false);
@@ -58,7 +54,7 @@ export default function TeamPage() {
     <div className="space-y-5">
       {/* Page heading */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-[#0D0D0D]">Team</h2>
+        <h2 className="text-lg font-bold text-foreground">Team</h2>
         <button
           onClick={() => setShowInvite((v) => !v)}
           className="cta-primary text-xs flex items-center gap-1.5"
@@ -70,7 +66,7 @@ export default function TeamPage() {
 
       {/* Success banner */}
       {showBanner && (
-        <div className="flex items-center gap-2 rounded-md bg-[#E8FAE9] px-4 py-2.5 text-sm font-medium text-[#15803D]">
+        <div className="flex items-center gap-2 rounded-md bg-[var(--passport-green-muted)] px-4 py-2.5 text-sm font-medium text-[#15803D]">
           <Mail className="h-4 w-4 shrink-0" />
           Invitation sent successfully
         </div>
@@ -78,17 +74,17 @@ export default function TeamPage() {
 
       {/* Invite form */}
       {showInvite && (
-        <div className="clean-card border border-[#22C55E]">
-          <div className="flex items-center justify-between border-b border-[#D9D9D9] px-5 py-3">
+        <div className="clean-card border border-primary">
+          <div className="flex items-center justify-between border-b border-border px-5 py-3">
             <div className="flex items-center gap-2">
-              <UserPlus className="h-4 w-4 text-[#22C55E]" />
-              <h3 className="text-sm font-semibold text-[#0D0D0D]">
+              <UserPlus className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-foreground">
                 Invite Team Member
               </h3>
             </div>
             <button
               onClick={() => setShowInvite(false)}
-              className="text-[#737373] hover:text-[#0D0D0D]"
+              className="text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>
@@ -97,22 +93,22 @@ export default function TeamPage() {
           <div className="p-5">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className={labelClass}>Email Address</label>
+                <label className={LABEL_CLASS}>Email Address</label>
                 <input
                   type="email"
                   placeholder="colleague@waaree.com"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
-                  className={inputClass}
+                  className={INPUT_CLASS}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className={labelClass}>Role</label>
+                <label className={LABEL_CLASS}>Role</label>
                 <select
                   value={inviteRole}
                   onChange={(e) => setInviteRole(e.target.value as Role)}
-                  className={inputClass}
+                  className={INPUT_CLASS}
                 >
                   {inviteRoleOptions.map((r) => (
                     <option key={r} value={r}>
@@ -138,15 +134,15 @@ export default function TeamPage() {
 
       {/* Members card */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <Users className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">Members</h3>
-          <span className="ml-auto bg-[#F2F2F2] px-2 py-0.5 text-xs font-semibold text-[#737373]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <Users className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">Members</h3>
+          <span className="ml-auto bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
             {teamMembers.length}
           </span>
         </div>
 
-        <div className="divide-y divide-[#D9D9D9]">
+        <div className="divide-y divide-border">
           {teamMembers.map((member: MockTeamMember) => {
             const colors = ROLE_COLORS[member.role];
             return (
@@ -155,14 +151,14 @@ export default function TeamPage() {
                 className="flex items-center justify-between px-5 py-3.5"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#22C55E] text-sm font-bold text-white">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-white">
                     {member.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-[#0D0D0D]">
+                    <p className="text-sm font-medium text-foreground">
                       {member.name}
                     </p>
-                    <p className="text-xs text-[#737373]">{member.email}</p>
+                    <p className="text-xs text-muted-foreground">{member.email}</p>
                   </div>
                 </div>
 
@@ -172,7 +168,7 @@ export default function TeamPage() {
                   >
                     {ROLE_LABELS[member.role]}
                   </span>
-                  <span className="text-xs text-[#737373]">
+                  <span className="text-xs text-muted-foreground">
                     Active {formatDate(member.lastActive)}
                   </span>
                 </div>
@@ -185,27 +181,27 @@ export default function TeamPage() {
       {/* Pending Invites card */}
       {invites.length > 0 && (
         <div className="clean-card">
-          <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
+          <div className="flex items-center gap-2 border-b border-border px-5 py-3">
             <Clock className="h-4 w-4 text-[#F59E0B]" />
-            <h3 className="text-sm font-semibold text-[#0D0D0D]">
+            <h3 className="text-sm font-semibold text-foreground">
               Pending Invitations
             </h3>
-            <span className="ml-auto bg-[#FEF3C7] px-2 py-0.5 text-xs font-semibold text-[#92400E]">
+            <span className="ml-auto bg-[var(--passport-amber-muted)] px-2 py-0.5 text-xs font-semibold text-[#92400E]">
               {invites.length}
             </span>
           </div>
 
-          <div className="divide-y divide-[#D9D9D9]">
+          <div className="divide-y divide-border">
             {invites.map((invite: MockInvite) => (
               <div
                 key={invite.id}
                 className="flex items-center justify-between px-5 py-3.5"
               >
                 <div>
-                  <p className="text-sm font-medium text-[#0D0D0D]">
+                  <p className="text-sm font-medium text-foreground">
                     {invite.email}
                   </p>
-                  <p className="text-xs text-[#737373]">
+                  <p className="text-xs text-muted-foreground">
                     Invited as {ROLE_LABELS[invite.role]} by {invite.invitedBy}{" "}
                     · {formatDate(invite.invitedAt)}
                   </p>

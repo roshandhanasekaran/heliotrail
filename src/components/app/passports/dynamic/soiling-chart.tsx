@@ -30,16 +30,16 @@ export function SoilingChart({ data }: SoilingChartProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.15 }}
-              className="pointer-events-none absolute -top-10 z-10 border border-[#D9D9D9] bg-white px-2 py-1 text-xs shadow-sm"
+              className="pointer-events-none absolute -top-10 z-10 border border-border bg-card px-2 py-1 text-xs shadow-sm"
               style={{
                 left: `${(hoveredIndex / (data.length - 1)) * 100}%`,
                 transform: "translateX(-50%)",
               }}
             >
-              <div className="font-mono font-semibold text-[#0D0D0D]">
+              <div className="font-mono font-semibold text-foreground">
                 {data[hoveredIndex].loss}% loss
               </div>
-              <div className="text-[#A3A3A3]">
+              <div className="text-muted-foreground/70">
                 -€{data[hoveredIndex].revenueLoss}
               </div>
             </motion.div>
@@ -86,7 +86,7 @@ export function SoilingChart({ data }: SoilingChartProps) {
                 {d.cleaned && (
                   <Droplets className="mt-0.5 h-2.5 w-2.5 text-[#3B82F6]" />
                 )}
-                <span className="mt-0.5 text-[9px] text-[#A3A3A3]">
+                <span className="mt-0.5 text-[9px] text-muted-foreground/70">
                   {d.month}
                 </span>
               </div>
@@ -96,7 +96,7 @@ export function SoilingChart({ data }: SoilingChartProps) {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-3 text-[10px] text-[#737373]">
+      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
         <span className="flex items-center gap-1">
           <Droplets className="h-2.5 w-2.5 text-[#3B82F6]" /> Cleaned
         </span>

@@ -107,16 +107,16 @@ export function CirpassSubmitDialog({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 8 }}
         transition={{ duration: 0.2 }}
-        className="relative z-10 w-full max-w-lg mx-4 bg-white border border-[#D9D9D9] shadow-xl"
+        className="relative z-10 w-full max-w-lg mx-4 bg-card border border-border shadow-xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#D9D9D9] px-6 py-4">
-          <h2 className="text-lg font-bold text-[#0D0D0D]">
+        <div className="flex items-center justify-between border-b border-border px-6 py-4">
+          <h2 className="text-lg font-bold text-foreground">
             Submit to CIRPASS 2
           </h2>
           <button
             onClick={handleClose}
-            className="p-1 text-[#737373] hover:text-[#0D0D0D] transition-colors"
+            className="p-1 text-muted-foreground hover:text-foreground transition-colors"
           >
             <XIcon className="h-4 w-4" />
           </button>
@@ -132,41 +132,41 @@ export function CirpassSubmitDialog({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <p className="text-sm text-[#737373] mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   This will anchor and submit the following passport to the
                   CIRPASS 2 digital product passport registry.
                 </p>
 
-                <div className="border border-[#D9D9D9] p-4 mb-6 space-y-2">
+                <div className="border border-border p-4 mb-6 space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-xs text-[#737373] uppercase tracking-wider font-semibold">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
                       Model
                     </span>
-                    <span className="text-sm font-medium text-[#0D0D0D]">
+                    <span className="text-sm font-medium text-foreground">
                       {passport.model_id}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs text-[#737373] uppercase tracking-wider font-semibold">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
                       Manufacturer
                     </span>
-                    <span className="text-sm font-medium text-[#0D0D0D]">
+                    <span className="text-sm font-medium text-foreground">
                       {passport.manufacturer_name}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs text-[#737373] uppercase tracking-wider font-semibold">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
                       Passport ID
                     </span>
-                    <span className="text-sm font-mono text-[#0D0D0D]">
+                    <span className="text-sm font-mono text-foreground">
                       {passport.pv_passport_id}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs text-[#737373] uppercase tracking-wider font-semibold">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
                       Version
                     </span>
-                    <span className="text-sm text-[#0D0D0D]">
+                    <span className="text-sm text-foreground">
                       v{passport.passport_version}
                     </span>
                   </div>
@@ -175,13 +175,13 @@ export function CirpassSubmitDialog({
                 <div className="flex gap-3 justify-end">
                   <button
                     onClick={handleClose}
-                    className="px-4 py-2 text-sm font-medium text-[#737373] border border-[#D9D9D9] hover:bg-[#F2F2F2] transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-muted-foreground border border-border hover:bg-muted transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-[#22C55E] text-[#0D0D0D] hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
+                    className="flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-foreground hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
                   >
                     <SendIcon className="h-3.5 w-3.5" />
                     Confirm Submission
@@ -198,14 +198,14 @@ export function CirpassSubmitDialog({
                 exit={{ opacity: 0 }}
                 className="flex flex-col items-center py-8 gap-4"
               >
-                <LoaderIcon className="h-8 w-8 text-[#22C55E] animate-spin" />
+                <LoaderIcon className="h-8 w-8 text-primary animate-spin" />
                 <div className="text-center">
-                  <p className="text-sm font-semibold text-[#0D0D0D]">
+                  <p className="text-sm font-semibold text-foreground">
                     {phase === "anchoring"
                       ? "Anchoring passport..."
                       : "Submitting to CIRPASS 2..."}
                   </p>
-                  <p className="text-xs text-[#737373] mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {phase === "anchoring"
                       ? "Computing integrity hash and recording anchor"
                       : "Sending DPP data to the CIRPASS 2 registry"}
@@ -215,23 +215,23 @@ export function CirpassSubmitDialog({
                 {/* Progress steps */}
                 <div className="w-full max-w-xs space-y-2 mt-2">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2Icon className="h-4 w-4 text-[#22C55E]" />
-                    <span className="text-xs text-[#0D0D0D]">
+                    <CheckCircle2Icon className="h-4 w-4 text-primary" />
+                    <span className="text-xs text-foreground">
                       DPP payload assembled
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     {phase === "submitting" ? (
-                      <CheckCircle2Icon className="h-4 w-4 text-[#22C55E]" />
+                      <CheckCircle2Icon className="h-4 w-4 text-primary" />
                     ) : (
-                      <LoaderIcon className="h-4 w-4 text-[#737373] animate-spin" />
+                      <LoaderIcon className="h-4 w-4 text-muted-foreground animate-spin" />
                     )}
                     <span
                       className={cn(
                         "text-xs",
                         phase === "submitting"
-                          ? "text-[#0D0D0D]"
-                          : "text-[#737373]"
+                          ? "text-foreground"
+                          : "text-muted-foreground"
                       )}
                     >
                       SHA-256 integrity hash computed
@@ -239,11 +239,11 @@ export function CirpassSubmitDialog({
                   </div>
                   <div className="flex items-center gap-2">
                     {phase === "submitting" ? (
-                      <LoaderIcon className="h-4 w-4 text-[#737373] animate-spin" />
+                      <LoaderIcon className="h-4 w-4 text-muted-foreground animate-spin" />
                     ) : (
-                      <div className="h-4 w-4 rounded-full border border-[#D9D9D9]" />
+                      <div className="h-4 w-4 rounded-full border border-border" />
                     )}
-                    <span className="text-xs text-[#737373]">
+                    <span className="text-xs text-muted-foreground">
                       Submitting to CIRPASS 2 portal
                     </span>
                   </div>
@@ -269,27 +269,27 @@ export function CirpassSubmitDialog({
                     delay: 0.1,
                   }}
                 >
-                  <CheckCircle2Icon className="h-12 w-12 text-[#22C55E]" />
+                  <CheckCircle2Icon className="h-12 w-12 text-primary" />
                 </motion.div>
 
                 <div className="text-center">
-                  <p className="text-lg font-bold text-[#0D0D0D]">
+                  <p className="text-lg font-bold text-foreground">
                     Successfully Registered
                   </p>
-                  <p className="text-sm text-[#737373] mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Passport accepted by CIRPASS 2 registry
                   </p>
                 </div>
 
-                <div className="w-full border border-[#D9D9D9] p-4 space-y-3 mt-2">
+                <div className="w-full border border-border p-4 space-y-3 mt-2">
                   {result.submission?.receiptId && (
                     <div className="flex items-start gap-2">
-                      <TicketIcon className="h-4 w-4 text-[#22C55E] mt-0.5 shrink-0" />
+                      <TicketIcon className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-[10px] text-[#737373] uppercase tracking-wider font-semibold">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
                           Receipt ID
                         </p>
-                        <p className="text-sm font-mono text-[#0D0D0D] break-all">
+                        <p className="text-sm font-mono text-foreground break-all">
                           {result.submission.receiptId}
                         </p>
                       </div>
@@ -297,12 +297,12 @@ export function CirpassSubmitDialog({
                   )}
                   {result.anchor?.payloadHash && (
                     <div className="flex items-start gap-2">
-                      <HashIcon className="h-4 w-4 text-[#22C55E] mt-0.5 shrink-0" />
+                      <HashIcon className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-[10px] text-[#737373] uppercase tracking-wider font-semibold">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
                           Anchor Hash (SHA-256)
                         </p>
-                        <p className="text-xs font-mono text-[#0D0D0D] break-all">
+                        <p className="text-xs font-mono text-foreground break-all">
                           {result.anchor.payloadHash}
                         </p>
                       </div>
@@ -310,12 +310,12 @@ export function CirpassSubmitDialog({
                   )}
                   {result.anchor?.anchoredAt && (
                     <div className="flex items-start gap-2">
-                      <ClockIcon className="h-4 w-4 text-[#737373] mt-0.5 shrink-0" />
+                      <ClockIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-[10px] text-[#737373] uppercase tracking-wider font-semibold">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
                           Anchored At
                         </p>
-                        <p className="text-sm text-[#0D0D0D]">
+                        <p className="text-sm text-foreground">
                           {new Date(result.anchor.anchoredAt).toLocaleString()}
                         </p>
                       </div>
@@ -323,12 +323,12 @@ export function CirpassSubmitDialog({
                   )}
                   {result.anchor?.passportVersion != null && (
                     <div className="flex items-start gap-2">
-                      <ShieldCheckIcon className="h-4 w-4 text-[#737373] mt-0.5 shrink-0" />
+                      <ShieldCheckIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                       <div>
-                        <p className="text-[10px] text-[#737373] uppercase tracking-wider font-semibold">
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
                           Passport Version
                         </p>
-                        <p className="text-sm text-[#0D0D0D]">
+                        <p className="text-sm text-foreground">
                           v{result.anchor.passportVersion}
                         </p>
                       </div>
@@ -338,7 +338,7 @@ export function CirpassSubmitDialog({
 
                 <button
                   onClick={handleClose}
-                  className="mt-2 px-5 py-2 text-sm font-semibold bg-[#22C55E] text-[#0D0D0D] hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
+                  className="mt-2 px-5 py-2 text-sm font-semibold bg-primary text-foreground hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
                 >
                   Done
                 </button>
@@ -356,10 +356,10 @@ export function CirpassSubmitDialog({
                 <AlertCircleIcon className="h-12 w-12 text-red-500" />
 
                 <div className="text-center">
-                  <p className="text-lg font-bold text-[#0D0D0D]">
+                  <p className="text-lg font-bold text-foreground">
                     Submission Failed
                   </p>
-                  <p className="text-sm text-[#737373] mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     {result?.error ?? "An unexpected error occurred"}
                   </p>
                   {result?.details && (
@@ -372,13 +372,13 @@ export function CirpassSubmitDialog({
                 <div className="flex gap-3 mt-2">
                   <button
                     onClick={handleClose}
-                    className="px-4 py-2 text-sm font-medium text-[#737373] border border-[#D9D9D9] hover:bg-[#F2F2F2] transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-muted-foreground border border-border hover:bg-muted transition-colors"
                   >
                     Close
                   </button>
                   <button
                     onClick={handleRetry}
-                    className="flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-[#22C55E] text-[#0D0D0D] hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
+                    className="flex items-center gap-2 px-5 py-2 text-sm font-semibold bg-primary text-foreground hover:scale-[1.02] hover:shadow-md active:scale-[0.98] transition-all"
                   >
                     Retry
                   </button>

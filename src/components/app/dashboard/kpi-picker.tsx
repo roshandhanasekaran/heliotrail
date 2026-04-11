@@ -70,7 +70,7 @@ export function KpiPicker({
           <div className="space-y-5">
             {grouped.map((group) => (
               <div key={group.category}>
-                <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-wider text-[#A3A3A3]">
+                <p className="mb-2 text-[0.625rem] font-semibold uppercase tracking-wider text-muted-foreground/70">
                   {group.label}
                 </p>
                 <div className="space-y-1">
@@ -85,7 +85,7 @@ export function KpiPicker({
                             ? "bg-[#F0FDF4]"
                             : disabled
                               ? "cursor-not-allowed opacity-50"
-                              : "hover:bg-[#FAFAFA]"
+                              : "hover:bg-muted/50"
                         }`}
                       >
                         <input
@@ -93,17 +93,17 @@ export function KpiPicker({
                           checked={isOn}
                           disabled={disabled}
                           onChange={() => toggle(metric.id)}
-                          className="h-4 w-4 rounded border-[#D9D9D9] text-[#22C55E] accent-[#22C55E]"
+                          className="h-4 w-4 rounded border-border text-primary accent-primary"
                         />
                         <metric.icon
                           className="h-4 w-4 shrink-0"
                           style={{ color: metric.accentColor }}
                         />
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-[#0D0D0D]">
+                          <p className="text-sm font-medium text-foreground">
                             {metric.label}
                           </p>
-                          <p className="text-xs text-[#737373]">
+                          <p className="text-xs text-muted-foreground">
                             {metric.description}
                           </p>
                         </div>
@@ -118,7 +118,7 @@ export function KpiPicker({
 
         <SheetFooter>
           <div className="flex items-center justify-between">
-            <span className="text-xs text-[#A3A3A3]">
+            <span className="text-xs text-muted-foreground/70">
               {enabled.size}/{MAX_SECONDARY_KPIS} selected
             </span>
             <Button

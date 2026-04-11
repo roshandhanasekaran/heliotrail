@@ -36,7 +36,7 @@ export function SubmitForApprovalButton({
 
   if (submitted) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-[#22C55E]">
+      <span className="inline-flex items-center gap-1 text-xs font-medium text-primary">
         <CheckCircle2 className="h-3.5 w-3.5" /> Submitted for Review
       </span>
     );

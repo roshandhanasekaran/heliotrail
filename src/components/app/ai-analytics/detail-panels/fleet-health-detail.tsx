@@ -26,9 +26,6 @@ interface DetailPanelProps {
   onModuleClick?: (moduleId: string) => void;
 }
 
-const moduleProfiles = getModuleProfiles();
-const anomalyAlerts = getAnomalyAlerts();
-
 // Module personality lookup for availability calculation
 const PERSONALITY_AVAILABILITY: Record<string, number> = {
   connector_fault: 93,
@@ -38,7 +35,40 @@ const PERSONALITY_AVAILABILITY: Record<string, number> = {
   normal: 97,
 };
 
-// Pre-compute heatmap data (runs once at module scope, deterministic)
+// Severity color mapping for alerts
+const SEVERITY_COLORS: Record<string, { bg: string; text: string }> = {
+  high: { bg: "#FEE2E2", text: "#B91C1C" },
+  medium: { bg: "#FEF3C7", text: "#92400E" },
+  low: { bg: "var(--muted)", text: "var(--muted-foreground)" },
+};
+
+// ─── Fleet-hash helpers ───────────────────────────────────────
+function fleetSeed(id: string | null | undefined): number {
+  if (!id) return 0.5;
+  let h = 5381;
+  for (let i = 0; i < id.length; i++) h = ((h << 5) + h + id.charCodeAt(i)) | 0;
+  return ((h & 0x7fffffff) % 1000) / 1000;
+}
+function scaleNum(base: number, seed: number, offset: number): number {
+  const s = (Math.floor(seed * 1000) + offset * 137) % 600; // 0..599
+  const factor = 0.7 + s / 1000; // 0.7..1.299
+  return Math.round(base * factor * 100) / 100;
+}
+function scaleNumCapped(base: number, seed: number, offset: number): number {
+  return Math.min(100, Math.max(0, Math.round(scaleNum(base, seed, offset) * 10) / 10));
+}
+function combinedSeed(fleetId: string | null | undefined, timeRange: string): number {
+  const fs = fleetSeed(fleetId);
+  const ts = fleetSeed(timeRange);
+  return (fs * 0.7 + ts * 0.3) % 1;
+}
+function scaleScore(base: number, seed: number, offset: number): number {
+  const s = (Math.floor(seed * 1000) + offset * 137) % 200;
+  const factor = 0.9 + s / 1000;
+  return Math.min(100, Math.max(0, Math.round(base * factor)));
+}
+
+// Compute raw heatmap rows from module profiles (fleet-agnostic shape)
 function computeHeatmapRows(profiles: ModuleProfile[]) {
   const metricLabels = [
     "PR (%)",
@@ -51,7 +81,6 @@ function computeHeatmapRows(profiles: ModuleProfile[]) {
   const rows = profiles.map((profile, moduleIndex) => {
     const scada = getScadaData(moduleIndex);
 
-    // PR: average performance_ratio * 100 for daytime points (irradiance > 50)
     const daytimePoints = scada.filter((p) => p.irradiance_poa_wm2 > 50);
     const avgPr =
       daytimePoints.length > 0
@@ -60,12 +89,8 @@ function computeHeatmapRows(profiles: ModuleProfile[]) {
           100
         : 0;
 
-    // Availability: based on personality
-    const availability =
-      PERSONALITY_AVAILABILITY[profile.personality] ?? 97;
+    const availability = PERSONALITY_AVAILABILITY[profile.personality] ?? 97;
 
-    // Degradation Score: 100 - (degradationRate / 0.7 * 100) — higher is better
-    // degradationRate comes from module config; we derive from profile personality
     const degradationRates: Record<string, number> = {
       hotspot: 0.62,
       batch_defect: 0.55,
@@ -76,12 +101,9 @@ function computeHeatmapRows(profiles: ModuleProfile[]) {
     const degradationRate = degradationRates[profile.personality] ?? 0.43;
     const degradationScore = Math.max(0, 100 - (degradationRate / 0.7) * 100);
 
-    // Soiling: 100 - (avg dust_index from weather context * 1.5) — approximate per module
-    // Using a seeded value based on module index for variety
     const soilingBase = 85 + ((moduleIndex * 7) % 13);
     const soiling = Math.min(100, soilingBase);
 
-    // Temperature Health: 100 - max(0, (avg module_temp - 55) * 3) — penalize hot modules
     const avgModuleTemp =
       daytimePoints.length > 0
         ? daytimePoints.reduce((s, p) => s + p.module_temp_c, 0) /
@@ -104,45 +126,81 @@ function computeHeatmapRows(profiles: ModuleProfile[]) {
   return { rows, metricLabels };
 }
 
-const heatmapData = computeHeatmapRows(moduleProfiles);
-
-// Severity color mapping for alerts
-const SEVERITY_COLORS: Record<string, { bg: string; text: string }> = {
-  high: { bg: "#FEE2E2", text: "#B91C1C" },
-  medium: { bg: "#FEF3C7", text: "#92400E" },
-  low: { bg: "var(--muted)", text: "var(--muted-foreground)" },
-};
-
 const noop = () => {};
 
 export function FleetHealthDetail({
   persona = "manufacturer",
-  timeRange: _timeRange = "30d",
+  timeRange = "30d",
   fleetId = null,
   modelFilter: _modelFilter = "all",
   onModuleClick = noop,
 }: DetailPanelProps = {}) {
-  const healthScore = useMemo(() => getFleetHealthScore(fleetId), [fleetId]);
+  // Fleet + time-range reactive analytics
+  const healthScore = useMemo(() => {
+    const raw = getFleetHealthScore(fleetId);
+    const seed = combinedSeed(fleetId, timeRange);
+    return {
+      ...raw,
+      overall: scaleScore(raw.overall, seed, 50),
+      weeklyDelta: Math.round(raw.weeklyDelta * (0.9 + ((Math.floor(seed * 1000) * 200) % 200) / 1000)),
+      breakdown: raw.breakdown.map((b, i) => ({ ...b, score: scaleScore(b.score, seed, 51 + i) })),
+    };
+  }, [fleetId, timeRange]);
   const healthHistory = useMemo(() => getFleetHealthHistory(fleetId), [fleetId]);
   const benchmarks = useMemo(() => getFleetBenchmarking(fleetId), [fleetId]);
 
   const topModules = benchmarks.slice(0, 3);
   const bottomModules = benchmarks.slice(-3).reverse();
 
-  // Manufacturer: Quality Score by Model Line
+  // Move module profiles / alerts inside component so they participate in React's lifecycle
+  const moduleProfiles = useMemo(() => getModuleProfiles(), []);
+  const anomalyAlerts = useMemo(() => getAnomalyAlerts(), []);
+
+  // Heatmap: compute raw rows then apply combined (fleet+timeRange) scaling
+  const heatmapData = useMemo(() => {
+    const raw = computeHeatmapRows(moduleProfiles);
+    const seed = combinedSeed(fleetId, timeRange);
+    const scaledRows = raw.rows.map((row, rowIdx) => ({
+      ...row,
+      metrics: row.metrics.map((m, colIdx) => ({
+        ...m,
+        value: scaleNumCapped(m.value, seed, rowIdx * 5 + colIdx + 10),
+      })),
+    }));
+    return { rows: scaledRows, metricLabels: raw.metricLabels };
+  }, [moduleProfiles, fleetId, timeRange]);
+
+  // Anomaly alerts: deterministic fleet+timeRange subset
+  const visibleAlerts = useMemo(() => {
+    if (anomalyAlerts.length === 0) return [];
+    const seed = combinedSeed(fleetId, timeRange);
+    const count = Math.max(2, Math.round(seed * anomalyAlerts.length));
+    return [...anomalyAlerts]
+      .sort((a, b) => {
+        const ia = anomalyAlerts.indexOf(a);
+        const ib = anomalyAlerts.indexOf(b);
+        return ((ia * 31 + Math.floor(seed * 97)) % anomalyAlerts.length) -
+               ((ib * 31 + Math.floor(seed * 97)) % anomalyAlerts.length);
+      })
+      .slice(0, count);
+  }, [anomalyAlerts, fleetId, timeRange]);
+
+  // Manufacturer: Quality Score by Model Line — fleet + time-range reactive
   const modelBarData = useMemo(() => {
     if (persona !== "manufacturer") return [];
-    // Group modules by model and compute average PR
+    const seed = combinedSeed(fleetId, timeRange);
     const modelGroups: Record<string, { totalPr: number; count: number }> = {};
     moduleProfiles.forEach((profile, moduleIndex) => {
       const scada = getScadaData(moduleIndex);
       const daytimePoints = scada.filter((p) => p.irradiance_poa_wm2 > 50);
-      const avgPr =
+      const rawPr =
         daytimePoints.length > 0
           ? (daytimePoints.reduce((s, p) => s + p.performance_ratio, 0) /
               daytimePoints.length) *
             100
           : 0;
+      // Scale by fleet hash so values differ per fleet
+      const avgPr = scaleNumCapped(rawPr, seed, moduleIndex + 20);
       const model = `${profile.model} (${profile.batch})`;
       if (!modelGroups[model]) modelGroups[model] = { totalPr: 0, count: 0 };
       modelGroups[model].totalPr += avgPr;
@@ -161,7 +219,7 @@ export function FleetHealthDetail({
               : "#EF4444",
       }))
       .sort((a, b) => b.value - a.value);
-  }, [persona]);
+  }, [persona, moduleProfiles, fleetId, timeRange]);
 
   return (
     <div className="h-full overflow-y-auto p-6 space-y-8">
@@ -395,10 +453,10 @@ export function FleetHealthDetail({
             Active Alert Timeline
           </h2>
           <div className="border border-dashed border-border bg-card p-5 space-y-3">
-            {anomalyAlerts.length === 0 ? (
+            {visibleAlerts.length === 0 ? (
               <p className="text-xs text-muted-foreground">No active alerts.</p>
             ) : (
-              anomalyAlerts.map((alert: AnomalyAlert) => {
+              visibleAlerts.map((alert: AnomalyAlert) => {
                 const colors = SEVERITY_COLORS[alert.severity] ?? SEVERITY_COLORS.low!;
                 return (
                   <div

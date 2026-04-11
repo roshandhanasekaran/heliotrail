@@ -56,8 +56,8 @@ const flashTestData = getFlashTestData();
 const revenueLossData = getRevenueLossBreakdown();
 
 const SEVERITY_STYLES = {
-  low: "bg-[#DBEAFE] text-[#3B82F6]",
-  medium: "bg-[#FEF3C7] text-[#F59E0B]",
+  low: "bg-[var(--passport-blue-muted)] text-[#3B82F6]",
+  medium: "bg-[var(--passport-amber-muted)] text-[#F59E0B]",
   high: "bg-[#FEE2E2] text-[#EF4444]",
 };
 
@@ -69,22 +69,22 @@ export default function DynamicDataPage() {
       {/* ── Section 1: Header ── */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-lg font-bold text-[#0D0D0D]">Dynamic Data</h2>
-          <p className="text-xs text-[#737373]">
+          <h2 className="text-lg font-bold text-foreground">Dynamic Data</h2>
+          <p className="text-xs text-muted-foreground">
             Real-time performance analytics & operational intelligence
           </p>
         </div>
         <div className="flex items-center gap-3">
           {/* Time range selector */}
-          <div className="flex border border-[#D9D9D9]">
+          <div className="flex border border-border">
             {TIME_RANGES.map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
                 className={`px-2.5 py-1 text-[10px] font-semibold tracking-wide transition-colors ${
                   timeRange === range
-                    ? "bg-[#22C55E] text-[#0D0D0D]"
-                    : "text-[#737373] hover:bg-[#F2F2F2]"
+                    ? "bg-primary text-foreground"
+                    : "text-muted-foreground hover:bg-muted"
                 }`}
               >
                 {range}
@@ -94,10 +94,10 @@ export default function DynamicDataPage() {
           {/* Live indicator */}
           <div className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping bg-[#22C55E] opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 bg-[#22C55E]" />
+              <span className="absolute inline-flex h-full w-full animate-ping bg-primary opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 bg-primary" />
             </span>
-            <span className="flex items-center gap-1 text-xs font-medium text-[#22C55E]">
+            <span className="flex items-center gap-1 text-xs font-medium text-primary">
               <Wifi className="h-3 w-3" />
               SCADA · Live
             </span>
@@ -114,26 +114,26 @@ export default function DynamicDataPage() {
             style={{ borderTop: `2px dashed ${kpi.accentColor}20` }}
           >
             <div className="flex items-center justify-between">
-              <span className="text-[0.6875rem] text-[#737373]">
+              <span className="text-[0.6875rem] text-muted-foreground">
                 {kpi.label}
               </span>
               <Sparkline data={kpi.sparkData} color={kpi.accentColor} />
             </div>
             <div className="mt-1.5">
-              <span className="font-mono text-xl font-bold leading-none text-[#0D0D0D]">
+              <span className="font-mono text-xl font-bold leading-none text-foreground">
                 {kpi.value}
               </span>
             </div>
-            <p className="mt-1 text-[0.625rem] text-[#A3A3A3]">{kpi.sub}</p>
+            <p className="mt-1 text-[0.625rem] text-muted-foreground/70">{kpi.sub}</p>
             <div className="mt-1.5 flex items-center gap-1">
               {kpi.trendUp ? (
-                <TrendingUp className="h-2.5 w-2.5 text-[#22C55E]" />
+                <TrendingUp className="h-2.5 w-2.5 text-primary" />
               ) : (
                 <TrendingDown className="h-2.5 w-2.5 text-[#F59E0B]" />
               )}
               <span
                 className={`text-[0.625rem] font-medium ${
-                  kpi.trendUp ? "text-[#22C55E]" : "text-[#F59E0B]"
+                  kpi.trendUp ? "text-primary" : "text-[#F59E0B]"
                 }`}
               >
                 {kpi.trend}
@@ -148,19 +148,19 @@ export default function DynamicDataPage() {
         <div className="clean-card p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-[#0D0D0D]">
+              <h3 className="text-sm font-bold text-foreground">
                 Performance Ratio
               </h3>
-              <p className="text-xs text-[#737373]">
+              <p className="text-xs text-muted-foreground">
                 Expected vs actual PR% — gap shows losses
               </p>
             </div>
-            <div className="flex items-center gap-3 text-[10px] text-[#737373]">
+            <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1">
-                <span className="h-0.5 w-3 border-t border-dashed border-[#22C55E]" /> Expected
+                <span className="h-0.5 w-3 border-t border-dashed border-primary" /> Expected
               </span>
               <span className="flex items-center gap-1">
-                <span className="h-0.5 w-3 bg-[#22C55E]" /> Actual
+                <span className="h-0.5 w-3 bg-primary" /> Actual
               </span>
             </div>
           </div>
@@ -172,10 +172,10 @@ export default function DynamicDataPage() {
         <div className="clean-card p-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-[#0D0D0D]">
+              <h3 className="text-sm font-bold text-foreground">
                 Energy Yield
               </h3>
-              <p className="text-xs text-[#737373]">
+              <p className="text-xs text-muted-foreground">
                 Monthly kWh expected vs actual + cumulative
               </p>
             </div>
@@ -190,14 +190,14 @@ export default function DynamicDataPage() {
       <div className="clean-card p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-[#0D0D0D]">
+            <h3 className="text-sm font-bold text-foreground">
               Power Output — Last 30 Days
             </h3>
-            <p className="text-xs text-[#737373]">
+            <p className="text-xs text-muted-foreground">
               Daily average active power (W) vs expected
             </p>
           </div>
-          <div className="flex items-center gap-1 text-xs text-[#A3A3A3]">
+          <div className="flex items-center gap-1 text-xs text-muted-foreground/70">
             <Clock className="h-3 w-3" />
             Updated 5 min ago
           </div>
@@ -211,18 +211,18 @@ export default function DynamicDataPage() {
       <div className="clean-card p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-[#0D0D0D]">
+            <h3 className="text-sm font-bold text-foreground">
               Performance Degradation
             </h3>
-            <p className="text-xs text-[#737373]">
+            <p className="text-xs text-muted-foreground">
               30-year projection with confidence band & fleet comparison
             </p>
           </div>
-          <div className="border border-[#D9D9D9] px-2 py-1">
-            <span className="font-mono text-xs font-semibold text-[#22C55E]">
+          <div className="border border-border px-2 py-1">
+            <span className="font-mono text-xs font-semibold text-primary">
               0.38%/yr
             </span>
-            <span className="ml-1 text-[10px] text-[#737373]">
+            <span className="ml-1 text-[10px] text-muted-foreground">
               vs 0.40% warranted
             </span>
           </div>
@@ -231,19 +231,19 @@ export default function DynamicDataPage() {
           <DegradationChart data={degradationData} />
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-4 text-xs">
-          <span className="flex items-center gap-1 text-[#22C55E]">
-            <span className="h-0.5 w-4 bg-[#22C55E]" /> This Module
+          <span className="flex items-center gap-1 text-primary">
+            <span className="h-0.5 w-4 bg-primary" /> This Module
           </span>
           <span className="flex items-center gap-1 text-[#F59E0B]">
             <span className="h-0.5 w-4 border-t-2 border-dashed border-[#F59E0B]" />
             Warranty Min
           </span>
-          <span className="flex items-center gap-1 text-[#A3A3A3]">
+          <span className="flex items-center gap-1 text-muted-foreground/70">
             <span className="h-0.5 w-4 border-t border-dashed border-[#A3A3A3]" />
             Fleet Average
           </span>
-          <span className="flex items-center gap-1 text-[#22C55E] opacity-40">
-            <span className="h-2 w-4 bg-[#22C55E] opacity-20" /> Confidence
+          <span className="flex items-center gap-1 text-primary opacity-40">
+            <span className="h-2 w-4 bg-primary opacity-20" /> Confidence
           </span>
         </div>
       </div>
@@ -251,21 +251,21 @@ export default function DynamicDataPage() {
       {/* ── Section 6: Correlation Analysis ── */}
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="clean-card p-4">
-          <h3 className="text-sm font-bold text-[#0D0D0D]">
+          <h3 className="text-sm font-bold text-foreground">
             Irradiance vs Power
           </h3>
-          <p className="text-xs text-[#737373]">
+          <p className="text-xs text-muted-foreground">
             Points below reference line indicate underperformance
           </p>
           <div className="mt-2">
             <IrradianceScatter data={irradianceData} />
           </div>
-          <div className="mt-2 flex items-center gap-3 text-[10px] text-[#737373]">
+          <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-foreground">
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 bg-[#86EFAC]" /> Morning
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 bg-[#22C55E]" /> Midday
+              <span className="h-2 w-2 bg-primary" /> Midday
             </span>
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 bg-[#F59E0B]" /> Afternoon
@@ -277,18 +277,18 @@ export default function DynamicDataPage() {
         </div>
 
         <div className="clean-card p-4">
-          <h3 className="text-sm font-bold text-[#0D0D0D]">
+          <h3 className="text-sm font-bold text-foreground">
             Temperature Derating
           </h3>
-          <p className="text-xs text-[#737373]">
+          <p className="text-xs text-muted-foreground">
             Thermal coefficient: -0.34%/°C (STC ref: 25°C)
           </p>
           <div className="mt-2">
             <TemperatureDeratingChart data={temperatureData} />
           </div>
-          <div className="mt-2 flex items-center gap-3 text-[10px] text-[#737373]">
+          <div className="mt-2 flex items-center gap-3 text-[10px] text-muted-foreground">
             <span className="flex items-center gap-1">
-              <span className="h-0.5 w-3 bg-[#22C55E]" /> Measured
+              <span className="h-0.5 w-3 bg-primary" /> Measured
             </span>
             <span className="flex items-center gap-1">
               <span className="h-0.5 w-3 border-t border-dashed border-[#A3A3A3]" /> Theoretical
@@ -300,30 +300,30 @@ export default function DynamicDataPage() {
       {/* ── Section 7: Operational Intelligence ── */}
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="clean-card p-4">
-          <h3 className="text-sm font-bold text-[#0D0D0D]">
+          <h3 className="text-sm font-bold text-foreground">
             Soiling Loss
           </h3>
-          <p className="mb-3 text-xs text-[#737373]">
+          <p className="mb-3 text-xs text-muted-foreground">
             Monthly loss % — hover for revenue impact
           </p>
           <SoilingChart data={soilingData} />
         </div>
 
         <div className="clean-card p-4">
-          <h3 className="text-sm font-bold text-[#0D0D0D]">
+          <h3 className="text-sm font-bold text-foreground">
             Inverter Clipping
           </h3>
-          <p className="mb-3 text-xs text-[#737373]">
+          <p className="mb-3 text-xs text-muted-foreground">
             Hours of power limiting per month
           </p>
           <ClippingChart data={clippingData} />
         </div>
 
         <div className="clean-card p-4">
-          <h3 className="text-sm font-bold text-[#0D0D0D]">
+          <h3 className="text-sm font-bold text-foreground">
             Flash Test vs Field
           </h3>
-          <p className="mb-3 text-xs text-[#737373]">
+          <p className="mb-3 text-xs text-muted-foreground">
             Factory nameplate vs real-world measurement
           </p>
           <FlashTestComparison data={flashTestData} />
@@ -332,10 +332,10 @@ export default function DynamicDataPage() {
 
       {/* ── Section 8: Availability ── */}
       <div className="clean-card p-4">
-        <h3 className="text-sm font-bold text-[#0D0D0D]">
+        <h3 className="text-sm font-bold text-foreground">
           Availability & Downtime
         </h3>
-        <p className="mb-3 text-xs text-[#737373]">
+        <p className="mb-3 text-xs text-muted-foreground">
           12-month uptime breakdown with reliability metrics
         </p>
         <AvailabilityTimeline data={availabilityData} />
@@ -345,7 +345,7 @@ export default function DynamicDataPage() {
       <div className="dashed-card p-4">
         <div className="mb-3 flex items-center gap-2">
           <TrendingDown className="h-4 w-4 text-[#EF4444]" />
-          <h3 className="text-sm font-bold text-[#0D0D0D]">
+          <h3 className="text-sm font-bold text-foreground">
             Financial Impact
           </h3>
         </div>
@@ -356,7 +356,7 @@ export default function DynamicDataPage() {
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Data quality */}
         <div className="clean-card p-4">
-          <h3 className="text-sm font-bold text-[#0D0D0D]">Data Quality</h3>
+          <h3 className="text-sm font-bold text-foreground">Data Quality</h3>
           <div className="mt-3 space-y-2.5">
             {[
               { label: "Freshness", value: "5 min ago", icon: CheckCircle2, ok: true },
@@ -365,11 +365,11 @@ export default function DynamicDataPage() {
               { label: "Anomalies", value: `${anomalyLog.filter((a) => !a.resolved).length} active`, icon: anomalyLog.some((a) => !a.resolved) ? AlertTriangle : CheckCircle2, ok: !anomalyLog.some((a) => !a.resolved) },
             ].map((item) => (
               <div key={item.label} className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-sm text-[#737373]">
-                  <item.icon className={`h-3.5 w-3.5 ${item.ok ? "text-[#22C55E]" : "text-[#F59E0B]"}`} />
+                <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <item.icon className={`h-3.5 w-3.5 ${item.ok ? "text-primary" : "text-[#F59E0B]"}`} />
                   {item.label}
                 </span>
-                <span className="font-mono text-sm font-medium text-[#0D0D0D]">
+                <span className="font-mono text-sm font-medium text-foreground">
                   {item.value}
                 </span>
               </div>
@@ -380,8 +380,8 @@ export default function DynamicDataPage() {
         {/* Anomaly log */}
         <div className="dashed-card p-4">
           <div className="flex items-center gap-2">
-            <Activity className="h-4 w-4 text-[#22C55E]" />
-            <h3 className="text-sm font-bold text-[#0D0D0D]">
+            <Activity className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-bold text-foreground">
               Anomaly Log
             </h3>
           </div>
@@ -389,7 +389,7 @@ export default function DynamicDataPage() {
             {anomalyLog.map((anomaly) => (
               <div
                 key={anomaly.id}
-                className="flex items-start gap-2 border-b border-[#F2F2F2] pb-2 last:border-0"
+                className="flex items-start gap-2 border-b border-muted pb-2 last:border-0"
               >
                 <span
                   className={`mt-0.5 shrink-0 px-1.5 py-0.5 text-[10px] font-semibold ${
@@ -400,17 +400,17 @@ export default function DynamicDataPage() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-[#0D0D0D]">
+                    <span className="text-xs font-semibold text-foreground">
                       {anomaly.type}
                     </span>
                     {anomaly.resolved && (
-                      <CheckCircle2 className="h-3 w-3 text-[#22C55E]" />
+                      <CheckCircle2 className="h-3 w-3 text-primary" />
                     )}
                   </div>
-                  <p className="mt-0.5 text-[11px] leading-snug text-[#737373]">
+                  <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">
                     {anomaly.description}
                   </p>
-                  <span className="mt-0.5 font-mono text-[10px] text-[#A3A3A3]">
+                  <span className="mt-0.5 font-mono text-[10px] text-muted-foreground/70">
                     {anomaly.timestamp}
                   </span>
                 </div>

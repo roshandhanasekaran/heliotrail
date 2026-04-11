@@ -43,7 +43,7 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
             {crumbs.map((crumb, i) => (
               <li key={i} className="flex items-center gap-1">
                 {i > 0 && (
-                  <span className="text-[#D9D9D9]">/</span>
+                  <span className="text-border">/</span>
                 )}
                 <span
                   className={
@@ -68,7 +68,7 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
           <input
             type="text"
             placeholder="Search passports..."
-            className="h-8 w-56 border border-border bg-muted pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+            className="h-8 w-56 border border-border bg-muted pl-8 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
 
@@ -79,7 +79,7 @@ export function AppTopbar({ onMobileMenuToggle }: AppTopbarProps) {
           className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
         >
           <Bell className="h-4 w-4" />
-          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center bg-[#22C55E] text-[9px] font-bold text-foreground">
+          <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center bg-primary text-[9px] font-bold text-foreground">
             3
           </span>
           <span className="sr-only">Notifications</span>

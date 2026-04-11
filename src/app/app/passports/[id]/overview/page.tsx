@@ -79,12 +79,12 @@ export default async function OverviewPage({
         {summaryCards.map((card) => (
           <div key={card.label} className="clean-card p-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center bg-[#E8FAE9]">
-                <card.icon className="h-3.5 w-3.5 text-[#22C55E]" />
+              <div className="flex h-7 w-7 items-center justify-center bg-[var(--passport-green-muted)]">
+                <card.icon className="h-3.5 w-3.5 text-primary" />
               </div>
-              <span className="text-xs text-[#737373]">{card.label}</span>
+              <span className="text-xs text-muted-foreground">{card.label}</span>
             </div>
-            <p className="mt-2 text-lg font-bold text-[#0D0D0D]">
+            <p className="mt-2 text-lg font-bold text-foreground">
               {card.value}
             </p>
           </div>
@@ -93,8 +93,8 @@ export default async function OverviewPage({
 
       {/* Identity section */}
       <div className="clean-card">
-        <div className="border-b border-[#D9D9D9] px-4 py-3">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
+        <div className="border-b border-border px-4 py-3">
+          <h2 className="text-sm font-bold text-foreground">
             Product Identity
           </h2>
         </div>
@@ -150,8 +150,8 @@ export default async function OverviewPage({
 
       {/* Key specs */}
       <div className="clean-card">
-        <div className="border-b border-[#D9D9D9] px-4 py-3">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
+        <div className="border-b border-border px-4 py-3">
+          <h2 className="text-sm font-bold text-foreground">
             Key Specifications
           </h2>
         </div>
@@ -202,8 +202,8 @@ export default async function OverviewPage({
 
       {/* Warranty */}
       <div className="clean-card">
-        <div className="border-b border-[#D9D9D9] px-4 py-3">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">Warranty</h2>
+        <div className="border-b border-border px-4 py-3">
+          <h2 className="text-sm font-bold text-foreground">Warranty</h2>
         </div>
         <div className="grid gap-0 sm:grid-cols-2">
           <InfoRow
@@ -251,10 +251,10 @@ export default async function OverviewPage({
       {/* EU Importer (conditional) */}
       {passport.importer_name && (
         <div className="clean-card">
-          <div className="border-b border-[#D9D9D9] px-4 py-3">
-            <h2 className="text-sm font-bold text-[#0D0D0D]">
+          <div className="border-b border-border px-4 py-3">
+            <h2 className="text-sm font-bold text-foreground">
               <span className="flex items-center gap-2">
-                <Ship className="h-3.5 w-3.5 text-[#737373]" />
+                <Ship className="h-3.5 w-3.5 text-muted-foreground" />
                 EU Importer
               </span>
             </h2>
@@ -276,10 +276,10 @@ export default async function OverviewPage({
 
       {/* Carbon & Environmental */}
       <div className="clean-card">
-        <div className="border-b border-[#D9D9D9] px-4 py-3">
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
+        <div className="border-b border-border px-4 py-3">
+          <h2 className="text-sm font-bold text-foreground">
             <span className="flex items-center gap-2">
-              <Leaf className="h-3.5 w-3.5 text-[#22C55E]" />
+              <Leaf className="h-3.5 w-3.5 text-primary" />
               Carbon &amp; Environmental
             </span>
           </h2>
@@ -340,13 +340,13 @@ function InfoRow({
   mono?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-[#D9D9D9] px-4 py-2.5 last:border-b-0">
-      <span className="flex items-center gap-2 text-[0.8125rem] text-[#737373]">
+    <div className="flex items-center justify-between border-b border-border px-4 py-2.5 last:border-b-0">
+      <span className="flex items-center gap-2 text-[0.8125rem] text-muted-foreground">
         {Icon && <Icon className="h-3.5 w-3.5" />}
         {label}
       </span>
       <span
-        className={`text-[0.8125rem] font-semibold text-[#0D0D0D] ${mono ? "font-mono" : ""}`}
+        className={`text-[0.8125rem] font-semibold text-foreground ${mono ? "font-mono" : ""}`}
       >
         {value}
       </span>

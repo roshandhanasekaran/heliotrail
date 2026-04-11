@@ -54,8 +54,8 @@ export default function IntegrationsPage() {
       </div>
 
       {toastName && (
-        <div className="flex items-center gap-2 bg-[#E8FAE9] px-4 py-2 text-sm font-medium text-[#0D0D0D]">
-          <Plug className="h-4 w-4 text-[#22C55E]" />
+        <div className="flex items-center gap-2 bg-[var(--passport-green-muted)] px-4 py-2 text-sm font-medium text-foreground">
+          <Plug className="h-4 w-4 text-primary" />
           <span>
             {toastName} integration setup requested. Our team will reach out within 24 hours.
           </span>

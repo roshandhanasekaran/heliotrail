@@ -28,13 +28,13 @@ export function FleetPRWidget() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-bold text-[#0D0D0D]">
+          <h2 className="text-sm font-bold text-foreground">
             Fleet Performance Ratio
           </h2>
-          <p className="text-xs text-[#737373]">Last 6 months trend</p>
+          <p className="text-xs text-muted-foreground">Last 6 months trend</p>
         </div>
-        <div className="border border-[#D9D9D9] px-2 py-1">
-          <span className="font-mono text-sm font-bold text-[#0D0D0D]">
+        <div className="border border-border px-2 py-1">
+          <span className="font-mono text-sm font-bold text-foreground">
             81.4%
           </span>
         </div>
@@ -51,7 +51,7 @@ export function FleetPRWidget() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.15 }}
-              className="pointer-events-none absolute -top-7 z-10 border border-[#D9D9D9] bg-white px-2 py-0.5 text-xs shadow-sm"
+              className="pointer-events-none absolute -top-7 z-10 border border-border bg-card px-2 py-0.5 text-xs shadow-sm"
               style={{
                 left: `${(hoveredIndex / (FLEET_PR_DATA.length - 1)) * 100}%`,
                 transform: "translateX(-50%)",
@@ -94,7 +94,7 @@ export function FleetPRWidget() {
                     transition={{ duration: 0.2 }}
                   />
                 </div>
-                <span className="mt-1 text-[9px] text-[#A3A3A3]">
+                <span className="mt-1 text-[9px] text-muted-foreground/70">
                   {d.month}
                 </span>
               </div>

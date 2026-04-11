@@ -1,0 +1,72 @@
+version: "3.9"
+
+# PV Digital Product Passport — Validator Stack
+# Based on CIRPASS-2 open-source infrastructure
+#
+# Services:
+#   pv-json-validator  — EC ISAITB JSON Schema validator (Java/Spring Boot)
+#   dppvalidator       — CIRPASS-2-aligned 7-layer DPP validator (Python)
+#   pv-shacl-validator — EC ISAITB SHACL validator (Java/Spring Boot) [optional]
+#
+# Usage:
+#   docker compose up                          # Start JSON + DPP validators
+#   docker compose --profile shacl up          # Start all including SHACL
+#
+# Endpoints:
+#   http://localhost:8080  — ISAITB JSON Validator (Web UI + REST API)
+#   http://localhost:8082  — dppvalidator REST API
+#   http://localhost:8081  — ISAITB SHACL Validator (Web UI + REST API) [optional]
+
+services:
+  # EC Official JSON Schema Validator
+  # Docker image: https://github.com/ISAITB/json-validator
+  # REST API: POST /api/validate
+  pv-json-validator:
+    image: isaitb/json-validator
+    volumes:
+      - ./validator/pv-dpp:/validator/repository/pv-dpp
+    environment:
+      - validator.resourceRoot=/validator/repository
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/json/pv-dpp/upload"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # CIRPASS-2-aligned DPP Validator with PV business rule plugin
+  # Based on: https://github.com/artiso-ai/dppvalidator
+  # REST API: POST /validate
+  dppvalidator:
+    build:
+      context: ./validator/dppvalidator
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8000"
+    volumes:
+      - ./schemas:/app/schemas
+    environment:
+      - PV_SCHEMA_PATH=/app/schemas/pv-passport-v1.json
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # EC Official SHACL Validator (Phase 2+)
+  # Docker image: https://github.com/ISAITB/shacl-validator
+  # Only starts with: docker compose --profile shacl up
+  pv-shacl-validator:
+    image: isaitb/shacl-validator
+    volumes:
+      - ./validator/pv-dpp-shacl:/validator/repository/pv-dpp-shacl
+    environment:
+      - validator.resourceRoot=/validator/repository
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+    profiles:
+      - shacl

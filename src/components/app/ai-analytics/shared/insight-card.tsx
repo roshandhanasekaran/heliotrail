@@ -7,9 +7,9 @@ import { CATEGORY_LABELS, type AIInsight } from "@/lib/mock/ai-analytics";
 
 export const INSIGHT_SEVERITY: Record<AIInsight["severity"], { bg: string; text: string; border: string }> = {
   critical: { bg: "bg-[#FEE2E2]", text: "text-[#B91C1C]", border: "border-[#FECACA]" },
-  warning: { bg: "bg-[#FEF3C7]", text: "text-[#92400E]", border: "border-[#FDE68A]" },
+  warning: { bg: "bg-[var(--passport-amber-muted)]", text: "text-[#92400E]", border: "border-[#FDE68A]" },
   info: { bg: "bg-[#EFF6FF]", text: "text-[#1E40AF]", border: "border-[#BFDBFE]" },
-  success: { bg: "bg-[#DCFCE7]", text: "text-[#166534]", border: "border-[#BBF7D0]" },
+  success: { bg: "bg-[var(--passport-green-muted)]", text: "text-foreground", border: "border-[#BBF7D0]" },
 };
 
 export interface InsightCardProps {
@@ -31,24 +31,24 @@ export function InsightCard({ insight }: InsightCardProps) {
           >
             {CATEGORY_LABELS[insight.category]}
           </span>
-          <span className={`font-mono text-[8px] ${insight.evidence.available >= insight.evidence.required ? "text-[#A3A3A3]" : "text-[#F59E0B]"}`}>
+          <span className={`font-mono text-[8px] ${insight.evidence.available >= insight.evidence.required ? "text-muted-foreground/70" : "text-[#F59E0B]"}`}>
             {insight.evidence.available}/{insight.evidence.required} evidence
           </span>
         </div>
-        <span className="shrink-0 text-[8px] text-[#A3A3A3]">
+        <span className="shrink-0 text-[8px] text-muted-foreground/70">
           {insight.timestamp}
         </span>
       </div>
-      <p className="text-[11px] font-semibold leading-tight text-[#0D0D0D]">
+      <p className="text-[11px] font-semibold leading-tight text-foreground">
         {insight.title}
       </p>
-      <p className="text-[10px] leading-snug text-[#737373]">
+      <p className="text-[10px] leading-snug text-muted-foreground">
         {insight.detail}
       </p>
       {insight.action && (
         <Link
           href={insight.action.href}
-          className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-[#22C55E] hover:text-[#0D0D0D] transition-colors"
+          className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-primary hover:text-foreground transition-colors"
         >
           {insight.action.label}
           <ArrowRight className="h-2.5 w-2.5" />

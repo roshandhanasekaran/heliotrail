@@ -15,7 +15,7 @@ export function PassportContextNav({ passportId }: PassportContextNavProps) {
   return (
     <>
       {/* Mobile: horizontal scrollable tab strip */}
-      <nav className="lg:hidden -mx-4 border-b border-[#D9D9D9] bg-[#FAFAFA] px-4 sm:-mx-6 sm:px-6">
+      <nav className="lg:hidden -mx-4 border-b border-border bg-muted/50 px-4 sm:-mx-6 sm:px-6">
         <div className="flex gap-1 overflow-x-auto py-2 scrollbar-none">
           {PASSPORT_SECTIONS.map((section) => {
             const href = `/app/passports/${passportId}/${section.href}`;
@@ -28,8 +28,8 @@ export function PassportContextNav({ passportId }: PassportContextNavProps) {
                 className={cn(
                   "flex shrink-0 items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors",
                   isActive
-                    ? "nav-pill-active text-[#0D0D0D]"
-                    : "border border-transparent text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+                    ? "nav-pill-active text-foreground"
+                    : "border border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 <section.icon className="h-3 w-3 shrink-0" />
@@ -54,8 +54,8 @@ export function PassportContextNav({ passportId }: PassportContextNavProps) {
                 className={cn(
                   "flex items-center gap-2 px-3 py-1.5 text-sm transition-colors",
                   isActive
-                    ? "border-l-2 border-[#22C55E] bg-[#E8FAE9] font-medium text-[#0D0D0D]"
-                    : "border-l-2 border-transparent text-[#737373] hover:bg-[#F2F2F2] hover:text-[#0D0D0D]"
+                    ? "border-l-2 border-primary bg-[var(--passport-green-muted)] font-medium text-foreground"
+                    : "border-l-2 border-transparent text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
                 <section.icon className="h-3.5 w-3.5 shrink-0" />

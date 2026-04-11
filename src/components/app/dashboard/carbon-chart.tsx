@@ -72,8 +72,8 @@ export function CarbonChart({ data }: CarbonChartProps) {
             onClick={() => setActiveTech(null)}
             className={`rounded-full px-2.5 py-1 text-[0.6875rem] font-medium transition-colors ${
               activeTech === null
-                ? "bg-[#0D0D0D] text-white"
-                : "bg-[#F2F2F2] text-[#737373] hover:bg-[#E5E5E5]"
+                ? "bg-foreground text-background"
+                : "bg-muted text-muted-foreground hover:bg-border"
             }`}
           >
             All ({data.length})
@@ -90,7 +90,7 @@ export function CarbonChart({ data }: CarbonChartProps) {
                 className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[0.6875rem] font-medium transition-colors ${
                   isActive
                     ? "text-white"
-                    : "bg-[#F2F2F2] text-[#737373] hover:bg-[#E5E5E5]"
+                    : "bg-muted text-muted-foreground hover:bg-border"
                 }`}
                 style={isActive ? { backgroundColor: TECH_COLORS[tech] ?? "#737373" } : undefined}
               >
@@ -131,13 +131,13 @@ export function CarbonChart({ data }: CarbonChartProps) {
           </defs>
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             vertical={false}
           />
           <XAxis
             dataKey="label"
-            tick={{ fontSize: 10, fill: "#737373" }}
-            axisLine={{ stroke: "#D9D9D9" }}
+            tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+            axisLine={{ stroke: "var(--border)" }}
             tickLine={false}
             interval={0}
             angle={-35}
@@ -145,15 +145,15 @@ export function CarbonChart({ data }: CarbonChartProps) {
             height={60}
           />
           <YAxis
-            tick={{ fontSize: 11, fill: "#737373" }}
+            tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
             axisLine={false}
             tickLine={false}
             width={40}
           />
           <Tooltip
             contentStyle={{
-              background: "#fff",
-              border: "1px solid #D9D9D9",
+              background: "var(--card)",
+              border: "1px solid var(--border)",
               fontSize: 12,
               boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
             }}
@@ -187,7 +187,7 @@ export function CarbonChart({ data }: CarbonChartProps) {
 
       {/* Count indicator when filtered */}
       {activeTech && filtered.length > 15 && (
-        <p className="mt-1 text-center text-[0.625rem] text-[#A3A3A3]">
+        <p className="mt-1 text-center text-[0.625rem] text-muted-foreground/70">
           Showing top 15 of {filtered.length} modules
         </p>
       )}

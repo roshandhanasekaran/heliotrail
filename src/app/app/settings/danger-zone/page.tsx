@@ -5,15 +5,14 @@ import { redirect } from "next/navigation";
 import { AlertTriangle, ArrowRightLeft, Trash2 } from "lucide-react";
 import { organization, currentUser } from "@/lib/mock/settings";
 import { canDo } from "@/lib/rbac";
+import { LABEL_CLASS } from "@/lib/styles";
 
 export default function DangerZonePage() {
   const [transferEmail, setTransferEmail] = useState("");
   const [deleteConfirm, setDeleteConfirm] = useState("");
 
   const redInputClass =
-    "w-full border border-red-200 bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500";
-  const labelClass =
-    "text-xs font-semibold uppercase tracking-wider text-[#737373]";
+    "w-full border border-red-200 bg-card px-3 py-2 text-sm text-foreground focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500";
   const redButtonClass =
     "rounded bg-red-600 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-40";
 
@@ -25,8 +24,8 @@ export default function DangerZonePage() {
     <div className="space-y-5">
       {/* Page heading */}
       <div>
-        <h2 className="text-lg font-bold text-[#0D0D0D]">Danger Zone</h2>
-        <p className="text-sm text-[#737373]">
+        <h2 className="text-lg font-bold text-foreground">Danger Zone</h2>
+        <p className="text-sm text-muted-foreground">
           Irreversible and destructive actions. Proceed with caution.
         </p>
       </div>
@@ -50,9 +49,9 @@ export default function DangerZonePage() {
         </div>
 
         <div className="p-5 space-y-4">
-          <p className="text-sm text-[#737373]">
+          <p className="text-sm text-muted-foreground">
             Transfer ownership of{" "}
-            <span className="font-semibold text-[#0D0D0D]">
+            <span className="font-semibold text-foreground">
               {organization.name}
             </span>{" "}
             to another team member. You will be demoted to Admin. This action
@@ -61,7 +60,7 @@ export default function DangerZonePage() {
 
           <div className="max-w-sm space-y-3">
             <div className="space-y-1.5">
-              <label className={labelClass}>New Owner Email</label>
+              <label className={LABEL_CLASS}>New Owner Email</label>
               <input
                 type="email"
                 value={transferEmail}
@@ -90,9 +89,9 @@ export default function DangerZonePage() {
         </div>
 
         <div className="p-5 space-y-4">
-          <p className="text-sm text-[#737373]">
+          <p className="text-sm text-muted-foreground">
             Permanently delete{" "}
-            <span className="font-semibold text-[#0D0D0D]">
+            <span className="font-semibold text-foreground">
               {organization.name}
             </span>{" "}
             and all associated data — passports, team members, API keys, audit
@@ -103,9 +102,9 @@ export default function DangerZonePage() {
 
           <div className="max-w-sm space-y-3">
             <div className="space-y-1.5">
-              <label className={labelClass}>
+              <label className={LABEL_CLASS}>
                 Type{" "}
-                <span className="font-bold text-[#0D0D0D]">
+                <span className="font-bold text-foreground">
                   {organization.name}
                 </span>{" "}
                 to confirm

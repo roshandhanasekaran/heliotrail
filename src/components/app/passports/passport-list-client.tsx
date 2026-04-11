@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   PASSPORT_STATUS_LABELS,
   VERIFICATION_STATUS_LABELS,
@@ -23,6 +23,8 @@ interface PassportRow {
   manufacturer_name: string;
 }
 
+const PAGE_SIZE = 20;
+
 const STATUS_OPTIONS = [
   { value: "", label: "All Statuses" },
   { value: "published", label: "Published" },
@@ -39,6 +41,7 @@ export function PassportListClient({
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     let result = passports;
@@ -61,32 +64,63 @@ export function PassportListClient({
     return result;
   }, [passports, search, statusFilter]);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const startIdx = (safePage - 1) * PAGE_SIZE;
+  const paginated = filtered.slice(startIdx, startIdx + PAGE_SIZE);
+  const displayStart = filtered.length === 0 ? 0 : startIdx + 1;
+  const displayEnd = Math.min(startIdx + PAGE_SIZE, filtered.length);
+
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value);
+    setPage(1);
+  }
+
+  function handleStatusFilter(value: string) {
+    setStatusFilter(value);
+    setPage(1);
+  }
+
+  // Build visible page numbers: show up to 5 around current page
+  const pageNumbers = useMemo(() => {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    const pages: (number | "…")[] = [];
+    pages.push(1);
+    if (safePage > 3) pages.push("…");
+    for (let p = Math.max(2, safePage - 1); p <= Math.min(totalPages - 1, safePage + 1); p++) {
+      pages.push(p);
+    }
+    if (safePage < totalPages - 2) pages.push("…");
+    pages.push(totalPages);
+    return pages;
+  }, [totalPages, safePage]);
+
   return (
     <>
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-[200px] max-w-md flex-1">
-          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#A3A3A3]" />
+          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/70" />
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearch}
             placeholder="Search by model, serial, or passport ID..."
-            className="h-9 w-full border border-[#D9D9D9] bg-white pl-8 pr-3 text-sm placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+            className="h-9 w-full border border-border bg-card pl-8 pr-3 text-sm placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
           className={`inline-flex h-9 items-center gap-1.5 border border-dashed px-3 text-sm ${
             showFilters || statusFilter
-              ? "border-[#22C55E] bg-[#E8FAE9] text-[#0D0D0D]"
-              : "border-[#D9D9D9] bg-white text-[#737373] hover:border-[#22C55E] hover:text-[#0D0D0D]"
+              ? "border-primary bg-[var(--passport-green-muted)] text-foreground"
+              : "border-border bg-card text-muted-foreground hover:border-primary hover:text-foreground"
           }`}
         >
           <Filter className="h-3.5 w-3.5" />
           Filters
           {statusFilter && (
-            <span className="ml-1 inline-flex h-4 w-4 items-center justify-center bg-[#22C55E] text-[9px] font-bold text-white">
+            <span className="ml-1 inline-flex h-4 w-4 items-center justify-center bg-primary text-[9px] font-bold text-white">
               1
             </span>
           )}
@@ -99,11 +133,11 @@ export function PassportListClient({
           {STATUS_OPTIONS.map((opt) => (
             <button
               key={opt.value}
-              onClick={() => setStatusFilter(opt.value)}
+              onClick={() => handleStatusFilter(opt.value)}
               className={`inline-flex items-center px-3 py-1.5 text-xs font-medium transition-colors ${
                 statusFilter === opt.value
-                  ? "bg-[#0D0D0D] text-white"
-                  : "border border-[#D9D9D9] bg-white text-[#737373] hover:border-[#22C55E]"
+                  ? "bg-foreground text-background"
+                  : "border border-border bg-card text-muted-foreground hover:border-primary"
               }`}
             >
               {opt.label}
@@ -114,7 +148,7 @@ export function PassportListClient({
 
       {/* Results count */}
       {(search || statusFilter) && (
-        <p className="text-xs text-[#737373]">
+        <p className="text-xs text-muted-foreground">
           Showing {filtered.length} of {passports.length} passports
           {search && <span> matching &ldquo;{search}&rdquo;</span>}
           {statusFilter && (
@@ -129,16 +163,17 @@ export function PassportListClient({
       {/* Table */}
       {filtered.length === 0 ? (
         <div className="dashed-card flex flex-col items-center justify-center py-16 text-center">
-          <p className="text-sm font-medium text-[#737373]">
+          <p className="text-sm font-medium text-muted-foreground">
             No passports match your search
           </p>
-          <p className="mt-1 text-xs text-[#A3A3A3]">
+          <p className="mt-1 text-xs text-muted-foreground/70">
             Try a different search term or clear filters.
           </p>
           <button
             onClick={() => {
               setSearch("");
               setStatusFilter("");
+              setPage(1);
             }}
             className="cta-secondary mt-4 text-xs"
           >
@@ -146,100 +181,151 @@ export function PassportListClient({
           </button>
         </div>
       ) : (
-        <div className="clean-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-[#D9D9D9] bg-[#FAFAFA]">
-                  <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
-                    Passport ID
-                  </th>
-                  <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
-                    Model
-                  </th>
-                  <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] md:table-cell">
-                    Technology
-                  </th>
-                  <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] sm:table-cell">
-                    Power
-                  </th>
-                  <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373]">
-                    Status
-                  </th>
-                  <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] lg:table-cell">
-                    Verification
-                  </th>
-                  <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-[#737373] lg:table-cell">
-                    Updated
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#D9D9D9]">
-                {filtered.map((p) => (
-                  <tr
-                    key={p.id}
-                    className="transition-colors hover:bg-[#FAFAFA]"
-                  >
-                    <td className="px-4 py-3">
-                      <Link
-                        href={`/app/passports/${p.id}/overview`}
-                        className="font-mono text-sm font-medium text-[#0D0D0D] underline-offset-4 hover:underline"
-                      >
-                        {p.pv_passport_id}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-[#0D0D0D]">
-                      {p.model_id}
-                    </td>
-                    <td className="hidden px-4 py-3 text-sm text-[#737373] md:table-cell">
-                      {MODULE_TECHNOLOGY_LABELS[p.module_technology] ??
-                        p.module_technology}
-                    </td>
-                    <td className="hidden px-4 py-3 text-sm font-medium text-[#0D0D0D] sm:table-cell">
-                      {p.rated_power_stc_w
-                        ? `${p.rated_power_stc_w}W`
-                        : "—"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                          p.status === "published"
-                            ? "status-valid"
-                            : p.status === "under_review"
-                              ? "status-pending"
-                              : p.status === "draft"
-                                ? "bg-[#F2F2F2] text-[#737373]"
-                                : p.status === "approved"
-                                  ? "status-valid"
-                                  : "bg-[#F2F2F2] text-[#737373]"
-                        }`}
-                      >
-                        {PASSPORT_STATUS_LABELS[p.status] ?? p.status}
-                      </span>
-                    </td>
-                    <td className="hidden px-4 py-3 lg:table-cell">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                          p.verification_status === "verified"
-                            ? "status-valid"
-                            : p.verification_status === "pending"
-                              ? "status-pending"
-                              : "bg-[#F2F2F2] text-[#737373]"
-                        }`}
-                      >
-                        {VERIFICATION_STATUS_LABELS[p.verification_status] ??
-                          p.verification_status}
-                      </span>
-                    </td>
-                    <td className="hidden px-4 py-3 text-xs text-[#737373] lg:table-cell">
-                      {formatDate(p.updated_at)}
-                    </td>
+        <>
+          <div className="clean-card overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border bg-muted/50">
+                    <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
+                      Passport ID
+                    </th>
+                    <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
+                      Model
+                    </th>
+                    <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground md:table-cell">
+                      Technology
+                    </th>
+                    <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground sm:table-cell">
+                      Power
+                    </th>
+                    <th className="px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground">
+                      Status
+                    </th>
+                    <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground lg:table-cell">
+                      Verification
+                    </th>
+                    <th className="hidden px-4 py-2.5 text-left text-[0.6875rem] font-bold uppercase tracking-wider text-muted-foreground lg:table-cell">
+                      Updated
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {paginated.map((p) => (
+                    <tr
+                      key={p.id}
+                      className="transition-colors hover:bg-muted/50"
+                    >
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/app/passports/${p.id}/overview`}
+                          className="font-mono text-sm font-medium text-foreground underline-offset-4 hover:underline"
+                        >
+                          {p.pv_passport_id}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-foreground">
+                        {p.model_id}
+                      </td>
+                      <td className="hidden px-4 py-3 text-sm text-muted-foreground md:table-cell">
+                        {MODULE_TECHNOLOGY_LABELS[p.module_technology] ??
+                          p.module_technology}
+                      </td>
+                      <td className="hidden px-4 py-3 text-sm font-medium text-foreground sm:table-cell">
+                        {p.rated_power_stc_w
+                          ? `${p.rated_power_stc_w}W`
+                          : "—"}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
+                            p.status === "published"
+                              ? "status-valid"
+                              : p.status === "under_review"
+                                ? "status-pending"
+                                : p.status === "draft"
+                                  ? "bg-muted text-muted-foreground"
+                                  : p.status === "approved"
+                                    ? "status-valid"
+                                    : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {PASSPORT_STATUS_LABELS[p.status] ?? p.status}
+                        </span>
+                      </td>
+                      <td className="hidden px-4 py-3 lg:table-cell">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
+                            p.verification_status === "verified"
+                              ? "status-valid"
+                              : p.verification_status === "pending"
+                                ? "status-pending"
+                                : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {VERIFICATION_STATUS_LABELS[p.verification_status] ??
+                            p.verification_status}
+                        </span>
+                      </td>
+                      <td className="hidden px-4 py-3 text-xs text-muted-foreground lg:table-cell">
+                        {formatDate(p.updated_at)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+
+          {/* Pagination */}
+          <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+            <p className="text-xs text-muted-foreground">
+              Showing {displayStart}–{displayEnd} of {filtered.length} passport{filtered.length !== 1 ? "s" : ""}
+            </p>
+            {totalPages > 1 && (
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={safePage === 1}
+                  className="inline-flex h-8 w-8 items-center justify-center border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                </button>
+
+                {pageNumbers.map((p, i) =>
+                  p === "…" ? (
+                    <span
+                      key={`ellipsis-${i}`}
+                      className="inline-flex h-8 w-8 items-center justify-center text-xs text-muted-foreground"
+                    >
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => setPage(p)}
+                      className={`inline-flex h-8 w-8 items-center justify-center text-xs font-medium transition-colors ${
+                        p === safePage
+                          ? "bg-foreground text-background"
+                          : "border border-border bg-card text-muted-foreground hover:border-primary hover:text-foreground"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={safePage === totalPages}
+                  className="inline-flex h-8 w-8 items-center justify-center border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+        </>
       )}
     </>
   );

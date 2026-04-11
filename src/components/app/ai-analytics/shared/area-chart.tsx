@@ -83,14 +83,14 @@ export function AreaChart({
             y1={g.y}
             x2={width - PAD.right}
             y2={g.y}
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeWidth={1}
           />
           <text
             x={PAD.left - 6}
             y={g.y + 3}
             textAnchor="end"
-            fill="#A3A3A3"
+            fill="var(--muted-foreground)"
             fontSize={9}
             fontFamily="JetBrains Mono, monospace"
           >
@@ -107,14 +107,14 @@ export function AreaChart({
             y1={toY(targetValue)}
             x2={width - PAD.right}
             y2={toY(targetValue)}
-            stroke="#A3A3A3"
+            stroke="var(--muted-foreground)"
             strokeWidth={1}
             strokeDasharray="4 3"
           />
           <text
             x={width - PAD.right + 4}
             y={toY(targetValue) + 3}
-            fill="#A3A3A3"
+            fill="var(--muted-foreground)"
             fontSize={8}
             fontFamily="JetBrains Mono, monospace"
           >
@@ -177,7 +177,7 @@ export function AreaChart({
               x={x}
               y={height - 4}
               textAnchor="middle"
-              fill="#A3A3A3"
+              fill="var(--muted-foreground)"
               fontSize={9}
               fontFamily="JetBrains Mono, monospace"
             >

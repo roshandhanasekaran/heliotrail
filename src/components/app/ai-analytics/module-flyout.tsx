@@ -43,8 +43,8 @@ const TABS: { key: TabKey; label: string }[] = [
 ];
 
 const CHART_TOOLTIP_STYLE = {
-  background: "#fff",
-  border: "1px solid #D9D9D9",
+  background: "var(--card)",
+  border: "1px solid var(--border)",
   fontSize: 12,
   boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
 };
@@ -102,11 +102,11 @@ function prColor(pr: number): string {
 }
 
 function degradationColor(rate: number): string {
-  return rate > 0.5 ? "#EF4444" : "#737373";
+  return rate > 0.5 ? "#EF4444" : "var(--muted-foreground)";
 }
 
 function hotspotColor(deltaT: number | null): string {
-  if (deltaT === null) return "#737373";
+  if (deltaT === null) return "var(--muted-foreground)";
   if (deltaT > 10) return "#EF4444";
   if (deltaT > 5) return "#F59E0B";
   return "#22C55E";
@@ -129,7 +129,7 @@ function statusBadge(
   personality: string,
 ): { label: string; bg: string; text: string } {
   if (personality === "high_performer" || pr >= 85)
-    return { label: "OUTPERFORMING", bg: "#DCFCE7", text: "#166534" };
+    return { label: "OUTPERFORMING", bg: "var(--passport-green-muted)", text: "var(--foreground)" };
   if (
     personality === "hotspot" ||
     personality === "batch_defect" ||
@@ -137,7 +137,7 @@ function statusBadge(
     pr < 78
   )
     return { label: "AT RISK", bg: "#FEE2E2", text: "#B91C1C" };
-  return { label: "NORMAL", bg: "#F2F2F2", text: "#525252" };
+  return { label: "NORMAL", bg: "var(--muted)", text: "#525252" };
 }
 
 function tempToColor(temp: number): string {
@@ -229,10 +229,10 @@ function PerformanceTab({ moduleIndex }: { moduleIndex: number }) {
 
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
         Power Output vs Expected — Last 7 Days
       </p>
-      <div className="border border-[#E5E5E5] bg-white p-3">
+      <div className="border border-border bg-card p-3">
         <ResponsiveContainer width="100%" height={220}>
           <AreaChart data={dailyData} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
             <defs>
@@ -241,15 +241,15 @@ function PerformanceTab({ moduleIndex }: { moduleIndex: number }) {
                 <stop offset="100%" stopColor="#22C55E" stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
             <XAxis
               dataKey="day"
-              tick={{ fontSize: 10, fill: "#737373" }}
-              axisLine={{ stroke: "#D9D9D9" }}
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+              axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 10, fill: "#737373" }}
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
               axisLine={false}
               tickLine={false}
               width={45}
@@ -264,7 +264,7 @@ function PerformanceTab({ moduleIndex }: { moduleIndex: number }) {
             />
             <ReferenceLine
               y={dailyData[0]?.expected ?? 0}
-              stroke="#A3A3A3"
+              stroke="var(--muted-foreground)"
               strokeDasharray="8 4"
               strokeWidth={1}
             />
@@ -279,7 +279,7 @@ function PerformanceTab({ moduleIndex }: { moduleIndex: number }) {
             <Line
               type="monotone"
               dataKey="expected"
-              stroke="#A3A3A3"
+              stroke="var(--muted-foreground)"
               strokeWidth={1.5}
               strokeDasharray="6 3"
               dot={false}
@@ -301,11 +301,11 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
   if (!event) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="w-12 h-12 rounded-full bg-[#F2F2F2] flex items-center justify-center mb-3">
-          <CheckCircle2Icon size={20} className="text-[#22C55E]" />
+        <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
+          <CheckCircle2Icon size={20} className="text-primary" />
         </div>
-        <p className="text-sm font-semibold text-[#0D0D0D]">No thermal anomalies detected</p>
-        <p className="text-xs text-[#737373] mt-1">
+        <p className="text-sm font-semibold text-foreground">No thermal anomalies detected</p>
+        <p className="text-xs text-muted-foreground mt-1">
           This module shows normal thermal behavior across all inspections.
         </p>
       </div>
@@ -314,10 +314,10 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
 
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
         Thermal Anomaly
       </p>
-      <div className="border border-[#E5E5E5] bg-white p-4">
+      <div className="border border-border bg-card p-4">
         <div
           className="grid gap-[2px] mx-auto"
           style={{
@@ -342,7 +342,7 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
         </div>
 
         <div className="mt-3 flex items-center gap-2 justify-center">
-          <span className="text-[9px] font-mono text-[#737373]">20°C</span>
+          <span className="text-[9px] font-mono text-muted-foreground">20°C</span>
           <div
             className="h-2 flex-1 rounded-full"
             style={{
@@ -351,19 +351,19 @@ function ThermalTab({ moduleIndex }: { moduleIndex: number }) {
                 "linear-gradient(to right, rgb(0,100,200), rgb(34,197,94), rgb(245,158,11), rgb(239,68,68))",
             }}
           />
-          <span className="text-[9px] font-mono text-[#737373]">80°C</span>
+          <span className="text-[9px] font-mono text-muted-foreground">80°C</span>
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">Delta Temperature</p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Delta Temperature</p>
             <p className="font-mono text-lg font-bold text-[#EF4444]">
               {event.hotspot_delta_c.toFixed(1)}°C
             </p>
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-[#737373]">Inspection Date</p>
-            <p className="font-mono text-sm font-semibold text-[#0D0D0D]">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Inspection Date</p>
+            <p className="font-mono text-sm font-semibold text-foreground">
               {event.date}
             </p>
           </div>
@@ -389,27 +389,27 @@ function IVCurvesTab({ moduleIndex }: { moduleIndex: number }) {
 
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
         IV Curve Trace
       </p>
-      <div className="border border-[#E5E5E5] bg-white p-3">
+      <div className="border border-border bg-card p-3">
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={chartData} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
             <XAxis
               dataKey="voltage"
-              tick={{ fontSize: 10, fill: "#737373" }}
-              axisLine={{ stroke: "#D9D9D9" }}
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+              axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
-              label={{ value: "Voltage (V)", position: "insideBottom", offset: -2, fontSize: 10, fill: "#A3A3A3" }}
+              label={{ value: "Voltage (V)", position: "insideBottom", offset: -2, fontSize: 10, fill: "var(--muted-foreground)" }}
             />
             <YAxis
               dataKey="current"
-              tick={{ fontSize: 10, fill: "#737373" }}
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
               axisLine={false}
               tickLine={false}
               width={40}
-              label={{ value: "Current (A)", angle: -90, position: "insideLeft", fontSize: 10, fill: "#A3A3A3" }}
+              label={{ value: "Current (A)", angle: -90, position: "insideLeft", fontSize: 10, fill: "var(--muted-foreground)" }}
             />
             <Tooltip
               contentStyle={CHART_TOOLTIP_STYLE}
@@ -431,21 +431,21 @@ function IVCurvesTab({ moduleIndex }: { moduleIndex: number }) {
       </div>
 
       <div className="grid grid-cols-3 gap-3 mt-4">
-        <div className="border border-[#E5E5E5] bg-white p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#737373]">Fill Factor</p>
+        <div className="border border-border bg-card p-3">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Fill Factor</p>
           <p className="font-mono text-lg font-bold" style={{ color: fillFactorColor(curve.fill_factor) }}>
             {curve.fill_factor.toFixed(3)}
           </p>
         </div>
-        <div className="border border-[#E5E5E5] bg-white p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#737373]">Series R</p>
-          <p className="font-mono text-lg font-bold text-[#0D0D0D]">
+        <div className="border border-border bg-card p-3">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Series R</p>
+          <p className="font-mono text-lg font-bold text-foreground">
             {curve.series_resistance_ohm.toFixed(2)} &#8486;
           </p>
         </div>
-        <div className="border border-[#E5E5E5] bg-white p-3">
-          <p className="text-[10px] uppercase tracking-wider text-[#737373]">Shunt R</p>
-          <p className="font-mono text-lg font-bold text-[#0D0D0D]">
+        <div className="border border-border bg-card p-3">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Shunt R</p>
+          <p className="font-mono text-lg font-bold text-foreground">
             {curve.shunt_resistance_ohm} &#8486;
           </p>
         </div>
@@ -457,7 +457,7 @@ function IVCurvesTab({ moduleIndex }: { moduleIndex: number }) {
 function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
   const riskBadge = (risk: "Low" | "Medium" | "High") => {
     const colors = {
-      Low: { bg: "#DCFCE7", text: "#166534" },
+      Low: { bg: "var(--passport-green-muted)", text: "var(--foreground)" },
       Medium: { bg: "#FEF3C7", text: "#92400E" },
       High: { bg: "#FEE2E2", text: "#B91C1C" },
     };
@@ -474,10 +474,10 @@ function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
 
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
         Module Details
       </p>
-      <div className="border border-[#E5E5E5] bg-white overflow-hidden">
+      <div className="border border-border bg-card overflow-hidden">
         <table className="w-full text-xs">
           <tbody>
             {[
@@ -487,14 +487,14 @@ function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
               { label: "Batch", value: profile.batch },
               { label: "Installation Date", value: profile.install_date },
             ].map((row, i) => (
-              <tr key={row.label} className={i % 2 === 0 ? "bg-white" : "bg-[#FAFAFA]"}>
-                <td className="px-4 py-2.5 text-[#737373] font-medium">{row.label}</td>
-                <td className="px-4 py-2.5 font-mono text-[#0D0D0D] text-right">{row.value}</td>
+              <tr key={row.label} className={i % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+                <td className="px-4 py-2.5 text-muted-foreground font-medium">{row.label}</td>
+                <td className="px-4 py-2.5 font-mono text-foreground text-right">{row.value}</td>
               </tr>
             ))}
-            <tr className={BOM_DATA.length % 2 === 0 ? "bg-white" : "bg-[#FAFAFA]"}>
-              <td className="px-4 py-2.5 text-[#737373] font-medium">Origin Country</td>
-              <td className="px-4 py-2.5 font-mono text-[#0D0D0D] text-right">
+            <tr className={BOM_DATA.length % 2 === 0 ? "bg-card" : "bg-muted/50"}>
+              <td className="px-4 py-2.5 text-muted-foreground font-medium">Origin Country</td>
+              <td className="px-4 py-2.5 font-mono text-foreground text-right">
                 <span className="inline-flex items-center gap-2">
                   India {riskBadge("Low")}
                 </span>
@@ -504,20 +504,20 @@ function SupplyChainTab({ profile }: { profile: ModuleProfile }) {
         </table>
       </div>
 
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3 mt-6">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3 mt-6">
         Bill of Materials
       </p>
-      <div className="border border-[#E5E5E5] bg-white p-4 space-y-2">
+      <div className="border border-border bg-card p-4 space-y-2">
         {BOM_DATA.map((item) => (
           <div key={item.material} className="flex items-center gap-3">
-            <span className="w-20 text-[11px] text-[#737373]">{item.material}</span>
-            <div className="flex-1 h-2 bg-[#F2F2F2] rounded-full overflow-hidden">
+            <span className="w-20 text-[11px] text-muted-foreground">{item.material}</span>
+            <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#22C55E] rounded-full"
+                className="h-full bg-primary rounded-full"
                 style={{ width: `${Math.min(item.percent, 100)}%` }}
               />
             </div>
-            <span className="w-12 text-right font-mono text-[10px] text-[#0D0D0D]">
+            <span className="w-12 text-right font-mono text-[10px] text-foreground">
               {item.percent}%
             </span>
           </div>
@@ -551,23 +551,23 @@ function WarrantyTab({ profile, moduleIndex }: { profile: ModuleProfile; moduleI
 
   return (
     <div>
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3">
         Degradation Curve — 30-Year Projection
       </p>
-      <div className="border border-[#E5E5E5] bg-white p-3">
+      <div className="border border-border bg-card p-3">
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={degradationData} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
             <XAxis
               dataKey="year"
-              tick={{ fontSize: 10, fill: "#737373" }}
-              axisLine={{ stroke: "#D9D9D9" }}
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+              axisLine={{ stroke: "var(--border)" }}
               tickLine={false}
-              label={{ value: "Year", position: "insideBottom", offset: -2, fontSize: 10, fill: "#A3A3A3" }}
+              label={{ value: "Year", position: "insideBottom", offset: -2, fontSize: 10, fill: "var(--muted-foreground)" }}
             />
             <YAxis
               domain={[60, 102]}
-              tick={{ fontSize: 10, fill: "#737373" }}
+              tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
               axisLine={false}
               tickLine={false}
               width={40}
@@ -601,38 +601,38 @@ function WarrantyTab({ profile, moduleIndex }: { profile: ModuleProfile; moduleI
         </ResponsiveContainer>
         <div className="flex items-center gap-4 mt-2 justify-center">
           <div className="flex items-center gap-1.5">
-            <div className="w-4 h-0.5 bg-[#22C55E]" />
-            <span className="text-[9px] text-[#737373]">Actual ({stats.degradationRate}%/yr)</span>
+            <div className="w-4 h-0.5 bg-primary" />
+            <span className="text-[9px] text-muted-foreground">Actual ({stats.degradationRate}%/yr)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-0.5 border-t border-dashed border-[#F59E0B]" />
-            <span className="text-[9px] text-[#737373]">Warranty Threshold (0.40%/yr)</span>
+            <span className="text-[9px] text-muted-foreground">Warranty Threshold (0.40%/yr)</span>
           </div>
         </div>
       </div>
 
-      <p className="text-[10px] uppercase tracking-wider font-bold text-[#737373] mb-3 mt-6">
+      <p className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground mb-3 mt-6">
         Evidence Score Breakdown ({passCount}/{evidenceFactors.length})
       </p>
-      <div className="border border-[#E5E5E5] bg-white p-4 space-y-2">
+      <div className="border border-border bg-card p-4 space-y-2">
         {evidenceFactors.map((f) => (
           <div key={f.label} className="flex items-center gap-2">
             {f.pass ? (
-              <CheckCircle2Icon size={14} className="text-[#22C55E] shrink-0" />
+              <CheckCircle2Icon size={14} className="text-primary shrink-0" />
             ) : (
               <XCircleIcon size={14} className="text-[#EF4444] shrink-0" />
             )}
-            <span className="text-[11px] text-[#525252]">{f.label}</span>
+            <span className="text-[11px] text-muted-foreground">{f.label}</span>
           </div>
         ))}
       </div>
 
       {estimatedClaimEur > 0 && (
-        <div className="mt-4 border border-[#E5E5E5] bg-white p-4">
-          <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+        <div className="mt-4 border border-border bg-card p-4">
+          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
             Estimated Claim Value
           </p>
-          <p className="font-mono text-2xl font-bold text-[#22C55E] mt-1">
+          <p className="font-mono text-2xl font-bold text-primary mt-1">
             &euro;{estimatedClaimEur.toLocaleString()}
           </p>
         </div>
@@ -676,7 +676,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
 
   const badge = profile && stats
     ? statusBadge(stats.pr, profile.personality)
-    : { label: "NORMAL", bg: "#F2F2F2", text: "#525252" };
+    : { label: "NORMAL", bg: "var(--muted)", text: "#525252" };
 
   const showAIRecommendation =
     alert &&
@@ -707,25 +707,25 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed top-0 right-0 bottom-0 z-50 flex flex-col bg-white"
+            className="fixed top-0 right-0 bottom-0 z-50 flex flex-col bg-card"
             style={{
               width: "50vw",
               minWidth: 480,
               maxWidth: 720,
-              borderLeft: "1px solid #E5E5E5",
+              borderLeft: "1px solid var(--border)",
               boxShadow: "-8px 0 24px rgba(0,0,0,0.08)",
             }}
           >
             {/* Header */}
             <div
               className="shrink-0 px-5 py-4"
-              style={{ borderBottom: "1px solid #E5E5E5" }}
+              style={{ borderBottom: "1px solid var(--border)" }}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3">
                     <h2
-                      className="text-sm font-bold text-[#0D0D0D] truncate"
+                      className="text-sm font-bold text-foreground truncate"
                       style={{ fontSize: 14 }}
                     >
                       {moduleId}
@@ -738,7 +738,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                     </span>
                   </div>
                   <p
-                    className="text-[#737373] mt-0.5 truncate"
+                    className="text-muted-foreground mt-0.5 truncate"
                     style={{ fontSize: 10 }}
                   >
                     {profile.manufacturer} &middot; {profile.technology} &middot;{" "}
@@ -747,10 +747,10 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                 </div>
                 <button
                   onClick={handleClose}
-                  className="ml-3 shrink-0 p-1 hover:bg-[#F2F2F2] rounded transition-colors"
+                  className="ml-3 shrink-0 p-1 hover:bg-muted rounded transition-colors"
                   aria-label="Close flyout"
                 >
-                  <XIcon size={16} color="#999" />
+                  <XIcon size={16} className="text-muted-foreground" />
                 </button>
               </div>
             </div>
@@ -758,10 +758,10 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
             {/* Quick Stats Row */}
             <div
               className="shrink-0 grid grid-cols-4"
-              style={{ borderBottom: "1px solid #E5E5E5" }}
+              style={{ borderBottom: "1px solid var(--border)" }}
             >
-              <div className="px-4 py-3" style={{ borderRight: "1px solid #E5E5E5" }}>
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">Current PR</p>
+              <div className="px-4 py-3" style={{ borderRight: "1px solid var(--border)" }}>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Current PR</p>
                 <p
                   className="font-mono text-xl font-bold mt-0.5"
                   style={{ color: prColor(stats?.pr ?? 80) }}
@@ -769,8 +769,8 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                   {stats?.pr ?? 80}%
                 </p>
               </div>
-              <div className="px-4 py-3" style={{ borderRight: "1px solid #E5E5E5" }}>
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">Degrad. Rate/yr</p>
+              <div className="px-4 py-3" style={{ borderRight: "1px solid var(--border)" }}>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Degrad. Rate/yr</p>
                 <p
                   className="font-mono text-xl font-bold mt-0.5"
                   style={{ color: degradationColor(stats?.degradationRate ?? 0.40) }}
@@ -778,8 +778,8 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                   {(stats?.degradationRate ?? 0.40).toFixed(2)}%
                 </p>
               </div>
-              <div className="px-4 py-3" style={{ borderRight: "1px solid #E5E5E5" }}>
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+              <div className="px-4 py-3" style={{ borderRight: "1px solid var(--border)" }}>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Hotspot &#916;T
                 </p>
                 <p
@@ -787,14 +787,14 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                   style={{
                     color: thermalEvent
                       ? hotspotColor(thermalEvent.hotspot_delta_c)
-                      : "#737373",
+                      : "var(--muted-foreground)",
                   }}
                 >
                   {thermalEvent ? `${thermalEvent.hotspot_delta_c.toFixed(1)}\u00B0C` : "\u2014"}
                 </p>
               </div>
               <div className="px-4 py-3">
-                <p className="text-[10px] uppercase tracking-wider text-[#737373]">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                   Warranty Evidence
                 </p>
                 <p
@@ -809,7 +809,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
             {/* Tabs */}
             <div
               className="shrink-0 flex gap-0 px-5 overflow-x-auto"
-              style={{ borderBottom: "1px solid #E5E5E5" }}
+              style={{ borderBottom: "1px solid var(--border)" }}
             >
               {TABS.map((tab) => (
                 <button
@@ -817,7 +817,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                   onClick={() => setActiveTab(tab.key)}
                   className="relative px-3 py-2.5 text-[10px] uppercase tracking-wider font-bold transition-colors whitespace-nowrap"
                   style={{
-                    color: activeTab === tab.key ? "#0D0D0D" : "#737373",
+                    color: activeTab === tab.key ? "var(--foreground)" : "var(--muted-foreground)",
                   }}
                 >
                   {tab.label}
@@ -825,7 +825,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                     <motion.div
                       layoutId="flyout-tab-underline"
                       className="absolute bottom-0 left-0 right-0 h-0.5"
-                      style={{ backgroundColor: "#22C55E" }}
+                      style={{ backgroundColor: "var(--primary)" }}
                     />
                   )}
                 </button>
@@ -861,7 +861,7 @@ export function ModuleFlyout({ moduleId, onClose }: ModuleFlyoutProps) {
                 style={{
                   backgroundColor: "#FFFBEB",
                   borderLeft: "3px solid #F59E0B",
-                  borderTop: "1px solid #E5E5E5",
+                  borderTop: "1px solid var(--border)",
                   color: "#451A03",
                 }}
               >

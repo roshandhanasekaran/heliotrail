@@ -28,6 +28,7 @@ export interface KpiComputeInput {
   totalCerts: number;
   certsExpiringIn30Days: number;
   avgRecyclability: number;
+  quarterGrowth: number;
 }
 
 export interface KpiMetricDefinition {
@@ -58,10 +59,10 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
       d.total > 0 ? Math.round((d.published / d.total) * 100) : 0,
     computeTrend: (d) => {
       const rate = d.total > 0 ? (d.published / d.total) * 100 : 0;
-      return { text: rate >= 50 ? "+12% QoQ" : "Growing", up: true };
+      return { text: rate >= 50 ? "+11% QoQ" : "Growing", up: true };
     },
     defaultEnabled: true,
-    sparkSeed: [40, 42, 48, 50, 55, 58, 63],
+    sparkSeed: [74, 71, 76, 79, 77, 83, 90],
   },
   {
     id: "evidence_coverage",
@@ -74,7 +75,7 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
     computeValue: (d) => d.evidencePercent,
     computeTrend: () => ({ text: "+8% this mo.", up: true }),
     defaultEnabled: true,
-    sparkSeed: [60, 65, 70, 75, 78, 82, 87],
+    sparkSeed: [68, 64, 71, 75, 72, 79, 83],
   },
 
   // ── Compliance ──────────────────────────────────────────────────────────────
@@ -107,7 +108,7 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
     computeValue: (d) => d.avgCarbon,
     computeTrend: () => ({ text: "-3% vs batch", up: false }),
     defaultEnabled: true,
-    sparkSeed: [440, 430, 425, 420, 415, 412, 410],
+    sparkSeed: [447, 438, 452, 431, 424, 418, 412],
   },
   {
     id: "crm_materials",
@@ -119,11 +120,11 @@ export const KPI_REGISTRY: KpiMetricDefinition[] = [
     description: "Critical Raw Materials flagged per EU CRA regulation",
     computeValue: (d) => d.crmCount,
     computeTrend: (d) => ({
-      text: `${d.crmCount} flagged`,
+      text: `${d.crmCount} type${d.crmCount !== 1 ? "s" : ""} flagged`,
       up: d.crmCount === 0,
     }),
     defaultEnabled: true,
-    sparkSeed: [20, 25, 30, 33, 36, 40, 42],
+    sparkSeed: [2, 2, 2, 2, 2, 2, 2],
   },
   {
     id: "substances_of_concern",

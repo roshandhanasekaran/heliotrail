@@ -28,16 +28,16 @@ export function PowerChart({ data }: PowerChartProps) {
             <stop offset="100%" stopColor="#22C55E" stopOpacity={0.02} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
         <XAxis
           dataKey="day"
-          tick={{ fontSize: 10, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+          axisLine={{ stroke: "var(--border)" }}
           tickLine={false}
           interval="preserveStartEnd"
         />
         <YAxis
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={45}

@@ -20,33 +20,33 @@ export default async function HistoryPage({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-bold text-[#0D0D0D]">History</h2>
+      <h2 className="text-lg font-bold text-foreground">History</h2>
 
       {/* Current version info */}
       <div className="clean-card p-4">
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#737373]">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
           <GitBranch className="h-3.5 w-3.5" />
           Current Version
         </div>
         <div className="mt-3 space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-[#737373]">Version</span>
-            <span className="font-mono font-semibold text-[#0D0D0D]">
+            <span className="text-muted-foreground">Version</span>
+            <span className="font-mono font-semibold text-foreground">
               v{p.passport_version}
             </span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-[#737373]">Created</span>
-            <span className="text-[#0D0D0D]">{formatDate(p.created_at)}</span>
+            <span className="text-muted-foreground">Created</span>
+            <span className="text-foreground">{formatDate(p.created_at)}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-[#737373]">Last Updated</span>
-            <span className="text-[#0D0D0D]">{formatDate(p.updated_at)}</span>
+            <span className="text-muted-foreground">Last Updated</span>
+            <span className="text-foreground">{formatDate(p.updated_at)}</span>
           </div>
           {p.published_at && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-[#737373]">Published</span>
-              <span className="text-[#22C55E]">
+              <span className="text-muted-foreground">Published</span>
+              <span className="text-primary">
                 {formatDate(p.published_at)}
               </span>
             </div>
@@ -56,11 +56,11 @@ export default async function HistoryPage({
 
       {/* Audit trail placeholder */}
       <div className="dashed-card flex flex-col items-center py-12 text-center">
-        <History className="h-8 w-8 text-[#D9D9D9]" />
-        <p className="mt-3 text-sm font-medium text-[#737373]">
+        <History className="h-8 w-8 text-border" />
+        <p className="mt-3 text-sm font-medium text-muted-foreground">
           Detailed audit trail coming soon
         </p>
-        <p className="mt-1 max-w-sm text-xs text-[#A3A3A3]">
+        <p className="mt-1 max-w-sm text-xs text-muted-foreground/70">
           Version comparison, field-level diffs, approver comments, and
           publish/reject records will appear here.
         </p>

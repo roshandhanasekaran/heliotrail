@@ -41,25 +41,25 @@ export default function AuditLogPage() {
     <div className="space-y-5">
       {/* Page heading */}
       <div>
-        <h2 className="text-lg font-bold text-[#0D0D0D]">Audit Log</h2>
-        <p className="text-sm text-[#737373]">
+        <h2 className="text-lg font-bold text-foreground">Audit Log</h2>
+        <p className="text-sm text-muted-foreground">
           A tamper-evident record of all actions taken in your workspace.
         </p>
       </div>
 
       {/* Timeline card */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <ScrollText className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <ScrollText className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Recent Activity
           </h3>
-          <span className="ml-auto rounded bg-[#F2F2F2] px-2 py-0.5 text-xs font-semibold text-[#737373]">
+          <span className="ml-auto rounded bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
             {sorted.length}
           </span>
         </div>
 
-        <div className="divide-y divide-[#D9D9D9]">
+        <div className="divide-y divide-border">
           {sorted.map((entry) => {
             const meta = ACTION_MAP[entry.action] ?? {
               icon: Settings,
@@ -70,24 +70,24 @@ export default function AuditLogPage() {
             return (
               <div key={entry.id} className="flex items-start gap-3 px-5 py-3">
                 {/* Icon box */}
-                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded bg-[#F2F2F2]">
-                  <Icon className="h-3.5 w-3.5 text-[#737373]" />
+                <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded bg-muted">
+                  <Icon className="h-3.5 w-3.5 text-muted-foreground" />
                 </div>
 
                 {/* Content */}
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-[#0D0D0D]">
+                  <p className="text-sm text-foreground">
                     <span className="font-semibold">{entry.actor}</span>{" "}
-                    <span className="text-[#737373]">{meta.label}</span>{" "}
+                    <span className="text-muted-foreground">{meta.label}</span>{" "}
                     <span className="font-medium">{entry.target}</span>
                   </p>
-                  <p className="mt-0.5 text-xs text-[#A3A3A3]">
+                  <p className="mt-0.5 text-xs text-muted-foreground/70">
                     {entry.details}
                   </p>
                 </div>
 
                 {/* Timestamp */}
-                <p className="shrink-0 text-xs text-[#A3A3A3]">
+                <p className="shrink-0 text-xs text-muted-foreground/70">
                   {formatTimestamp(entry.timestamp)}
                 </p>
               </div>

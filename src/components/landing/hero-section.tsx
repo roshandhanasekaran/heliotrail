@@ -26,7 +26,7 @@ export function HeroSection() {
           {/* Badge */}
           <FadeIn>
             <div className="inline-flex items-center gap-2 border border-border px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <span className="inline-flex h-2 w-2 bg-[#22C55E]" />
+              <span className="inline-flex h-2 w-2 bg-primary" />
               EU ESPR Digital Product Passport Platform
             </div>
           </FadeIn>
@@ -35,7 +35,7 @@ export function HeroSection() {
           <FadeIn delay={0.1}>
             <h1 className="mt-8 max-w-4xl text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
               The Digital Identity of{" "}
-              <span className="text-[#22C55E]">Every Solar Panel</span>
+              <span className="text-primary">Every Solar Panel</span>
             </h1>
           </FadeIn>
 

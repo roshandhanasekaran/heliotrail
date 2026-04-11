@@ -17,8 +17,8 @@ export default async function PassportsListPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#0D0D0D]">Passports</h1>
-          <p className="mt-1 text-sm text-[#737373]">
+          <h1 className="text-2xl font-bold text-foreground">Passports</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             {all.length} passport{all.length !== 1 ? "s" : ""} in your portfolio
           </p>
         </div>

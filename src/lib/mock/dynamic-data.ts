@@ -22,10 +22,11 @@ function resetSeed(s = 42) {
 
 // Shared tooltip style for all Recharts charts
 export const CHART_TOOLTIP_STYLE = {
-  background: "#fff",
-  border: "1px solid #D9D9D9",
+  background: "var(--card)",
+  border: "1px solid var(--border)",
   fontSize: 12,
   boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+  color: "var(--foreground)",
 };
 
 const MONTHS_SHORT = [

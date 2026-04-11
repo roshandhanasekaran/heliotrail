@@ -66,7 +66,7 @@ export function DonutChart({
           cy={cy}
           r={radius}
           fill="none"
-          stroke="#F2F2F2"
+          stroke="var(--muted)"
           strokeWidth={strokeWidth}
         />
 
@@ -95,7 +95,7 @@ export function DonutChart({
             y={centerLabel ? cy - 4 : cy + 4}
             textAnchor="middle"
             dominantBaseline="central"
-            fill="#0D0D0D"
+            fill="var(--foreground)"
             fontSize={22}
             fontWeight={700}
             fontFamily="JetBrains Mono, monospace"
@@ -108,7 +108,7 @@ export function DonutChart({
             x={cx}
             y={cy + 14}
             textAnchor="middle"
-            fill="#A3A3A3"
+            fill="var(--muted-foreground)"
             fontSize={9}
             fontFamily="DM Sans, sans-serif"
           >
@@ -126,8 +126,8 @@ export function DonutChart({
                 className="h-2.5 w-2.5 shrink-0"
                 style={{ backgroundColor: arc.color }}
               />
-              <span className="text-[10px] text-[#737373]">{arc.label}</span>
-              <span className="font-mono text-[10px] font-semibold text-[#0D0D0D]">
+              <span className="text-[10px] text-muted-foreground">{arc.label}</span>
+              <span className="font-mono text-[10px] font-semibold text-foreground">
                 {arc.percent}%
               </span>
             </div>

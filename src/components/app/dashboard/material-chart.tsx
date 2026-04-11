@@ -37,8 +37,8 @@ export function MaterialChart({ segments }: MaterialChartProps) {
               style={{ backgroundColor: seg.color }}
             />
             <div className="min-w-0">
-              <span className="text-xs text-[#737373]">{seg.name}</span>
-              <span className="ml-1 font-mono text-xs font-semibold text-[#0D0D0D]">
+              <span className="text-xs text-muted-foreground">{seg.name}</span>
+              <span className="ml-1 font-mono text-xs font-semibold text-foreground">
                 {seg.percent.toFixed(1)}%
               </span>
             </div>

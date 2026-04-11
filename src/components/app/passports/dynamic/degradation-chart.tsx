@@ -37,23 +37,23 @@ export function DegradationChart({ data }: DegradationChartProps) {
             <stop offset="100%" stopColor="#22C55E" stopOpacity={0.02} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
         <XAxis
           dataKey="year"
-          tick={{ fontSize: 10, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+          axisLine={{ stroke: "var(--border)" }}
           tickLine={false}
           label={{
             value: "Year",
             position: "insideBottom",
             offset: -2,
             fontSize: 10,
-            fill: "#A3A3A3",
+            fill: "var(--muted-foreground)",
           }}
         />
         <YAxis
           domain={[75, 102]}
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={40}
@@ -78,7 +78,7 @@ export function DegradationChart({ data }: DegradationChartProps) {
           <ReferenceLine
             key={y}
             x={y}
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeDasharray="2 2"
           />
         ))}
@@ -93,7 +93,7 @@ export function DegradationChart({ data }: DegradationChartProps) {
           type="natural"
           dataKey="lowerBound"
           stroke="none"
-          fill="#ffffff"
+          fill="var(--card)"
         />
         {/* Fleet average */}
         <Line

@@ -23,22 +23,22 @@ export function TemperatureDeratingChart({
   return (
     <ResponsiveContainer width="100%" height={280}>
       <LineChart data={data} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
         <XAxis
           dataKey="temperature"
-          tick={{ fontSize: 10, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+          axisLine={{ stroke: "var(--border)" }}
           tickLine={false}
           label={{
             value: "Module Temp (°C)",
             position: "insideBottom",
             offset: -2,
             fontSize: 10,
-            fill: "#A3A3A3",
+            fill: "var(--muted-foreground)",
           }}
         />
         <YAxis
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={50}

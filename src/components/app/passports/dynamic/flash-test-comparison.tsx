@@ -27,7 +27,7 @@ export function FlashTestComparison({ data }: FlashTestComparisonProps) {
       <div className="flex h-36 items-end justify-center gap-6">
         {/* Flash test bar */}
         <div className="flex flex-col items-center gap-1">
-          <span className="font-mono text-xs font-bold text-[#0D0D0D]">
+          <span className="font-mono text-xs font-bold text-foreground">
             {data.flashTestPower}W
           </span>
           <div
@@ -37,12 +37,12 @@ export function FlashTestComparison({ data }: FlashTestComparisonProps) {
               backgroundColor: hovered ? "#A3A3A3" : "#D9D9D9",
             }}
           />
-          <span className="text-[10px] text-[#737373]">Flash Test</span>
+          <span className="text-[10px] text-muted-foreground">Flash Test</span>
         </div>
 
         {/* Field measurement bar */}
         <div className="flex flex-col items-center gap-1">
-          <span className="font-mono text-xs font-bold text-[#0D0D0D]">
+          <span className="font-mono text-xs font-bold text-foreground">
             {data.fieldPower}W
           </span>
           <div
@@ -52,15 +52,15 @@ export function FlashTestComparison({ data }: FlashTestComparisonProps) {
               backgroundColor: hovered ? "#22C55E" : "#86EFAC",
             }}
           />
-          <span className="text-[10px] text-[#737373]">Field</span>
+          <span className="text-[10px] text-muted-foreground">Field</span>
         </div>
       </div>
 
       {/* Gap indicator */}
-      <div className="flex items-center justify-between border-t border-dashed border-[#D9D9D9] pt-2">
+      <div className="flex items-center justify-between border-t border-dashed border-border pt-2">
         <div className="flex items-center gap-1.5">
           <Zap className="h-3 w-3" style={{ color: gapColor }} />
-          <span className="text-xs text-[#737373]">Gap</span>
+          <span className="text-xs text-muted-foreground">Gap</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="font-mono text-sm font-bold" style={{ color: gapColor }}>

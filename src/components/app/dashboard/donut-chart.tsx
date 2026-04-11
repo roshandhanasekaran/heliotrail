@@ -36,11 +36,11 @@ export function DonutChart({ data, centerLabel, centerValue }: DonutChartProps) 
 
       {/* Center label */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold tabular-nums text-[#0D0D0D]">
+        <span className="text-2xl font-bold tabular-nums text-foreground">
           {centerValue ?? total}
         </span>
         {centerLabel && (
-          <span className="text-[0.625rem] text-[#737373]">{centerLabel}</span>
+          <span className="text-[0.625rem] text-muted-foreground">{centerLabel}</span>
         )}
       </div>
 
@@ -54,8 +54,8 @@ export function DonutChart({ data, centerLabel, centerValue }: DonutChartProps) 
                 className="inline-block h-2 w-2"
                 style={{ backgroundColor: d.color }}
               />
-              <span className="text-xs text-[#737373]">
-                {d.name} <strong className="text-[#0D0D0D]">{d.value}</strong>
+              <span className="text-xs text-muted-foreground">
+                {d.name} <strong className="text-foreground">{d.value}</strong>
               </span>
             </div>
           ))}

@@ -21,7 +21,7 @@ export function RadialGauge({
   label,
   unit = "%",
   size = 160,
-  color = "#0D0D0D",
+  color = "var(--foreground)",
   className,
   showTicks = true,
 }: RadialGaugeProps) {
@@ -75,7 +75,7 @@ export function RadialGauge({
               <line
                 key={i}
                 x1={x1} y1={y1} x2={x2} y2={y2}
-                stroke="#D9D9D9"
+                stroke="var(--border)"
                 strokeWidth={isMajor ? 1.5 : 0.8}
                 strokeLinecap="round"
               />
@@ -88,7 +88,7 @@ export function RadialGauge({
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeWidth={strokeWidth}
           />
 
@@ -128,17 +128,17 @@ export function RadialGauge({
         {/* Center value */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span
-            className="text-2xl font-bold tabular-nums tracking-tight text-[#0D0D0D]"
+            className="text-2xl font-bold tabular-nums tracking-tight text-foreground"
           >
             {display}
           </span>
-          <span className="text-[10px] font-medium text-[#737373] uppercase tracking-wider -mt-0.5">
+          <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider -mt-0.5">
             {unit}
           </span>
         </div>
       </div>
 
-      <p className="mt-2 text-xs font-medium text-[#737373] tracking-wide">{label}</p>
+      <p className="mt-2 text-xs font-medium text-muted-foreground tracking-wide">{label}</p>
     </div>
   );
 }

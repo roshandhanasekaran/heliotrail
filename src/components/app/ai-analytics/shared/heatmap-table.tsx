@@ -24,7 +24,7 @@ function getCellColor(
   yellowThreshold: number
 ): { bg: string; text: string } {
   if (value >= greenThreshold) {
-    return { bg: "#DCFCE7", text: "#166534" };
+    return { bg: "var(--passport-green-muted)", text: "var(--foreground)" };
   }
   if (value >= yellowThreshold) {
     return { bg: "#FEF3C7", text: "#92400E" };
@@ -41,16 +41,16 @@ export function HeatmapTable({
 }: HeatmapTableProps) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border border-[#D9D9D9] text-xs">
+      <table className="w-full border border-border text-xs">
         <thead>
-          <tr className="bg-[#F2F2F2]">
-            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]">
+          <tr className="bg-muted">
+            <th className="text-left px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
               Module
             </th>
             {metricLabels.map((label) => (
               <th
                 key={label}
-                className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-[#737373]"
+                className="text-center px-3 py-2 text-[10px] uppercase tracking-wider font-bold text-muted-foreground"
               >
                 {label}
               </th>
@@ -61,19 +61,19 @@ export function HeatmapTable({
           {rows.map((row, i) => (
             <tr
               key={row.moduleId}
-              className={i % 2 === 1 ? "bg-[#FAFAFA]" : "bg-white"}
+              className={i % 2 === 1 ? "bg-muted/50" : "bg-card"}
             >
               <td className="px-3 py-2">
                 {onModuleClick ? (
                   <button
                     type="button"
                     onClick={() => onModuleClick(row.moduleId)}
-                    className="font-mono text-[10px] font-bold text-[#0D0D0D] underline decoration-dashed underline-offset-2 hover:text-[#22C55E] transition-colors cursor-pointer"
+                    className="font-mono text-[10px] font-bold text-foreground underline decoration-dashed underline-offset-2 hover:text-primary transition-colors cursor-pointer"
                   >
                     {row.moduleId}
                   </button>
                 ) : (
-                  <span className="font-mono text-[10px] font-bold text-[#0D0D0D]">
+                  <span className="font-mono text-[10px] font-bold text-foreground">
                     {row.moduleId}
                   </span>
                 )}

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://heliotrail.io/schemas/pv-passport/v1/industry",
+  "title": "PV Digital Product Passport — Industry Standard Profile",
+  "description": "Regulatory Core + Industry Consensus fields (BOM, carbon, warranty, circularity). Layers 1 + 2.",
+  "type": "object",
+  "required": [
+    "pvPassportId",
+    "moduleIdentifier",
+    "modelId",
+    "manufacturer",
+    "manufacturingFacility",
+    "moduleTechnology",
+    "ratedPowerSTC_W",
+    "moduleEfficiency_percent",
+    "passportStatus",
+    "materialComposition",
+    "carbonFootprint",
+    "warranty",
+    "endOfLife"
+  ],
+  "properties": {
+    "pvPassportId": { "type": "string", "pattern": "^PVP-[0-9]{7,}$" },
+    "moduleIdentifier": { "type": "string" },
+    "serialNumber": { "type": "string" },
+    "batchId": { "type": "string" },
+    "modelId": { "type": "string" },
+    "gtin": { "type": "string", "pattern": "^[0-9]{8,14}$" },
+    "dataCarrierType": { "type": "string", "enum": ["qr_gs1_digital_link", "data_matrix", "rfid", "nfc"] },
+    "passportVersion": { "type": "string" },
+    "passportStatus": { "type": "string", "enum": ["draft", "under_review", "approved", "published", "superseded", "archived", "decommissioned"] },
+    "manufacturer": {
+      "type": "object",
+      "required": ["name", "operatorIdentifier"],
+      "properties": {
+        "name": { "type": "string" },
+        "operatorIdentifier": { "type": "string" },
+        "address": { "type": "object" },
+        "contactUrl": { "type": "string", "format": "uri" }
+      }
+    },
+    "importer": { "type": "object" },
+    "manufacturingFacility": {
+      "type": "object",
+      "required": ["facilityIdentifier", "name", "location"],
+      "properties": {
+        "facilityIdentifier": { "type": "string" },
+        "name": { "type": "string" },
+        "location": { "type": "object", "required": ["country"] }
+      }
+    },
+    "manufacturingDate": { "type": "string", "format": "date-time" },
+    "moduleCategory": { "type": "string" },
+    "moduleTechnology": { "type": "string", "enum": ["perc", "topcon", "hjt", "cigs", "cdte", "perovskite", "shj", "ibc"] },
+    "ratedPowerSTC_W": { "type": "number", "minimum": 50, "maximum": 800 },
+    "moduleEfficiency_percent": { "type": "number", "minimum": 5, "maximum": 30 },
+    "voc_V": { "type": "number", "minimum": 0 },
+    "isc_A": { "type": "number", "minimum": 0 },
+    "vmp_V": { "type": "number", "minimum": 0 },
+    "imp_A": { "type": "number", "minimum": 0 },
+    "maxSystemVoltage_V": { "type": "number" },
+    "moduleDimensions_mm": { "type": "object" },
+    "moduleMass_kg": { "type": "number", "minimum": 5, "maximum": 50 },
+    "compliance": { "type": "object" },
+    "carbonFootprint": {
+      "type": "object",
+      "required": ["declaredValue_kgCO2e"],
+      "properties": {
+        "declaredValue_kgCO2e": { "type": "number", "minimum": 0 },
+        "functionalUnit_gCO2eq_per_kWh": { "type": "number", "minimum": 0 },
+        "boundary": { "type": "string", "enum": ["cradle_to_gate", "cradle_to_grave"] },
+        "methodology": { "type": "string" },
+        "verificationRef": { "type": "string" }
+      }
+    },
+    "materialComposition": {
+      "type": "object",
+      "required": ["moduleMaterials"],
+      "properties": {
+        "moduleMaterials": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["materialName", "componentType"],
+            "properties": {
+              "materialName": { "type": "string" },
+              "componentType": { "type": "string" },
+              "mass_g": { "type": "number", "minimum": 0 },
+              "massPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+              "isCriticalRawMaterial": { "type": "boolean" },
+              "recyclabilityHint": { "type": "string" }
+            }
+          }
+        },
+        "substancesOfConcern": { "type": "array" },
+        "reachStatus": { "type": "string" },
+        "rohsStatus": { "type": "string" }
+      }
+    },
+    "warranty": {
+      "type": "object",
+      "properties": {
+        "productWarranty_years": { "type": "number" },
+        "performanceWarranty": { "type": "string" },
+        "linearDegradation_percent_per_year": { "type": "number" },
+        "expectedLifetime_years": { "type": "number" },
+        "testStandards": { "type": "array" }
+      }
+    },
+    "endOfLife": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "type": "string", "enum": ["in_use", "decommissioned", "in_recycling", "recycled", "reused", "disposed"] },
+        "dismantlingInstructions": { "type": "string" },
+        "collectionScheme": { "type": "string" },
+        "recyclerPartner": { "type": "string" },
+        "hazardousWarnings": { "type": "array" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

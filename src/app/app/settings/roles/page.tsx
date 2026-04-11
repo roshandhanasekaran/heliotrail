@@ -80,8 +80,8 @@ export default function RolesPage() {
     <div className="space-y-5">
       {/* Page heading */}
       <div>
-        <h2 className="text-lg font-bold text-[#0D0D0D]">Roles &amp; Permissions</h2>
-        <p className="text-sm text-[#737373]">
+        <h2 className="text-lg font-bold text-foreground">Roles &amp; Permissions</h2>
+        <p className="text-sm text-muted-foreground">
           Overview of role capabilities and the full permission matrix.
         </p>
       </div>
@@ -93,14 +93,14 @@ export default function RolesPage() {
           return (
             <div key={role} className="clean-card p-5">
               <div className="mb-2 flex items-center gap-2">
-                <Shield className="h-4 w-4 text-[#737373]" />
+                <Shield className="h-4 w-4 text-muted-foreground" />
                 <span
                   className={`rounded px-2 py-0.5 text-xs font-semibold ${colors.bg} ${colors.text}`}
                 >
                   {ROLE_LABELS[role]}
                 </span>
               </div>
-              <p className="text-xs text-[#737373] leading-relaxed">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 {ROLE_DESCRIPTIONS[role]}
               </p>
             </div>
@@ -110,9 +110,9 @@ export default function RolesPage() {
 
       {/* Permission matrix */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <Shield className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <Shield className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Permission Matrix
           </h3>
         </div>
@@ -120,8 +120,8 @@ export default function RolesPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#D9D9D9]">
-                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-[#737373]">
+              <tr className="border-b border-border">
+                <th className="px-5 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   Capability
                 </th>
                 {ROLES.map((role) => {
@@ -130,7 +130,7 @@ export default function RolesPage() {
                   return (
                     <th
                       key={role}
-                      className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-[#737373]"
+                      className="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     >
                       <span
                         className={`rounded px-2 py-0.5 ${colors.bg} ${colors.text}`}
@@ -146,10 +146,10 @@ export default function RolesPage() {
               {PERMISSION_GROUPS.map((group) => (
                 <Fragment key={group.label}>
                   {/* Group header row */}
-                  <tr className="bg-[#FAFAFA]">
+                  <tr className="bg-muted/50">
                     <td
                       colSpan={ROLES.length + 1}
-                      className="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-[#737373]"
+                      className="px-5 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                     >
                       {group.label}
                     </td>
@@ -161,9 +161,9 @@ export default function RolesPage() {
                     return (
                       <tr
                         key={perm}
-                        className="border-t border-[#D9D9D9] hover:bg-[#FAFAFA]"
+                        className="border-t border-border hover:bg-muted/50"
                       >
-                        <td className="px-5 py-2.5 text-sm text-[#0D0D0D]">
+                        <td className="px-5 py-2.5 text-sm text-foreground">
                           {capabilityLabel(perm)}
                         </td>
                         {ROLES.map((role) => {
@@ -177,13 +177,11 @@ export default function RolesPage() {
                             >
                               {allowed ? (
                                 <Check
-                                  className="mx-auto h-4 w-4"
-                                  style={{ color: "#22C55E" }}
+                                  className="mx-auto h-4 w-4 text-primary"
                                 />
                               ) : (
                                 <Minus
-                                  className="mx-auto h-4 w-4"
-                                  style={{ color: "#D9D9D9" }}
+                                  className="mx-auto h-4 w-4 text-border"
                                 />
                               )}
                             </td>

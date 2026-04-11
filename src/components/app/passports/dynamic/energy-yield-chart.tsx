@@ -25,16 +25,16 @@ export function EnergyYieldChart({ data }: EnergyYieldChartProps) {
         data={data}
         margin={{ left: 0, right: 8, top: 8, bottom: 8 }}
       >
-        <CartesianGrid strokeDasharray="3 3" stroke="#F2F2F2" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--muted)" />
         <XAxis
           dataKey="month"
-          tick={{ fontSize: 10, fill: "#737373" }}
-          axisLine={{ stroke: "#D9D9D9" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+          axisLine={{ stroke: "var(--border)" }}
           tickLine={false}
         />
         <YAxis
           yAxisId="bar"
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={45}
@@ -44,13 +44,13 @@ export function EnergyYieldChart({ data }: EnergyYieldChartProps) {
             position: "insideTopLeft",
             offset: -5,
             fontSize: 9,
-            fill: "#A3A3A3",
+            fill: "var(--muted-foreground)",
           }}
         />
         <YAxis
           yAxisId="line"
           orientation="right"
-          tick={{ fontSize: 10, fill: "#737373" }}
+          tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
           width={50}
@@ -60,7 +60,7 @@ export function EnergyYieldChart({ data }: EnergyYieldChartProps) {
             position: "insideTopRight",
             offset: -5,
             fontSize: 9,
-            fill: "#A3A3A3",
+            fill: "var(--muted-foreground)",
           }}
         />
         <Tooltip
@@ -77,13 +77,13 @@ export function EnergyYieldChart({ data }: EnergyYieldChartProps) {
         />
         <Legend
           iconSize={8}
-          wrapperStyle={{ fontSize: 10, color: "#737373" }}
+          wrapperStyle={{ fontSize: 10, color: "var(--muted-foreground)" }}
         />
         <Bar
           yAxisId="bar"
           dataKey="expected"
           name="Expected"
-          fill="#D9D9D9"
+          fill="var(--border)"
           barSize={14}
         />
         <Bar

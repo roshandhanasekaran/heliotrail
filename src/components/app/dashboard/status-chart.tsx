@@ -22,7 +22,7 @@ export function StatusChart({ data }: StatusChartProps) {
           type="category"
           dataKey="name"
           width={90}
-          tick={{ fontSize: 12, fill: "#737373" }}
+          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
         />

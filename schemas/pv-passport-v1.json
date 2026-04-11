@@ -1,0 +1,536 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://heliotrail.io/schemas/pv-passport/v1",
+  "title": "PV Digital Product Passport",
+  "description": "Schema for a photovoltaic module digital product passport, aligned with EU ESPR framework. Supports three validation profiles: regulatory-core, industry, and full.",
+  "type": "object",
+  "required": [
+    "pvPassportId",
+    "moduleIdentifier",
+    "modelId",
+    "manufacturer",
+    "manufacturingFacility",
+    "moduleTechnology",
+    "ratedPowerSTC_W",
+    "moduleEfficiency_percent",
+    "passportStatus"
+  ],
+  "properties": {
+    "pvPassportId": {
+      "type": "string",
+      "description": "Unique passport identifier (ISO/IEC 15459 aligned)",
+      "pattern": "^PVP-[0-9]{7,}$",
+      "examples": ["PVP-0000001"]
+    },
+    "moduleIdentifier": {
+      "type": "string",
+      "description": "Module-level unique identifier",
+      "examples": ["MOD-123456789"]
+    },
+    "serialNumber": {
+      "type": "string",
+      "description": "Module serial number"
+    },
+    "batchId": {
+      "type": "string",
+      "description": "Batch/lot identifier"
+    },
+    "modelId": {
+      "type": "string",
+      "description": "Product model identifier"
+    },
+    "gtin": {
+      "type": "string",
+      "description": "GS1 Global Trade Item Number",
+      "pattern": "^[0-9]{8,14}$"
+    },
+    "dataCarrierType": {
+      "type": "string",
+      "enum": ["qr_gs1_digital_link", "data_matrix", "rfid", "nfc"],
+      "default": "qr_gs1_digital_link"
+    },
+    "passportVersion": {
+      "type": "string",
+      "description": "Current passport version",
+      "examples": ["v1"]
+    },
+    "passportStatus": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "approved",
+        "published",
+        "superseded",
+        "archived",
+        "decommissioned"
+      ]
+    },
+    "manufacturer": {
+      "$ref": "#/$defs/economicOperator",
+      "description": "Module manufacturer / EU economic operator"
+    },
+    "importer": {
+      "$ref": "#/$defs/economicOperator",
+      "description": "EU importer (required for non-EU manufacturers)"
+    },
+    "authorizedRepresentative": {
+      "$ref": "#/$defs/economicOperator",
+      "description": "EU authorized representative"
+    },
+    "distributors": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/economicOperator" }
+    },
+    "manufacturingFacility": {
+      "type": "object",
+      "required": ["facilityIdentifier", "name", "location"],
+      "properties": {
+        "facilityIdentifier": { "type": "string" },
+        "name": { "type": "string" },
+        "location": {
+          "type": "object",
+          "required": ["country"],
+          "properties": {
+            "country": { "type": "string", "minLength": 2, "maxLength": 2, "description": "ISO 3166-1 alpha-2 country code" },
+            "region": { "type": "string" },
+            "city": { "type": "string" },
+            "address": { "type": "string" },
+            "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+            "longitude": { "type": "number", "minimum": -180, "maximum": 180 }
+          }
+        }
+      }
+    },
+    "manufacturingDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date of manufacture (ISO 8601)"
+    },
+    "moduleCategory": {
+      "type": "string",
+      "enum": ["crystalline_silicon", "thin_film", "multi_junction", "perovskite", "organic"]
+    },
+    "moduleTechnology": {
+      "type": "string",
+      "enum": ["perc", "topcon", "hjt", "cigs", "cdte", "perovskite", "shj", "ibc"],
+      "description": "Solar cell technology"
+    },
+    "ratedPowerSTC_W": {
+      "type": "number",
+      "minimum": 50,
+      "maximum": 800,
+      "description": "Nameplate power at Standard Test Conditions (W)"
+    },
+    "moduleEfficiency_percent": {
+      "type": "number",
+      "minimum": 5,
+      "maximum": 30,
+      "description": "Module efficiency (%)"
+    },
+    "voc_V": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Open-circuit voltage (V)"
+    },
+    "isc_A": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Short-circuit current (A)"
+    },
+    "vmp_V": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Voltage at maximum power point (V)"
+    },
+    "imp_A": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Current at maximum power point (A)"
+    },
+    "maxSystemVoltage_V": {
+      "type": "number",
+      "enum": [600, 1000, 1500],
+      "description": "Maximum system voltage (V)"
+    },
+    "moduleDimensions_mm": {
+      "type": "object",
+      "properties": {
+        "length": { "type": "number", "minimum": 0 },
+        "width": { "type": "number", "minimum": 0 },
+        "depth": { "type": "number", "minimum": 0 }
+      }
+    },
+    "moduleMass_kg": {
+      "type": "number",
+      "minimum": 5,
+      "maximum": 50,
+      "description": "Total module mass (kg)"
+    },
+    "tempCoeff_Pmax": {
+      "type": "number",
+      "maximum": 0,
+      "description": "Temperature coefficient of max power (%/°C), must be negative"
+    },
+    "tempCoeff_Voc": {
+      "type": "number",
+      "maximum": 0,
+      "description": "Temperature coefficient of Voc (%/°C), must be negative"
+    },
+    "tempCoeff_Isc": {
+      "type": "number",
+      "description": "Temperature coefficient of Isc (%/°C), typically positive"
+    },
+    "noct_C": {
+      "type": "number",
+      "minimum": 30,
+      "maximum": 55,
+      "description": "Nominal Operating Cell Temperature (°C)"
+    },
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "declarationOfConformity": { "$ref": "#/$defs/hashedDocument" },
+        "technicalDocumentationRef": { "$ref": "#/$defs/hashedDocument" },
+        "certificates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/certificate" }
+        },
+        "userManual": { "$ref": "#/$defs/hashedDocument" },
+        "installationInstructions": { "$ref": "#/$defs/hashedDocument" },
+        "safetyInstructions": { "$ref": "#/$defs/hashedDocument" }
+      }
+    },
+    "carbonFootprint": {
+      "type": "object",
+      "properties": {
+        "declaredValue_kgCO2e": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Total carbon footprint (kg CO2eq)"
+        },
+        "functionalUnit_gCO2eq_per_kWh": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Carbon intensity per kWh (JRC method)"
+        },
+        "boundary": {
+          "type": "string",
+          "enum": ["cradle_to_gate", "cradle_to_grave"]
+        },
+        "methodology": {
+          "type": "string",
+          "description": "Calculation methodology (e.g., JRC_harmonized_2025, PEF, ISO_14040)"
+        },
+        "verificationRef": {
+          "type": "string",
+          "description": "Third-party verification reference"
+        }
+      }
+    },
+    "materialComposition": {
+      "type": "object",
+      "properties": {
+        "moduleMaterials": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/material" }
+        },
+        "substancesOfConcern": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/substanceOfConcern" }
+        },
+        "reachStatus": {
+          "type": "string",
+          "enum": ["compliant", "non_compliant", "exempt", "under_review"]
+        },
+        "rohsStatus": {
+          "type": "string",
+          "enum": ["compliant", "compliant_with_exemption", "exempt", "non_compliant"]
+        }
+      }
+    },
+    "warranty": {
+      "type": "object",
+      "properties": {
+        "productWarranty_years": { "type": "number", "minimum": 0 },
+        "performanceWarranty": { "type": "string" },
+        "linearDegradation_percent_per_year": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 1.5
+        },
+        "expectedLifetime_years": { "type": "number", "minimum": 0 },
+        "testStandards": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "supplyChain": {
+      "type": "object",
+      "properties": {
+        "actors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/supplyChainActor" }
+        },
+        "facilities": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "supplierTiers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/supplierTier" }
+        },
+        "chainOfCustodyEvents": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/chainOfCustodyEvent" }
+        },
+        "dueDiligenceReport": { "$ref": "#/$defs/hashedDocument" },
+        "thirdPartyAssurances": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hashedDocument" }
+        },
+        "uflpaCompliance": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["compliant", "non_compliant", "not_applicable", "under_review"] },
+            "attestationRef": { "$ref": "#/$defs/hashedDocument" }
+          }
+        },
+        "ssiCertification": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["certified", "in_progress", "not_certified"] },
+            "certificationRef": { "$ref": "#/$defs/hashedDocument" }
+          }
+        }
+      }
+    },
+    "endOfLife": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["in_use", "decommissioned", "in_recycling", "recycled", "reused", "disposed"]
+        },
+        "dismantlingInstructions": { "type": "string" },
+        "collectionScheme": { "type": "string" },
+        "recyclerPartner": { "type": "string" },
+        "hazardousWarnings": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recoveryOutcomes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "material": { "type": "string" },
+              "expectedRecoveryPercent": { "type": "number" },
+              "actualRecoveryPercent": { "type": "number" },
+              "massRecovered_kg": { "type": "number" }
+            }
+          }
+        },
+        "reuseAssessment": {
+          "type": "object",
+          "properties": {
+            "remainingCapacityPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+            "conditionGrade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+            "reuseEligible": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "dynamic": {
+      "type": "object",
+      "description": "Dynamic lifecycle data — Layer 3 (advanced intelligence)",
+      "properties": {
+        "currentActivePower_W": { "type": "number", "minimum": 0 },
+        "cumulativeEnergyGeneration_kWh": { "type": "number", "minimum": 0 },
+        "cumulativeIrradiance_kWh_m2": { "type": "number", "minimum": 0 },
+        "moduleTemperature_C": { "type": "number" },
+        "ambientTemperature_C": { "type": "number" },
+        "operatingHours_h": { "type": "number", "minimum": 0 },
+        "powerRetention_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "estimatedDegradationRate_percent_per_year": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "anomalyFlags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["pid", "hotspot", "delamination", "snail_trails", "bypass_diode_failure", "microcracks", "discoloration", "corrosion"]
+          }
+        },
+        "maintenanceEvents": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/maintenanceEvent" }
+        },
+        "inspectionEvents": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/inspectionEvent" }
+        },
+        "negativeEvents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string", "format": "date" },
+              "type": { "type": "string", "enum": ["hail", "lightning", "flooding", "fire", "wind", "vandalism", "other"] },
+              "description": { "type": "string" },
+              "impactAssessment": { "type": "string" }
+            }
+          }
+        },
+        "snapshotTimestamp": { "type": "string", "format": "date-time" },
+        "installationSite": {
+          "type": "object",
+          "properties": {
+            "siteId": { "type": "string" },
+            "latitude": { "type": "number" },
+            "longitude": { "type": "number" },
+            "installationDate": { "type": "string", "format": "date" }
+          }
+        },
+        "currentOwner": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "type": { "type": "string", "enum": ["individual", "commercial", "utility", "government"] }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "economicOperator": {
+      "type": "object",
+      "required": ["name", "operatorIdentifier"],
+      "properties": {
+        "name": { "type": "string" },
+        "operatorIdentifier": { "type": "string" },
+        "address": {
+          "type": "object",
+          "properties": {
+            "country": { "type": "string" },
+            "city": { "type": "string" },
+            "state": { "type": "string" },
+            "postalCode": { "type": "string" },
+            "street": { "type": "string" }
+          }
+        },
+        "contactUrl": { "type": "string", "format": "uri" }
+      }
+    },
+    "hashedDocument": {
+      "type": "object",
+      "required": ["uri", "hashAlg", "hash"],
+      "properties": {
+        "uri": { "type": "string", "format": "uri" },
+        "hashAlg": { "type": "string", "enum": ["sha256", "sha384", "sha512"] },
+        "hash": { "type": "string", "pattern": "^[a-f0-9]+$" }
+      }
+    },
+    "certificate": {
+      "type": "object",
+      "required": ["standard", "issuer"],
+      "properties": {
+        "standard": { "type": "string", "description": "e.g., IEC 61215, IEC 61730, UL 61730, BIS IS 14286" },
+        "issuer": { "type": "string" },
+        "validUntil": { "type": "string", "format": "date" },
+        "uri": { "type": "string", "format": "uri" },
+        "hash": { "type": "string" }
+      }
+    },
+    "material": {
+      "type": "object",
+      "required": ["materialName", "componentType"],
+      "properties": {
+        "materialName": { "type": "string" },
+        "componentType": {
+          "type": "string",
+          "enum": ["front_cover", "frame", "solar_cell", "encapsulant", "interconnects", "cell_metallization", "rear_cover", "junction_box", "solder", "other"]
+        },
+        "mass_g": { "type": "number", "minimum": 0 },
+        "massPercent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "casNumber": { "type": ["string", "null"] },
+        "isCriticalRawMaterial": { "type": "boolean" },
+        "supplierId": { "type": "string" },
+        "recyclabilityHint": {
+          "type": "string",
+          "enum": ["fully_recyclable", "recoverable", "limited", "not_recyclable"]
+        },
+        "recycledContent_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "originCountry": { "type": "string", "minLength": 2, "maxLength": 2 }
+      }
+    },
+    "substanceOfConcern": {
+      "type": "object",
+      "required": ["name", "casNumber"],
+      "properties": {
+        "name": { "type": "string" },
+        "casNumber": { "type": "string", "pattern": "^[0-9]+-[0-9]+-[0-9]+$" },
+        "concentration_w_w_percent": { "type": "number", "minimum": 0, "maximum": 100 },
+        "regulatoryBasis": { "type": "string", "enum": ["REACH", "RoHS", "SVHC", "CLP", "other"] }
+      }
+    },
+    "supplyChainActor": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "id": { "type": "string" },
+        "role": { "type": "string", "enum": ["manufacturer", "supplier", "processor", "transporter", "recycler", "distributor"] },
+        "country": { "type": "string" }
+      }
+    },
+    "supplierTier": {
+      "type": "object",
+      "properties": {
+        "tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "stage": {
+          "type": "string",
+          "enum": ["quartz_mining", "polysilicon", "ingot_wafer", "cell_manufacturing", "module_assembly"]
+        },
+        "actor": { "type": "string" },
+        "facility": { "type": "string" },
+        "country": { "type": "string" },
+        "uflpaCompliant": { "type": "boolean" },
+        "certifications": { "type": "array", "items": { "type": "string" } },
+        "auditDate": { "type": "string", "format": "date" }
+      }
+    },
+    "chainOfCustodyEvent": {
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "fromActor": { "type": "string" },
+        "toActor": { "type": "string" },
+        "eventType": { "type": "string", "enum": ["production", "transfer", "processing", "shipment", "receipt", "installation", "decommission"] },
+        "evidenceRef": { "$ref": "#/$defs/hashedDocument" },
+        "location": { "type": "string" }
+      }
+    },
+    "maintenanceEvent": {
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date" },
+        "type": { "type": "string", "enum": ["cleaning", "repair", "replacement", "inspection", "other"] },
+        "description": { "type": "string" },
+        "technician": { "type": "string" },
+        "reportRef": { "$ref": "#/$defs/hashedDocument" }
+      }
+    },
+    "inspectionEvent": {
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date" },
+        "method": { "type": "string", "enum": ["visual", "infrared_thermography", "electroluminescence", "iv_curve", "drone", "other"] },
+        "findings": { "type": "string" },
+        "reportRef": { "$ref": "#/$defs/hashedDocument" }
+      }
+    }
+  }
+}

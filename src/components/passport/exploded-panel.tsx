@@ -51,16 +51,16 @@ export function ExplodedPanel({
       <div className="flex justify-center mb-6">
         <button
           onClick={() => setIsExploded(!isExploded)}
-          className="group flex items-center gap-2 border border-[#D9D9D9] bg-white px-5 py-2 text-xs font-medium transition-all hover:bg-[#F2F2F2]"
+          className="group flex items-center gap-2 border border-border bg-card px-5 py-2 text-xs font-medium transition-all hover:bg-muted"
         >
           <motion.span
             animate={{ rotate: isExploded ? 180 : 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="text-[#0D0D0D]"
+            className="text-foreground"
           >
             {isExploded ? "\u2191" : "\u2193"}
           </motion.span>
-          <span className="text-[#0D0D0D]">
+          <span className="text-foreground">
             {isExploded ? "Collapse Layers" : "Explode Panel View"}
           </span>
         </button>
@@ -88,7 +88,7 @@ export function ExplodedPanel({
               const x = (500 - w) / 2;
 
               const fill = layerFills[i % layerFills.length];
-              const strokeColor = isActive ? "#22C55E" : "#D9D9D9";
+              const strokeColor = isActive ? "var(--primary)" : "var(--border)";
               const strokeW = isActive ? 2 : 1;
 
               return (
@@ -127,10 +127,10 @@ export function ExplodedPanel({
                     y={y}
                     width={w}
                     height={layerH}
-                    fill={isActive ? "#FAFAFA" : fill}
+                    fill={isActive ? "var(--accent)" : fill}
                     stroke={strokeColor}
                     strokeWidth={strokeW}
-                    animate={{ fill: isActive ? "#FAFAFA" : fill }}
+                    animate={{ fill: isActive ? "var(--accent)" : fill }}
                     transition={{ duration: 0.2 }}
                   />
 
@@ -140,13 +140,13 @@ export function ExplodedPanel({
                       <line
                         x1={x + 8} y1={y + layerH / 3}
                         x2={x + w - 8} y2={y + layerH / 3}
-                        stroke="#D9D9D9" strokeWidth="0.3"
+                        stroke="var(--border)" strokeWidth="0.3"
                         strokeDasharray="4 6"
                       />
                       <line
                         x1={x + 8} y1={y + (layerH * 2) / 3}
                         x2={x + w - 8} y2={y + (layerH * 2) / 3}
-                        stroke="#D9D9D9" strokeWidth="0.3"
+                        stroke="var(--border)" strokeWidth="0.3"
                         strokeDasharray="4 6"
                       />
                     </>
@@ -156,7 +156,7 @@ export function ExplodedPanel({
                   <text
                     x={x + 16}
                     y={y + layerH / 2 + 1}
-                    fill={isActive ? "#0D0D0D" : "#737373"}
+                    fill={isActive ? "var(--foreground)" : "var(--muted-foreground)"}
                     className="text-[11px] font-medium"
                     dominantBaseline="middle"
                   >
@@ -167,7 +167,7 @@ export function ExplodedPanel({
                   <text
                     x={x + w - 16}
                     y={y + layerH / 2 + 1}
-                    fill={isActive ? "#0D0D0D" : "#737373"}
+                    fill={isActive ? "var(--foreground)" : "var(--muted-foreground)"}
                     className="text-[11px] font-mono font-semibold"
                     dominantBaseline="middle"
                     textAnchor="end"
@@ -180,7 +180,7 @@ export function ExplodedPanel({
                     <text
                       x={x + w - 60}
                       y={y + layerH / 2 + 1}
-                      fill="#737373"
+                      fill="var(--muted-foreground)"
                       className="text-[9px] font-mono"
                       dominantBaseline="middle"
                       textAnchor="end"
@@ -221,7 +221,7 @@ export function ExplodedPanel({
                   width="348"
                   height={layers.length * 32 + 8}
                   fill="none"
-                  stroke="#D9D9D9"
+                  stroke="var(--border)"
                   strokeWidth="1"
                 />
               </motion.g>
@@ -239,34 +239,34 @@ export function ExplodedPanel({
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
-                className="border border-[#D9D9D9] bg-white p-5"
+                className="border border-border bg-card p-5"
               >
                 <div className="flex items-center gap-2.5 mb-3">
                   <div
                     className="h-4 w-4"
                     style={{ backgroundColor: layerFills[activeLayer % layerFills.length], border: "1px solid #D9D9D9" }}
                   />
-                  <span className="text-sm font-semibold text-[#0D0D0D]">
+                  <span className="text-sm font-semibold text-foreground">
                     {layers[activeLayer].name}
                   </span>
                 </div>
                 <div className="space-y-2 mb-3">
                   <div className="flex justify-between text-xs">
-                    <span className="text-[#737373]">Mass %</span>
-                    <span className="font-mono font-semibold text-[#0D0D0D]">
+                    <span className="text-muted-foreground">Mass %</span>
+                    <span className="font-mono font-semibold text-foreground">
                       {layers[activeLayer].massPercent}%
                     </span>
                   </div>
                   {layers[activeLayer].massG != null && (
                     <div className="flex justify-between text-xs">
-                      <span className="text-[#737373]">Mass</span>
-                      <span className="font-mono text-[#0D0D0D]">
+                      <span className="text-muted-foreground">Mass</span>
+                      <span className="font-mono text-foreground">
                         {(layers[activeLayer].massG / 1000).toFixed(1)} kg
                       </span>
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-[#737373] leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   {layers[activeLayer].description}
                 </p>
               </motion.div>
@@ -274,9 +274,9 @@ export function ExplodedPanel({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="border border-[#D9D9D9] bg-[#FAFAFA] p-5 text-center"
+                className="border border-border bg-muted/50 p-5 text-center"
               >
-                <p className="text-xs text-[#737373]">
+                <p className="text-xs text-muted-foreground">
                   Hover over a layer to see details
                 </p>
               </motion.div>

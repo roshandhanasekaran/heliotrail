@@ -20,25 +20,25 @@ export function RevenueImpact({ data }: RevenueImpactProps) {
       {/* Summary row */}
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
             Expected Output
           </p>
-          <p className="font-mono text-xl font-bold text-[#0D0D0D]">
+          <p className="font-mono text-xl font-bold text-foreground">
             {data.totalExpected.toLocaleString()}{" "}
-            <span className="text-xs font-normal text-[#737373]">kWh</span>
+            <span className="text-xs font-normal text-muted-foreground">kWh</span>
           </p>
         </div>
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
             Actual Output
           </p>
-          <p className="font-mono text-xl font-bold text-[#0D0D0D]">
+          <p className="font-mono text-xl font-bold text-foreground">
             {data.totalActual.toLocaleString()}{" "}
-            <span className="text-xs font-normal text-[#737373]">kWh</span>
+            <span className="text-xs font-normal text-muted-foreground">kWh</span>
           </p>
         </div>
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#A3A3A3]">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
             Performance Gap
           </p>
           <p className="flex items-center gap-1 font-mono text-xl font-bold text-[#EF4444]">
@@ -50,7 +50,7 @@ export function RevenueImpact({ data }: RevenueImpactProps) {
 
       {/* Segmented loss bar */}
       <div>
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-[#A3A3A3]">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
           Loss Breakdown
         </p>
         <div className="flex h-3 w-full overflow-hidden">
@@ -77,11 +77,11 @@ export function RevenueImpact({ data }: RevenueImpactProps) {
                 style={{ backgroundColor: loss.color }}
               />
               <div className="min-w-0">
-                <span className="text-xs text-[#737373]">
+                <span className="text-xs text-muted-foreground">
                   {loss.category}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-semibold text-[#0D0D0D]">
+                  <span className="font-mono text-xs font-semibold text-foreground">
                     {loss.kwhLost} kWh
                   </span>
                   <span className="text-[10px] text-[#EF4444]">
@@ -95,9 +95,9 @@ export function RevenueImpact({ data }: RevenueImpactProps) {
       </div>
 
       {/* Total loss */}
-      <div className="border-t border-dashed border-[#D9D9D9] pt-3">
+      <div className="border-t border-dashed border-border pt-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-medium text-[#737373]">
+          <span className="text-xs font-medium text-muted-foreground">
             Total Monthly Revenue Loss
           </span>
           <span className="font-mono text-lg font-bold text-[#EF4444]">

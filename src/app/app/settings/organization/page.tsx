@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Building2 } from "lucide-react";
 import { currentUser, organization } from "@/lib/mock/settings";
 import { canDo } from "@/lib/rbac";
+import { LABEL_CLASS, INPUT_CLASS, READONLY_CLASS } from "@/lib/styles";
 
 export default function OrganizationPage() {
   const canEdit = canDo(currentUser.role, "org.edit");
@@ -25,19 +26,14 @@ export default function OrganizationPage() {
     setTimeout(() => setSaved(false), 2000);
   }
 
-  const labelClass =
-    "text-xs font-semibold uppercase tracking-wider text-[#737373]";
-
-  const inputClass = canEdit
-    ? "w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
-    : "w-full border border-[#D9D9D9] bg-[#F5F5F5] px-3 py-2 text-sm text-[#737373]";
+  const inputClass = canEdit ? INPUT_CLASS : READONLY_CLASS;
 
   return (
     <div className="space-y-5">
       {/* Page heading */}
       <div>
-        <h2 className="text-lg font-bold text-[#0D0D0D]">Organization</h2>
-        <p className="text-sm text-[#737373]">
+        <h2 className="text-lg font-bold text-foreground">Organization</h2>
+        <p className="text-sm text-muted-foreground">
           {canEdit
             ? "Manage your organization identity and EU economic operator details."
             : "View your organization identity and EU economic operator details."}
@@ -46,9 +42,9 @@ export default function OrganizationPage() {
 
       {/* Organization Identity card */}
       <div className="clean-card">
-        <div className="border-b border-[#D9D9D9] px-5 py-3 flex items-center gap-2">
-          <Building2 className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="border-b border-border px-5 py-3 flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             Organization Identity
           </h3>
         </div>
@@ -57,7 +53,7 @@ export default function OrganizationPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {/* Org Name */}
             <div className="space-y-1.5">
-              <label className={labelClass}>Organization Name</label>
+              <label className={LABEL_CLASS}>Organization Name</label>
               <input
                 type="text"
                 value={orgName}
@@ -69,7 +65,7 @@ export default function OrganizationPage() {
 
             {/* Domain */}
             <div className="space-y-1.5">
-              <label className={labelClass}>Domain</label>
+              <label className={LABEL_CLASS}>Domain</label>
               <input
                 type="text"
                 value={domain}
@@ -81,7 +77,7 @@ export default function OrganizationPage() {
 
             {/* Default Facility */}
             <div className="space-y-1.5">
-              <label className={labelClass}>Default Facility</label>
+              <label className={LABEL_CLASS}>Default Facility</label>
               <input
                 type="text"
                 value={defaultFacility}
@@ -96,9 +92,9 @@ export default function OrganizationPage() {
 
       {/* EU Economic Operator card */}
       <div className="clean-card">
-        <div className="border-b border-[#D9D9D9] px-5 py-3 flex items-center gap-2">
-          <Building2 className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="border-b border-border px-5 py-3 flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">
             EU Economic Operator
           </h3>
           <span className="ml-1 rounded px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase tracking-wide bg-[#003399] text-white">
@@ -110,7 +106,7 @@ export default function OrganizationPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {/* Economic Operator ID — full width */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className={labelClass}>Economic Operator ID</label>
+              <label className={LABEL_CLASS}>Economic Operator ID</label>
               <input
                 type="text"
                 value={operatorId}
@@ -122,7 +118,7 @@ export default function OrganizationPage() {
 
             {/* Street Address — full width */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className={labelClass}>Street Address</label>
+              <label className={LABEL_CLASS}>Street Address</label>
               <input
                 type="text"
                 value={street}
@@ -134,7 +130,7 @@ export default function OrganizationPage() {
 
             {/* City */}
             <div className="space-y-1.5">
-              <label className={labelClass}>City</label>
+              <label className={LABEL_CLASS}>City</label>
               <input
                 type="text"
                 value={city}
@@ -146,7 +142,7 @@ export default function OrganizationPage() {
 
             {/* Postal Code */}
             <div className="space-y-1.5">
-              <label className={labelClass}>Postal Code</label>
+              <label className={LABEL_CLASS}>Postal Code</label>
               <input
                 type="text"
                 value={postalCode}
@@ -158,7 +154,7 @@ export default function OrganizationPage() {
 
             {/* Country — full width */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className={labelClass}>Country</label>
+              <label className={LABEL_CLASS}>Country</label>
               <input
                 type="text"
                 value={country}
@@ -178,7 +174,7 @@ export default function OrganizationPage() {
             Save Changes
           </button>
           {saved && (
-            <span className="text-xs font-medium text-[#22C55E]">
+            <span className="text-xs font-medium text-primary">
               Changes saved
             </span>
           )}

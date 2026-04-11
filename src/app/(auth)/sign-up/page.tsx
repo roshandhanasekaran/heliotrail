@@ -16,13 +16,13 @@ export default async function SignUpPage({
   return (
     <div className="w-full max-w-sm">
       <div className="clean-card p-6">
-        <h1 className="text-xl font-bold text-[#0D0D0D]">Create account</h1>
-        <p className="mt-1 text-sm text-[#737373]">
+        <h1 className="text-xl font-bold text-foreground">Create account</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
           Get started with HelioTrail
         </p>
 
         {params.error && (
-          <div className="mt-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          <div className="mt-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-300">
             {params.error}
           </div>
         )}
@@ -31,7 +31,7 @@ export default async function SignUpPage({
           <div>
             <label
               htmlFor="full_name"
-              className="block text-xs font-semibold uppercase tracking-wider text-[#737373]"
+              className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
               Full Name
             </label>
@@ -42,14 +42,14 @@ export default async function SignUpPage({
               required
               autoComplete="name"
               placeholder="Jane Smith"
-              className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+              className="mt-1 block w-full border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
           <div>
             <label
               htmlFor="email"
-              className="block text-xs font-semibold uppercase tracking-wider text-[#737373]"
+              className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
               Email
             </label>
@@ -60,14 +60,14 @@ export default async function SignUpPage({
               required
               autoComplete="email"
               placeholder="you@company.com"
-              className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+              className="mt-1 block w-full border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="block text-xs font-semibold uppercase tracking-wider text-[#737373]"
+              className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
               Password
             </label>
@@ -79,7 +79,7 @@ export default async function SignUpPage({
               autoComplete="new-password"
               minLength={8}
               placeholder="Min. 8 characters"
-              className="mt-1 block w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] placeholder:text-[#A3A3A3] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+              className="mt-1 block w-full border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
 
@@ -92,11 +92,11 @@ export default async function SignUpPage({
         </form>
       </div>
 
-      <p className="mt-4 text-center text-sm text-[#737373]">
+      <p className="mt-4 text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <Link
           href="/sign-in"
-          className="font-medium text-[#0D0D0D] underline underline-offset-4 hover:text-[#22C55E]"
+          className="font-medium text-foreground underline underline-offset-4 hover:text-primary"
         >
           Sign in
         </Link>

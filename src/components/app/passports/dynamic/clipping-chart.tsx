@@ -28,16 +28,16 @@ export function ClippingChart({ data }: ClippingChartProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.15 }}
-              className="pointer-events-none absolute -top-10 z-10 border border-[#D9D9D9] bg-white px-2 py-1 text-xs shadow-sm"
+              className="pointer-events-none absolute -top-10 z-10 border border-border bg-card px-2 py-1 text-xs shadow-sm"
               style={{
                 left: `${(hoveredIndex / (data.length - 1)) * 100}%`,
                 transform: "translateX(-50%)",
               }}
             >
-              <div className="font-mono font-semibold text-[#0D0D0D]">
+              <div className="font-mono font-semibold text-foreground">
                 {data[hoveredIndex].hours}h clipped
               </div>
-              <div className="text-[#A3A3A3]">
+              <div className="text-muted-foreground/70">
                 -{data[hoveredIndex].kwhLost} kWh lost
               </div>
             </motion.div>
@@ -79,7 +79,7 @@ export function ClippingChart({ data }: ClippingChartProps) {
                     transition={{ duration: 0.2 }}
                   />
                 </div>
-                <span className="mt-1 text-[9px] text-[#A3A3A3]">
+                <span className="mt-1 text-[9px] text-muted-foreground/70">
                   {d.month}
                 </span>
               </div>
@@ -88,7 +88,7 @@ export function ClippingChart({ data }: ClippingChartProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3 text-[10px] text-[#737373]">
+      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
         <span className="flex items-center gap-1">
           <span className="h-2 w-2 bg-[#3B82F6]" /> Normal
         </span>

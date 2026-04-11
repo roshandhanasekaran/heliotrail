@@ -91,14 +91,14 @@ export function DualLineChart({
             y1={g.y}
             x2={width - PAD.right}
             y2={g.y}
-            stroke="#F2F2F2"
+            stroke="var(--muted)"
             strokeWidth={1}
           />
           <text
             x={PAD.left - 6}
             y={g.y + 3}
             textAnchor="end"
-            fill="#A3A3A3"
+            fill="var(--muted-foreground)"
             fontSize={9}
             fontFamily="JetBrains Mono, monospace"
           >
@@ -114,7 +114,7 @@ export function DualLineChart({
           x={toX(d.x)}
           y={height - 4}
           textAnchor="middle"
-          fill="#A3A3A3"
+          fill="var(--muted-foreground)"
           fontSize={9}
           fontFamily="JetBrains Mono, monospace"
         >
@@ -158,15 +158,15 @@ export function DualLineChart({
 
       {/* Legend */}
       <g transform={`translate(${width - PAD.right - 130}, ${PAD.top})`}>
-        <rect x={0} y={0} width={130} height={36} rx={2} fill="white" fillOpacity={0.85} stroke="#F2F2F2" strokeWidth={1} />
+        <rect x={0} y={0} width={130} height={36} rx={2} fill="var(--card)" fillOpacity={0.85} stroke="var(--muted)" strokeWidth={1} />
         <line x1={8} y1={12} x2={24} y2={12} stroke={line1Color} strokeWidth={2} />
         <circle cx={16} cy={12} r={2.5} fill={line1Color} />
-        <text x={30} y={15} fill="#737373" fontSize={9} fontFamily="DM Sans, sans-serif">
+        <text x={30} y={15} fill="var(--muted-foreground)" fontSize={9} fontFamily="DM Sans, sans-serif">
           {line1Label}
         </text>
         <line x1={8} y1={26} x2={24} y2={26} stroke={line2Color} strokeWidth={1.5} strokeDasharray="4 2" />
         <circle cx={16} cy={26} r={2} fill={line2Color} />
-        <text x={30} y={29} fill="#737373" fontSize={9} fontFamily="DM Sans, sans-serif">
+        <text x={30} y={29} fill="var(--muted-foreground)" fontSize={9} fontFamily="DM Sans, sans-serif">
           {line2Label}
         </text>
       </g>

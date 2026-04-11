@@ -73,15 +73,15 @@ export function UploadEvidenceButton({ className }: { className?: string }) {
 
       {showDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-md bg-white p-6 shadow-xl">
+          <div className="w-full max-w-md bg-card p-6 shadow-xl">
             {/* Header */}
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#0D0D0D]">
+              <h3 className="text-lg font-bold text-foreground">
                 Upload Evidence
               </h3>
               <button
                 onClick={handleClose}
-                className="text-[#737373] hover:text-[#0D0D0D]"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -90,13 +90,13 @@ export function UploadEvidenceButton({ className }: { className?: string }) {
             {/* Success state */}
             {uploaded ? (
               <div className="mt-6 flex flex-col items-center py-8 text-center">
-                <CheckCircle2 className="h-10 w-10 text-[#22C55E]" />
-                <p className="mt-3 text-sm font-medium text-[#0D0D0D]">
+                <CheckCircle2 className="h-10 w-10 text-primary" />
+                <p className="mt-3 text-sm font-medium text-foreground">
                   Document uploaded successfully
                 </p>
-                <p className="mt-1 text-xs text-[#737373]">
+                <p className="mt-1 text-xs text-muted-foreground">
                   SHA-256 hash:{" "}
-                  <span className="font-mono text-[#0D0D0D]">{FAKE_HASH}</span>{" "}
+                  <span className="font-mono text-foreground">{FAKE_HASH}</span>{" "}
                   (verified)
                 </p>
                 <button
@@ -113,13 +113,13 @@ export function UploadEvidenceButton({ className }: { className?: string }) {
                   type="button"
                   onClick={handleUpload}
                   disabled={uploading}
-                  className="mt-4 w-full cursor-pointer border-2 border-dashed border-[#D9D9D9] bg-[#FAFAFA] py-12 text-center transition-colors hover:border-[#22C55E] hover:bg-[#F0FDF4] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-4 w-full cursor-pointer border-2 border-dashed border-border bg-muted/50 py-12 text-center transition-colors hover:border-primary hover:bg-[#F0FDF4] dark:hover:bg-primary/5 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <UploadCloud className="mx-auto h-9 w-9 text-[#A3A3A3]" />
-                  <p className="mt-3 text-sm font-medium text-[#737373]">
+                  <UploadCloud className="mx-auto h-9 w-9 text-muted-foreground/70" />
+                  <p className="mt-3 text-sm font-medium text-muted-foreground">
                     Drag and drop files here, or click to browse
                   </p>
-                  <p className="mt-1 text-xs text-[#A3A3A3]">
+                  <p className="mt-1 text-xs text-muted-foreground/70">
                     PDF, DOC, JPG, PNG up to 50MB
                   </p>
                 </button>
@@ -127,21 +127,21 @@ export function UploadEvidenceButton({ className }: { className?: string }) {
                 {/* Progress state */}
                 {uploading && (
                   <div className="mt-4 space-y-1.5">
-                    <div className="flex items-center justify-between text-xs text-[#737373]">
-                      <span className="font-medium text-[#0D0D0D]">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="font-medium text-foreground">
                         {FAKE_FILENAME}
                       </span>
                       <span>{FAKE_FILESIZE}</span>
                     </div>
                     {/* Track */}
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#E5E5E5]">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-border">
                       {/* Fill */}
                       <div
-                        className="h-full rounded-full bg-[#22C55E] transition-all duration-75"
+                        className="h-full rounded-full bg-primary transition-all duration-75"
                         style={{ width: `${Math.round(progress)}%` }}
                       />
                     </div>
-                    <p className="text-right text-xs text-[#737373]">
+                    <p className="text-right text-xs text-muted-foreground">
                       {Math.round(progress)}%
                     </p>
                   </div>

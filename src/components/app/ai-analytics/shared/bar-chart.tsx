@@ -43,14 +43,14 @@ export function BarChart({
             style={{ marginBottom: i < bars.length - 1 ? gap : 0 }}
           >
             <span
-              className="text-[10px] text-[#737373] truncate shrink-0"
+              className="text-[10px] text-muted-foreground truncate shrink-0"
               style={{ width: labelWidth }}
             >
               {bar.label}
             </span>
             <div className="flex-1 relative" style={{ height: barHeight }}>
               {/* Track */}
-              <div className="absolute inset-0 bg-[#F2F2F2]" />
+              <div className="absolute inset-0 bg-muted" />
               {/* Bar */}
               <div
                 className="absolute left-0 top-0 h-full transition-all duration-500"
@@ -62,7 +62,7 @@ export function BarChart({
               {/* Baseline */}
               {baselineValue != null && maxValue > 0 && (
                 <div
-                  className="absolute top-0 h-full border-l-2 border-dashed border-[#0D0D0D]"
+                  className="absolute top-0 h-full border-l-2 border-dashed border-foreground"
                   style={{
                     left: `${Math.min((baselineValue / maxValue) * 100, 100)}%`,
                   }}
@@ -71,7 +71,7 @@ export function BarChart({
             </div>
             {showValues && (
               <span
-                className="font-mono text-[10px] font-semibold text-[#0D0D0D] shrink-0 text-right"
+                className="font-mono text-[10px] font-semibold text-foreground shrink-0 text-right"
                 style={{ width: valueWidth }}
               >
                 {typeof bar.value === "number" && bar.value % 1 !== 0
@@ -85,8 +85,8 @@ export function BarChart({
       })}
       {baselineValue != null && baselineLabel && (
         <div className="flex items-center gap-1.5 mt-2 ml-[132px]">
-          <div className="h-0 w-3 border-t-2 border-dashed border-[#0D0D0D]" />
-          <span className="text-[9px] text-[#737373]">
+          <div className="h-0 w-3 border-t-2 border-dashed border-foreground" />
+          <span className="text-[9px] text-muted-foreground">
             {baselineLabel}
           </span>
         </div>

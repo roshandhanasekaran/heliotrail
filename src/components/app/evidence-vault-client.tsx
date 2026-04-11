@@ -51,7 +51,7 @@ export function EvidenceVaultClient({ documents }: { documents: DocumentRow[] })
           placeholder="Search documents..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-9 w-full border border-border bg-background pl-8 pr-3 text-sm placeholder:text-muted-foreground focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+          className="h-9 w-full border border-border bg-background pl-8 pr-3 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
@@ -65,7 +65,7 @@ export function EvidenceVaultClient({ documents }: { documents: DocumentRow[] })
       {/* Empty state */}
       {filtered.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-16 text-center">
-          <FolderOpen className="h-10 w-10 text-[#D9D9D9]" />
+          <FolderOpen className="h-10 w-10 text-border" />
           <p className="mt-3 text-sm font-medium text-muted-foreground">
             {isSearching ? "No documents match your search" : "Evidence vault is empty"}
           </p>
@@ -97,7 +97,7 @@ export function EvidenceVaultClient({ documents }: { documents: DocumentRow[] })
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#D9D9D9]">
+            <tbody className="divide-y divide-border">
               {filtered.map((doc) => (
                 <tr key={doc.id} className="hover:bg-muted">
                   <td className="px-4 py-3">
@@ -127,7 +127,7 @@ export function EvidenceVaultClient({ documents }: { documents: DocumentRow[] })
                   </td>
                   <td className="px-4 py-3">
                     {doc.access_level === "public" ? (
-                      <span className="inline-flex items-center gap-1 text-xs text-[#22C55E]">
+                      <span className="inline-flex items-center gap-1 text-xs text-primary">
                         <Globe className="h-3 w-3" /> Public
                       </span>
                     ) : (
@@ -139,9 +139,9 @@ export function EvidenceVaultClient({ documents }: { documents: DocumentRow[] })
                   </td>
                   <td className="hidden px-4 py-3 sm:table-cell">
                     {doc.document_hash ? (
-                      <CheckCircle2 className="h-4 w-4 text-[#22C55E]" />
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
                     ) : (
-                      <span className="text-xs text-[#D9D9D9]">—</span>
+                      <span className="text-xs text-border">—</span>
                     )}
                   </td>
                 </tr>

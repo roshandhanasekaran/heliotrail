@@ -6,11 +6,7 @@ import { Key, Plus, Copy, Check, Trash2 } from "lucide-react";
 import { apiKeys as initialKeys, currentUser, type MockApiKey } from "@/lib/mock/settings";
 import { canDo } from "@/lib/rbac";
 import { formatDate } from "@/lib/utils";
-
-const labelClass =
-  "text-xs font-semibold uppercase tracking-wider text-[#737373]";
-const inputClass =
-  "w-full border border-[#D9D9D9] bg-white px-3 py-2 text-sm text-[#0D0D0D] focus:border-[#22C55E] focus:outline-none focus:ring-1 focus:ring-[#22C55E]";
+import { LABEL_CLASS, INPUT_CLASS } from "@/lib/styles";
 
 function randomPrefix(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -61,8 +57,8 @@ export default function ApiKeysPage() {
       {/* Page heading + create button */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-[#0D0D0D]">API Keys</h2>
-          <p className="text-sm text-[#737373]">
+          <h2 className="text-lg font-bold text-foreground">API Keys</h2>
+          <p className="text-sm text-muted-foreground">
             Manage API keys used by integrations and external systems.
           </p>
         </div>
@@ -77,23 +73,23 @@ export default function ApiKeysPage() {
 
       {/* Create key form */}
       {showForm && (
-        <div className="clean-card border border-[#22C55E]">
-          <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-            <Key className="h-4 w-4 text-[#22C55E]" />
-            <h3 className="text-sm font-semibold text-[#0D0D0D]">
+        <div className="clean-card border border-primary">
+          <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+            <Key className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-semibold text-foreground">
               New API Key
             </h3>
           </div>
           <div className="p-5">
             <div className="max-w-sm space-y-4">
               <div className="space-y-1.5">
-                <label className={labelClass}>Key Name</label>
+                <label className={LABEL_CLASS}>Key Name</label>
                 <input
                   type="text"
                   value={newKeyName}
                   onChange={(e) => setNewKeyName(e.target.value)}
                   placeholder="e.g. ERP Integration"
-                  className={inputClass}
+                  className={INPUT_CLASS}
                   onKeyDown={(e) => e.key === "Enter" && handleCreate()}
                   autoFocus
                 />
@@ -123,20 +119,20 @@ export default function ApiKeysPage() {
 
       {/* Active keys card */}
       <div className="clean-card">
-        <div className="flex items-center gap-2 border-b border-[#D9D9D9] px-5 py-3">
-          <Key className="h-4 w-4 text-[#737373]" />
-          <h3 className="text-sm font-semibold text-[#0D0D0D]">Active Keys</h3>
-          <span className="ml-auto rounded bg-[#F2F2F2] px-2 py-0.5 text-xs font-semibold text-[#737373]">
+        <div className="flex items-center gap-2 border-b border-border px-5 py-3">
+          <Key className="h-4 w-4 text-muted-foreground" />
+          <h3 className="text-sm font-semibold text-foreground">Active Keys</h3>
+          <span className="ml-auto rounded bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
             {keys.length}
           </span>
         </div>
 
         {keys.length === 0 ? (
-          <div className="px-5 py-8 text-center text-sm text-[#A3A3A3]">
+          <div className="px-5 py-8 text-center text-sm text-muted-foreground/70">
             No active API keys. Create one above.
           </div>
         ) : (
-          <div className="divide-y divide-[#D9D9D9]">
+          <div className="divide-y divide-border">
             {keys.map((key) => {
               const isCopied = copiedId === key.id;
               return (
@@ -146,11 +142,11 @@ export default function ApiKeysPage() {
                 >
                   {/* Info */}
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-[#0D0D0D]">
+                    <p className="text-sm font-medium text-foreground">
                       {key.name}
                     </p>
-                    <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-[#737373]">
-                      <code className="rounded bg-[#F2F2F2] px-1.5 py-0.5 font-mono text-[#0D0D0D]">
+                    <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-foreground">
                         {key.prefix}••••
                       </code>
                       <span>·</span>
@@ -167,7 +163,7 @@ export default function ApiKeysPage() {
                       {key.scopes.map((scope) => (
                         <span
                           key={scope}
-                          className="rounded bg-[#E8FAE9] px-1.5 py-0.5 text-[0.625rem] font-medium text-[#22C55E]"
+                          className="rounded bg-[var(--passport-green-muted)] px-1.5 py-0.5 text-[0.625rem] font-medium text-primary"
                         >
                           {scope}
                         </span>
@@ -180,10 +176,10 @@ export default function ApiKeysPage() {
                     <button
                       onClick={() => handleCopy(key.id, key.prefix)}
                       title="Copy key prefix"
-                      className="flex h-7 w-7 items-center justify-center rounded border border-[#D9D9D9] bg-white text-[#737373] transition-colors hover:border-[#22C55E] hover:text-[#22C55E]"
+                      className="flex h-7 w-7 items-center justify-center rounded border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-primary"
                     >
                       {isCopied ? (
-                        <Check className="h-3.5 w-3.5 text-[#22C55E]" />
+                        <Check className="h-3.5 w-3.5 text-primary" />
                       ) : (
                         <Copy className="h-3.5 w-3.5" />
                       )}
@@ -191,7 +187,7 @@ export default function ApiKeysPage() {
                     <button
                       onClick={() => handleRevoke(key.id)}
                       title="Revoke key"
-                      className="flex h-7 w-7 items-center justify-center rounded border border-[#D9D9D9] bg-white text-[#737373] transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+                      className="flex h-7 w-7 items-center justify-center rounded border border-border bg-card text-muted-foreground transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
