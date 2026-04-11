@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { CheckSquare } from "lucide-react";
 import { ApprovalsClient } from "@/components/app/approvals-client";
+import { PageHeader } from "@/components/shared/page-header";
 
 export default async function ApprovalsPage() {
   const supabase = await createClient();
@@ -14,12 +15,10 @@ export default async function ApprovalsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Approvals</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Review and approve passport updates
-        </p>
-      </div>
+      <PageHeader
+        title="Approvals"
+        subtitle="Review and approve passport updates"
+      />
 
       {all.length === 0 ? (
         <div className="dashed-card flex flex-col items-center py-16 text-center">

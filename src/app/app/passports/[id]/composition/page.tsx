@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { AlertTriangle, Layers } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 export default async function CompositionPage({
   params,
@@ -57,15 +58,11 @@ export default async function CompositionPage({
 
       {/* Materials table */}
       {mats.length === 0 ? (
-        <div className="dashed-card flex flex-col items-center py-12 text-center">
-          <Layers className="h-8 w-8 text-border" />
-          <p className="mt-3 text-sm font-medium text-muted-foreground">
-            No materials recorded
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground/70">
-            Add material composition data to this passport.
-          </p>
-        </div>
+        <EmptyState
+          icon={<Layers className="h-10 w-10" />}
+          title="No materials recorded"
+          description="Add material composition data to this passport."
+        />
       ) : (
         <div className="clean-card overflow-hidden">
           <table className="w-full">

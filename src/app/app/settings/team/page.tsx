@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { redirect } from "next/navigation";
-import { Users, UserPlus, Clock, Mail, X } from "lucide-react";
+import { toast } from "sonner";
+import { Users, UserPlus, Clock, X } from "lucide-react";
 import {
   teamMembers,
   pendingInvites,
@@ -19,8 +20,6 @@ export default function TeamPage() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<Role>("editor");
   const [invites, setInvites] = useState<MockInvite[]>(pendingInvites);
-  const [showBanner, setShowBanner] = useState(false);
-
   function handleSendInvitation() {
     if (!inviteEmail.trim()) return;
 
@@ -36,8 +35,7 @@ export default function TeamPage() {
     setInviteEmail("");
     setInviteRole("editor");
     setShowInvite(false);
-    setShowBanner(true);
-    setTimeout(() => setShowBanner(false), 3000);
+    toast.success("Invitation sent", { description: `Invite sent to ${newInvite.email} as ${newInvite.role}.` });
   }
 
   function handleRevoke(id: string) {
@@ -63,14 +61,6 @@ export default function TeamPage() {
           Invite Member
         </button>
       </div>
-
-      {/* Success banner */}
-      {showBanner && (
-        <div className="flex items-center gap-2 rounded-md bg-[var(--passport-green-muted)] px-4 py-2.5 text-sm font-medium text-[#15803D]">
-          <Mail className="h-4 w-4 shrink-0" />
-          Invitation sent successfully
-        </div>
-      )}
 
       {/* Invite form */}
       {showInvite && (

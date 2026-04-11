@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { StatusBadge } from "@/components/shared/status-badge";
 
 /* ============================================
    CONSTANTS & TYPES
@@ -146,6 +147,126 @@ const MODULE_MODELS: ModuleModel[] = [
     glassType: "2mm Low Iron ARC tempered", bifacialityFactor: "0.75",
     warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
   },
+  {
+    id: "WRM-685-TOPCON-BiN-03", label: "WRM-685-TOPCON-BiN-03 (685W TOPCon)", ...WRM_COMPANY,
+    power: 685, technology: "crystalline_silicon_topcon", efficiency: 22.05,
+    voc: 53.90, isc: 18.10, vmp: 45.30, imp: 17.20, maxSystemVoltage: 1500,
+    length: 2384, width: 1303, depth: 33, mass: 37.8, cellCount: 132,
+    cellType: "G12 N-type TOPCon bifacial", facility: "FAC-WRM-TMB-003",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.25", tempCoeffIsc: "0.045",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "2mm Low Iron ARC semi-tempered (dual glass)", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
+  },
+  {
+    id: "WRM-625-TOPCON-BiN-17", label: "WRM-625-TOPCON-BiN-17 (625W TOPCon 156-cell)", ...WRM_COMPANY,
+    power: 625, technology: "crystalline_silicon_topcon", efficiency: 22.36,
+    voc: 53.40, isc: 14.90, vmp: 44.60, imp: 14.01, maxSystemVoltage: 1500,
+    length: 2465, width: 1134, depth: 33, mass: 35.0, cellCount: 156,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-WRM-NDG-004",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.26", tempCoeffIsc: "0.046",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "3.2mm Low Iron Tempered ARC", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
+  },
+  {
+    id: "WRM-645-TOPCON-BiN-17", label: "WRM-645-TOPCON-BiN-17 (645W TOPCon 156-cell)", ...WRM_COMPANY,
+    power: 645, technology: "crystalline_silicon_topcon", efficiency: 22.70,
+    voc: 54.10, isc: 15.10, vmp: 45.20, imp: 14.27, maxSystemVoltage: 1500,
+    length: 2465, width: 1134, depth: 33, mass: 35.2, cellCount: 156,
+    cellType: "M10 N-type TOPCon bifacial", facility: "FAC-WRM-NDG-004",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.26", tempCoeffIsc: "0.046",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "3.2mm Low Iron Tempered ARC", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
+  },
+  {
+    id: "WRM-635-TOPCON-BiN-02", label: "WRM-635-TOPCON-BiN-02 (635W TOPCon 120-cell)", ...WRM_COMPANY,
+    power: 635, technology: "crystalline_silicon_topcon", efficiency: 22.42,
+    voc: 44.20, isc: 18.25, vmp: 37.00, imp: 17.16, maxSystemVoltage: 1500,
+    length: 2172, width: 1303, depth: 35, mass: 35.5, cellCount: 120,
+    cellType: "G12 N-type TOPCon bifacial", facility: "FAC-WRM-SRT-001",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.25", tempCoeffIsc: "0.045",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "3.2mm Low Iron Tempered ARC", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
+  },
+  {
+    id: "WRM-620-TOPCON-BiN-21R", label: "WRM-620-TOPCON-BiN-21R (620W TOPCon Elite R)", ...WRM_COMPANY,
+    power: 620, technology: "crystalline_silicon_topcon", efficiency: 22.80,
+    voc: 53.50, isc: 14.80, vmp: 44.80, imp: 13.84, maxSystemVoltage: 1500,
+    length: 2384, width: 1134, depth: 33, mass: 33.0, cellCount: 132,
+    cellType: "G12R N-type TOPCon bifacial", facility: "FAC-WRM-SMK-005",
+    tempCoeffPmax: "-0.30", tempCoeffVoc: "-0.25", tempCoeffIsc: "0.045",
+    noct: "43", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "3.2mm Low Iron Tempered ARC", bifacialityFactor: "0.80",
+    warrantyYears: "12", performanceWarranty: "87.4", degradationRate: "0.40", expectedLifetime: "35",
+  },
+  {
+    id: "WRM-540-PERC-WSMD", label: "WRM-540-PERC-WSMD (540W Arka PERC)", ...WRM_COMPANY,
+    power: 540, technology: "crystalline_silicon_perc", efficiency: 20.98,
+    voc: 49.61, isc: 13.83, vmp: 40.67, imp: 12.95, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 35, mass: 28.5, cellCount: 144,
+    cellType: "M10 P-type mono PERC", facility: "FAC-WRM-CHK-002",
+    tempCoeffPmax: "-0.34", tempCoeffVoc: "-0.27", tempCoeffIsc: "0.048",
+    noct: "45", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "3.2mm Low Iron Tempered ARC", bifacialityFactor: "0",
+    warrantyYears: "10", performanceWarranty: "84.8", degradationRate: "0.55", expectedLifetime: "30",
+  },
+  {
+    id: "WRM-400-PERC-WSMD-RES", label: "WRM-400-PERC-WSMD-RES (400W Arka Residential)", ...WRM_COMPANY,
+    power: 400, technology: "crystalline_silicon_perc", efficiency: 20.50,
+    voc: 37.40, isc: 13.60, vmp: 31.00, imp: 12.90, maxSystemVoltage: 1500,
+    length: 1722, width: 1134, depth: 30, mass: 21.5, cellCount: 108,
+    cellType: "M10 P-type mono PERC half-cut", facility: "FAC-WRM-SRT-001",
+    tempCoeffPmax: "-0.34", tempCoeffVoc: "-0.27", tempCoeffIsc: "0.048",
+    noct: "45", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 30mm",
+    glassType: "3.2mm Low Iron Tempered ARC", bifacialityFactor: "0",
+    warrantyYears: "10", performanceWarranty: "84.8", degradationRate: "0.55", expectedLifetime: "30",
+  },
+  {
+    id: "WRM-535-PERC-Bi55", label: "WRM-535-PERC-Bi55 (535W Ahnay Bifacial)", ...WRM_COMPANY,
+    power: 535, technology: "crystalline_silicon_perc", efficiency: 20.70,
+    voc: 49.30, isc: 13.80, vmp: 40.30, imp: 12.85, maxSystemVoltage: 1500,
+    length: 2278, width: 1134, depth: 35, mass: 30.5, cellCount: 144,
+    cellType: "M10 P-type mono PERC bifacial", facility: "FAC-WRM-TMB-003",
+    tempCoeffPmax: "-0.35", tempCoeffVoc: "-0.28", tempCoeffIsc: "0.048",
+    noct: "45", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "2mm Tempered ARC (dual glass)", bifacialityFactor: "0.70",
+    warrantyYears: "10", performanceWarranty: "84.8", degradationRate: "0.55", expectedLifetime: "30",
+  },
+  {
+    id: "WRM-720-HJT-BIH-11", label: "WRM-720-HJT-BIH-11 (720W Plexus HJT)", ...WRM_COMPANY,
+    power: 720, technology: "crystalline_silicon_hjt", efficiency: 23.20,
+    voc: 55.40, isc: 18.60, vmp: 46.90, imp: 17.50, maxSystemVoltage: 1500,
+    length: 2384, width: 1303, depth: 33, mass: 37.0, cellCount: 144,
+    cellType: "G12 N-type Heterojunction bifacial", facility: "FAC-WRM-SMK-005",
+    tempCoeffPmax: "-0.26", tempCoeffVoc: "-0.24", tempCoeffIsc: "0.040",
+    noct: "42", fireRating: "Class A", ipRating: "IP68",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 33mm",
+    glassType: "3.2mm Tempered ARC (dual glass)", bifacialityFactor: "0.90",
+    warrantyYears: "15", performanceWarranty: "90.0", degradationRate: "0.25", expectedLifetime: "40",
+  },
+  {
+    id: "WRM-330-POLY-WS", label: "WRM-330-POLY-WS (330W Aditya Polycrystalline)", ...WRM_COMPANY,
+    power: 330, technology: "other", efficiency: 17.01,
+    voc: 46.70, isc: 9.25, vmp: 37.95, imp: 8.70, maxSystemVoltage: 1000,
+    length: 1960, width: 992, depth: 35, mass: 22.5, cellCount: 72,
+    cellType: "Polycrystalline silicon (Multi-Si)", facility: "FAC-WRM-TMB-003",
+    tempCoeffPmax: "-0.40", tempCoeffVoc: "-0.30", tempCoeffIsc: "0.050",
+    noct: "47", fireRating: "Class C", ipRating: "IP65",
+    connectorType: "MC4 Compatible", frameType: "Anodized aluminium alloy, 35mm",
+    glassType: "3.2mm Tempered Solar Glass", bifacialityFactor: "0",
+    warrantyYears: "10", performanceWarranty: "80.0", degradationRate: "0.70", expectedLifetime: "25",
+  },
   // ── Adani Solar ──
   {
     id: "ASM-590-TOPCON-BiN", label: "ASM-590-TOPCON-BiN (590W TOPCon)", ...ADS_COMPANY,
@@ -225,6 +346,9 @@ const MODULE_MODELS: ModuleModel[] = [
 const FACILITIES = [
   { id: "FAC-WRM-SRT-001", label: "Waaree Surat SEZ GigaFactory, Gujarat" },
   { id: "FAC-WRM-CHK-002", label: "Waaree Chikhli Plant, Gujarat" },
+  { id: "FAC-WRM-TMB-003", label: "Waaree Tumb Manufacturing Plant, Gujarat" },
+  { id: "FAC-WRM-NDG-004", label: "Waaree Nandigram Plant, Gujarat" },
+  { id: "FAC-WRM-SMK-005", label: "Waaree Samakhiali Mega Plant, Kutch, Gujarat" },
   { id: "FAC-ADS-MND-001", label: "Adani Mundra GigaFactory, Kutch, Gujarat" },
   { id: "FAC-VKS-FLT-001", label: "Vikram Solar Falta SEZ, West Bengal" },
   { id: "FAC-VKS-OGD-002", label: "Vikram Solar Oragadam Plant, Chennai" },
@@ -1650,16 +1774,7 @@ function StepCompliance({
                   Certificate {idx + 1}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      "inline-flex items-center px-2 py-0.5 text-[0.6875rem] font-semibold",
-                      cert.status === "valid" && "status-valid",
-                      cert.status === "pending" && "status-pending",
-                      cert.status === "expired" && "status-expired"
-                    )}
-                  >
-                    {cert.status ? cert.status.charAt(0).toUpperCase() + cert.status.slice(1) : "Valid"}
-                  </span>
+                  <StatusBadge status={cert.status || "valid"} className="text-[0.6875rem]" />
                   <button
                     type="button"
                     onClick={() => removeCert(cert.id)}
@@ -2434,16 +2549,7 @@ function StepReview({
                 {c.issuer && (
                   <span className="text-xs text-muted-foreground">{c.issuer}</span>
                 )}
-                <span
-                  className={cn(
-                    "ml-auto inline-flex items-center px-2 py-0.5 text-[0.6875rem] font-semibold",
-                    c.status === "valid" && "status-valid",
-                    c.status === "pending" && "status-pending",
-                    c.status === "expired" && "status-expired"
-                  )}
-                >
-                  {c.status ? c.status.charAt(0).toUpperCase() + c.status.slice(1) : "—"}
-                </span>
+                <StatusBadge status={c.status || "valid"} className="ml-auto text-[0.6875rem]" />
               </div>
             ))}
           </div>

@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import {
-  PASSPORT_STATUS_LABELS,
-  VERIFICATION_STATUS_LABELS,
   MODULE_TECHNOLOGY_LABELS,
 } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
+import { StatusBadge } from "@/components/shared/status-badge";
 
 interface PassportRow {
   id: string;
@@ -38,7 +38,8 @@ export function PassportListClient({
 }: {
   passports: PassportRow[];
 }) {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("q") ?? "");
   const [statusFilter, setStatusFilter] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState(1);
@@ -237,35 +238,10 @@ export function PassportListClient({
                           : "—"}
                       </td>
                       <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                            p.status === "published"
-                              ? "status-valid"
-                              : p.status === "under_review"
-                                ? "status-pending"
-                                : p.status === "draft"
-                                  ? "bg-muted text-muted-foreground"
-                                  : p.status === "approved"
-                                    ? "status-valid"
-                                    : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {PASSPORT_STATUS_LABELS[p.status] ?? p.status}
-                        </span>
+                        <StatusBadge status={p.status} />
                       </td>
                       <td className="hidden px-4 py-3 lg:table-cell">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                            p.verification_status === "verified"
-                              ? "status-valid"
-                              : p.verification_status === "pending"
-                                ? "status-pending"
-                                : "bg-muted text-muted-foreground"
-                          }`}
-                        >
-                          {VERIFICATION_STATUS_LABELS[p.verification_status] ??
-                            p.verification_status}
-                        </span>
+                        <StatusBadge status={p.verification_status} />
                       </td>
                       <td className="hidden px-4 py-3 text-xs text-muted-foreground lg:table-cell">
                         {formatDate(p.updated_at)}

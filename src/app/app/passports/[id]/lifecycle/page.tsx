@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { RefreshCcw, Recycle, AlertTriangle, CheckCircle2, Leaf, Wrench, Phone, FileText, ShieldCheck } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 export default async function LifecyclePage({
   params,
@@ -194,15 +195,11 @@ export default async function LifecyclePage({
           )}
         </>
       ) : (
-        <div className="dashed-card flex flex-col items-center py-12 text-center">
-          <RefreshCcw className="h-8 w-8 text-border" />
-          <p className="mt-3 text-sm font-medium text-muted-foreground">
-            No lifecycle data recorded
-          </p>
-          <p className="mt-1 max-w-sm text-xs text-muted-foreground/70">
-            Add circularity and end-of-life information for this passport.
-          </p>
-        </div>
+        <EmptyState
+          icon={<RefreshCcw className="h-10 w-10" />}
+          title="No lifecycle data recorded"
+          description="Add circularity and end-of-life information for this passport."
+        />
       )}
     </div>
   );

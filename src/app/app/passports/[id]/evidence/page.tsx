@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DOCUMENT_TYPE_LABELS, ACCESS_LEVEL_LABELS } from "@/lib/constants";
 import { formatDate, formatFileSize } from "@/lib/utils";
 import { FolderOpen, FileText, Lock, Globe, ExternalLink } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 import { UploadEvidenceButton } from "@/components/app/upload-evidence-button";
 
 export default async function EvidencePage({
@@ -34,16 +35,11 @@ export default async function EvidencePage({
       </div>
 
       {docs.length === 0 ? (
-        <div className="dashed-card flex flex-col items-center py-12 text-center">
-          <FolderOpen className="h-8 w-8 text-border" />
-          <p className="mt-3 text-sm font-medium text-muted-foreground">
-            No evidence uploaded
-          </p>
-          <p className="mt-1 max-w-sm text-xs text-muted-foreground/70">
-            Upload certificates, declarations, or manuals so this passport can
-            move to review.
-          </p>
-        </div>
+        <EmptyState
+          icon={<FolderOpen className="h-10 w-10" />}
+          title="No evidence uploaded"
+          description="Upload certificates, declarations, or manuals so this passport can move to review."
+        />
       ) : (
         <div className="space-y-2">
           {docs.map((doc) => (

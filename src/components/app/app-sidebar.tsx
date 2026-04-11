@@ -67,10 +67,20 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                     ? pathname === "/app"
                     : pathname.startsWith(item.href);
 
+                const tourId =
+                  item.href === "/app"
+                    ? "dashboard"
+                    : item.href === "/app/passports"
+                      ? "passports"
+                      : item.href === "/app/analytics"
+                        ? "analytics"
+                        : undefined;
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
+                    data-tour={tourId}
                     className={cn(
                       "group/nav relative flex items-center gap-3 px-3 py-2 text-[0.8125rem] font-medium transition-all duration-150",
                       collapsed && "justify-center px-0",

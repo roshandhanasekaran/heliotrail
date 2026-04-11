@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Clock, XCircle } from "lucide-react";
-import { PASSPORT_STATUS_LABELS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
+import { StatusBadge } from "@/components/shared/status-badge";
 
 type Passport = {
   id: string;
@@ -112,17 +112,7 @@ export function ApprovalsClient({ passports }: Props) {
                 <span className="text-xs text-muted-foreground/70">
                   {formatDate(p.updated_at)}
                 </span>
-                <span
-                  className={`px-2 py-0.5 text-xs font-semibold ${
-                    isPending
-                      ? "status-pending"
-                      : isRejected
-                      ? "bg-red-100 text-red-700"
-                      : "status-valid"
-                  }`}
-                >
-                  {PASSPORT_STATUS_LABELS[p.effectiveStatus] ?? p.effectiveStatus}
-                </span>
+                <StatusBadge status={p.effectiveStatus} />
 
                 {isPending && (
                   <div className="flex items-center gap-2">

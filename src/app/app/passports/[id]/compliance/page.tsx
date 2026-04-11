@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { CERTIFICATE_STATUS_LABELS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
+import { StatusBadge } from "@/components/shared/status-badge";
 import { ShieldCheck, AlertTriangle, CheckCircle2, Clock, XCircle, ExternalLink, Fingerprint } from "lucide-react";
+import { EmptyState } from "@/components/shared/empty-state";
 
 export default async function CompliancePage({
   params,
@@ -53,15 +54,11 @@ export default async function CompliancePage({
       </div>
 
       {certs.length === 0 ? (
-        <div className="dashed-card flex flex-col items-center py-12 text-center">
-          <ShieldCheck className="h-8 w-8 text-border" />
-          <p className="mt-3 text-sm font-medium text-muted-foreground">
-            No certificates recorded
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground/70">
-            Upload compliance certificates for this passport.
-          </p>
-        </div>
+        <EmptyState
+          icon={<ShieldCheck className="h-10 w-10" />}
+          title="No certificates recorded"
+          description="Upload compliance certificates for this passport."
+        />
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
           {certs.map((cert) => {
@@ -81,17 +78,7 @@ export default async function CompliancePage({
                   </div>
                   <div className="flex items-center gap-1">
                     <Icon className={`h-4 w-4 ${color}`} />
-                    <span
-                      className={`text-xs font-semibold ${
-                        cert.status === "valid"
-                          ? "status-valid"
-                          : cert.status === "pending"
-                            ? "status-pending"
-                            : "status-expired"
-                      } px-1.5 py-0.5`}
-                    >
-                      {CERTIFICATE_STATUS_LABELS[cert.status] ?? cert.status}
-                    </span>
+                    <StatusBadge status={cert.status} className="px-1.5 py-0.5" />
                   </div>
                 </div>
                 <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">

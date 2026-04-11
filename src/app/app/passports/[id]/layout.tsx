@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import { PASSPORT_STATUS_LABELS, VERIFICATION_STATUS_LABELS } from "@/lib/constants";
 import { formatDate } from "@/lib/utils";
+import { StatusBadge } from "@/components/shared/status-badge";
 import Link from "next/link";
 import { PassportContextNav } from "@/components/app/passports/passport-context-nav";
 import { ArrowLeft, ExternalLink } from "lucide-react";
@@ -47,28 +47,8 @@ export default async function PassportWorkspaceLayout({
               {passport.pv_passport_id}
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
-              <span
-                className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                  passport.status === "published"
-                    ? "status-valid"
-                    : passport.status === "under_review"
-                      ? "status-pending"
-                      : passport.status === "draft"
-                        ? "bg-muted text-muted-foreground"
-                        : "status-valid"
-                }`}
-              >
-                {PASSPORT_STATUS_LABELS[passport.status] ?? passport.status}
-              </span>
-              <span
-                className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                  passport.verification_status === "verified"
-                    ? "status-valid"
-                    : "status-pending"
-                }`}
-              >
-                {VERIFICATION_STATUS_LABELS[passport.verification_status]}
-              </span>
+              <StatusBadge status={passport.status} />
+              <StatusBadge status={passport.verification_status} />
               <span className="text-xs text-muted-foreground/70">
                 Updated {formatDate(passport.updated_at)}
               </span>

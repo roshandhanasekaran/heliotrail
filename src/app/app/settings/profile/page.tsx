@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { User } from "lucide-react";
 import { currentUser } from "@/lib/mock/settings";
 import { ROLE_LABELS } from "@/lib/rbac";
@@ -9,11 +10,8 @@ import { LABEL_CLASS, INPUT_CLASS, READONLY_CLASS } from "@/lib/styles";
 export default function ProfilePage() {
   const [name, setName] = useState(currentUser.name);
   const [title, setTitle] = useState(currentUser.title);
-  const [saved, setSaved] = useState(false);
-
   function handleSave() {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    toast.success("Profile updated", { description: "Demo mode — changes are not persisted to the database." });
   }
 
   return (
@@ -101,11 +99,6 @@ export default function ProfilePage() {
             <button onClick={handleSave} className="cta-primary text-xs">
               Save Changes
             </button>
-            {saved && (
-              <span className="text-xs font-medium text-primary">
-                Changes saved
-              </span>
-            )}
           </div>
         </div>
       </div>

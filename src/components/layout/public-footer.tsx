@@ -19,7 +19,7 @@ export function PublicFooter({ className }: { className?: string }) {
             <Link href="/scan" className="hover:text-foreground transition-colors">
               Scan Passport
             </Link>
-            <Link href="/" className="hover:text-foreground transition-colors">
+            <Link href="/about" className="hover:text-foreground transition-colors">
               About
             </Link>
           </nav>

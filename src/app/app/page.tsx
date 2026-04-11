@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { PASSPORT_STATUS_LABELS } from "@/lib/constants";
 import Link from "next/link";
+import { StatusBadge } from "@/components/shared/status-badge";
 import {
   CheckCircle2,
   Clock,
@@ -161,7 +161,7 @@ export default async function DashboardPage() {
             Roshan — Portfolio Intelligence
           </p>
         </div>
-        <Link href="/app/passports/new" className="cta-primary text-sm">
+        <Link href="/app/passports/new" className="cta-primary text-sm" data-tour="create-passport">
           <Plus className="h-4 w-4" />
           Create Passport
         </Link>
@@ -264,17 +264,7 @@ export default async function DashboardPage() {
                         {p.rated_power_stc_w}W
                       </span>
                     )}
-                    <span
-                      className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold ${
-                        p.status === "published"
-                          ? "status-valid"
-                          : p.status === "under_review"
-                            ? "status-pending"
-                            : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {PASSPORT_STATUS_LABELS[p.status] ?? p.status}
-                    </span>
+                    <StatusBadge status={p.status} />
                   </div>
                 </Link>
               ))}

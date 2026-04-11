@@ -1,0 +1,6 @@
+"use client";
+import { ErrorFallback } from "@/components/shared/error-fallback";
+
+export default function AppError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  return <ErrorFallback error={error} reset={reset} title="Something went wrong" backHref="/app" backLabel="Back to Dashboard" />;
+}

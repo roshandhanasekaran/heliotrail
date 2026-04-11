@@ -17,7 +17,7 @@ const stats = [
   { value: "12", suffix: "", label: "ESPR Article Requirements", icon: ShieldCheckIcon },
 ];
 
-export function HeroSection() {
+export function HeroSection({ demoPassportId = "topcon-550-bf-2026-001" }: { demoPassportId?: string }) {
   return (
     <section className="relative overflow-hidden bg-background">
       <GreenMosaic />
@@ -51,7 +51,7 @@ export function HeroSection() {
           {/* Dual CTA buttons */}
           <FadeIn delay={0.2}>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link href="/passport/topcon-550-bf-2026-001">
+              <Link href={`/passport/${demoPassportId}`}>
                 <button className="cta-primary">
                   <span>Explore Demo Passport</span>
                   <ArrowRightIcon className="arrow-icon h-4 w-4" />

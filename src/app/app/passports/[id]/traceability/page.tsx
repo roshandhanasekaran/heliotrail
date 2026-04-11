@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
+import { StatusBadge } from "@/components/shared/status-badge";
 import type {
   PassportSupplyChainActor,
   PassportChainOfCustody,
@@ -127,13 +128,7 @@ export default async function TraceabilityPage({
                       <span className="text-sm font-bold text-foreground">
                         {actor.stage ?? actor.actor_role}
                       </span>
-                      <span
-                        className={`px-1.5 py-0.5 text-[0.625rem] font-semibold ${
-                          isVerified ? "status-valid" : "status-pending"
-                        }`}
-                      >
-                        {isVerified ? "Verified" : "Pending"}
-                      </span>
+                      <StatusBadge status={isVerified ? "verified" : "pending"} className="px-1.5 py-0.5 text-[0.625rem]" />
                     </div>
                     <p className="mt-0.5 text-sm text-foreground">
                       {actor.actor_name}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Wifi,
   CheckCircle2,
@@ -41,15 +41,15 @@ import {
 
 const TIME_RANGES = ["7d", "30d", "90d", "1y", "All"] as const;
 
-const powerData = generatePowerData();
-const degradationData = generateDegradationData();
-const prData = generatePRData();
-const energyYieldData = generateEnergyYieldData();
-const irradianceData = generateIrradianceCorrelation();
-const temperatureData = generateTemperatureDerating();
-const soilingData = generateSoilingData();
-const clippingData = generateClippingData();
-const availabilityData = generateAvailabilityData();
+const TIME_RANGE_DAYS: Record<(typeof TIME_RANGES)[number], number> = {
+  "7d": 7,
+  "30d": 30,
+  "90d": 90,
+  "1y": 365,
+  All: 730,
+};
+
+// Static data that doesn't vary with time range
 const anomalyLog = generateAnomalyLog();
 const kpis = getDynamicKpis();
 const flashTestData = getFlashTestData();
@@ -63,6 +63,42 @@ const SEVERITY_STYLES = {
 
 export default function DynamicDataPage() {
   const [timeRange, setTimeRange] = useState<(typeof TIME_RANGES)[number]>("30d");
+
+  const days = TIME_RANGE_DAYS[timeRange];
+
+  const powerData = useMemo(() => generatePowerData(days), [days]);
+  const degradationData = useMemo(
+    () => generateDegradationData(Math.max(5, Math.round(days / 12))),
+    [days],
+  );
+  const prData = useMemo(
+    () => generatePRData(Math.max(2, Math.round(days / 30))),
+    [days],
+  );
+  const energyYieldData = useMemo(
+    () => generateEnergyYieldData(Math.max(2, Math.round(days / 30))),
+    [days],
+  );
+  const irradianceData = useMemo(
+    () => generateIrradianceCorrelation(Math.max(20, days * 4)),
+    [days],
+  );
+  const temperatureData = useMemo(
+    () => generateTemperatureDerating(Math.max(10, Math.round(days / 2))),
+    [days],
+  );
+  const soilingData = useMemo(
+    () => generateSoilingData(Math.max(2, Math.round(days / 30))),
+    [days],
+  );
+  const clippingData = useMemo(
+    () => generateClippingData(Math.max(2, Math.round(days / 30))),
+    [days],
+  );
+  const availabilityData = useMemo(
+    () => generateAvailabilityData(Math.max(2, Math.round(days / 30))),
+    [days],
+  );
 
   return (
     <div className="space-y-6">
@@ -191,7 +227,7 @@ export default function DynamicDataPage() {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-bold text-foreground">
-              Power Output — Last 30 Days
+              Power Output — Last {timeRange === "All" ? "2 Years" : timeRange}
             </h3>
             <p className="text-xs text-muted-foreground">
               Daily average active power (W) vs expected

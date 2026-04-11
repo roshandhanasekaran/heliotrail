@@ -11,6 +11,7 @@ import {
   TrendingUp,
   BarChart3,
 } from "lucide-react";
+import { PageHeader } from "@/components/shared/page-header";
 
 export default async function AnalyticsPage() {
   const supabase = await createClient();
@@ -114,14 +115,10 @@ export default async function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">
-          Portfolio Analytics
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Regulatory intelligence, compliance health, and material analytics
-        </p>
-      </div>
+      <PageHeader
+        title="Portfolio Analytics"
+        subtitle="Regulatory intelligence, compliance health, and material analytics"
+      />
 
       {/* Top row: Readiness + Market Access */}
       <div className="grid gap-4 lg:grid-cols-2">

@@ -74,6 +74,12 @@ export default async function SignInPage({
             />
           </div>
 
+          <div className="flex justify-end">
+            <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+
           <button
             type="submit"
             className="cta-primary w-full justify-center text-sm"

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plug, Database, Factory, BarChart3, Shield, Wifi } from "lucide-react";
+import { PageHeader } from "@/components/shared/page-header";
 
 const integrations = [
   {
@@ -46,12 +47,10 @@ export default function IntegrationsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Integrations</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Connect external systems to automate passport data flows
-        </p>
-      </div>
+      <PageHeader
+        title="Integrations"
+        subtitle="Connect external systems to automate passport data flows"
+      />
 
       {toastName && (
         <div className="flex items-center gap-2 bg-[var(--passport-green-muted)] px-4 py-2 text-sm font-medium text-foreground">

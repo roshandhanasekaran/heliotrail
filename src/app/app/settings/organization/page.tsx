@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Building2 } from "lucide-react";
 import { currentUser, organization } from "@/lib/mock/settings";
 import { canDo } from "@/lib/rbac";
@@ -19,11 +20,8 @@ export default function OrganizationPage() {
   const [city, setCity] = useState(organization.address.city);
   const [postalCode, setPostalCode] = useState(organization.address.postalCode);
   const [country, setCountry] = useState(organization.address.country);
-  const [saved, setSaved] = useState(false);
-
   function handleSave() {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    toast.success("Organization updated", { description: "Demo mode — changes are not persisted to the database." });
   }
 
   const inputClass = canEdit ? INPUT_CLASS : READONLY_CLASS;
@@ -173,11 +171,6 @@ export default function OrganizationPage() {
           <button onClick={handleSave} className="cta-primary text-xs">
             Save Changes
           </button>
-          {saved && (
-            <span className="text-xs font-medium text-primary">
-              Changes saved
-            </span>
-          )}
         </div>
       )}
     </div>
