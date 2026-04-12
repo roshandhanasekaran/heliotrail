@@ -45,6 +45,7 @@ interface AIAnalyticsSidebarProps {
   onSelectSection: (section: string) => void;
   fleetId: string | null;
   fleetOptions: FleetOption[];
+  timeRange?: string;
 }
 
 /* ─── Section definitions ─── */
@@ -75,6 +76,7 @@ export function AIAnalyticsSidebar({
   onSelectSection,
   fleetId,
   fleetOptions,
+  timeRange = "30d",
 }: AIAnalyticsSidebarProps) {
   const selectedFleet = fleetId ? fleetOptions.find((f) => f.id === fleetId) : null;
   const totalModules = fleetOptions.reduce((s, f) => s + f.moduleCount, 0);
@@ -160,6 +162,7 @@ export function AIAnalyticsSidebar({
                   sectionId={section.id}
                   onSelectSection={onSelectSection}
                   fleetId={fleetId}
+                  timeRange={timeRange}
                 />
               </div>
             )}
@@ -176,14 +179,16 @@ function SectionContent({
   sectionId,
   onSelectSection,
   fleetId,
+  timeRange,
 }: {
   sectionId: SectionId;
   onSelectSection: (section: string) => void;
   fleetId: string | null;
+  timeRange: string;
 }) {
   switch (sectionId) {
     case "fleet-health":
-      return <FleetHealthContent onSelectSection={onSelectSection} fleetId={fleetId} />;
+      return <FleetHealthContent onSelectSection={onSelectSection} fleetId={fleetId} timeRange={timeRange} />;
     case "performance":
       return <PerformanceContent onSelectSection={onSelectSection} fleetId={fleetId} />;
     case "degradation":
@@ -199,14 +204,46 @@ function SectionContent({
 
 /* ─── A. Fleet Health ─── */
 
+// Match the scaling logic used in SummaryDetail so sidebar & main panel show identical scores
+function sidebarFleetSeed(id: string | null | undefined): number {
+  if (!id) return 0.5;
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = ((h << 5) + h + id.charCodeAt(i)) | 0;
+  return ((h & 0x7fffffff) % 1000) / 1000;
+}
+function sidebarCombinedSeed(fleetId: string | null | undefined, timeRange: string): number {
+  const fs = sidebarFleetSeed(fleetId);
+  const ts = sidebarFleetSeed(timeRange);
+  return (fs * 0.7 + ts * 0.3) % 1;
+}
+function sidebarScaleScore(base: number, seed: number, offset: number): number {
+  const s = (Math.floor(seed * 1000) + offset * 137) % 200;
+  const factor = 0.9 + s / 1000;
+  return Math.min(100, Math.max(0, Math.round(base * factor)));
+}
+
 function FleetHealthContent({
   onSelectSection,
   fleetId,
+  timeRange,
 }: {
   onSelectSection: (section: string) => void;
   fleetId: string | null;
+  timeRange: string;
 }) {
-  const healthScore = useMemo(() => getFleetHealthScore(fleetId), [fleetId]);
+  const healthScore = useMemo(() => {
+    const raw = getFleetHealthScore(fleetId);
+    const seed = sidebarCombinedSeed(fleetId, timeRange);
+    return {
+      ...raw,
+      overall: sidebarScaleScore(raw.overall, seed, 50),
+      weeklyDelta: Math.round(raw.weeklyDelta * (0.9 + (seed * 200 % 200) / 1000)),
+      breakdown: raw.breakdown.map((b, i) => ({
+        ...b,
+        score: sidebarScaleScore(b.score, seed, 51 + i),
+      })),
+    };
+  }, [fleetId, timeRange]);
   return (
     <div className="dashed-card p-3">
       <div className="flex justify-center">

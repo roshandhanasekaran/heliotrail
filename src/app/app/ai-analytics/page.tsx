@@ -55,6 +55,7 @@ export default function AIAnalyticsPage() {
         onSelectSection={setActiveSection}
         fleetId={fleetId}
         fleetOptions={FLEET_OPTIONS}
+        timeRange={timeRange}
       />
       <div className="flex flex-1 flex-col overflow-hidden">
         <AnalyticsControlBar
