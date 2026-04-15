@@ -55,7 +55,7 @@ export function SpecsClient({
               size={160}
               color="var(--foreground)"
               showTicks
-              decimals={1}
+              decimals={2}
             />
           </div>
         </div>
