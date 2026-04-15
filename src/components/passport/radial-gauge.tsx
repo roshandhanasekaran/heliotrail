@@ -13,6 +13,7 @@ interface RadialGaugeProps {
   color?: string;
   className?: string;
   showTicks?: boolean;
+  decimals?: number;
 }
 
 export function RadialGauge({
@@ -24,6 +25,7 @@ export function RadialGauge({
   color = "var(--foreground)",
   className,
   showTicks = true,
+  decimals = 0,
 }: RadialGaugeProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
@@ -33,7 +35,9 @@ export function RadialGauge({
   const percentage = Math.min(value / max, 1);
 
   const spring = useSpring(0, { duration: 1800 });
-  const displayValue = useTransform(spring, (v) => Math.round(v));
+  const displayValue = useTransform(spring, (v) =>
+    decimals > 0 ? parseFloat(v.toFixed(decimals)) : Math.round(v)
+  );
   const [display, setDisplay] = useState("0");
 
   useEffect(() => {
